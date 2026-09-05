@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.handler.web.line
 
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
-import java.util.UUID
+import java.util.*
 
 object ClientWebLines {
 

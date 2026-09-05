@@ -4,8 +4,8 @@ import dev.aaronhowser.mods.aaron.registry.AaronDataComponentRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.data.WormColor
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
-import dev.aaronhowser.mods.critterworks.item.component.WebPortComponent
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
+import dev.aaronhowser.mods.critterworks.item.component.WebPortComponent
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.component.CustomData

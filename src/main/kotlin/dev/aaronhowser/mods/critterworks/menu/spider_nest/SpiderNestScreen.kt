@@ -10,7 +10,7 @@ import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.Hoppi
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
-import java.util.Locale
+import java.util.*
 
 class SpiderNestScreen(
 	menu: SpiderNestMenu,

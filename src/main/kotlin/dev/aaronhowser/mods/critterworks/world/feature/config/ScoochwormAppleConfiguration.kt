@@ -2,8 +2,8 @@ package dev.aaronhowser.mods.critterworks.world.feature.config
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
 import net.minecraft.util.valueproviders.IntProvider
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
 
 data class ScoochwormAppleConfiguration(
 	val radius: IntProvider,

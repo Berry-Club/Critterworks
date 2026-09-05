@@ -28,7 +28,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.CollisionContext
-import java.util.UUID
+import java.util.*
 
 class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(HoppingSpiderNestConfiguration.CODEC) {
 

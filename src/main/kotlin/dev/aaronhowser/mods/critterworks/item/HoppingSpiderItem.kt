@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item
 
-import dev.aaronhowser.mods.critterworks.client.render.item.HoppingSpiderItemRenderer
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
+import dev.aaronhowser.mods.critterworks.client.render.item.HoppingSpiderItemRenderer
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer

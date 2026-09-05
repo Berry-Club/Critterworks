@@ -12,19 +12,22 @@ interface ScoochwormSegmentSupportBlock {
 		level: ServerLevel,
 		position: BlockPos,
 		segment: ScoochwormPartEntity
-	) {}
+	) {
+	}
 
 	fun onSegmentTick(
 		state: BlockState,
 		level: ServerLevel,
 		position: BlockPos,
 		segment: ScoochwormPartEntity
-	) {}
+	) {
+	}
 
 	fun onSegmentDetached(
 		state: BlockState,
 		level: ServerLevel,
 		position: BlockPos,
 		segment: ScoochwormPartEntity
-	) {}
+	) {
+	}
 }

@@ -5,13 +5,11 @@ import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Spawner
 import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.DeferredSpawnEggItem
-import net.neoforged.neoforge.registries.DeferredHolder
 
 class ScoochwormSpawnEggItem(properties: Properties) : DeferredSpawnEggItem(
 	ModEntityTypes.SCOOCHWORM,

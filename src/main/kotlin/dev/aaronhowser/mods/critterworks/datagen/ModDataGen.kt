@@ -6,11 +6,7 @@ import dev.aaronhowser.mods.critterworks.datagen.loot.ModLootTableProvider
 import dev.aaronhowser.mods.critterworks.datagen.model.ModBlockStateProvider
 import dev.aaronhowser.mods.critterworks.datagen.model.ModItemModelProvider
 import dev.aaronhowser.mods.critterworks.datagen.sound.ModSoundDefinitionsProvider
-import dev.aaronhowser.mods.critterworks.datagen.tag.ModBlockTagsProvider
-import dev.aaronhowser.mods.critterworks.datagen.tag.ModBiomeTagsProvider
-import dev.aaronhowser.mods.critterworks.datagen.tag.ModEntityTypeTagsProvider
-import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
-import dev.aaronhowser.mods.critterworks.datagen.tag.ModMobEffectTagsProvider
+import dev.aaronhowser.mods.critterworks.datagen.tag.*
 import dev.aaronhowser.mods.critterworks.datagen.worldgen.ModBiomeModifiers
 import dev.aaronhowser.mods.critterworks.datagen.worldgen.ModConfiguredFeatures
 import dev.aaronhowser.mods.critterworks.datagen.worldgen.ModPlacedFeatures

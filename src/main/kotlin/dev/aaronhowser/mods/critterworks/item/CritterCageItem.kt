@@ -14,11 +14,10 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
 
 class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE.get(), properties) {
 

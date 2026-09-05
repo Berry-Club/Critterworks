@@ -4,10 +4,10 @@ import dev.aaronhowser.mods.aaron.registry.AaronMenuTypesRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterMenu
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterScreen
-import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortMenu
-import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortScreen
 import dev.aaronhowser.mods.critterworks.menu.spider_nest.SpiderNestMenu
 import dev.aaronhowser.mods.critterworks.menu.spider_nest.SpiderNestScreen
+import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortMenu
+import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortScreen
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.inventory.MenuType
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent
