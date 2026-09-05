@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
@@ -30,9 +31,10 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		if (interactionTarget !is ScoochwormEntity || stack.has(ModDataComponents.ENTITY_DATA)) return InteractionResult.PASS
 
 		if (player.isServerSide) {
-			val filledCage = stack.copy()    // So it works in creative mode
+			val filledCage = stack.copyWithCount(1)
 			filledCage.set(ModDataComponents.ENTITY_DATA, createEntityData(interactionTarget))
-			player.setItemInHand(usedHand, filledCage)
+			val remainingStack = ItemUtils.createFilledResult(stack, player, filledCage)
+			player.setItemInHand(usedHand, remainingStack)
 
 			interactionTarget.discard()
 		}

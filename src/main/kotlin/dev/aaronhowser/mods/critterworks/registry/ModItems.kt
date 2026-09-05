@@ -23,9 +23,9 @@ object ModItems : AaronItemRegistry() {
 	val WEB_PORT: DeferredItem<WebPortItem> =
 		register("web_port", ::WebPortItem, PROPERTIES_SINGLE_STACK)
 	val HOPPING_SPIDER: DeferredItem<HoppingSpiderItem> =
-		register("hopping_spider", ::HoppingSpiderItem, PROPERTIES_SINGLE_STACK)
+		register("hopping_spider", ::HoppingSpiderItem)
 	val CRITTER_CAGE: DeferredItem<CritterCageItem> =
-		register("critter_cage", ::CritterCageItem, PROPERTIES_SINGLE_STACK)
+		register("critter_cage", ::CritterCageItem)
 	val SCOOCHWORM_SPAWN_EGG: DeferredItem<ScoochwormSpawnEggItem> =
 		register("scoochworm_spawn_egg", ::ScoochwormSpawnEggItem)
 
