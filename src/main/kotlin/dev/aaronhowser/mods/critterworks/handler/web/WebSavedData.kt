@@ -38,6 +38,7 @@ class WebSavedData : SavedData() {
 	private val lineUuidsByChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
 	private val chunksToValidate: MutableSet<ChunkPos> = mutableSetOf()
 
+	@Synchronized
 	fun addLine(level: ServerLevel, line: WebLine) {
 		val previousLine = lines[line.uuid]
 		if (previousLine != null) {
@@ -56,27 +57,33 @@ class WebSavedData : SavedData() {
 		sendToNearbyPlayers(level, line, AddWebLinesPacket.fromLines(listOf(line)))
 	}
 
+	@Synchronized
 	fun getNode(uuid: UUID): WebNode? {
 		return nodes[uuid]
 	}
 
+	@Synchronized
 	fun getCanonicalNode(node: WebNode): WebNode {
 		return nodes[node.uuid] ?: node
 	}
 
+	@Synchronized
 	fun getLine(uuid: UUID): WebLine? {
 		return lines[uuid]
 	}
 
+	@Synchronized
 	fun getNetwork(lineUuid: UUID): WebNetwork? {
 		return networksByLineUuid[lineUuid]
 	}
 
+	@Synchronized
 	fun installWebPort(level: ServerLevel, anchor: WebBlockAnchor, webPortStack: ItemStack) {
 		anchor.webPort = webPortStack.copyWithCount(1)
 		syncAnchor(level, anchor)
 	}
 
+	@Synchronized
 	fun removeWebPort(level: ServerLevel, anchor: WebBlockAnchor): ItemStack {
 		val removedStack = anchor.webPort
 		anchor.webPort = ItemStack.EMPTY
@@ -84,6 +91,7 @@ class WebSavedData : SavedData() {
 		return removedStack
 	}
 
+	@Synchronized
 	fun syncAnchor(level: ServerLevel, anchor: WebBlockAnchor) {
 		setDirty()
 		val packet = AddWebLinesPacket.fromLines(anchor.lines)
@@ -92,6 +100,7 @@ class WebSavedData : SavedData() {
 		}
 	}
 
+	@Synchronized
 	fun getNetworksAt(blockPos: BlockPos): Set<WebNetwork> {
 		val matchingNetworks: MutableSet<WebNetwork> = mutableSetOf()
 		for (node in nodes.values) {
@@ -107,6 +116,7 @@ class WebSavedData : SavedData() {
 		return matchingNetworks
 	}
 
+	@Synchronized
 	fun removeLine(level: ServerLevel, uuid: UUID): WebLine? {
 		val removedLine = lines[uuid] ?: return null
 		removeStoredLine(level, removedLine)
@@ -115,6 +125,7 @@ class WebSavedData : SavedData() {
 		return removedLine
 	}
 
+	@Synchronized
 	fun syncChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val nearbyLines = lines.values.filter { line -> chunkPos in line.getEndpointChunkPositions() }
 		if (nearbyLines.isEmpty()) return
@@ -122,6 +133,7 @@ class WebSavedData : SavedData() {
 		AddWebLinesPacket.fromLines(nearbyLines).messagePlayer(player)
 	}
 
+	@Synchronized
 	fun forgetChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val level = player.serverLevel()
 
@@ -146,10 +158,12 @@ class WebSavedData : SavedData() {
 		}
 	}
 
+	@Synchronized
 	fun markForValidation(blockPos: BlockPos) {
 		chunksToValidate.add(ChunkPos(blockPos))
 	}
 
+	@Synchronized
 	fun validateChangedChunks(level: ServerLevel) {
 		if (chunksToValidate.isEmpty()) return
 
@@ -444,6 +458,7 @@ class WebSavedData : SavedData() {
 		}
 	}
 
+	@Synchronized
 	override fun save(tag: CompoundTag, registries: HolderLookup.Provider): CompoundTag {
 		val ops = registries.createSerializationContext(NbtOps.INSTANCE)
 
