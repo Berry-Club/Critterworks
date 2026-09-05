@@ -14,6 +14,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 object ModBiomeModifiers {
 
 	val ADD_SCOOCHWORM_APPLE: ResourceKey<BiomeModifier> = key("add_scoochworm_apple")
+	val ADD_HOPPING_SPIDER_NEST: ResourceKey<BiomeModifier> = key("add_hopping_spider_nest")
 
 	fun bootstrap(context: BootstrapContext<BiomeModifier>) {
 		val biomes = context.lookup(Registries.BIOME)
@@ -25,6 +26,15 @@ object ModBiomeModifiers {
 				biomes.getOrThrow(ModBiomeTagsProvider.HAS_SCOOCHWORM_APPLE),
 				HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.SCOOCHWORM_APPLE)),
 				GenerationStep.Decoration.VEGETAL_DECORATION
+			)
+		)
+
+		context.register(
+			ADD_HOPPING_SPIDER_NEST,
+			BiomeModifiers.AddFeaturesBiomeModifier(
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_HOPPING_SPIDER_NEST),
+				HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.HOPPING_SPIDER_NEST)),
+				GenerationStep.Decoration.UNDERGROUND_DECORATION
 			)
 		)
 	}

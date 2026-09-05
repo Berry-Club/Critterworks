@@ -10,6 +10,8 @@ class ServerConfig(
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var lockboxDropIntervalTicks: ModConfigSpec.IntValue
 	lateinit var lockboxDropAmount: ModConfigSpec.IntValue
+	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
+	lateinit var hoppingSpiderNestRarity: ModConfigSpec.IntValue
 
 	init {
 		general()
@@ -27,6 +29,14 @@ class ServerConfig(
 		dyeberryVineReplacementChance = builder
 			.comment("The chance that a berry-bearing cave vine is replaced with a dyeberry vine.")
 			.defineInRange("dyeberryVineReplacementChance", 0.05, 0.0, 1.0)
+
+		scoochwormAppleRarity = builder
+			.comment("The average number of chunks between Scoochworm Apple generation attempts.")
+			.defineInRange("scoochwormAppleRarity", 24, 1, Int.MAX_VALUE)
+
+		hoppingSpiderNestRarity = builder
+			.comment("The average number of chunks between Hopping Spider Nest generation attempts.")
+			.defineInRange("hoppingSpiderNestRarity", 128, 1, Int.MAX_VALUE)
 	}
 
 	companion object {

@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.world.feature
+package dev.aaronhowser.mods.critterworks.world.feature.config
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder

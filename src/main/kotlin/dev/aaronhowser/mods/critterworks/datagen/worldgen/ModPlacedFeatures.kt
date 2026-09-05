@@ -10,6 +10,7 @@ import net.minecraft.world.level.levelgen.placement.*
 object ModPlacedFeatures {
 
 	val SCOOCHWORM_APPLE: ResourceKey<PlacedFeature> = key("scoochworm_apple")
+	val HOPPING_SPIDER_NEST: ResourceKey<PlacedFeature> = key("hopping_spider_nest")
 
 	fun bootstrap(context: BootstrapContext<PlacedFeature>) {
 		val configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE)
@@ -19,7 +20,21 @@ object ModPlacedFeatures {
 			PlacedFeature(
 				configuredFeatures.getOrThrow(ModConfiguredFeatures.SCOOCHWORM_APPLE),
 				listOf(
-					RarityFilter.onAverageOnceEvery(24),
+					InSquarePlacement.spread(),
+					HeightRangePlacement.uniform(
+						VerticalAnchor.bottom(),
+						VerticalAnchor.absolute(64)
+					),
+					BiomeFilter.biome()
+				)
+			)
+		)
+
+		context.register(
+			HOPPING_SPIDER_NEST,
+			PlacedFeature(
+				configuredFeatures.getOrThrow(ModConfiguredFeatures.HOPPING_SPIDER_NEST),
+				listOf(
 					InSquarePlacement.spread(),
 					HeightRangePlacement.uniform(
 						VerticalAnchor.bottom(),
