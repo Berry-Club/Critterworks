@@ -12,8 +12,8 @@ object ModItems : AaronItemRegistry() {
 	val ITEM_REGISTRY: DeferredRegister.Items = DeferredRegister.createItems(Critterworks.MOD_ID)
 	override fun getItemRegistry(): DeferredRegister.Items = ITEM_REGISTRY
 
-	val LOCKBOX: DeferredItem<StorageAttachmentItem> =
-		register("lockbox", ::StorageAttachmentItem, StorageAttachmentItem.DEFAULT_PROPERTIES)
+	val LOCKBOX: DeferredItem<LockboxItem> =
+		register("lockbox", ::LockboxItem, LockboxItem.DEFAULT_PROPERTIES)
 	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
 		register("artificial_spinnerets", ::ArtificialSpinneretsItem, PROPERTIES_SINGLE_STACK)
 	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =

@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.component.ItemContainerContents
 
-class StorageAttachmentItem(
+class LockboxItem(
 	properties: Properties
 ) : Item(properties) {
 
