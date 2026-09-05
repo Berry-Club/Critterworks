@@ -1,4 +1,7 @@
-// 1.21.1	2026-09-05T15:04:08.1880792	Registries
+// 1.21.1	2026-09-05T15:39:38.3611241	Registries
+6c69a4b3230591b9539ba32cbfd927b55c95fdea data/critterworks/neoforge/biome_modifier/add_hopping_spider_nest.json
 0b68b5328b1ac79429082fd551c90659a139a5c2 data/critterworks/neoforge/biome_modifier/add_scoochworm_apple.json
+a6db3f083253c0f9dbdf814eb4ac969843766435 data/critterworks/worldgen/configured_feature/hopping_spider_nest.json
 4ff3123222b7281dd54ba2c365f7300666a323e6 data/critterworks/worldgen/configured_feature/scoochworm_apple.json
-c230cca328df090f95f12e47a51b710671affdd1 data/critterworks/worldgen/placed_feature/scoochworm_apple.json
+d86d5e70700ebd675c8851431de252bcee51dbe8 data/critterworks/worldgen/placed_feature/hopping_spider_nest.json
+51966f80f606bb068f65268e9079c0e0ea442c8c data/critterworks/worldgen/placed_feature/scoochworm_apple.json

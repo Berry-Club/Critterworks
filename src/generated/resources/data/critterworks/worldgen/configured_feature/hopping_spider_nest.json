@@ -1,0 +1,25 @@
+{
+  "type": "critterworks:hopping_spider_nest",
+  "config": {
+    "connect_webs": true,
+    "connection_progress": [
+      0.3,
+      0.7
+    ],
+    "minimum_depth_below_surface": 3,
+    "ray_attempts": 15,
+    "ray_spread": 1.0,
+    "spiders": [
+      3,
+      8
+    ],
+    "web_count": [
+      1,
+      3
+    ],
+    "web_distance": [
+      2.0,
+      10.0
+    ]
+  }
+}
