@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionResult
@@ -12,14 +13,9 @@ import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.DeferredSpawnEggItem
 import net.neoforged.neoforge.registries.DeferredHolder
 
-class ScoochwormSpawnEggItem(
-	entityType: DeferredHolder<EntityType<*>, EntityType<ScoochwormEntity>>,
-	backgroundColor: Int,
-	highlightColor: Int,
-	properties: Properties
-) : DeferredSpawnEggItem(
-	entityType,
-	backgroundColor, highlightColor,
+class ScoochwormSpawnEggItem(properties: Properties) : DeferredSpawnEggItem(
+	ModEntityTypes.SCOOCHWORM,
+	0x95E4ED, 0x6DCF72,
 	properties
 ) {
 

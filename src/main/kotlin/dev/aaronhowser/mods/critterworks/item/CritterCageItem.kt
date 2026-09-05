@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getMinimalTag
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.BlockPos
@@ -18,7 +19,7 @@ import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 
-class CritterCageItem(block: Block, properties: Properties) : BlockItem(block, properties) {
+class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE.get(), properties) {
 
 	override fun interactLivingEntity(
 		stack: ItemStack,

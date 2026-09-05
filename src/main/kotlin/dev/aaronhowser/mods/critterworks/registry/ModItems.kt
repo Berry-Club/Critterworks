@@ -14,39 +14,20 @@ object ModItems : AaronItemRegistry() {
 
 	val LOCKBOX: DeferredItem<StorageAttachmentItem> =
 		register("lockbox", ::StorageAttachmentItem, StorageAttachmentItem.DEFAULT_PROPERTIES)
-
 	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
 		register("artificial_spinnerets", ::ArtificialSpinneretsItem, PROPERTIES_SINGLE_STACK)
-
 	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =
 		register("web_pathfinder", ::WebPathfinderItem, PROPERTIES_SINGLE_STACK)
-
 	val ITEM_FILTER: DeferredItem<ItemFilterItem> =
 		register("item_filter", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
-
 	val WEB_PORT: DeferredItem<WebPortItem> =
 		register("web_port", ::WebPortItem, PROPERTIES_SINGLE_STACK)
-
 	val HOPPING_SPIDER: DeferredItem<HoppingSpiderItem> =
 		register("hopping_spider", ::HoppingSpiderItem, PROPERTIES_SINGLE_STACK)
-
 	val CRITTER_CAGE: DeferredItem<CritterCageItem> =
-		register(
-			"critter_cage",
-			{ properties -> CritterCageItem(ModBlocks.CRITTER_CAGE.get(), properties) },
-			PROPERTIES_SINGLE_STACK
-		)
-
+		register("critter_cage", ::CritterCageItem, PROPERTIES_SINGLE_STACK)
 	val SCOOCHWORM_SPAWN_EGG: DeferredItem<ScoochwormSpawnEggItem> =
-		register(
-			"scoochworm_spawn_egg",
-			builder = { properties ->
-				ScoochwormSpawnEggItem(
-					ModEntityTypes.SCOOCHWORM,
-					0x95E4ED, 0x6DCF72,
-					properties
-				)
-			})
+		register("scoochworm_spawn_egg", ::ScoochwormSpawnEggItem)
 
 	val GREEN_DYEBERRY: DeferredItem<DyeberryItem> =
 		registerDyeberry(WormColor.GREEN)
