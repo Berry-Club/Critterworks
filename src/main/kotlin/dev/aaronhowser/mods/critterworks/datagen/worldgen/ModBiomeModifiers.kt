@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.datagen.worldgen
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.registry.ModBiomeTags
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModBiomeTagsProvider
 import net.minecraft.core.HolderSet
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
@@ -22,7 +22,7 @@ object ModBiomeModifiers {
 		context.register(
 			ADD_SCOOCHWORM_APPLE,
 			BiomeModifiers.AddFeaturesBiomeModifier(
-				biomes.getOrThrow(ModBiomeTags.HAS_SCOOCHWORM_APPLE),
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_SCOOCHWORM_APPLE),
 				HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.SCOOCHWORM_APPLE)),
 				GenerationStep.Decoration.VEGETAL_DECORATION
 			)
@@ -30,6 +30,9 @@ object ModBiomeModifiers {
 	}
 
 	private fun key(name: String): ResourceKey<BiomeModifier> {
-		return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Critterworks.modResource(name))
+		return ResourceKey.create(
+			NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+			Critterworks.modResource(name)
+		)
 	}
 }
