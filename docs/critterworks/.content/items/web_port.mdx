@@ -1,0 +1,20 @@
+---
+title: Web Port
+id: critterworks:web_port
+related_items: [critterworks:web_port]
+type: item
+---
+
+A **Web Port** tells the spiders in a [Web Network](@critterworks:web_networks) how to use an inventory connected to [Web Lines](@critterworks:web_lines).
+
+Use the Web Port in your hand to configure it, then use it on a Web Line endpoint attached to the inventory. You can also configure the Web Port after it's been placed. Sneak and interact with an empty hand to remove it.
+
+## Settings
+
+**Input** inventories supply items to the network. **Output** inventories receive them. Spiders only carry items between Web Ports of the same color.
+
+An [Item Filter](@critterworks:item_filter) limits which items the port can supply or receive. Without a filter, every item is allowed.
+
+Priority decides which work spiders choose first. Higher numbers are preferred, and Input priority is considered before Output priority.
+
+The Web Port accesses the inventory from the block face where its endpoint is attached. Make sure the inventory accepts automation from that side.

@@ -1,0 +1,38 @@
+---
+title: Web Networks
+id: critterworks:web_networks
+---
+
+A **Web Network** uses Hopping Spiders to move items between inventories. It consists of three parts:
+
+- [Web Lines](@critterworks:web_lines) that form the routes
+- At least one [Hopping Spider Nest](@critterworks:hopping_spider_nest) connected to those routes
+- [Web Ports](@critterworks:web_port) attached to the inventories you want to use
+
+## Basic Setup
+
+Connect a nest and two inventories with Web Lines. Install a Web Port on each inventory's Web Line endpoint, then set one port to **Input** and the other to **Output**. Make sure both ports use the same color.
+
+The nest's spiders will collect matching items from the Input and carry them to the Output. Each spider can carry up to one stack per trip.
+
+## Expanding a Network
+
+Every connected group of Web Lines is one network. Lines can branch, so one network can reach many nests and inventories.
+
+A nest can connect to several separate networks and its spiders can take jobs from any of them. Multiple nests can also share one network; their spiders coordinate to avoid choosing the same pickup or delivery.
+
+Use different Web Port colors to create independent item routes within the same network. [Item Filters](@critterworks:item_filter) provide more control over what each port accepts.
+
+## Choosing Jobs
+
+A job is available when an Input contains an allowed item, a same-colored Output has room for it, and both ports have a complete route to a nest.
+
+When several jobs are available, spiders prefer higher-priority Inputs, followed by higher-priority Outputs. They also favor shorter trips and jobs that can move more items.
+
+If an Output fills while a spider is traveling, the spider waits and tries again. If a changed route, color, or filter makes delivery impossible, it returns the item to its original inventory.
+
+## Idle Spiders
+
+Spiders wander along the network when no jobs are available. At night, idle spiders return to their nest and remain nearby. Transport work takes priority over wandering.
+
+Use a **Web Pathfinder** to check whether two points are connected and briefly highlight the shortest route between them.

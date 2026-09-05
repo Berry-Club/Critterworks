@@ -1,17 +1,19 @@
 ---
 title: Web Lines
 id: critterworks:web_lines
-related_items: [critterworks:web_fluid, critterworks:web_pathfinder]
+related_items: [critterworks:artificial_spinnerets, critterworks:web_pathfinder]
 type: item
 ---
 
-**Web Lines** form routes for the spiders from a [Hopping Spider Nest](@critterworks:hopping_spider_nest). Any connected group of lines makes a web network.
+**Web Lines** form the routes in a [Web Network](@critterworks:web_networks). Any connected group of lines belongs to the same network.
 
 ## Creating Lines
 
-Use **Web Fluid** on a block face to select the first endpoint, then use it on another block face to create a line between them. Web Fluid can also select a point on an existing line, allowing routes to branch.
+Use **Artificial Spinnerets** on a block face to select the first endpoint, then use them on another block face to create a line between the two. You can also select a point on an existing line to create a branch. The Spinnerets glint while the first point is selected; sneak and use them in the air to cancel.
 
-A line must be shorter than 10 blocks and have a clear path between its endpoints. Its two block faces also cannot point in the same direction.
+Artificial Spinnerets hold up to 128 blocks' worth of Web Fluid. In an inventory, pick up String and place it onto the Spinnerets to refill them; each String restores enough fluid for one block of line. Creative-mode players do not consume Web Fluid.
+
+A line must be shorter than 10 blocks, have a clear path between its endpoints, and use block faces that point in different directions. Longer lines consume more Web Fluid.
 
 Use **Shears** on a Web Line to remove it. Any other Web Lines that depended on it will also be lost.
 

@@ -5,30 +5,14 @@ related_items: [critterworks:hopping_spider_nest]
 type: block
 ---
 
-The **Hopping Spider Nest** sends out four tiny spiders to carry items between inventories connected by [Web Lines](@critterworks:web_lines).
+The **Hopping Spider Nest** houses the spiders that move items around a [Web Network](@critterworks:web_networks).
 
-Connect the nest itself to a web network, then install [Spider Nest Interfaces](@critterworks:spider_nest_interface) at the inventories that should supply or receive items. The spiders automatically choose available work, collect up to one stack at a time, and deliver it.
+Nests generate rarely in underground Overworld caves with several spiders and a small network already inside.
 
-A nest can connect to multiple separate web networks. Its spiders choose work from any of them, returning to the nest after each delivery so they can depart on a different network when needed. Connecting the same network to the nest more than once still counts as one network.
+## Managing Spiders
 
-Multiple nests can share the same web network. Their spiders coordinate with one another so they do not try to collect from or deliver to the same place at once.
+Use a **Hopping Spider** item on the nest to add it. Sneak and interact with an empty hand to remove the most recently added spider. Custom spider names are kept when spiders enter or leave the nest.
 
-## Spider Jobs
+Interact with the nest to view each spider's position and current behavior. The screen shows whether a spider is wandering, working, waiting to deliver, or unable to finish a delivery.
 
-A job begins when the network has an item in an **Input** inventory and room for it in a matching **Output** inventory. Both interfaces must use the same color, allow the item through their filters, and have a complete Web Line route connecting them to the nest.
-
-When several jobs are available, spiders prefer the highest Input priority, followed by the highest Output priority. The nest then prefers a spider that is not already transporting anything, choosing whichever available spider has the shortest Web Line route to the Input. If the remaining choices are equal, it prefers the job that can move the most items.
-
-Each spider reserves its pickup and delivery while working so another spider does not choose the same job. It travels from its current node to the Input, collects up to one stack, carries it to the Output, and then returns home before accepting another job. If the Output fills while the spider is traveling, it waits there and tries again. If the job becomes invalid because an interface, color, or filter changed, the spider returns the item to its original inventory before going home.
-
-## Idle Wandering
-
-Spiders without transport work wander around the connected web network. They usually move to a neighboring node, avoid immediately retracing their last line when another route is available, and occasionally choose a more distant node. A spider may pause briefly after reaching a node, and individual spiders move at slightly different speeds.
-
-At night, idle spiders make their way back to the nest and remain nearby. Transport work takes priority over wandering, but a wandering spider finishes crossing its current Web Line before accepting a job so it never jumps between points on the network.
-
-## Checking the Spiders
-
-Interact with the nest to view each spider's position and current behavior. This screen shows whether it is wandering as well as when a delivery is waiting or can no longer be completed.
-
-If the nest is broken while a spider is carrying something, the carried item is dropped at the nest.
+Breaking the nest drops its spiders and anything they were carrying.
