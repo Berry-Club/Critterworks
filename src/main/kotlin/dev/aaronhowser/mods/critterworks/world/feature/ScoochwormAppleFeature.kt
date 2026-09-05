@@ -15,36 +15,40 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration
 
-class ScoochwormAppleFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfiguration.CODEC) {
+class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormAppleConfiguration.CODEC) {
 
-	override fun place(context: FeaturePlaceContext<NoneFeatureConfiguration>): Boolean {
+	override fun place(context: FeaturePlaceContext<ScoochwormAppleConfiguration>): Boolean {
 		val level = context.level()
-		val floorPosition = findFloor(level, context.origin()) ?: return false
-		val center = floorPosition.above(APPLE_RADIUS)
+		val configuration = context.config()
+		val radius = configuration.radius.sample(context.random())
+		val floorPosition = findFloor(level, context.origin(), configuration.verticalSearchRange) ?: return false
+		val center = floorPosition.above(radius)
 
-		if (!isExposed(level, center)) return false
+		if (!isExposed(level, center, radius)) return false
 
-		placeApple(level, center)
-		spawnScoochworm(level, center.below(APPLE_RADIUS))
+		placeApple(level, center, radius)
+
+		if (configuration.spawnScoochworm) {
+			spawnScoochworm(level, center.below(radius))
+		}
 //		sendTeleportMessage(level, center)
 
 		return true
 	}
 
-	private fun findFloor(level: WorldGenLevel, origin: BlockPos): BlockPos? {
+	private fun findFloor(level: WorldGenLevel, origin: BlockPos, verticalSearchRange: Int): BlockPos? {
 		var position = origin
 		var tries = 0
 
-		while (tries < VERTICAL_SEARCH_RANGE && !level.isEmptyBlock(position)) {
+		while (tries < verticalSearchRange && !level.isEmptyBlock(position)) {
 			position = position.above()
 			tries++
 		}
 
 		if (!level.isEmptyBlock(position)) return null
 
-		while (tries < VERTICAL_SEARCH_RANGE * 2 && level.isEmptyBlock(position.below())) {
+		while (tries < verticalSearchRange * 2 && level.isEmptyBlock(position.below())) {
 			position = position.below()
 			tries++
 		}
@@ -54,13 +58,13 @@ class ScoochwormAppleFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConf
 		return position.below()
 	}
 
-	private fun isExposed(level: WorldGenLevel, center: BlockPos): Boolean {
+	private fun isExposed(level: WorldGenLevel, center: BlockPos, radius: Int): Boolean {
 		val mutablePosition = BlockPos.MutableBlockPos()
 
-		for (xOffset in -APPLE_RADIUS..APPLE_RADIUS) {
-			for (yOffset in -APPLE_RADIUS..APPLE_RADIUS) {
-				for (zOffset in -APPLE_RADIUS..APPLE_RADIUS) {
-					val internalFace = getInternalFace(xOffset, yOffset, zOffset) ?: continue
+		for (xOffset in -radius..radius) {
+			for (yOffset in -radius..radius) {
+				for (zOffset in -radius..radius) {
+					val internalFace = getInternalFace(xOffset, yOffset, zOffset, radius) ?: continue
 
 					mutablePosition.setWithOffset(center, xOffset, yOffset, zOffset)
 					mutablePosition.move(internalFace.opposite)
@@ -73,15 +77,15 @@ class ScoochwormAppleFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConf
 		return false
 	}
 
-	private fun placeApple(level: WorldGenLevel, center: BlockPos) {
+	private fun placeApple(level: WorldGenLevel, center: BlockPos, radius: Int) {
 		val mutablePosition = BlockPos.MutableBlockPos()
 
-		for (xOffset in -APPLE_RADIUS..APPLE_RADIUS) {
-			for (yOffset in -APPLE_RADIUS..APPLE_RADIUS) {
-				for (zOffset in -APPLE_RADIUS..APPLE_RADIUS) {
+		for (xOffset in -radius..radius) {
+			for (yOffset in -radius..radius) {
+				for (zOffset in -radius..radius) {
 					mutablePosition.setWithOffset(center, xOffset, yOffset, zOffset)
 
-					val internalFace = getInternalFace(xOffset, yOffset, zOffset)
+					val internalFace = getInternalFace(xOffset, yOffset, zOffset, radius)
 					val blockState = if (internalFace == null) {
 						Blocks.AIR.defaultBlockState()
 					} else {
@@ -93,7 +97,7 @@ class ScoochwormAppleFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConf
 			}
 		}
 
-		val stemPos = center.above(APPLE_RADIUS + 1)
+		val stemPos = center.above(radius + 1)
 		val stemState = ModBlocks.SCOOCHSTEM.get()
 			.defaultBlockState()
 			.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)
@@ -105,7 +109,7 @@ class ScoochwormAppleFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConf
 		level.setBlock(stemPos, stemState, Block.UPDATE_CLIENTS)
 		level.scheduleTick(stemPos, stemState.block, 3)
 
-		val berryPos = center.above(APPLE_RADIUS - 1)
+		val berryPos = center.above(radius - 1)
 		val berryState = Blocks.CAVE_VINES
 			.defaultBlockState()
 			.setValue(CaveVinesBlock.BERRIES, true)
@@ -137,21 +141,21 @@ class ScoochwormAppleFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConf
 		level.level.server.playerList.broadcastSystemMessage(message, false)
 	}
 
-	private fun getInternalFace(xOffset: Int, yOffset: Int, zOffset: Int): Direction? {
+	private fun getInternalFace(xOffset: Int, yOffset: Int, zOffset: Int, radius: Int): Direction? {
 		var internalFace: Direction? = null
 		var boundaryCount = 0
 
-		if (xOffset == -APPLE_RADIUS || xOffset == APPLE_RADIUS) {
+		if (xOffset == -radius || xOffset == radius) {
 			internalFace = if (xOffset < 0) Direction.EAST else Direction.WEST
 			boundaryCount++
 		}
 
-		if (yOffset == -APPLE_RADIUS || yOffset == APPLE_RADIUS) {
+		if (yOffset == -radius || yOffset == radius) {
 			internalFace = if (yOffset < 0) Direction.UP else Direction.DOWN
 			boundaryCount++
 		}
 
-		if (zOffset == -APPLE_RADIUS || zOffset == APPLE_RADIUS) {
+		if (zOffset == -radius || zOffset == radius) {
 			internalFace = if (zOffset < 0) Direction.SOUTH else Direction.NORTH
 			boundaryCount++
 		}
@@ -174,8 +178,4 @@ class ScoochwormAppleFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConf
 			.setValue(property, false)
 	}
 
-	companion object {
-		private const val APPLE_RADIUS = 2
-		private const val VERTICAL_SEARCH_RANGE = 24
-	}
 }

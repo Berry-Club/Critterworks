@@ -1,4 +1,12 @@
 {
   "type": "critterworks:scoochworm_apple",
-  "config": {}
+  "config": {
+    "radius": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
+    "spawn_scoochworm": true,
+    "vertical_search_range": 24
+  }
 }

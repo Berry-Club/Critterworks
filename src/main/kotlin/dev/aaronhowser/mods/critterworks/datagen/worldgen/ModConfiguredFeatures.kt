@@ -2,11 +2,12 @@ package dev.aaronhowser.mods.critterworks.datagen.worldgen
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.registry.ModFeatures
+import dev.aaronhowser.mods.critterworks.world.feature.ScoochwormAppleConfiguration
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
 import net.minecraft.resources.ResourceKey
+import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
 
 object ModConfiguredFeatures {
 
@@ -17,7 +18,11 @@ object ModConfiguredFeatures {
 			SCOOCHWORM_APPLE,
 			ConfiguredFeature(
 				ModFeatures.SCOOCHWORM_APPLE.get(),
-				FeatureConfiguration.NONE
+				ScoochwormAppleConfiguration(
+					radius = UniformInt.of(2, 4),
+					verticalSearchRange = 24,
+					spawnScoochworm = true
+				)
 			)
 		)
 	}
