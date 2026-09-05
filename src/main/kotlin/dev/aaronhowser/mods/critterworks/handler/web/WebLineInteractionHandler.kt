@@ -204,7 +204,7 @@ object WebLineInteractionHandler {
 			return
 		}
 
-		if (!player.abilities.instabuild) {
+		if (!player.hasInfiniteMaterials()) {
 			val lineLength = canonicalFirstNode.position.distanceTo(canonicalSelectedNode.position)
 			val remainingWebFluid = itemStack.getOrDefault(ModDataComponents.WEB_FLUID, 0.0) - lineLength
 			itemStack.set(ModDataComponents.WEB_FLUID, remainingWebFluid.coerceAtLeast(0.0))
@@ -284,7 +284,7 @@ object WebLineInteractionHandler {
 			return ModMessageLang.TOO_LONG_MESSAGE
 		}
 
-		if (!player.abilities.instabuild) {
+		if (!player.hasInfiniteMaterials()) {
 			val lineLength = firstNode.position.distanceTo(secondNode.position)
 			val availableWebFluid = itemStack.getOrDefault(ModDataComponents.WEB_FLUID, 0.0)
 			if (lineLength > availableWebFluid) return ModMessageLang.NOT_ENOUGH_WEB_FLUID_MESSAGE
