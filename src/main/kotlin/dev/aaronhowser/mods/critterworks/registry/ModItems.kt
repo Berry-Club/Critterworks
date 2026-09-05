@@ -15,7 +15,7 @@ object ModItems : AaronItemRegistry() {
 	val LOCKBOX: DeferredItem<LockboxItem> =
 		register("lockbox", ::LockboxItem, LockboxItem.DEFAULT_PROPERTIES)
 	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
-		register("artificial_spinnerets", ::ArtificialSpinneretsItem, PROPERTIES_SINGLE_STACK)
+		register("artificial_spinnerets", ::ArtificialSpinneretsItem, ArtificialSpinneretsItem.DEFAULT_PROPERTIES)
 	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =
 		register("web_pathfinder", ::WebPathfinderItem, PROPERTIES_SINGLE_STACK)
 	val ITEM_FILTER: DeferredItem<ItemFilterItem> =

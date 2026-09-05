@@ -25,9 +25,18 @@ object WebLinePreviewRenderer {
 		val minecraft = Minecraft.getInstance()
 		val player = minecraft.player ?: return
 		val itemStack = getHeldArtificialSpinnerets(player.mainHandItem, player.offhandItem) ?: return
+
 		val firstNode = itemStack.get(ModDataComponents.WEB_NODE)?.node ?: return
 		val secondNode = getTargetedNode(minecraft, eyePosition, viewVector) ?: return
-		val isValid = WebLineInteractionHandler.canCreateLine(player.level(), player, firstNode, secondNode)
+
+		val isValid = WebLineInteractionHandler.canCreateLine(
+			player.level(),
+			player,
+			itemStack,
+			firstNode,
+			secondNode
+		)
+
 		val color = if (isValid) VALID_PREVIEW_COLOR else INVALID_PREVIEW_COLOR
 
 		WebLineGeometryRenderer.render(
@@ -42,11 +51,13 @@ object WebLinePreviewRenderer {
 	private fun renderHoveredAnchor(poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
 		val minecraft = Minecraft.getInstance()
 		val player = minecraft.player ?: return
+
 		val targetedNode = ClientWebLineInteractionHandler.getHoveredAnchor(
 			player,
 			eyePosition,
 			viewVector
 		) ?: return
+
 		val position = targetedNode.node.position.subtract(eyePosition)
 
 		AaronRenderUtil.renderCubeThroughWalls(

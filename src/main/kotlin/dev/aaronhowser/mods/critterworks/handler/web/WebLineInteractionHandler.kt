@@ -194,16 +194,25 @@ object WebLineInteractionHandler {
 		val invalidMessage = getInvalidMessage(
 			level,
 			player,
+			itemStack,
 			canonicalFirstNode,
 			canonicalSelectedNode
 		)
+
 		if (invalidMessage != null) {
 			player.status(invalidMessage.toComponent())
 			return
 		}
 
+		if (!player.abilities.instabuild) {
+			val lineLength = canonicalFirstNode.position.distanceTo(canonicalSelectedNode.position)
+			val remainingWebFluid = itemStack.getOrDefault(ModDataComponents.WEB_FLUID, 0.0) - lineLength
+			itemStack.set(ModDataComponents.WEB_FLUID, remainingWebFluid.coerceAtLeast(0.0))
+		}
+
 		val webLine = WebLine(UUID.randomUUID(), canonicalFirstNode, canonicalSelectedNode)
 		savedData.addLine(level, webLine)
+
 		itemStack.remove(ModDataComponents.WEB_NODE)
 		player.status(ModMessageLang.LINE_CREATED_MESSAGE.toComponent())
 	}
@@ -232,10 +241,11 @@ object WebLineInteractionHandler {
 	fun canCreateLine(
 		level: Level,
 		player: Player,
+		itemStack: ItemStack,
 		firstNode: WebNode,
 		secondNode: WebNode
 	): Boolean {
-		return getInvalidMessage(level, player, firstNode, secondNode) == null
+		return getInvalidMessage(level, player, itemStack, firstNode, secondNode) == null
 	}
 
 	fun createBlockAnchor(blockPos: BlockPos, face: Direction, position: Vec3): WebBlockAnchor {
@@ -253,6 +263,7 @@ object WebLineInteractionHandler {
 	private fun getInvalidMessage(
 		level: Level,
 		player: Player,
+		itemStack: ItemStack,
 		firstNode: WebNode,
 		secondNode: WebNode
 	): String? {
@@ -271,6 +282,12 @@ object WebLineInteractionHandler {
 		val maxLength = 10.0
 		if (firstNode.position.distanceToSqr(secondNode.position) >= maxLength * maxLength) {
 			return ModMessageLang.TOO_LONG_MESSAGE
+		}
+
+		if (!player.abilities.instabuild) {
+			val lineLength = firstNode.position.distanceTo(secondNode.position)
+			val availableWebFluid = itemStack.getOrDefault(ModDataComponents.WEB_FLUID, 0.0)
+			if (lineLength > availableWebFluid) return ModMessageLang.NOT_ENOUGH_WEB_FLUID_MESSAGE
 		}
 
 		if (!hasLineOfSight(level, player, firstNode, secondNode)) {

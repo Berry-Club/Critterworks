@@ -1,5 +1,6 @@
-// 1.21.1	2026-09-04T14:11:14.6226851	Item Models: critterworks
+// 1.21.1	2026-09-05T18:07:56.6120063	Item Models: critterworks
 9aa9ecfaa63b4c4d480829eca9ac5ad68d1cde96 assets/critterworks/models/item/aaronberry.json
+5aad47e8444dc8a16cdca383d2183dfb11c638ac assets/critterworks/models/item/artificial_spinnerets.json
 115fa32078e292a27a51f6d53578b7feb62e1be2 assets/critterworks/models/item/blue_dyeberry.json
 8b8cf1343b4092504d81e51a6a0a048b3b7d6937 assets/critterworks/models/item/cyan_dyeberry.json
 09949346c06732407655084e8bae12798f049a8f assets/critterworks/models/item/green_dyeberry.json
@@ -9,7 +10,6 @@ f3a12699706be3ff90b282461458f0f8bfd608e5 assets/critterworks/models/item/lockbox
 da7ce6ee17dca44a0d840be56cac5590423c307a assets/critterworks/models/item/magenta_dyeberry.json
 95c73f8b03e1cc0ad1820feabfcd4f1fc7fa5c0f assets/critterworks/models/item/red_dyeberry.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/critterworks/models/item/scoochworm_spawn_egg.json
-ec2fa282e43358aa1f544f97e94dc3f59416f7ca assets/critterworks/models/item/spider_nest_interface.json
-fc428cec73e8abfc507b4f2bdb70ac8d84260332 assets/critterworks/models/item/web_fluid.json
 ec2fa282e43358aa1f544f97e94dc3f59416f7ca assets/critterworks/models/item/web_pathfinder.json
+ec2fa282e43358aa1f544f97e94dc3f59416f7ca assets/critterworks/models/item/web_port.json
 18a0bb9f5aaf6940151a13cc2412459d6a9d7b43 assets/critterworks/models/item/yellow_dyeberry.json

@@ -21,16 +21,15 @@ object ModDataComponents : AaronDataComponentRegistry() {
 
 	val ENTITY_DATA: DeferredHolder<DataComponentType<*>, DataComponentType<CustomData>> =
 		register("entity_data", CustomData.CODEC, CustomData.STREAM_CODEC)
-
 	val WORM_COLOR: DeferredHolder<DataComponentType<*>, DataComponentType<WormColor>> =
 		register("worm_color", WormColor.CODEC, WormColor.STREAM_CODEC)
-
 	val WEB_NODE: DeferredHolder<DataComponentType<*>, DataComponentType<WebNodeDataComponent>> =
 		register("web_node", WebNodeDataComponent.CODEC, WebNodeDataComponent.STREAM_CODEC)
-
 	val ITEM_FILTER: DeferredHolder<DataComponentType<*>, DataComponentType<ItemFilterComponent>> =
 		register("item_filter", ItemFilterComponent.CODEC, ItemFilterComponent.STREAM_CODEC)
-
 	val WEB_PORT: DeferredHolder<DataComponentType<*>, DataComponentType<WebPortComponent>> =
 		register("web_port", WebPortComponent.CODEC, WebPortComponent.STREAM_CODEC)
+	val WEB_FLUID: DeferredHolder<DataComponentType<*>, DataComponentType<Double>> =
+		double("web_fluid")
+
 }
