@@ -1,8 +1,8 @@
-# 1.0.1
+# 1.1.0
 
-### Fixed
+### Changed
 
-- Web Port texture has the right name
+- Changed the layout of the Web Port menu
 
 # 1.0.0
 
