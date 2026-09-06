@@ -297,36 +297,37 @@ class ModBlockStateProvider(
 
 	private fun stemEncasedComparator() {
 		val stemEncasedComparator = ModBlocks.STEM_ENCASED_COMPARATOR.get()
-		val comparatorSide = modLoc("block/stem_encased_comparator/side")
-		val comparatorSideDisabled = modLoc("block/stem_encased_comparator/side_disabled")
-		val comparatorTop = modLoc("block/stem_encased_comparator/top")
-		val comparatorTopDisabled = modLoc("block/stem_encased_comparator/top_disabled")
+
+		val side = modLoc("block/stem_encased_comparator/side")
+		val sideDisabled = modLoc("block/stem_encased_comparator/side_disabled")
+		val top = modLoc("block/stem_encased_comparator/top")
+		val topDisabled = modLoc("block/stem_encased_comparator/top_disabled")
 
 		scoochstemBlock(
 			block = stemEncasedComparator,
-			sideModels = scoochstemFaceModels("stem_encased_comparator_side", comparatorSide),
+			sideModels = scoochstemFaceModels("stem_encased_comparator_side", side),
 			disabledSideModels = scoochstemFaceModels(
 				"stem_encased_comparator_side_disabled",
-				comparatorSideDisabled
+				sideDisabled
 			),
-			endModels = scoochstemFaceModels("stem_encased_comparator_top", comparatorTop),
+			endModels = scoochstemFaceModels("stem_encased_comparator_top", top),
 			disabledEndModels = scoochstemFaceModels(
 				"stem_encased_comparator_top_disabled",
-				comparatorTopDisabled
+				topDisabled
 			)
 		)
 
 		val comparatorItemModel = models()
 			.cube(
 				"stem_encased_comparator",
-				comparatorTop,
-				comparatorTop,
-				comparatorSide,
-				comparatorSide,
-				comparatorSide,
-				comparatorSide
+				top,
+				top,
+				side,
+				side,
+				side,
+				side
 			)
-			.particle(comparatorSide)
+			.particle(side)
 
 		simpleBlockItem(stemEncasedComparator, comparatorItemModel)
 	}
