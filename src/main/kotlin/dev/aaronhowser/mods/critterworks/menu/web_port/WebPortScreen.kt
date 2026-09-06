@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.menu.web_port
 import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.ScreenWithStrings
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDyeName
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.packet.c2s.ClientClickedMenuButton
 import dev.aaronhowser.mods.aaron.packet.c2s.ClientChangedMenuString
@@ -89,7 +90,7 @@ class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 	}
 
 	private fun getColorMessage(): Component {
-		return ModMenuLang.WEB_PORT_COLOR.toComponent(menu.getColor().name)
+		return ModMenuLang.WEB_PORT_COLOR.toComponent(menu.getColor().getDyeName())
 	}
 
 	private fun getDirectionMessage(): Component {
