@@ -5,11 +5,13 @@ import dev.aaronhowser.mods.aaron.menu.ScreenWithStrings
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDyeName
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
-import dev.aaronhowser.mods.aaron.packet.c2s.ClientClickedMenuButton
 import dev.aaronhowser.mods.aaron.packet.c2s.ClientChangedMenuString
+import dev.aaronhowser.mods.aaron.packet.c2s.ClientClickedMenuButton
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
+import dev.aaronhowser.mods.critterworks.menu.ColorButton
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.network.chat.Component
@@ -21,28 +23,40 @@ class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 	override val background: ScreenBackground = BACKGROUND
 	override val inventoryLabelOffsetY: Int = -2
 
-	private lateinit var colorButton: Button
+	private lateinit var colorButton: ColorButton
 	private lateinit var directionButton: Button
 	private lateinit var priorityInput: EditBox
 
 	override fun baseInit() {
 		super.baseInit()
-		colorButton = Button
-			.builder(getColorMessage()) {
-				ClientClickedMenuButton(WebPortMenu.CYCLE_COLOR_BUTTON_ID).messageServer()
-			}.bounds(leftPos + 12, topPos + 57, 72, 20)
-			.build()
+
+		colorButton = ColorButton(
+			leftPos + 56,
+			topPos + 42,
+			20,
+			20,
+			font,
+			{ menu.getColor().textColor },
+			{ Component.literal(menu.getColor().getDyeName()) },
+		) {
+			ClientClickedMenuButton(WebPortMenu.CYCLE_COLOR_BUTTON_ID).messageServer()
+		}
 
 		directionButton = Button
 			.builder(getDirectionMessage()) {
 				ClientClickedMenuButton(WebPortMenu.TOGGLE_DIRECTION_BUTTON_ID).messageServer()
-			}.bounds(leftPos + 92, topPos + 57, 72, 20)
+			}.bounds(
+				leftPos + 88,
+				topPos + 42,
+				72,
+				20
+			)
 			.build()
 
 		priorityInput = EditBox(
 			font,
-			leftPos + 12,
-			topPos + 32,
+			leftPos + 56,
+			topPos + 20,
 			56,
 			18,
 			ModMenuLang.WEB_PORT_PRIORITY.toComponent()
@@ -85,12 +99,13 @@ class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 
 	override fun containerTick() {
 		super.containerTick()
-		colorButton.message = getColorMessage()
 		directionButton.message = getDirectionMessage()
 	}
 
-	private fun getColorMessage(): Component {
-		return ModMenuLang.WEB_PORT_COLOR.toComponent(menu.getColor().getDyeName())
+	override fun renderLabels(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+		super.renderLabels(guiGraphics, mouseX, mouseY)
+		guiGraphics.drawString(font, ModMenuLang.WEB_PORT_PRIORITY.toComponent(), 12, 25, 0x404040, false)
+		guiGraphics.drawString(font, Component.literal("Color: "), 12, 47, 0x404040, false)
 	}
 
 	private fun getDirectionMessage(): Component {

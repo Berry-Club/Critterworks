@@ -108,7 +108,7 @@ class WebPortMenu private constructor(
 	}
 
 	override fun addContainerSlots() {
-		addSlot(SlotItemHandler(filterSlot, 0, 80, 35))
+		addSlot(SlotItemHandler(filterSlot, 0, 140, 20))
 	}
 
 	override fun stillValid(player: Player): Boolean {
