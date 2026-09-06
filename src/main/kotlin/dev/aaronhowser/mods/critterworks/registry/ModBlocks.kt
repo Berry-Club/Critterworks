@@ -31,6 +31,9 @@ object ModBlocks : AaronBlockRegistry() {
 	val SCOOCHSTEM_WOOD: DeferredBlock<ScoochstemBlock> =
 		registerBlock("scoochstem_wood", ::ScoochstemBlock)
 
+	val SCOOCHWORM_DEPOT: DeferredBlock<ScoochwormDepotBlock> =
+		registerBlock("scoochworm_depot", ::ScoochwormDepotBlock)
+
 	val APPLE_SLICE: DeferredBlock<HugeMushroomBlock> =
 		registerBlock("apple_slice") {
 			HugeMushroomBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK))

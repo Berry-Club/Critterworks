@@ -27,6 +27,7 @@ class ModBlockLootTablesSubProvider(
 		dropSelf(ModBlocks.STEM_ENCASED_COMPARATOR.get())
 		dropSelf(ModBlocks.SCOOCHSTEM_WOOD.get())
 		dropSelf(ModBlocks.HOPPING_SPIDER_NEST.get())
+		dropSelf(ModBlocks.SCOOCHWORM_DEPOT.get())
 		appleSlice()
 
 		dropSelf(ModBlocks.GREEN_SCOOCHSTEM.get())

@@ -38,7 +38,8 @@ class ModBlockTagsProvider(
 				ModBlocks.RED_SCOOCHSTEM,
 				ModBlocks.YELLOW_SCOOCHSTEM,
 				ModBlocks.MAGENTA_SCOOCHSTEM,
-				ModBlocks.CYAN_SCOOCHSTEM
+				ModBlocks.CYAN_SCOOCHSTEM,
+				ModBlocks.SCOOCHWORM_DEPOT
 			)
 
 		tag(SCOOCHSTEM_REPLACEABLE)

@@ -34,6 +34,7 @@ class ModBlockStateProvider(
 		hoppingSpiderNest()
 		appleSlice()
 		scoochstem()
+		scoochwormDepot()
 		stemEncasedComparator()
 		coloredScoochstem()
 		dyeberryVines()
@@ -47,6 +48,12 @@ class ModBlockStateProvider(
 			mcLoc("block/bee_nest_bottom"),
 			mcLoc("block/bee_nest_top")
 		)
+		simpleBlockWithItem(block, model)
+	}
+
+	private fun scoochwormDepot() {
+		val block = ModBlocks.SCOOCHWORM_DEPOT.get()
+		val model = models().cubeAll("scoochworm_depot", mcLoc("block/iron_block"))
 		simpleBlockWithItem(block, model)
 	}
 

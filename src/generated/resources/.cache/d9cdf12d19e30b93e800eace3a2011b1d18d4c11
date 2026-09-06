@@ -1,4 +1,4 @@
-// 1.21.1	2026-09-05T13:49:38.3581732	Block States: critterworks
+// 1.21.1	2026-09-06T15:57:41.5809866	Block States: critterworks
 bff39bd414b05811bbd89c96d8e2121642432d62 assets/critterworks/blockstates/apple_slice.json
 92a92831fb4c696d7bdfa64e0b64ae262f78d98c assets/critterworks/blockstates/blue_scoochstem.json
 86fd608de8d6b5ed6348bcdeee10c53f6ede2662 assets/critterworks/blockstates/critter_cage.json
@@ -11,6 +11,7 @@ a59a4bba1ce33bf179a2da492eff9e52bf345162 assets/critterworks/blockstates/magenta
 038b5bf584b0d3ba96e497612595f9d95e55fddb assets/critterworks/blockstates/red_scoochstem.json
 63e1d8c04ad0119a12ac1698c887dcd07afc0f59 assets/critterworks/blockstates/scoochstem.json
 11be609fcc6fee195d80714220debe55d47b67a0 assets/critterworks/blockstates/scoochstem_wood.json
+51d74e238ab166614b3afa6c33f0fd0ec7746d9a assets/critterworks/blockstates/scoochworm_depot.json
 4aff481a1ea76458e290dc5f45d262531fd62028 assets/critterworks/blockstates/stem_encased_comparator.json
 0a70c5d2f57e933735d10acc45e6cadc37460441 assets/critterworks/blockstates/yellow_scoochstem.json
 7be2e3396385d849e09e89b0f6d4fe069f52794b assets/critterworks/models/block/apple_slice.json
@@ -46,6 +47,7 @@ f0c1f62d9d1984f60a9cea0631d57911ac3163c0 assets/critterworks/models/block/scooch
 e59370050544891aba43e529d63d1bf606982aa9 assets/critterworks/models/block/scoochstem_top_disabled_rotated.json
 8e6608d87550d06ef3589248c24d867bf604a2e2 assets/critterworks/models/block/scoochstem_top_rotated.json
 256037bc138205916c67c0c1b25b5a7fb4dd2454 assets/critterworks/models/block/scoochstem_wood.json
+a7a1c26a7c6b0979efcf548430b04d9fca654080 assets/critterworks/models/block/scoochworm_depot.json
 984816b9875ce400dc94b43fab9fddcfaa2c6488 assets/critterworks/models/block/stem_encased_comparator.json
 2983c43cae1f9d9fd6f5742704d8dc8b51e56f55 assets/critterworks/models/block/stem_encased_comparator_side.json
 0845d7f4e53139799da9f1808e2342e9c23d3eed assets/critterworks/models/block/stem_encased_comparator_side_disabled.json
@@ -66,5 +68,6 @@ a70395cb03f323175f2019807c8fce56af474bf7 assets/critterworks/models/item/cyan_sc
 75de77107c8cb9d75b888d7f50b601937336c654 assets/critterworks/models/item/red_scoochstem.json
 e3b072c5cca45b7ae04a18fa64a1df1447ec231a assets/critterworks/models/item/scoochstem.json
 3fa02d514dfc434712bb710e2a4e1b7c70b91c83 assets/critterworks/models/item/scoochstem_wood.json
+4adc616251384e6fc2b6890f596382a03262af77 assets/critterworks/models/item/scoochworm_depot.json
 fa42580d5bf86f7c69d1a3d8071b76bd1c6ce835 assets/critterworks/models/item/stem_encased_comparator.json
 bacccc260e73d73ba91bfcd984451ed8bc0b273c assets/critterworks/models/item/yellow_scoochstem.json

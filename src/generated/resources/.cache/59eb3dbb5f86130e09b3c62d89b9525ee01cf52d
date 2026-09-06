@@ -1,4 +1,4 @@
-// 1.21.1	2026-09-05T13:47:36.1731941	Loot Tables
+// 1.21.1	2026-09-06T15:57:41.5774607	Loot Tables
 dfb6776539ef4f66eb99bc9590fc5419bed3967f data/critterworks/loot_table/blocks/apple_slice.json
 04a3171f4aa5322f422d727d4ed49fafe8774b9b data/critterworks/loot_table/blocks/blue_scoochstem.json
 bf05e11a4a6d0e85e4e9286cdf6fe57180795d2a data/critterworks/loot_table/blocks/critter_cage.json
@@ -11,5 +11,6 @@ db08354324e4b89a6423cc87c27078a07ac3b6af data/critterworks/loot_table/blocks/gre
 54889de36d7ffd483f37fe07becad2c28c704ffa data/critterworks/loot_table/blocks/red_scoochstem.json
 8146c906c556520d4ef4e85ccfc07efabac3c4bb data/critterworks/loot_table/blocks/scoochstem.json
 99939d33805bfd41a3f27b9db2272682d0f824e1 data/critterworks/loot_table/blocks/scoochstem_wood.json
+7f171c043dacfae5d48b9379cad5e4cf20a5f87a data/critterworks/loot_table/blocks/scoochworm_depot.json
 623242ec7e72869f4fdf82734c71ef63c381042c data/critterworks/loot_table/blocks/stem_encased_comparator.json
 82a5eee36c355472783efa29d711e192de2d7954 data/critterworks/loot_table/blocks/yellow_scoochstem.json
