@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.critterworks.packet
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacketRegistrar
-import dev.aaronhowser.mods.critterworks.packet.client_to_server.SetWebPortPriorityPacket
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
@@ -16,7 +15,6 @@ object ModPacketHandler : AaronPacketRegistrar {
 		toClient(registrar, AddWebLinesPacket.TYPE, AddWebLinesPacket.STREAM_CODEC)
 		toClient(registrar, RemoveWebLinePacket.TYPE, RemoveWebLinePacket.STREAM_CODEC)
 		toClient(registrar, ShowWebPathPacket.TYPE, ShowWebPathPacket.STREAM_CODEC)
-		toServer(registrar, SetWebPortPriorityPacket.TYPE, SetWebPortPriorityPacket.STREAM_CODEC)
 		toServer(registrar, WebLineInteractPacket.TYPE, WebLineInteractPacket.STREAM_CODEC)
 	}
 }

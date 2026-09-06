@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.menu.web_port
 
 import dev.aaronhowser.mods.aaron.menu.MenuWithButtons
 import dev.aaronhowser.mods.aaron.menu.MenuWithInventory
+import dev.aaronhowser.mods.aaron.menu.MenuWithStrings
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
@@ -27,7 +28,7 @@ class WebPortMenu private constructor(
 	private val hand: InteractionHand?,
 	private val anchorUuid: UUID?,
 	private val clientAnchorStack: ItemStack
-) : MenuWithInventory(ModMenuTypes.WEB_PORT.get(), containerId, playerInventory), MenuWithButtons {
+) : MenuWithInventory(ModMenuTypes.WEB_PORT.get(), containerId, playerInventory), MenuWithButtons, MenuWithStrings {
 
 	constructor(containerId: Int, playerInventory: Inventory, hand: InteractionHand) :
 		this(containerId, playerInventory, hand, null, ItemStack.EMPTY)
@@ -95,6 +96,12 @@ class WebPortMenu private constructor(
 	fun isInput(): Boolean = getComponent().transferDirection == WebPortComponent.TransferDirection.INPUT
 	fun getPriority(): Int = getComponent().priority
 
+	override fun receiveString(stringId: Int, stringReceived: String) {
+		if (stringId != PRIORITY_STRING_ID) return
+		val priority = stringReceived.toIntOrNull() ?: return
+		setPriority(priority)
+	}
+
 	fun setPriority(priority: Int) {
 		WebPortItem.setPriority(getWebPortStack(), priority)
 		syncAnchor()
@@ -134,6 +141,7 @@ class WebPortMenu private constructor(
 	companion object {
 		const val CYCLE_COLOR_BUTTON_ID = 0
 		const val TOGGLE_DIRECTION_BUTTON_ID = 1
+		const val PRIORITY_STRING_ID = 0
 		private const val MAX_DISTANCE_SQUARED = 64.0
 
 		fun fromNetwork(
