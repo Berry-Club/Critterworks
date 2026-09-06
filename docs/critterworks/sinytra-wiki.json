@@ -1,6 +1,7 @@
 {
 	"id": "critterworks",
 	"modid": "critterworks",
+	"schema": "1",
 	"owners": [
 		"aaronhowser1"
 	],
