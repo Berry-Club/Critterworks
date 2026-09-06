@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.entity.goal
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
 import dev.aaronhowser.mods.critterworks.block.CritterCageBlock
+import dev.aaronhowser.mods.critterworks.block.base.ScoochwormTravelBlock
 import dev.aaronhowser.mods.critterworks.block_entity.CritterCageBlockEntity
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import net.minecraft.core.BlockPos
@@ -31,13 +32,13 @@ class ScoochwormTravelGoal(
 		scoochworm.attachToSupport(support.supportPosition, support.supportDirection)
 
 		val direction = getMovementDirection(support.supportDirection)
+		currentSupport = support
 		val destination = chooseNextSupport(support, direction)
 		if (destination == null) {
 			tryEnterCage(direction)
 			return false
 		}
 
-		currentSupport = support
 		startMovingTo(support, destination, direction)
 		return true
 	}
@@ -176,12 +177,14 @@ class ScoochwormTravelGoal(
 	): ScoochwormSupport? {
 		val left = turnAlongSurface(forward, support.supportDirection, false)
 		val right = turnAlongSurface(forward, support.supportDirection, true)
+
 		val leftSupport = support.copy(
 			supportPosition = support.supportPosition.relative(left)
 		)
 		val rightSupport = support.copy(
 			supportPosition = support.supportPosition.relative(right)
 		)
+
 		val canTurnLeft = canMoveOnto(leftSupport)
 		val canTurnRight = canMoveOnto(rightSupport)
 
@@ -293,6 +296,19 @@ class ScoochwormTravelGoal(
 	}
 
 	private fun canMoveOnto(support: ScoochwormSupport): Boolean {
+		val current = currentSupport
+
+		if (current != null) {
+			val towardsDirection = getDirectionToSupport(
+				current,
+				support,
+				movementDirection ?: Direction.NORTH
+			)
+
+			if (!canExitCurrentSupport(current, towardsDirection)) return false
+			if (!canEnterSupport(support, towardsDirection)) return false
+		}
+
 		if (!isStemSupport(support)) return false
 
 		val position = getPositionOnSupport(support)
@@ -304,6 +320,39 @@ class ScoochwormTravelGoal(
 		)
 
 		return scoochworm.level().noCollision(scoochworm, bounds)
+	}
+
+	private fun canExitCurrentSupport(current: ScoochwormSupport, towardsDirection: Direction): Boolean {
+		val state = scoochworm.level().getBlockState(current.supportPosition)
+		val block = state.block
+		if (block !is ScoochwormTravelBlock) return true
+
+		return block.canDetachFromBlock(
+			state,
+			scoochworm,
+			scoochworm.level(),
+			current.supportPosition,
+			current.supportDirection,
+			towardsDirection
+		)
+	}
+
+	private fun canEnterSupport(
+		destination: ScoochwormSupport,
+		towardsDirection: Direction
+	): Boolean {
+		val state = scoochworm.level().getBlockState(destination.supportPosition)
+		val block = state.block
+		if (block !is ScoochwormTravelBlock) return true
+
+		return block.canAttachToBlock(
+			state,
+			scoochworm,
+			scoochworm.level(),
+			destination.supportPosition,
+			destination.supportDirection,
+			towardsDirection.opposite
+		)
 	}
 
 	private fun isStemSupport(support: ScoochwormSupport): Boolean {

@@ -15,12 +15,13 @@ class ColoredScoochstemBlock(
 	val color: WormColor
 ) : RotatedPillarBlock(Properties.ofFullCopy(Blocks.OAK_LOG)), ScoochwormTravelBlock {
 
-	override fun supportsScoochwormTravel(
+	override fun canAttachToBlock(
 		blockState: BlockState,
 		scoochworm: ScoochwormEntity,
 		level: Level,
 		position: BlockPos,
-		face: Direction
+		supportDirection: Direction,
+		fromDirection: Direction
 	): Boolean {
 		return scoochworm.color == this.color
 	}

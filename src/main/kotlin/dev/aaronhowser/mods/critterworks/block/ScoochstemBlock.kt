@@ -195,14 +195,15 @@ open class ScoochstemBlock : RotatedPillarBlock(Properties.ofFullCopy(Blocks.OAK
 		return state.setValue(disabledProperty, !state.getValue(disabledProperty))
 	}
 
-	override fun supportsScoochwormTravel(
+	override fun canAttachToBlock(
 		blockState: BlockState,
 		scoochworm: ScoochwormEntity,
 		level: Level,
 		position: BlockPos,
-		face: Direction
+		supportDirection: Direction,
+		fromDirection: Direction
 	): Boolean {
-		return !blockState.getValue(getDisabledProperty(face))
+		return !blockState.getValue(getDisabledProperty(supportDirection))
 	}
 
 	override fun getFlammability(state: BlockState, level: BlockGetter, position: BlockPos, direction: Direction): Int = 5

@@ -512,7 +512,14 @@ class ScoochwormEntity(
 
 			val block = blockState.block
 			return if (block is ScoochwormTravelBlock) {
-				block.supportsScoochwormTravel(blockState, scoochworm, level, position, attachmentFace)
+				block.canAttachToBlock(
+					blockState,
+					scoochworm,
+					level,
+					position,
+					attachmentFace.opposite,
+					attachmentFace
+				)
 			} else {
 				true
 			}
