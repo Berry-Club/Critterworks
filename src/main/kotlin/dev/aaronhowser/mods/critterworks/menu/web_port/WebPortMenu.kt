@@ -99,6 +99,7 @@ class WebPortMenu private constructor(
 	override fun receiveString(stringId: Int, stringReceived: String) {
 		if (stringId != PRIORITY_STRING_ID) return
 		val priority = stringReceived.toIntOrNull() ?: return
+
 		setPriority(priority)
 	}
 
@@ -135,6 +136,7 @@ class WebPortMenu private constructor(
 				WebPortItem.setTransferDirection(stack, direction)
 			}
 		}
+
 		syncAnchor()
 	}
 

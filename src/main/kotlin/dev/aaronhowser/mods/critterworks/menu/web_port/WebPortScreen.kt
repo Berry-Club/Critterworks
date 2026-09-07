@@ -16,6 +16,7 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
+import org.lwjgl.glfw.GLFW
 
 class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 	BaseScreen<WebPortMenu>(menu, inventory, title), ScreenWithStrings {
@@ -84,6 +85,10 @@ class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 	}
 
 	override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+			return super.keyPressed(keyCode, scanCode, modifiers)
+		}
+
 		return if (!priorityInput.keyPressed(keyCode, scanCode, modifiers) && !priorityInput.canConsumeInput()) {
 			super.keyPressed(keyCode, scanCode, modifiers)
 		} else {
