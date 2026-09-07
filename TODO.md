@@ -71,6 +71,12 @@
 - Better comparator that can intake an Item Filter
 	- Or should the Stem-Encased Comparator just have an item slot for this?
 
+# Farm critters?
+
+- Animal farming?
+- Monster farming?
+- Crops and trees?
+
 # Generic non critter stuff
 
 - Dripleaf Launchpad
