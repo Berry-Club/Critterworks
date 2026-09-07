@@ -89,3 +89,9 @@
 
 - Dripleaf Launchpad
 	- Basically the thing from Portal 
+
+# Guidebook
+
+- Bookworm, obviously
+- What if instead of an item given to you on spawn, it's a mob that spawns on you when you first join and it follows you around etc
+- Or it could be a butterfly and the wings are the front and back covers of the book
