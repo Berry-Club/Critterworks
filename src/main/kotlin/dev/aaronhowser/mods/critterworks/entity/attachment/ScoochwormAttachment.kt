@@ -38,6 +38,8 @@ abstract class ScoochwormAttachment(
 
 	open fun serverTick(bodyPart: ScoochwormPartEntity) {}
 
+	open fun install(player: Player): Boolean = true
+
 	open fun applySyncedData(data: SyncedAttachmentData) {}
 
 	protected open fun synchronizeItemStack() {}

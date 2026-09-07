@@ -108,6 +108,7 @@ class ScoochwormSegment {
 
 		val newAttachment = ScoochwormAttachment.fromItemStack(attachmentItem)
 		if (newAttachment is NoAttachment) return false
+		if (!newAttachment.install(player)) return false
 
 		attachment = newAttachment
 		bodyPart.attachmentData = attachment.syncedData

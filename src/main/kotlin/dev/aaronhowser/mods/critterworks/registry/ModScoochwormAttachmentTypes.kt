@@ -5,9 +5,11 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachmentType
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.LockboxAttachment
+import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.ChunkLoaderAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.SaddleAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.LockboxAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.attachment.data.ChunkLoaderAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.NoAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SaddleAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
@@ -48,6 +50,16 @@ object ModScoochwormAttachmentTypes {
 				matchesItem = { itemStack -> itemStack.isItem(ModItems.LOCKBOX) },
 				createFromItem = ::LockboxAttachment,
 				createEmpty = { LockboxAttachment(ItemStack.EMPTY) }
+			)
+		}
+
+	val CHUNK_LOADER: DeferredHolder<ScoochwormAttachmentType<*>, ScoochwormAttachmentType<ChunkLoaderAttachmentData>> =
+		register("chunk_loader") {
+			ScoochwormAttachmentType(
+				streamCodec = ChunkLoaderAttachmentData.STREAM_CODEC,
+				matchesItem = { itemStack -> itemStack.isItem(ModItems.SCOOCHWORM_GPS) },
+				createFromItem = ::ChunkLoaderAttachment,
+				createEmpty = { ChunkLoaderAttachment(ItemStack.EMPTY) }
 			)
 		}
 

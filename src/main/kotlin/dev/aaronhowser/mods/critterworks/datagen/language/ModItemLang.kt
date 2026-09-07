@@ -8,6 +8,7 @@ object ModItemLang {
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {
 			addItem(ModItems.LOCKBOX, "Lockbox")
+			addItem(ModItems.SCOOCHWORM_GPS, "Scoochworm GPS")
 			addItem(ModItems.ARTIFICIAL_SPINNERETS, "Artificial Spinnerets")
 			addItem(ModItems.WEB_PATHFINDER, "Web Pathfinder")
 			addItem(ModItems.ITEM_FILTER, "Item Filter")

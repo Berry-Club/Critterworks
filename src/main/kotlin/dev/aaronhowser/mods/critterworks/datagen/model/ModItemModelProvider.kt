@@ -17,6 +17,7 @@ class ModItemModelProvider(
 
 	override fun registerModels() {
 		basicItem(ModItems.LOCKBOX.get())
+		basicItem(ModItems.SCOOCHWORM_GPS.get())
 		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
 		basicItem(ModItems.WEB_PATHFINDER.get())
 		basicItem(ModItems.ITEM_FILTER.get())
