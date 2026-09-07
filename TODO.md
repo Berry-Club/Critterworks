@@ -1,6 +1,5 @@
 # Scoochworms
 
-- More advanced Comparators that emit a signal when they have specific items
 - Attachments for fluids and energy
 	- Iron Stomach or something for fluids?
 		- Or is that too gross and unwholesome? It's kinda body horror. It's not an attachment, it's surgery
