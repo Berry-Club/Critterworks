@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.ScreenWithStrings
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDyeName
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getNameComponent
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.packet.c2s.ClientChangedMenuString
 import dev.aaronhowser.mods.critterworks.Critterworks
@@ -37,7 +38,7 @@ class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 			20,
 			font,
 			{ menu.getColor().textColor },
-			{ Component.literal(menu.getColor().getDyeName()) },
+			{ menu.getColor().getNameComponent() },
 		) {
 			buttonClicked(WebPortMenu.CYCLE_COLOR_BUTTON_ID)
 		}
