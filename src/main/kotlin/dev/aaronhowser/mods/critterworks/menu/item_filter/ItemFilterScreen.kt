@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
-import dev.aaronhowser.mods.aaron.packet.c2s.ClientClickedMenuButton
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.menu.ToggleSpriteButton
@@ -50,8 +49,7 @@ class ItemFilterScreen(
 			),
 			isOnGetter = { menu.isInverted() },
 			onPress = {
-				val packet = ClientClickedMenuButton(ItemFilterMenu.TOGGLE_INVERTED_BUTTON_ID)
-				packet.messageServer()
+				buttonClicked(ItemFilterMenu.TOGGLE_INVERTED_BUTTON_ID)
 			}
 		)
 
@@ -70,8 +68,7 @@ class ItemFilterScreen(
 			),
 			isOnGetter = { menu.useTags() },
 			onPress = {
-				val packet = ClientClickedMenuButton(ItemFilterMenu.TOGGLE_USE_TAGS_BUTTON_ID)
-				packet.messageServer()
+				buttonClicked(ItemFilterMenu.TOGGLE_USE_TAGS_BUTTON_ID)
 			}
 		)
 
@@ -90,8 +87,7 @@ class ItemFilterScreen(
 			),
 			isOnGetter = { menu.ignoreDamage() },
 			onPress = {
-				val packet = ClientClickedMenuButton(ItemFilterMenu.TOGGLE_IGNORE_DAMAGE_BUTTON_ID)
-				packet.messageServer()
+				buttonClicked(ItemFilterMenu.TOGGLE_IGNORE_DAMAGE_BUTTON_ID)
 			}
 		)
 
@@ -110,8 +106,7 @@ class ItemFilterScreen(
 			),
 			isOnGetter = { menu.ignoreAllComponents() },
 			onPress = {
-				val packet = ClientClickedMenuButton(ItemFilterMenu.TOGGLE_IGNORE_ALL_COMPONENTS_BUTTON_ID)
-				packet.messageServer()
+				buttonClicked(ItemFilterMenu.TOGGLE_IGNORE_ALL_COMPONENTS_BUTTON_ID)
 			}
 		)
 

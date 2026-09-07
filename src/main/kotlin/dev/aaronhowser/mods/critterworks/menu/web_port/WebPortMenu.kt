@@ -4,6 +4,8 @@ import dev.aaronhowser.mods.aaron.menu.MenuWithButtons
 import dev.aaronhowser.mods.aaron.menu.MenuWithInventory
 import dev.aaronhowser.mods.aaron.menu.MenuWithStrings
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextEnum
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.prevEnum
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.item.WebPortItem
@@ -122,13 +124,18 @@ class WebPortMenu private constructor(
 		return anchor.hasWebPort && player.distanceToSqr(anchor.position) <= MAX_DISTANCE_SQUARED
 	}
 
-	override fun handleButtonPressed(buttonId: Int) {
+	override fun handleButtonPressed(buttonId: Int, isShiftDown: Boolean) {
 		val stack = getWebPortStack()
 		when (buttonId) {
 			CYCLE_COLOR_BUTTON_ID -> {
-				val colors = DyeColor.entries
-				val nextIndex = (getComponent().color.ordinal + 1) % colors.size
-				WebPortItem.setColor(stack, colors[nextIndex])
+				val currentColor = getComponent().color
+				val nextColor = if (isShiftDown) {
+					currentColor.prevEnum()
+				} else {
+					currentColor.nextEnum()
+				}
+
+				WebPortItem.setColor(stack, nextColor)
 			}
 
 			TOGGLE_DIRECTION_BUTTON_ID -> {

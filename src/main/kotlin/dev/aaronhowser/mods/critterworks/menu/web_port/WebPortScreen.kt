@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDyeName
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.packet.c2s.ClientChangedMenuString
-import dev.aaronhowser.mods.aaron.packet.c2s.ClientClickedMenuButton
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.menu.ColorButton
@@ -40,12 +39,12 @@ class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 			{ menu.getColor().textColor },
 			{ Component.literal(menu.getColor().getDyeName()) },
 		) {
-			ClientClickedMenuButton(WebPortMenu.CYCLE_COLOR_BUTTON_ID).messageServer()
+			buttonClicked(WebPortMenu.CYCLE_COLOR_BUTTON_ID)
 		}
 
 		directionButton = Button
 			.builder(getDirectionMessage()) {
-				ClientClickedMenuButton(WebPortMenu.TOGGLE_DIRECTION_BUTTON_ID).messageServer()
+				buttonClicked(WebPortMenu.TOGGLE_DIRECTION_BUTTON_ID)
 			}.bounds(
 				leftPos + 88,
 				topPos + 42,
