@@ -4,20 +4,16 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachmentType
-import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.LockboxAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.ChunkLoaderAttachment
+import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.LockboxAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.SaddleAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.LockboxAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.ChunkLoaderAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.NoAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SaddleAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.attachment.data.*
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
-import net.minecraft.world.item.ItemStack
 import java.util.function.Supplier
 
 object ModScoochwormAttachmentTypes {

@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.data.LockboxAttachmen
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -20,7 +21,6 @@ import net.minecraft.world.inventory.ChestMenu
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemContainerContents
-import net.minecraft.nbt.CompoundTag
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.wrapper.InvWrapper
 

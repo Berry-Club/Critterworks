@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.critterworks.menu.web_port
 import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.ScreenWithStrings
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDyeName
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getNameComponent
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.packet.c2s.ClientChangedMenuString

@@ -5,9 +5,9 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormSegmentSupportBlock
+import dev.aaronhowser.mods.critterworks.block_entity.StemEncasedComparatorBlockEntity
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.block_entity.StemEncasedComparatorBlockEntity
 import dev.aaronhowser.mods.critterworks.item.ItemFilterItem
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -20,9 +20,9 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.neoforged.neoforge.items.ItemHandlerHelper

@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.handler.chunkloader
 
 import net.minecraft.world.level.ChunkPos
-import java.util.UUID
+import java.util.*
 
 data class ChunkLoaderRecord(
 	val attachmentUuid: UUID,
