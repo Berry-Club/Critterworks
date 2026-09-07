@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.config
 
+import dev.aaronhowser.mods.aaron.misc.AaronDsls.section
 import net.neoforged.neoforge.common.ModConfigSpec
 import org.apache.commons.lang3.tuple.Pair
 
@@ -18,14 +19,16 @@ class ServerConfig(
 	}
 
 	private fun general() {
-		lockboxDropIntervalTicks = builder
-			.comment("How often an upside-down Lockbox drops an item, in ticks.")
-			.defineInRange("lockboxDropIntervalTicks", 2, 1, Int.MAX_VALUE)
+		builder.section("scoochworm_attachments") {
+			scoochwormAttachmentConfigs()
+		}
 
-		lockboxDropAmount = builder
-			.comment("The number of items an upside-down Lockbox attempts to drop each interval.")
-			.defineInRange("lockboxDropAmount", 1, 1, Int.MAX_VALUE)
+		builder.section("world_gen") {
+			worldGenConfigs()
+		}
+	}
 
+	private fun worldGenConfigs() {
 		dyeberryVineReplacementChance = builder
 			.comment("The chance that a berry-bearing cave vine is replaced with a dyeberry vine.")
 			.defineInRange("dyeberryVineReplacementChance", 0.05, 0.0, 1.0)
@@ -37,6 +40,16 @@ class ServerConfig(
 		hoppingSpiderNestRarity = builder
 			.comment("The average number of chunks between Hopping Spider Nest generation attempts.")
 			.defineInRange("hoppingSpiderNestRarity", 128, 1, Int.MAX_VALUE)
+	}
+
+	private fun scoochwormAttachmentConfigs() {
+		lockboxDropIntervalTicks = builder
+			.comment("How often an upside-down Lockbox drops an item, in ticks.")
+			.defineInRange("lockboxDropIntervalTicks", 2, 1, Int.MAX_VALUE)
+
+		lockboxDropAmount = builder
+			.comment("The number of items an upside-down Lockbox attempts to drop each interval.")
+			.defineInRange("lockboxDropAmount", 1, 1, Int.MAX_VALUE)
 	}
 
 	companion object {
