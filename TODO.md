@@ -8,6 +8,27 @@
 - Block that exposes item/fluid/energy handlers to pipes etc?
 	- Would trivialize the whole thing with stopping them while they're upside down until they're empty
 
+# Hopping Spiders
+
+- Should webs have more features?
+	- Stand on webs?
+	- Prevent falling damage on webs?
+	- Web trampoline?
+    - Web _swinging?_ Probably not, that sounds hard and out of scope
+- Should they be able to pick up dropped items?
+	- Densely webbed area catches item entities and spiders move them to a designated drop-off point?
+      - Would that need a new "overflow" Web Port?
+- Should Spiders have more individuality?
+  - Stats?
+    - Speed
+    - Carry Capacity
+    - Work Ethic?
+      - Low ethic = sometimes ignores jobs
+      - High ethic = never wanders too far from highly active Input ports
+        - Would have to start keeping track of port activity in addition to priority
+  - Breed Spiders to get better stats?
+    - How would you even do that though?
+
 # Honeypot Ants
 
 - Carry fluids along paths
