@@ -6,6 +6,8 @@ import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterMenu
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterScreen
 import dev.aaronhowser.mods.critterworks.menu.spider_nest.SpiderNestMenu
 import dev.aaronhowser.mods.critterworks.menu.spider_nest.SpiderNestScreen
+import dev.aaronhowser.mods.critterworks.menu.stem_comparator.StemComparatorMenu
+import dev.aaronhowser.mods.critterworks.menu.stem_comparator.StemComparatorScreen
 import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortMenu
 import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortScreen
 import net.minecraft.core.registries.BuiltInRegistries
@@ -31,9 +33,13 @@ object ModMenuTypes : AaronMenuTypesRegistry() {
 	val SPIDER_NEST: DeferredHolder<MenuType<*>, MenuType<SpiderNestMenu>> =
 		register("spider_nest") { IMenuTypeExtension.create(SpiderNestMenu::fromNetwork) }
 
+	val STEM_COMPARATOR: DeferredHolder<MenuType<*>, MenuType<StemComparatorMenu>> =
+		register("stem_comparator", ::StemComparatorMenu)
+
 	override fun registerScreens(event: RegisterMenuScreensEvent) {
 		event.register(ITEM_FILTER.get(), ::ItemFilterScreen)
 		event.register(WEB_PORT.get(), ::WebPortScreen)
 		event.register(SPIDER_NEST.get(), ::SpiderNestScreen)
+		event.register(STEM_COMPARATOR.get(), ::StemComparatorScreen)
 	}
 }

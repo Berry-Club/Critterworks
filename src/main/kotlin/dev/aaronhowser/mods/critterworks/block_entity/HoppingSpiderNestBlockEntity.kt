@@ -2,8 +2,6 @@ package dev.aaronhowser.mods.critterworks.block_entity
 
 import dev.aaronhowser.mods.aaron.block_entity.SyncingBlockEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
-import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.HoppingSpiderWanderBehavior
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.HoppingSpiderTransportBehavior
@@ -68,9 +66,7 @@ class HoppingSpiderNestBlockEntity(
 		level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
 	}
 
-	override fun getDisplayName(): Component {
-		return ModMenuLang.SPIDER_NEST_TITLE.toComponent()
-	}
+	override fun getDisplayName(): Component = blockState.block.name
 
 	override fun createMenu(
 		containerId: Int,
