@@ -1,10 +1,13 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment.builtin
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
 import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.ChunkLoaderAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
-import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
+import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
@@ -31,8 +34,9 @@ class ChunkLoaderAttachment(
 	private var loadedChunk: ChunkPos = ChunkPos.ZERO
 	private var loadedLevel: ServerLevel? = null
 
-	override fun install(player: Player): Boolean {
+	override fun install(player: Player, segment: ScoochwormSegment): Boolean {
 		if (player is FakePlayer) return false
+		if (segment.body?.hasAttachment(ModScoochwormAttachmentTypes.CHUNK_LOADER.get()).isTrue()) return false
 
 		val level = player.level() as? ServerLevel ?: return false
 

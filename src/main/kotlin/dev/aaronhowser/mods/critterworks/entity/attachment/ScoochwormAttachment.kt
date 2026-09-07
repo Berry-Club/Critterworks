@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment
 
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
@@ -19,6 +20,9 @@ abstract class ScoochwormAttachment(
 	protected val itemStack: ItemStack = itemStack.copy()
 
 	abstract val syncedData: SyncedAttachmentData
+	val type: ScoochwormAttachmentType<*>
+		get() = syncedData.resolveType()
+
 	abstract val equipSound: SoundEvent?
 	open val itemHandler: IItemHandler? = null
 
@@ -40,7 +44,7 @@ abstract class ScoochwormAttachment(
 
 	open fun onRemoved(bodyPart: ScoochwormPartEntity) {}
 
-	open fun install(player: Player): Boolean = true
+	open fun install(player: Player, segment: ScoochwormSegment): Boolean = true
 
 	open fun applySyncedData(data: SyncedAttachmentData) {}
 
