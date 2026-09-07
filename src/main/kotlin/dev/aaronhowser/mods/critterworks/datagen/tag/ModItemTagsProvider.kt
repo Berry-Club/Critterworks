@@ -58,6 +58,19 @@ class ModItemTagsProvider(
 				ModBlocks.SCOOCHSTEM.asItem(),
 				ModBlocks.SCOOCHSTEM_WOOD.asItem()
 			)
+
+		tag(SNAP_TO_NODE)
+			.add(
+				ModItems.ARTIFICIAL_SPINNERETS,
+				ModItems.WEB_PATHFINDER,
+				ModItems.WEB_PORT
+			)
+
+		tag(REQUIRES_EXISTING_NODE)
+			.add(
+				ModItems.WEB_PATHFINDER,
+				ModItems.WEB_PORT
+			)
 	}
 
 	companion object {
@@ -65,6 +78,8 @@ class ModItemTagsProvider(
 		val SCOOCHWORM_LOOK_AT = create("scoochworm_look_at")
 		val SCOOCHWORM_SADDLES = create("scoochworm_saddles")
 		val WEB_LINE_INTERACTABLE = create("web_line_interactable")
+		val SNAP_TO_NODE = create("snap_to_node")
+		val REQUIRES_EXISTING_NODE = create("requires_existing_node")
 
 		private fun create(id: String): TagKey<Item> = ItemTags.create(Critterworks.modResource(id))
 	}

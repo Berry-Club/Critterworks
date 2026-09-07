@@ -121,12 +121,8 @@ object WebLineInteractionHandler {
 		val lookOffset = player.lookAngle.scale(interactionRange)
 		val lookEnd = eyePosition.add(lookOffset)
 
-		val snapToExistingNode = itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
-			|| itemStack.isItem(ModItems.WEB_PATHFINDER)
-			|| itemStack.isItem(ModItems.WEB_PORT)
-
-		val requireExistingNode = itemStack.isItem(ModItems.WEB_PATHFINDER)
-			|| itemStack.isItem(ModItems.WEB_PORT)
+		val snapToExistingNode = itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+		val requireExistingNode = itemStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
 
 		val targetedNode = getTargetedNode(
 			listOf(line),
