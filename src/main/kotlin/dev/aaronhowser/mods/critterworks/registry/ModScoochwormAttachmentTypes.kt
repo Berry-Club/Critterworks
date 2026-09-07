@@ -15,6 +15,7 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
+import net.minecraft.world.item.ItemStack
 import java.util.function.Supplier
 
 object ModScoochwormAttachmentTypes {
@@ -35,7 +36,8 @@ object ModScoochwormAttachmentTypes {
 			ScoochwormAttachmentType(
 				streamCodec = NoAttachmentData.STREAM_CODEC,
 				matchesItem = { false },
-				createFromItem = { NoAttachment() }
+				createFromItem = { NoAttachment() },
+				createEmpty = ::NoAttachment
 			)
 		}
 
@@ -44,7 +46,8 @@ object ModScoochwormAttachmentTypes {
 			ScoochwormAttachmentType(
 				streamCodec = LockboxAttachmentData.STREAM_CODEC,
 				matchesItem = { itemStack -> itemStack.isItem(ModItems.LOCKBOX) },
-				createFromItem = ::LockboxAttachment
+				createFromItem = ::LockboxAttachment,
+				createEmpty = { LockboxAttachment(ItemStack.EMPTY) }
 			)
 		}
 
@@ -55,7 +58,8 @@ object ModScoochwormAttachmentTypes {
 				matchesItem = { itemStack ->
 					itemStack.isItem(ModItemTagsProvider.SCOOCHWORM_SADDLES)
 				},
-				createFromItem = ::SaddleAttachment
+				createFromItem = ::SaddleAttachment,
+				createEmpty = { SaddleAttachment(ItemStack.EMPTY) }
 			)
 		}
 

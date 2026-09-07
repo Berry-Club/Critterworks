@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment
 
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
-
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
@@ -9,7 +8,8 @@ import net.minecraft.world.item.ItemStack
 class ScoochwormAttachmentType<T : SyncedAttachmentData>(
 	private val streamCodec: StreamCodec<ByteBuf, T>,
 	private val matchesItem: (ItemStack) -> Boolean,
-	private val createFromItem: (ItemStack) -> ScoochwormAttachment
+	private val createFromItem: (ItemStack) -> ScoochwormAttachment,
+	private val createEmpty: () -> ScoochwormAttachment
 ) {
 	fun create(itemStack: ItemStack): ScoochwormAttachment? {
 		if (!matches(itemStack)) return null
@@ -19,6 +19,8 @@ class ScoochwormAttachmentType<T : SyncedAttachmentData>(
 	fun matches(itemStack: ItemStack): Boolean {
 		return matchesItem(itemStack)
 	}
+
+	fun createEmptyAttachment(): ScoochwormAttachment = createEmpty()
 
 	@Suppress("UNCHECKED_CAST")
 	fun createClientAttachment(data: SyncedAttachmentData): ScoochwormAttachment {
