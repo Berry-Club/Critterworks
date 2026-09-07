@@ -110,20 +110,30 @@ class ChunkLoaderAttachment(
 
 		private fun addTickets(level: ServerLevel, center: ChunkPos, attachmentUuid: UUID) {
 			val chunkSource = level.chunkSource
-			chunkSource.addRegionTicket(TICKET_TYPE, center, 0, attachmentUuid)
-			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x + 1, center.z), 0, attachmentUuid)
-			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x - 1, center.z), 0, attachmentUuid)
-			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z + 1), 0, attachmentUuid)
-			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z - 1), 0, attachmentUuid)
+
+			val chunks = getChunkShape(center)
+			for (chunk in chunks) {
+				chunkSource.addRegionTicket(TICKET_TYPE, chunk, 0, attachmentUuid)
+			}
 		}
 
 		private fun removeTickets(level: ServerLevel, center: ChunkPos, attachmentUuid: UUID) {
 			val chunkSource = level.chunkSource
-			chunkSource.removeRegionTicket(TICKET_TYPE, center, 0, attachmentUuid)
-			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x + 1, center.z), 0, attachmentUuid)
-			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x - 1, center.z), 0, attachmentUuid)
-			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z + 1), 0, attachmentUuid)
-			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z - 1), 0, attachmentUuid)
+
+			val chunks = getChunkShape(center)
+			for (chunk in chunks) {
+				chunkSource.removeRegionTicket(TICKET_TYPE, chunk, 0, attachmentUuid)
+			}
+		}
+
+		private fun getChunkShape(center: ChunkPos): List<ChunkPos> {
+			return listOf(
+				center,
+				ChunkPos(center.x + 1, center.z),
+				ChunkPos(center.x - 1, center.z),
+				ChunkPos(center.x, center.z + 1),
+				ChunkPos(center.x, center.z - 1),
+			)
 		}
 	}
 }
