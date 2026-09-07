@@ -10,6 +10,7 @@ class ServerConfig(
 
 	lateinit var lockboxDropIntervalTicks: ModConfigSpec.IntValue
 	lateinit var lockboxDropAmount: ModConfigSpec.IntValue
+	lateinit var maxChunkLoadersPerPlayer: ModConfigSpec.IntValue
 
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
@@ -37,6 +38,10 @@ class ServerConfig(
 		lockboxDropAmount = builder
 			.comment("The number of items an upside-down Lockbox attempts to drop each interval.")
 			.defineInRange("lockboxDropAmount", 1, 1, Int.MAX_VALUE)
+
+		maxChunkLoadersPerPlayer = builder
+			.comment("How many Chunkloader Attachments can each player own?")
+			.defineInRange("maxChunkLoadersPerPlayer", 15, 1, Int.MAX_VALUE)
 	}
 
 	private fun worldGenConfigs() {

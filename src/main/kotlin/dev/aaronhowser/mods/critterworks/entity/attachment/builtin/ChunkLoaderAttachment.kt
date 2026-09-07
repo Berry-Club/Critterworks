@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
 import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.ChunkLoaderAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
@@ -32,6 +33,15 @@ class ChunkLoaderAttachment(
 
 	override fun install(player: Player): Boolean {
 		if (player is FakePlayer) return false
+
+		val level = player.level() as? ServerLevel ?: return false
+
+		val loaderCount = ChunkLoaderSavedData
+			.getAllRecords(level.server, player.uuid)
+			.size
+
+		val maxLoaders = ServerConfig.CONFIG.maxChunkLoadersPerPlayer.get()
+		if (loaderCount >= maxLoaders) return false
 
 		syncedData = ChunkLoaderAttachmentData(
 			UUID.randomUUID(),
