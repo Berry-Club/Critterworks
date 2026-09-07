@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.handler.chunkloader
 
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.saveddata.SavedData
@@ -96,6 +97,23 @@ class ChunkLoaderSavedData : SavedData() {
 					),
 					SAVED_DATA_NAME
 				)
+		}
+
+		fun getAllRecords(server: MinecraftServer): List<ChunkLoaderRecord> {
+			val allLevels = server.allLevels
+			val allRecords = mutableListOf<ChunkLoaderRecord>()
+
+			for (level in allLevels) {
+				val data = get(level)
+				allRecords += data.getRecords()
+			}
+
+			return allRecords
+		}
+
+		fun getAllRecords(server: MinecraftServer, playerUuid: UUID): List<ChunkLoaderRecord> {
+			val allRecords = getAllRecords(server)
+			return allRecords.filter { it.placerUuid == playerUuid }
 		}
 	}
 }
