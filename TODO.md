@@ -1,0 +1,51 @@
+# Scoochworms
+
+- More advanced Comparators that emit a signal when they have specific blocks
+- Attachments for fluids and energy
+	- Iron Stomach or something for fluids?
+		- Or is that too gross and unwholesome? It's kinda body horror. It's not an attachment, it's surgery
+	- Maybe a cage full of the electric fireflies for the energy?
+- Block that exposes item/fluid/energy handlers to pipes etc?
+	- Would trivialize the whole thing with stopping them while they're upside down until they're empty
+
+# Honeypot Ants
+
+- Carry fluids along paths
+- Like Spiders but they can only move along surfaces
+- Figure out how best they should work.
+	- Where do they spawn?
+		- Anthills?
+	- How do you lay out paths for them to take?
+		- Sugar water?
+
+# Electric Fireflies
+
+- Functions basically like the wireless thing from Draconic Evolution
+	- Set certain blocks nearby as inputs and others as outputs
+	- Fireflies with low charge move to inputs and drain them
+	- Fireflies with high charge move to outputs and fill them
+- Glow brighter when high charge? Maybe make electric crackles or something?
+
+# Dragginflies
+
+- Moves mobs
+- Moves very quickly in arbitrary lines through the air
+- Can release mobs while flying to fling them
+- While not on paths, just fly very quickly and erratically
+- Ride as a vehicle?
+
+# Redstone critters?
+
+- What should it actually be?
+	- Frog whose tongue is a redstone wire and it shoots out and activates something far away?
+	- Cricket that plays a sound on signal, and an Earworm that makes a signal on that sound?
+		- Wait this is just how Amethyst things work, shit
+- Probably should be more than just multiple channels of wire
+- Logic gates? would that even make sense?
+- Better comparator that can intake an Item Filter
+	- Or should the Stem-Encased Comparator just have an item slot for this?
+
+# Generic non critter stuff
+
+- Dripleaf Launchpad
+	- Basically the thing from Portal 
