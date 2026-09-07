@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.entity.data
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachmentType
 import net.minecraft.nbt.ListTag
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -13,7 +14,13 @@ class ScoochwormBody(
 	private val scoochworm: ScoochwormEntity
 ) {
 
-	private val segments: MutableList<ScoochwormSegment> = mutableListOf(ScoochwormSegment())
+	private val segments: MutableList<ScoochwormSegment> = mutableListOf()
+
+	init {
+		val firstSegment = ScoochwormSegment()
+		firstSegment.assignBody(this)
+		segments.add(firstSegment)
+	}
 
 	val size: Int
 		get() = segments.size
@@ -27,7 +34,9 @@ class ScoochwormBody(
 
 	fun grow() {
 		if (canGrow) {
-			segments.add(ScoochwormSegment())
+			val segment = ScoochwormSegment()
+			segment.assignBody(this)
+			segments.add(segment)
 		}
 	}
 
@@ -79,6 +88,9 @@ class ScoochwormBody(
 		discard()
 		segments.clear()
 		segments.addAll(newSegments)
+		for (segment in segments) {
+			segment.assignBody(this)
+		}
 
 		for (partIndex in segments.indices) {
 			segments[partIndex].reparentBodyPart(scoochworm, partIndex)
@@ -135,6 +147,10 @@ class ScoochwormBody(
 		return segments.getOrNull(partIndex)
 	}
 
+	fun hasAttachment(attachmentType: ScoochwormAttachmentType<*>): Boolean {
+		return segments.any { it.getAttachment().type == attachmentType}
+	}
+
 	fun getBodyPart(partIndex: Int): ScoochwormPartEntity? {
 		return getSegment(partIndex)?.bodyPart
 	}
@@ -144,7 +160,9 @@ class ScoochwormBody(
 		if (partIndex !in 0 until MAX_COUNT) return null
 
 		while (segments.size <= partIndex) {
-			segments.add(ScoochwormSegment())
+			val segment = ScoochwormSegment()
+			segment.assignBody(this)
+			segments.add(segment)
 		}
 
 		val targetSegment = segments[partIndex]
@@ -193,7 +211,7 @@ class ScoochwormBody(
 				if (index < tag.size) {
 					ScoochwormSegment.load(tag.getCompound(index))
 				} else {
-					ScoochwormSegment()
+					ScoochwormSegment().also { it.assignBody(this) }
 				}
 			)
 		}

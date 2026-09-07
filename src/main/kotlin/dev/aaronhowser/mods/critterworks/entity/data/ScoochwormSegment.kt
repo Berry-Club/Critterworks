@@ -31,6 +31,9 @@ import net.neoforged.neoforge.items.IItemHandler
 // It holds the attachment etc
 class ScoochwormSegment {
 
+	var body: ScoochwormBody? = null
+		private set
+
 	private var attachment: ScoochwormAttachment = NoAttachment()
 	private var previousSupportPosition: BlockPos? = null
 	private var previousSupportState: BlockState? = null
@@ -109,7 +112,7 @@ class ScoochwormSegment {
 
 		val newAttachment = ScoochwormAttachment.fromItemStack(attachmentItem)
 		if (newAttachment is NoAttachment) return false
-		if (!newAttachment.install(player)) return false
+		if (!newAttachment.install(player, this)) return false
 
 		attachment = newAttachment
 		bodyPart.attachmentData = attachment.syncedData
@@ -204,6 +207,10 @@ class ScoochwormSegment {
 
 	fun getAttachment(): ScoochwormAttachment {
 		return attachment
+	}
+
+	fun assignBody(body: ScoochwormBody) {
+		this.body = body
 	}
 
 	fun insertIntoLockbox(itemStack: ItemStack): ItemStack {
