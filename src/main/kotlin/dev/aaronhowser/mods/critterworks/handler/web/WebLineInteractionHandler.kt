@@ -50,56 +50,84 @@ object WebLineInteractionHandler {
 
 		val level = player.serverLevel()
 		val savedData = WebSavedData.get(level)
+
 		if (targetsNode) {
-			val selectedNode = savedData.getNode(targetUuid) ?: return
-			if (!isTargetingNode(player, selectedNode)) return
-			val positionToleranceSquared =
-				REQUESTED_POSITION_TOLERANCE * REQUESTED_POSITION_TOLERANCE
-			if (selectedNode.position.distanceToSqr(requestedPosition) > positionToleranceSquared) return
+			interactWithNode(player, targetUuid, requestedPosition, itemStack, level, savedData)
+			return
+		}
 
-			val blockAnchor = selectedNode as? WebBlockAnchor
-			if (blockAnchor?.hasWebPort == true) {
-				if (itemStack.isEmpty && player.isSecondaryUseActive) {
-					val removedStack = savedData.removeWebPort(level, blockAnchor)
-					player.drop(removedStack, false)
-				} else {
-					openWebPort(player, blockAnchor)
-				}
-				return
-			}
-			if (!itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+		interactWithLine(player, targetUuid, requestedPosition, itemStack, hand, level, savedData)
+	}
 
-			if (!itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
-				&& !itemStack.isItem(ModItems.WEB_PATHFINDER)
-				&& !itemStack.isItem(ModItems.WEB_PORT)
-			) return
+	private fun interactWithNode(
+		player: ServerPlayer,
+		targetUuid: UUID,
+		requestedPosition: Vec3,
+		itemStack: ItemStack,
+		level: ServerLevel,
+		savedData: WebSavedData
+	) {
+		val selectedNode = savedData.getNode(targetUuid) ?: return
+		if (!isTargetingNode(player, selectedNode)) return
 
-			if (itemStack.isItem(ModItems.WEB_PORT)) {
-				val blockAnchor = selectedNode as? WebBlockAnchor ?: return
-				if (blockAnchor.hasWebPort) return
+		val positionToleranceSquared = REQUESTED_POSITION_TOLERANCE * REQUESTED_POSITION_TOLERANCE
+		if (selectedNode.position.distanceToSqr(requestedPosition) > positionToleranceSquared) return
 
-				savedData.installWebPort(level, blockAnchor, itemStack)
-				itemStack.consume(1, player)
-			} else if (itemStack.isItem(ModItems.WEB_PATHFINDER)) {
-				handlePathSelection(level, player, itemStack, selectedNode)
+		if (selectedNode is WebBlockAnchor && selectedNode.hasWebPort) {
+			if (itemStack.isEmpty && player.isSecondaryUseActive) {
+				val removedStack = savedData.removeWebPort(level, selectedNode)
+				player.drop(removedStack, false)
 			} else {
-				handleNodeSelection(level, player, itemStack, selectedNode)
+				openWebPort(player, selectedNode)
 			}
+
 			return
 		}
 
 		if (!itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
 
+		when {
+			itemStack.isItem(ModItems.WEB_PORT) -> {
+				val blockAnchor = selectedNode as? WebBlockAnchor ?: return
+				if (blockAnchor.hasWebPort) return
+
+				savedData.installWebPort(level, blockAnchor, itemStack)
+				itemStack.consume(1, player)
+			}
+
+			itemStack.isItem(ModItems.WEB_PATHFINDER) ->
+				handlePathSelection(level, player, itemStack, selectedNode)
+
+			else ->
+				handleNodeSelection(level, player, itemStack, selectedNode)
+		}
+	}
+
+	private fun interactWithLine(
+		player: ServerPlayer,
+		targetUuid: UUID,
+		requestedPosition: Vec3,
+		itemStack: ItemStack,
+		hand: InteractionHand,
+		level: ServerLevel,
+		savedData: WebSavedData
+	) {
+		if (!itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+
 		val line = savedData.getLine(targetUuid) ?: return
+
 		val eyePosition = player.eyePosition
 		val interactionRange = player.blockInteractionRange()
 		val lookOffset = player.lookAngle.scale(interactionRange)
 		val lookEnd = eyePosition.add(lookOffset)
+
 		val snapToExistingNode = itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
 			|| itemStack.isItem(ModItems.WEB_PATHFINDER)
 			|| itemStack.isItem(ModItems.WEB_PORT)
+
 		val requireExistingNode = itemStack.isItem(ModItems.WEB_PATHFINDER)
 			|| itemStack.isItem(ModItems.WEB_PORT)
+
 		val targetedNode = getTargetedNode(
 			listOf(line),
 			eyePosition,
@@ -107,9 +135,9 @@ object WebLineInteractionHandler {
 			snapToExistingNode,
 			requireExistingNode
 		) ?: return
+
 		val selectedNode = targetedNode.node
-		val positionToleranceSquared =
-			REQUESTED_POSITION_TOLERANCE * REQUESTED_POSITION_TOLERANCE
+		val positionToleranceSquared = REQUESTED_POSITION_TOLERANCE * REQUESTED_POSITION_TOLERANCE
 
 		if (selectedNode.position.distanceToSqr(requestedPosition) > positionToleranceSquared) return
 
@@ -129,6 +157,7 @@ object WebLineInteractionHandler {
 		val constructor = MenuConstructor { containerId, inventory, _ ->
 			WebPortMenu(containerId, inventory, anchor)
 		}
+
 		val provider = SimpleMenuProvider(constructor, anchor.webPort.hoverName)
 		player.openMenu(provider) { data ->
 			data.writeBoolean(true)
