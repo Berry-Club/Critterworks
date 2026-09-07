@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachment
 import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.TicketType
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Player
@@ -26,7 +27,8 @@ class ChunkLoaderAttachment(
 
 	override val equipSound: SoundEvent = SoundEvents.IRON_GOLEM_REPAIR
 
-	private var currentChunk = ChunkPos.ZERO
+	private var loadedChunk: ChunkPos = ChunkPos.ZERO
+	private var loadedLevel: ServerLevel? = null
 
 	override fun install(player: Player): Boolean {
 		if (player is FakePlayer) return false
@@ -65,11 +67,21 @@ class ChunkLoaderAttachment(
 	override fun serverTick(bodyPart: ScoochwormPartEntity) {
 		val head = bodyPart.getScoochworm() ?: return
 		val data = syncedData as? ChunkLoaderAttachmentData ?: return
+
 		val level = head.level() as? ServerLevel ?: return
+		val oldLevel = loadedLevel
 
 		val newChunk = ChunkPos(head.blockPosition())
-		if (newChunk == currentChunk) return
-		currentChunk = newChunk
+		val oldChunk = loadedChunk
+		if (newChunk == oldChunk && level === oldLevel) return
+
+		if (oldLevel != null) {
+			removeTickets(oldLevel, oldChunk, data.uuid)
+		}
+
+		addTickets(level, newChunk, data.uuid)
+		loadedChunk = newChunk
+		loadedLevel = level
 
 		ChunkLoaderSavedData.get(level)
 			.updateRecord(
@@ -83,11 +95,35 @@ class ChunkLoaderAttachment(
 	override fun onRemoved(bodyPart: ScoochwormPartEntity) {
 		val data = syncedData as? ChunkLoaderAttachmentData ?: return
 		val level = bodyPart.level() as? ServerLevel ?: return
+		removeTickets(loadedLevel ?: level, loadedChunk, data.uuid)
 		ChunkLoaderSavedData.get(level).removeRecord(data.uuid)
 	}
 
 	companion object {
+		private val TICKET_TYPE: TicketType<UUID> = TicketType.create(
+			"critterworks_chunk_loader",
+			Comparator.comparing(UUID::toString)
+		)
+
 		private const val UUID_TAG = "Uuid"
 		private const val PLACER_UUID_TAG = "PlacerUuid"
+
+		private fun addTickets(level: ServerLevel, center: ChunkPos, attachmentUuid: UUID) {
+			val chunkSource = level.chunkSource
+			chunkSource.addRegionTicket(TICKET_TYPE, center, 0, attachmentUuid)
+			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x + 1, center.z), 0, attachmentUuid)
+			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x - 1, center.z), 0, attachmentUuid)
+			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z + 1), 0, attachmentUuid)
+			chunkSource.addRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z - 1), 0, attachmentUuid)
+		}
+
+		private fun removeTickets(level: ServerLevel, center: ChunkPos, attachmentUuid: UUID) {
+			val chunkSource = level.chunkSource
+			chunkSource.removeRegionTicket(TICKET_TYPE, center, 0, attachmentUuid)
+			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x + 1, center.z), 0, attachmentUuid)
+			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x - 1, center.z), 0, attachmentUuid)
+			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z + 1), 0, attachmentUuid)
+			chunkSource.removeRegionTicket(TICKET_TYPE, ChunkPos(center.x, center.z - 1), 0, attachmentUuid)
+		}
 	}
 }
