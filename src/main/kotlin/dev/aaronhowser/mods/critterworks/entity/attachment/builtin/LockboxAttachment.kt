@@ -20,6 +20,7 @@ import net.minecraft.world.inventory.ChestMenu
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemContainerContents
+import net.minecraft.nbt.CompoundTag
 import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.wrapper.InvWrapper
 
@@ -91,6 +92,24 @@ class LockboxAttachment(
 
 	override fun synchronizeItemStack() {
 		updateItemContents()
+	}
+
+	override fun save(): CompoundTag {
+		val tag = super.save()
+		saveItemStack(tag)
+		return tag
+	}
+
+	override fun load(tag: CompoundTag) {
+		val itemStack = ItemStack.OPTIONAL_CODEC
+			.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.getCompound("AttachmentItem"))
+			.result()
+			.orElse(ItemStack.EMPTY)
+		val contents = itemStack.getOrDefault(
+			DataComponents.CONTAINER,
+			ItemContainerContents.EMPTY
+		)
+		contents.copyInto(container.items)
 	}
 
 	override fun clientTick(bodyPart: ScoochwormPartEntity) {

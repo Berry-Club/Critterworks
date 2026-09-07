@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment
 
-import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
@@ -43,29 +42,29 @@ abstract class ScoochwormAttachment(
 
 	protected open fun synchronizeItemStack() {}
 
-	fun remove(): ItemStack {
+	open fun save(): CompoundTag = CompoundTag().apply {
+		putString(ATTACHMENT_TYPE_TAG, syncedData.typeId.toString())
+	}
+
+	open fun load(tag: CompoundTag) {}
+
+	protected fun saveItemStack(tag: CompoundTag) {
+		synchronizeItemStack()
+		val encodedTag = ItemStack.OPTIONAL_CODEC.encodeStart(
+			NbtOps.INSTANCE,
+			itemStack
+		)
+		encodedTag.result().ifPresent { tag.put(ATTACHMENT_ITEM_TAG, it) }
+	}
+
+	open fun remove(): ItemStack {
 		synchronizeItemStack()
 		return itemStack
 	}
 
-	fun save(): CompoundTag {
-		synchronizeItemStack()
-
-		val encodedTag = CODEC
-			.encodeStart(NbtOps.INSTANCE, itemStack)
-			.result()
-
-		return encodedTag
-			.map { it as CompoundTag }
-			.orElseGet(::CompoundTag)
-	}
-
 	companion object {
 		private const val ATTACHMENT_ITEM_TAG = "AttachmentItem"
-
-		private val CODEC: Codec<ItemStack> = ItemStack.OPTIONAL_CODEC
-			.optionalFieldOf(ATTACHMENT_ITEM_TAG, ItemStack.EMPTY)
-			.codec()
+		private const val ATTACHMENT_TYPE_TAG = "Type"
 
 		fun fromItemStack(
 			itemStack: ItemStack
@@ -91,12 +90,12 @@ abstract class ScoochwormAttachment(
 		}
 
 		fun load(tag: CompoundTag): ScoochwormAttachment {
-			val itemStack = CODEC
-				.parse(NbtOps.INSTANCE, tag)
-				.result()
-				.orElse(ItemStack.EMPTY)
-
-			return fromItemStack(itemStack)
+			val typeId = net.minecraft.resources.ResourceLocation.parse(tag.getString(ATTACHMENT_TYPE_TAG))
+			val type = ModScoochwormAttachmentTypes.REGISTRY.get(typeId)
+				?: return NoAttachment()
+			val attachment = type.createEmptyAttachment()
+			attachment.load(tag)
+			return attachment
 		}
 	}
 }
