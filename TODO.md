@@ -76,6 +76,15 @@
 - Animal farming?
 - Monster farming?
 - Crops and trees?
+	- Leaf Cutter Ants lol
+
+# Autocrafting?
+
+- Something should probably be able to autocraft
+- Probably relating to the spiders
+	- Just a new block and the spiders do it themselves?
+- Carpenter ants? that's thematic
+- Is it even worth adding a whole new critter JUST for autocrafting?
 
 # Generic non critter stuff
 
