@@ -14,7 +14,8 @@ class ScoochwormBody(
 	private val scoochworm: ScoochwormEntity
 ) {
 
-	private val segments: MutableList<ScoochwormSegment> = mutableListOf()
+	val segments: List<ScoochwormSegment>
+		field = mutableListOf()
 
 	init {
 		val firstSegment = ScoochwormSegment()
@@ -148,7 +149,7 @@ class ScoochwormBody(
 	}
 
 	fun hasAttachment(attachmentType: ScoochwormAttachmentType<*>): Boolean {
-		return segments.any { it.getAttachment().type == attachmentType}
+		return segments.any { it.getAttachment().type == attachmentType }
 	}
 
 	fun getBodyPart(partIndex: Int): ScoochwormPartEntity? {
