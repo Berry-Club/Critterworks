@@ -26,6 +26,8 @@ class ChunkLoaderAttachment(
 
 	override val equipSound: SoundEvent = SoundEvents.IRON_GOLEM_REPAIR
 
+	private var currentChunk = ChunkPos.ZERO
+
 	override fun install(player: Player): Boolean {
 		if (player is FakePlayer) return false
 
@@ -65,12 +67,16 @@ class ChunkLoaderAttachment(
 		val data = syncedData as? ChunkLoaderAttachmentData ?: return
 		val level = head.level() as? ServerLevel ?: return
 
+		val newChunk = ChunkPos(head.blockPosition())
+		if (newChunk == currentChunk) return
+		currentChunk = newChunk
+
 		ChunkLoaderSavedData.get(level)
 			.updateRecord(
 				data.uuid,
 				data.placerUuid,
 				head.uuid,
-				ChunkPos(head.blockPosition())
+				newChunk
 			)
 	}
 
