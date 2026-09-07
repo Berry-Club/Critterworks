@@ -66,7 +66,7 @@ class ScoochwormPartEntity(
 		get() = entityData.get(DATA_BOTTOM_DIRECTION)
 		private set(value) = entityData.set(DATA_BOTTOM_DIRECTION, value)
 
-	private fun getScoochworm(): ScoochwormEntity? {
+	fun getScoochworm(): ScoochwormEntity? {
 		return level().getEntity(parentId) as? ScoochwormEntity
 	}
 

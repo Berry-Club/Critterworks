@@ -58,6 +58,7 @@ class ScoochwormSegment {
 	fun discardBodyPart() {
 		val existingBodyPart = bodyPart
 		if (existingBodyPart != null) {
+			attachment.onRemoved(existingBodyPart)
 			val level = existingBodyPart.level()
 			if (level is ServerLevel) {
 				notifyDetached(
@@ -130,6 +131,10 @@ class ScoochwormSegment {
 
 	private fun removeAttachment(): ItemStack {
 		val removedItem = attachment.remove()
+		val existingBodyPart = bodyPart
+		if (existingBodyPart != null) {
+			attachment.onRemoved(existingBodyPart)
+		}
 		attachment = NoAttachment()
 		bodyPart?.attachmentData = attachment.syncedData
 		return removedItem

@@ -1,15 +1,19 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment.builtin
 
+import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
 import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.ChunkLoaderAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.ChunkPos
 import net.neoforged.neoforge.common.util.FakePlayer
-import java.util.UUID
+import java.util.*
 
 class ChunkLoaderAttachment(
 	gps: ItemStack
@@ -51,7 +55,29 @@ class ChunkLoaderAttachment(
 	}
 
 	override fun applySyncedData(data: SyncedAttachmentData) {
-		if (data is ChunkLoaderAttachmentData) syncedData = data
+		if (data is ChunkLoaderAttachmentData) {
+			syncedData = data
+		}
+	}
+
+	override fun serverTick(bodyPart: ScoochwormPartEntity) {
+		val head = bodyPart.getScoochworm() ?: return
+		val data = syncedData as? ChunkLoaderAttachmentData ?: return
+		val level = head.level() as? ServerLevel ?: return
+
+		ChunkLoaderSavedData.get(level)
+			.updateRecord(
+				data.uuid,
+				data.placerUuid,
+				head.uuid,
+				ChunkPos(head.blockPosition())
+			)
+	}
+
+	override fun onRemoved(bodyPart: ScoochwormPartEntity) {
+		val data = syncedData as? ChunkLoaderAttachmentData ?: return
+		val level = bodyPart.level() as? ServerLevel ?: return
+		ChunkLoaderSavedData.get(level).removeRecord(data.uuid)
 	}
 
 	companion object {
