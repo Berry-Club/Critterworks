@@ -4,8 +4,6 @@ on:
     push:
         branches:
             - '1.21.1-Neoforge'
-        paths-ignore:
-            - '**/*.md'
     workflow_dispatch:
         branches:
             - '1.21.1-Neoforge'
