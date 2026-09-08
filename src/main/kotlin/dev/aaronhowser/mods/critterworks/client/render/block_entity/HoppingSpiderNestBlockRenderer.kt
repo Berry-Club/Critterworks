@@ -163,6 +163,10 @@ class HoppingSpiderNestBlockRenderer(
 		return blockEntity.renderBounds
 	}
 
+	override fun shouldRenderOffScreen(blockEntity: HoppingSpiderNestBlockEntity): Boolean {
+		return true
+	}
+
 	companion object {
 		private const val HOPPING_SPIDER_SCALE = 0.5f
 		private const val ITEM_SCALE = 0.6f
