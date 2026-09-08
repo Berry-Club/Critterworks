@@ -17,7 +17,6 @@ class ModItemModelProvider(
 
 	override fun registerModels() {
 		basicItems()
-		bewlrs()
 		dyeberryItems()
 		hoppingSpider()
 
@@ -64,25 +63,13 @@ class ModItemModelProvider(
 			.end()
 	}
 
-	private fun bewlrs() {
-		val items = listOf(
-			ModItems.SCOOCHWORM_GPS
-		)
-
-		for (item in items) {
-			val id = item.id.path
-
-			getBuilder(id)
-				.parent(ModelFile.UncheckedModelFile("builtin/entity"))
-		}
-	}
-
 	private fun basicItems() {
 		basicItem(ModItems.LOCKBOX.get())
 		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
 		basicItem(ModItems.WEB_PATHFINDER.get())
 		basicItem(ModItems.ITEM_FILTER.get())
 		basicItem(ModItems.WEB_PORT.get())
+		basicItem(ModItems.SCOOCHWORM_GPS.get())
 	}
 
 	private fun dyeberryItems() {
