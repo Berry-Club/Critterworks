@@ -17,10 +17,12 @@ class ModItemModelProvider(
 
 	override fun registerModels() {
 		basicItem(ModItems.LOCKBOX.get())
-		basicItem(ModItems.SCOOCHWORM_GPS.get())
+		getBuilder(ModItems.SCOOCHWORM_GPS.id.path)
+			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
 		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
 		basicItem(ModItems.WEB_PATHFINDER.get())
 		basicItem(ModItems.ITEM_FILTER.get())
+
 		val hoppingSpiderModel = getBuilder("hopping_spider")
 			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
 			.texture("particle", modLoc("item/hopping_spider"))
@@ -58,8 +60,10 @@ class ModItemModelProvider(
 			.transform(ItemDisplayContext.FIXED)
 			.rotation(90f, 0f, -180f)
 			.end()
+
 		withExistingParent("web_port", mcLoc("item/generated"))
 			.texture("layer0", modLoc("item/web_pathfinder"))
+
 		dyeberryItem(ModItems.GREEN_DYEBERRY.get(), "green")
 		dyeberryItem(ModItems.BLUE_DYEBERRY.get(), "blue")
 		dyeberryItem(ModItems.RED_DYEBERRY.get(), "red")
