@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.event
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.client.render.bewlr.CritterCageItemRenderer
+import dev.aaronhowser.mods.critterworks.client.render.item.CritterCageItemRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormPartRenderer

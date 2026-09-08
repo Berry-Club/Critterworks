@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.client.render.bewlr
+package dev.aaronhowser.mods.critterworks.client.render.item
 
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
