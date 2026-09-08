@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.registry.AaronItemRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.data.WormColor
 import dev.aaronhowser.mods.critterworks.item.*
+import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
 
@@ -14,8 +15,8 @@ object ModItems : AaronItemRegistry() {
 
 	val LOCKBOX: DeferredItem<LockboxItem> =
 		register("lockbox", ::LockboxItem, LockboxItem.DEFAULT_PROPERTIES)
-	val SCOOCHWORM_GPS: DeferredItem<ScoochwormGpsItem> =
-		register("scoochworm_gps", ::ScoochwormGpsItem, PROPERTIES_SINGLE_STACK)
+	val SCOOCHWORM_GPS: DeferredItem<Item> =
+		register("scoochworm_gps", ::Item, PROPERTIES_SINGLE_STACK)
 	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
 		register("artificial_spinnerets", ::ArtificialSpinneretsItem, ArtificialSpinneretsItem.DEFAULT_PROPERTIES)
 	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =
