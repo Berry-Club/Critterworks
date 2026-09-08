@@ -2,9 +2,12 @@ package dev.aaronhowser.mods.critterworks.handler.web.line
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
+import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
+import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
 import dev.aaronhowser.mods.critterworks.handler.web.TargetedWebNode
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
@@ -14,6 +17,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.client.event.InputEvent
+import net.neoforged.neoforge.common.NeoForge
 
 object ClientWebLineInteractionHandler {
 
@@ -48,6 +52,7 @@ object ClientWebLineInteractionHandler {
 	private fun interactWithTarget(event: InputEvent.InteractionKeyMappingTriggered) {
 		val player = Minecraft.getInstance().player ?: return
 		val interactionHand = getInteractionHand(player) ?: event.hand
+
 		val targetedNode = getTargetedNode(
 			player,
 			player.eyePosition,
@@ -62,8 +67,24 @@ object ClientWebLineInteractionHandler {
 			return
 		}
 
+		val interactionEvent = if (targetedNode.lineUuid == null) {
+			WebNodeInteractionEvent(player, targetedNode.node, heldStack, interactionHand)
+		} else {
+			WebLineInteractionEvent(
+				player,
+				targetedNode.lineUuid,
+				targetedNode.node as WebLineAnchor,
+				heldStack,
+				interactionHand
+			)
+		}
+
+		NeoForge.EVENT_BUS.post(interactionEvent)
+
 		if (event.hand == interactionHand) {
-			sendInteraction(targetedNode, interactionHand)
+			if (!interactionEvent.isCanceled) {
+				sendInteraction(targetedNode, interactionHand)
+			}
 		}
 
 		event.isCanceled = true

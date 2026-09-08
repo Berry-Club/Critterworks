@@ -6,6 +6,9 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.status
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
+import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
+import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
+import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebLineAnchor
@@ -30,14 +33,23 @@ import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.common.Tags
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
 import org.joml.Intersectiond
 import org.joml.Vector3d
 import java.util.*
 
+@EventBusSubscriber(modid = Critterworks.MOD_ID)
 object WebLineInteractionHandler {
 
 	private const val LINE_SELECTION_RADIUS = 0.3
 	private const val REQUESTED_POSITION_TOLERANCE = 0.1
+
+	private fun isWithinPositionTolerance(expected: Vec3, actual: Vec3): Boolean {
+		val toleranceSquared = REQUESTED_POSITION_TOLERANCE * REQUESTED_POSITION_TOLERANCE
+		return expected.distanceToSqr(actual) <= toleranceSquared
+	}
 
 	fun interact(
 		player: ServerPlayer,
@@ -48,15 +60,84 @@ object WebLineInteractionHandler {
 	) {
 		val itemStack = player.getItemInHand(hand)
 
-		val level = player.serverLevel()
-		val savedData = WebSavedData.get(level)
-
 		if (targetsNode) {
-			interactWithNode(player, targetUuid, requestedPosition, itemStack, level, savedData)
+			interactNode(player, targetUuid, requestedPosition, itemStack, hand)
 			return
 		}
 
-		interactWithLine(player, targetUuid, requestedPosition, itemStack, hand, level, savedData)
+		interactLine(player, targetUuid, requestedPosition, itemStack, hand)
+	}
+
+	private fun interactNode(
+		player: ServerPlayer,
+		targetUuid: UUID,
+		requestedPosition: Vec3,
+		itemStack: ItemStack,
+		hand: InteractionHand
+	) {
+		val target = WebSavedData.get(player.serverLevel()).getNode(targetUuid) ?: return
+		if (!isTargetingNode(player, target)) return
+
+		if (!isWithinPositionTolerance(target.position, requestedPosition)) return
+
+		NeoForge.EVENT_BUS.post(WebNodeInteractionEvent(player, target, itemStack, hand))
+	}
+
+	private fun interactLine(
+		player: ServerPlayer,
+		lineUuid: UUID,
+		requestedPosition: Vec3,
+		itemStack: ItemStack,
+		hand: InteractionHand
+	) {
+		val line = WebSavedData.get(player.serverLevel()).getLine(lineUuid) ?: return
+
+		val eyePosition = player.eyePosition
+		val lookEnd = eyePosition.add(player.lookAngle.scale(player.blockInteractionRange()))
+		val snapToExistingNode = itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+		val requireExistingNode = itemStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
+		val targetedNode = getTargetedNode(
+			listOf(line),
+			eyePosition,
+			lookEnd,
+			snapToExistingNode,
+			requireExistingNode
+		) ?: return
+
+		if (targetedNode.node !is WebLineAnchor) return
+		if (!isWithinPositionTolerance(targetedNode.node.position, requestedPosition)) return
+
+		NeoForge.EVENT_BUS.post(
+			WebLineInteractionEvent(player, lineUuid, targetedNode.node, itemStack, hand)
+		)
+	}
+
+	@SubscribeEvent
+	fun handleNodeInteraction(event: WebNodeInteractionEvent) {
+		if (event.isCanceled) return
+
+		val player = event.player as? ServerPlayer ?: return
+		val level = player.serverLevel()
+		val savedData = WebSavedData.get(level)
+		interactWithNode(player, event.node.uuid, event.node.position, event.itemStack, level, savedData)
+	}
+
+	@SubscribeEvent
+	fun handleLineInteraction(event: WebLineInteractionEvent) {
+		if (event.isCanceled) return
+
+		val player = event.player as? ServerPlayer ?: return
+		val level = player.serverLevel()
+		val savedData = WebSavedData.get(level)
+		interactWithLine(
+			player,
+			event.lineUuid,
+			event.target.position,
+			event.itemStack,
+			event.hand,
+			level,
+			savedData
+		)
 	}
 
 	private fun interactWithNode(
