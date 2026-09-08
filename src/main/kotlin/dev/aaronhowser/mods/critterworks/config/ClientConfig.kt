@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.config
 
+import dev.aaronhowser.mods.aaron.misc.AaronDsls.section
 import net.neoforged.neoforge.common.ModConfigSpec
 import org.apache.commons.lang3.tuple.Pair
 
@@ -16,6 +17,12 @@ class ClientConfig(
 	}
 
 	private fun general() {
+		builder.section("debug") {
+			debugConfigs()
+		}
+	}
+
+	private fun debugConfigs() {
 		renderScoochwormAttachmentProbe = builder
 			.comment("Render the Scoochworm attachment probe position through walls.")
 			.define("renderScoochwormAttachmentProbe", false)
