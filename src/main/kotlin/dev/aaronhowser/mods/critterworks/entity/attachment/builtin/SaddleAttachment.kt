@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment.builtin
 
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
+import dev.aaronhowser.mods.critterworks.entity.attachment.ItemStackScoochwormAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SaddleAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import net.minecraft.sounds.SoundEvent
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack
 
 class SaddleAttachment(
 	saddle: ItemStack
-) : ScoochwormAttachment(saddle) {
+) : ItemStackScoochwormAttachment(saddle) {
 
 	override val syncedData: SyncedAttachmentData = SaddleAttachmentData
 	override val equipSound: SoundEvent = SoundEvents.HORSE_SADDLE

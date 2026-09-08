@@ -54,8 +54,8 @@ object ModScoochwormAttachmentTypes {
 			ScoochwormAttachmentType(
 				streamCodec = ChunkLoaderAttachmentData.STREAM_CODEC,
 				matchesItem = { itemStack -> itemStack.isItem(ModItems.SCOOCHWORM_GPS) },
-				createFromItem = ::ChunkLoaderAttachment,
-				createEmpty = { ChunkLoaderAttachment(ItemStack.EMPTY) }
+				createFromItem = { ChunkLoaderAttachment() },
+				createEmpty = ::ChunkLoaderAttachment
 			)
 		}
 

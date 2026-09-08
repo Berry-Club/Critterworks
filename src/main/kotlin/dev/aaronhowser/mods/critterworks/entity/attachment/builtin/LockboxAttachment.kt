@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.entity.attachment.builtin
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
+import dev.aaronhowser.mods.critterworks.entity.attachment.ItemStackScoochwormAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.LockboxAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import net.minecraft.core.Direction
@@ -26,7 +26,7 @@ import net.neoforged.neoforge.items.wrapper.InvWrapper
 
 class LockboxAttachment(
 	lockbox: ItemStack
-) : ScoochwormAttachment(lockbox) {
+) : ItemStackScoochwormAttachment(lockbox) {
 
 	override val syncedData: SyncedAttachmentData
 		get() = LockboxAttachmentData(openers > 0)

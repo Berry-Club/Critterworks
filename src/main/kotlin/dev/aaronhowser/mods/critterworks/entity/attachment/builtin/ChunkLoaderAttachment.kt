@@ -15,14 +15,11 @@ import net.minecraft.server.level.TicketType
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ChunkPos
 import net.neoforged.neoforge.common.util.FakePlayer
 import java.util.*
 
-class ChunkLoaderAttachment(
-	gps: ItemStack
-) : ScoochwormAttachment(gps) {
+class ChunkLoaderAttachment : ScoochwormAttachment() {
 
 	override var syncedData: SyncedAttachmentData = ChunkLoaderAttachmentData(
 		UUID(0L, 0L),

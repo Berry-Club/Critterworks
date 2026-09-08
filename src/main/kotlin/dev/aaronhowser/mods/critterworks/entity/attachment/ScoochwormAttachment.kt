@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
@@ -14,17 +13,14 @@ import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.items.IItemHandler
 
 abstract class ScoochwormAttachment(
-	itemStack: ItemStack
 ) {
-
-	protected val itemStack: ItemStack = itemStack.copy()
-
 	abstract val syncedData: SyncedAttachmentData
 	val type: ScoochwormAttachmentType<*>
 		get() = syncedData.resolveType()
 
 	abstract val equipSound: SoundEvent?
 	open val itemHandler: IItemHandler? = null
+	open val consumesItemStack: Boolean = false
 
 	open fun interact(
 		player: Player,
@@ -48,30 +44,17 @@ abstract class ScoochwormAttachment(
 
 	open fun applySyncedData(data: SyncedAttachmentData) {}
 
-	protected open fun synchronizeItemStack() {}
-
 	open fun save(): CompoundTag = CompoundTag().apply {
 		putString(ATTACHMENT_TYPE_TAG, syncedData.typeId.toString())
 	}
 
 	open fun load(tag: CompoundTag) {}
 
-	protected fun saveItemStack(tag: CompoundTag) {
-		synchronizeItemStack()
-		val encodedTag = ItemStack.OPTIONAL_CODEC.encodeStart(
-			NbtOps.INSTANCE,
-			itemStack
-		)
-		encodedTag.result().ifPresent { tag.put(ATTACHMENT_ITEM_TAG, it) }
-	}
-
 	open fun remove(): ItemStack {
-		synchronizeItemStack()
-		return itemStack
+		return ItemStack.EMPTY
 	}
 
 	companion object {
-		private const val ATTACHMENT_ITEM_TAG = "AttachmentItem"
 		private const val ATTACHMENT_TYPE_TAG = "Type"
 
 		fun fromItemStack(

@@ -186,7 +186,9 @@ class ScoochwormSegment {
 		if (attachment is NoAttachment) {
 			if (!installAttachment(heldStack, player, bodyPart)) return InteractionResult.PASS
 
-			heldStack.consume(1, player)
+			if (attachment.consumesItemStack) {
+				heldStack.consume(1, player)
+			}
 			return InteractionResult.CONSUME
 		}
 
