@@ -9,6 +9,7 @@
 ### Changed
 
 - Changed the layout of the Web Port menu
+- Web Line and Node interactions are now their own events
 
 # 1.0.0
 
