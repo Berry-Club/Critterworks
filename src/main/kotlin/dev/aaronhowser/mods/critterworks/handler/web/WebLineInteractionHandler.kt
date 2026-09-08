@@ -8,7 +8,6 @@ import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
-import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebLineAnchor
@@ -34,13 +33,10 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.common.NeoForge
-import net.neoforged.bus.api.SubscribeEvent
-import net.neoforged.fml.common.EventBusSubscriber
 import org.joml.Intersectiond
 import org.joml.Vector3d
 import java.util.*
 
-@EventBusSubscriber(modid = Critterworks.MOD_ID)
 object WebLineInteractionHandler {
 
 	private const val LINE_SELECTION_RADIUS = 0.3
@@ -112,50 +108,18 @@ object WebLineInteractionHandler {
 		)
 	}
 
-	@SubscribeEvent
 	fun handleNodeInteraction(event: WebNodeInteractionEvent) {
-		if (event.isCanceled) return
-
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
+
 		val savedData = WebSavedData.get(level)
-		interactWithNode(player, event.node.uuid, event.node.position, event.itemStack, level, savedData)
-	}
+		val selectedNode = savedData.getNode(event.node.uuid) ?: return
 
-	@SubscribeEvent
-	fun handleLineInteraction(event: WebLineInteractionEvent) {
-		if (event.isCanceled) return
-
-		val player = event.player as? ServerPlayer ?: return
-		val level = player.serverLevel()
-		val savedData = WebSavedData.get(level)
-		interactWithLine(
-			player,
-			event.lineUuid,
-			event.target.position,
-			event.itemStack,
-			event.hand,
-			level,
-			savedData
-		)
-	}
-
-	private fun interactWithNode(
-		player: ServerPlayer,
-		targetUuid: UUID,
-		requestedPosition: Vec3,
-		itemStack: ItemStack,
-		level: ServerLevel,
-		savedData: WebSavedData
-	) {
-		val selectedNode = savedData.getNode(targetUuid) ?: return
 		if (!isTargetingNode(player, selectedNode)) return
-
-		val positionToleranceSquared = REQUESTED_POSITION_TOLERANCE * REQUESTED_POSITION_TOLERANCE
-		if (selectedNode.position.distanceToSqr(requestedPosition) > positionToleranceSquared) return
+		if (!isWithinPositionTolerance(selectedNode.position, event.node.position)) return
 
 		if (selectedNode is WebBlockAnchor && selectedNode.hasWebPort) {
-			if (itemStack.isEmpty && player.isSecondaryUseActive) {
+			if (event.itemStack.isEmpty && player.isSecondaryUseActive) {
 				val removedStack = savedData.removeWebPort(level, selectedNode)
 				player.drop(removedStack, false)
 			} else {
@@ -165,45 +129,41 @@ object WebLineInteractionHandler {
 			return
 		}
 
-		if (!itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+		if (!event.itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
 
 		when {
-			itemStack.isItem(ModItems.WEB_PORT) -> {
+			event.itemStack.isItem(ModItems.WEB_PORT) -> {
 				val blockAnchor = selectedNode as? WebBlockAnchor ?: return
 				if (blockAnchor.hasWebPort) return
 
-				savedData.installWebPort(level, blockAnchor, itemStack)
-				itemStack.consume(1, player)
+				savedData.installWebPort(level, blockAnchor, event.itemStack)
+				event.itemStack.consume(1, player)
 			}
 
-			itemStack.isItem(ModItems.WEB_PATHFINDER) ->
-				handlePathSelection(level, player, itemStack, selectedNode)
+			event.itemStack.isItem(ModItems.WEB_PATHFINDER) ->
+				handlePathSelection(level, player, event.itemStack, selectedNode)
 
 			else ->
-				handleNodeSelection(level, player, itemStack, selectedNode)
+				handleNodeSelection(level, player, event.itemStack, selectedNode)
 		}
 	}
 
-	private fun interactWithLine(
-		player: ServerPlayer,
-		targetUuid: UUID,
-		requestedPosition: Vec3,
-		itemStack: ItemStack,
-		hand: InteractionHand,
-		level: ServerLevel,
-		savedData: WebSavedData
-	) {
-		if (!itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+	fun handleLineInteraction(player: ServerPlayer, event: WebLineInteractionEvent) {
+		val player = event.player as? ServerPlayer ?: return
+		val level = player.serverLevel()
+		val savedData = WebSavedData.get(level)
 
-		val line = savedData.getLine(targetUuid) ?: return
+		if (!event.itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+
+		val line = savedData.getLine(event.lineUuid) ?: return
 
 		val eyePosition = player.eyePosition
 		val interactionRange = player.blockInteractionRange()
 		val lookOffset = player.lookAngle.scale(interactionRange)
 		val lookEnd = eyePosition.add(lookOffset)
 
-		val snapToExistingNode = itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
-		val requireExistingNode = itemStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
+		val snapToExistingNode = event.itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+		val requireExistingNode = event.itemStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
 
 		val targetedNode = getTargetedNode(
 			listOf(line),
@@ -214,19 +174,18 @@ object WebLineInteractionHandler {
 		) ?: return
 
 		val selectedNode = targetedNode.node
-		val positionToleranceSquared = REQUESTED_POSITION_TOLERANCE * REQUESTED_POSITION_TOLERANCE
 
-		if (selectedNode.position.distanceToSqr(requestedPosition) > positionToleranceSquared) return
+		if (!isWithinPositionTolerance(selectedNode.position, event.target.position)) return
 
 		when {
-			itemStack.isItem(Tags.Items.TOOLS_SHEAR) && selectedNode is WebLineAnchor ->
-				shearLine(level, player, itemStack, targetUuid, selectedNode, hand)
+			event.itemStack.isItem(Tags.Items.TOOLS_SHEAR) && selectedNode is WebLineAnchor ->
+				shearLine(level, player, event.itemStack, event.lineUuid, selectedNode, event.hand)
 
-			itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS) ->
-				handleNodeSelection(level, player, itemStack, selectedNode)
+			event.itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS) ->
+				handleNodeSelection(level, player, event.itemStack, selectedNode)
 
-			itemStack.isItem(ModItems.WEB_PATHFINDER) ->
-				handlePathSelection(level, player, itemStack, selectedNode)
+			event.itemStack.isItem(ModItems.WEB_PATHFINDER) ->
+				handlePathSelection(level, player, event.itemStack, selectedNode)
 		}
 	}
 
