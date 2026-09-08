@@ -2,11 +2,11 @@ package dev.aaronhowser.mods.critterworks.client.render.item
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
@@ -14,12 +14,25 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions
 import org.joml.Vector3f
 
 class ScoochwormGpsItemRenderer : BlockEntityWithoutLevelRenderer(Minecraft.getInstance().blockEntityRenderDispatcher, Minecraft.getInstance().entityModels) {
-	override fun renderByItem(stack: ItemStack, displayContext: ItemDisplayContext, poseStack: PoseStack, buffer: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
+
+	override fun renderByItem(
+		stack: ItemStack,
+		displayContext: ItemDisplayContext,
+		poseStack: PoseStack,
+		buffer: MultiBufferSource,
+		packedLight: Int,
+		packedOverlay: Int
+	) {
 		renderShape(poseStack, buffer, packedLight, packedOverlay)
 	}
 
 	companion object {
-		fun renderShape(poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
+		fun renderShape(
+			poseStack: PoseStack,
+			bufferSource: MultiBufferSource,
+			packedLight: Int,
+			packedOverlay: Int
+		) {
 			val vertexConsumer = bufferSource.getBuffer(RENDER_TYPE)
 			val pose = poseStack.last()
 

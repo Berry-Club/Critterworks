@@ -14,8 +14,21 @@ import software.bernie.geckolib.cache.`object`.BakedGeoModel
 import software.bernie.geckolib.renderer.GeoRenderer
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer
 
-class ScoochwormChunkLoaderLayer(renderer: GeoRenderer<ScoochwormPartEntity>) : GeoRenderLayer<ScoochwormPartEntity>(renderer) {
-	override fun render(poseStack: PoseStack, animatable: ScoochwormPartEntity, bakedModel: BakedGeoModel, renderType: RenderType?, bufferSource: MultiBufferSource, buffer: VertexConsumer?, partialTick: Float, packedLight: Int, packedOverlay: Int) {
+class ScoochwormChunkLoaderLayer(
+	renderer: GeoRenderer<ScoochwormPartEntity>
+) : GeoRenderLayer<ScoochwormPartEntity>(renderer) {
+
+	override fun render(
+		poseStack: PoseStack,
+		animatable: ScoochwormPartEntity,
+		bakedModel: BakedGeoModel,
+		renderType: RenderType?,
+		bufferSource: MultiBufferSource,
+		buffer: VertexConsumer?,
+		partialTick: Float,
+		packedLight: Int,
+		packedOverlay: Int
+	) {
 		if (animatable.attachmentData.resolveType() != ModScoochwormAttachmentTypes.CHUNK_LOADER.get()) return
 
 		val animationTime = animatable.tickCount + partialTick
