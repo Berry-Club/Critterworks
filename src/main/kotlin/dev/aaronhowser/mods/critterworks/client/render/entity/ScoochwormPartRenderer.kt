@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.client.render.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormPartModel
+import dev.aaronhowser.mods.critterworks.client.render.entity.layer.ScoochwormChunkLoaderLayer
 import dev.aaronhowser.mods.critterworks.client.render.entity.layer.ScoochwormLockboxLayer
 import dev.aaronhowser.mods.critterworks.client.render.entity.layer.ScoochwormSaddleLayer
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
@@ -17,6 +18,7 @@ class ScoochwormPartRenderer(
 
 	init {
 		withScale(ScoochwormEntity.SIZE)
+		addRenderLayer(ScoochwormChunkLoaderLayer(this))
 		addRenderLayer(ScoochwormLockboxLayer(this))
 		addRenderLayer(ScoochwormSaddleLayer(this))
 	}
