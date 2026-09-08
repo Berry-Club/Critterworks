@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageB
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormRenderer
-import dev.aaronhowser.mods.critterworks.client.render.item.ScoochwormGpsItemRenderer
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
@@ -51,10 +50,6 @@ object ClientEvents {
 		event.registerItem(
 			CritterCageItemRenderer.ClientItemExtensions,
 			ModItems.CRITTER_CAGE.get()
-		)
-		event.registerItem(
-			ScoochwormGpsItemRenderer.ClientItemExtensions,
-			ModItems.SCOOCHWORM_GPS.get()
 		)
 	}
 
