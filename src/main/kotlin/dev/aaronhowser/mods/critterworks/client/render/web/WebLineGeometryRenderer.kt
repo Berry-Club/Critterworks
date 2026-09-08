@@ -7,8 +7,8 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.BlockPos
@@ -19,10 +19,10 @@ import org.joml.Quaternionf
 
 object WebLineGeometryRenderer {
 
-	fun renderAll(minecraft: Minecraft, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
+	fun renderAll(bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
 		for (line in ClientWebLines.getLines()) {
 			render(
-				minecraft,
+				bufferSource,
 				level,
 				poseStack,
 				line.firstNode.position,
@@ -34,7 +34,7 @@ object WebLineGeometryRenderer {
 	}
 
 	fun render(
-		minecraft: Minecraft,
+		bufferSource: MultiBufferSource.BufferSource,
 		level: Level,
 		poseStack: PoseStack,
 		start: Vec3,
@@ -46,7 +46,6 @@ object WebLineGeometryRenderer {
 		val height = offset.length()
 		if (height == 0.0) return
 
-		val bufferSource = minecraft.renderBuffers().bufferSource()
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
 		val direction = offset.scale(1.0 / height)
 		val rotation = Quaternionf().rotationTo(

@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
@@ -17,12 +18,12 @@ import net.minecraft.world.level.Level
 
 object WebLinePreviewRenderer {
 
-	fun render(minecraft: Minecraft, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
-		renderPlacement(minecraft, level, poseStack, eyePosition, viewVector)
+	fun render(minecraft: Minecraft, bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
+		renderPlacement(minecraft, bufferSource, level, poseStack, eyePosition, viewVector)
 		renderHoveredAnchor(minecraft, poseStack, eyePosition, viewVector)
 	}
 
-	private fun renderPlacement(minecraft: Minecraft, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
+	private fun renderPlacement(minecraft: Minecraft, bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
 		val player = minecraft.player ?: return
 		val itemStack = getHeldArtificialSpinnerets(player.mainHandItem, player.offhandItem) ?: return
 
@@ -40,7 +41,7 @@ object WebLinePreviewRenderer {
 		val color = if (isValid) VALID_PREVIEW_COLOR else INVALID_PREVIEW_COLOR
 
 		WebLineGeometryRenderer.render(
-			minecraft,
+			bufferSource,
 			level,
 			poseStack,
 			firstNode.position,

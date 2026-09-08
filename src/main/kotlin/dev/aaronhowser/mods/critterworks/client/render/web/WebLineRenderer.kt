@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.client.render.web
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
 import dev.aaronhowser.mods.critterworks.Critterworks
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.MultiBufferSource
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
@@ -23,10 +24,11 @@ object WebLineRenderer {
 		val poseStack = event.poseStack
 		val minecraft = Minecraft.getInstance()
 		val level = minecraft.level ?: return
+		val bufferSource = minecraft.renderBuffers().bufferSource()
 
-		WebLineGeometryRenderer.renderAll(minecraft, level, poseStack, cameraPosition)
-		WebPortRenderer.renderAll(minecraft, level, poseStack, cameraPosition)
-		WebLinePreviewRenderer.render(minecraft, level, poseStack, cameraPosition, viewVector)
+		WebLineGeometryRenderer.renderAll(bufferSource, level, poseStack, cameraPosition)
+		WebPortRenderer.renderAll(bufferSource, level, poseStack, cameraPosition)
+		WebLinePreviewRenderer.render(minecraft, bufferSource, level, poseStack, cameraPosition, viewVector)
 	}
 
 }

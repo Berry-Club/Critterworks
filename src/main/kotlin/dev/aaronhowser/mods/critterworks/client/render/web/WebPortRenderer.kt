@@ -7,8 +7,8 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.item.WebPortItem
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.phys.Vec3
@@ -18,8 +18,7 @@ import org.joml.Vector3f
 
 object WebPortRenderer {
 
-	fun renderAll(minecraft: Minecraft, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
-		val bufferSource = minecraft.renderBuffers().bufferSource()
+	fun renderAll(bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
 
 		for (node in ClientWebLines.getNodes()) {
