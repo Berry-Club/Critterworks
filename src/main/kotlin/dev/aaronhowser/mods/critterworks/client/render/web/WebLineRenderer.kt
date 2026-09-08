@@ -15,7 +15,7 @@ object WebLineRenderer {
 
 	@SubscribeEvent
 	fun renderWebLines(event: RenderLevelStageEvent) {
-		if (event.stage != RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS) return
+		if (event.stage != RenderLevelStageEvent.Stage.AFTER_ENTITIES) return
 
 		val cameraPosition = event.camera.position
 		val viewVector = event.camera.lookVector.toVec3()
@@ -25,4 +25,5 @@ object WebLineRenderer {
 		WebPortRenderer.renderAll(poseStack, cameraPosition)
 		WebLinePreviewRenderer.render(poseStack, cameraPosition, viewVector)
 	}
+
 }

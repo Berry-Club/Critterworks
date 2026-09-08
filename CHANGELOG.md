@@ -11,6 +11,10 @@
 - Changed the layout of the Web Port menu
 - Web Line and Node interactions are now their own events
 
+### Fixed
+
+- Fixed Web Lines only rendering if Iris was installed (????)
+
 # 1.0.0
 
 - Initial alpha release
