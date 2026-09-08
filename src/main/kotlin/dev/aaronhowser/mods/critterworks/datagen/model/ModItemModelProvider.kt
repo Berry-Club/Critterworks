@@ -16,13 +16,15 @@ class ModItemModelProvider(
 ) : ItemModelProvider(output, Critterworks.MOD_ID, existingFileHelper) {
 
 	override fun registerModels() {
-		basicItem(ModItems.LOCKBOX.get())
-		getBuilder(ModItems.SCOOCHWORM_GPS.id.path)
-			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
-		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
-		basicItem(ModItems.WEB_PATHFINDER.get())
-		basicItem(ModItems.ITEM_FILTER.get())
+		basicItems()
+		bewlrs()
+		dyeberryItems()
+		hoppingSpider()
 
+		spawnEggItem(ModItems.SCOOCHWORM_SPAWN_EGG.get())
+	}
+
+	private fun hoppingSpider() {
 		val hoppingSpiderModel = getBuilder("hopping_spider")
 			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
 			.texture("particle", modLoc("item/hopping_spider"))
@@ -60,9 +62,36 @@ class ModItemModelProvider(
 			.transform(ItemDisplayContext.FIXED)
 			.rotation(90f, 0f, -180f)
 			.end()
+	}
 
-		withExistingParent("web_port", mcLoc("item/generated"))
-			.texture("layer0", modLoc("item/web_pathfinder"))
+	private fun bewlrs() {
+		val items = listOf(
+			ModItems.SCOOCHWORM_GPS
+		)
+
+		for (item in items) {
+			val id = item.id.path
+
+			getBuilder(id)
+				.parent(ModelFile.UncheckedModelFile("builtin/entity"))
+		}
+	}
+
+	private fun basicItems() {
+		basicItem(ModItems.LOCKBOX.get())
+		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
+		basicItem(ModItems.WEB_PATHFINDER.get())
+		basicItem(ModItems.ITEM_FILTER.get())
+		basicItem(ModItems.WEB_PORT.get())
+	}
+
+	private fun dyeberryItems() {
+		fun dyeberryItem(item: Item, textureName: String) {
+			val itemName = BuiltInRegistries.ITEM.getKey(item).path
+
+			withExistingParent(itemName, mcLoc("item/generated"))
+				.texture("layer0", modLoc("item/dyeberry/$textureName"))
+		}
 
 		dyeberryItem(ModItems.GREEN_DYEBERRY.get(), "green")
 		dyeberryItem(ModItems.BLUE_DYEBERRY.get(), "blue")
@@ -71,13 +100,6 @@ class ModItemModelProvider(
 		dyeberryItem(ModItems.MAGENTA_DYEBERRY.get(), "magenta")
 		dyeberryItem(ModItems.CYAN_DYEBERRY.get(), "cyan")
 		dyeberryItem(ModItems.AARONBERRY.get(), "aaron")
-		spawnEggItem(ModItems.SCOOCHWORM_SPAWN_EGG.get())
 	}
 
-	private fun dyeberryItem(item: Item, textureName: String) {
-		val itemName = BuiltInRegistries.ITEM.getKey(item).path
-
-		withExistingParent(itemName, mcLoc("item/generated"))
-			.texture("layer0", modLoc("item/dyeberry/$textureName"))
-	}
 }
