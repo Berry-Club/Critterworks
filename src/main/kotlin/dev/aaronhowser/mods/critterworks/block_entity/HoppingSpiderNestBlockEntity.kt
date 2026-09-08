@@ -31,6 +31,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.AABB
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.items.IItemHandler
 
@@ -42,6 +43,9 @@ class HoppingSpiderNestBlockEntity(
 	override val syncImmediately: Boolean = false
 
 	val hoppingSpiders: MutableList<HoppingSpider> = mutableListOf()
+
+	var renderBounds: AABB = AABB(pos)
+		private set
 
 	fun addSpider(stack: ItemStack): Boolean {
 		if (hoppingSpiders.size >= MAX_SPIDERS) return false
@@ -77,6 +81,7 @@ class HoppingSpiderNestBlockEntity(
 	}
 
 	private fun serverTick(level: ServerLevel) {
+		updateRenderBounds(level)
 		var shouldSync = assignTransportBehaviors(level)
 
 		for (spider in hoppingSpiders) {
@@ -100,6 +105,25 @@ class HoppingSpiderNestBlockEntity(
 		if (shouldSync) {
 			level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
 		}
+	}
+
+	private fun updateRenderBounds(level: ServerLevel) {
+		if (level.gameTime % 20 != 0L) return
+		var bounds = AABB(blockPos)
+
+		for (network in WebSavedData.get(level).getNetworksAt(blockPos)) {
+			for (line in network.lines) {
+				bounds = bounds.minmax(AABB(line.firstNode.position, line.firstNode.position))
+				bounds = bounds.minmax(AABB(line.secondNode.position, line.secondNode.position))
+			}
+		}
+
+		bounds = bounds.inflate(1.0)
+
+		if (bounds == renderBounds) return
+		renderBounds = bounds
+
+		setChangedAndSync()
 	}
 
 	private fun hasActiveBehaviors(): Boolean {
@@ -425,6 +449,12 @@ class HoppingSpiderNestBlockEntity(
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
 		super.saveAdditional(tag, registries)
 		tag.put(SPIDERS_TAG, saveSpiders(registries))
+		tag.putDouble(RENDER_MIN_X_TAG, renderBounds.minX)
+		tag.putDouble(RENDER_MIN_Y_TAG, renderBounds.minY)
+		tag.putDouble(RENDER_MIN_Z_TAG, renderBounds.minZ)
+		tag.putDouble(RENDER_MAX_X_TAG, renderBounds.maxX)
+		tag.putDouble(RENDER_MAX_Y_TAG, renderBounds.maxY)
+		tag.putDouble(RENDER_MAX_Z_TAG, renderBounds.maxZ)
 	}
 
 	private fun saveSpiders(registries: HolderLookup.Provider): ListTag {
@@ -441,6 +471,14 @@ class HoppingSpiderNestBlockEntity(
 		super.loadAdditional(tag, registries)
 		hoppingSpiders.clear()
 		loadSpiders(tag.getList(SPIDERS_TAG, CompoundTag.TAG_COMPOUND.toInt()), registries)
+		if (tag.contains(RENDER_MIN_X_TAG)) {
+			renderBounds = AABB(
+				tag.getDouble(RENDER_MIN_X_TAG), tag.getDouble(RENDER_MIN_Y_TAG), tag.getDouble(RENDER_MIN_Z_TAG),
+				tag.getDouble(RENDER_MAX_X_TAG), tag.getDouble(RENDER_MAX_Y_TAG), tag.getDouble(RENDER_MAX_Z_TAG)
+			)
+		} else {
+			renderBounds = AABB(blockPos)
+		}
 	}
 
 	private fun loadSpiders(spidersTag: ListTag, registries: HolderLookup.Provider) {
@@ -452,6 +490,12 @@ class HoppingSpiderNestBlockEntity(
 
 	companion object {
 		private const val SPIDERS_TAG = "HoppingSpiders"
+		private const val RENDER_MIN_X_TAG = "RenderMinX"
+		private const val RENDER_MIN_Y_TAG = "RenderMinY"
+		private const val RENDER_MIN_Z_TAG = "RenderMinZ"
+		private const val RENDER_MAX_X_TAG = "RenderMaxX"
+		private const val RENDER_MAX_Y_TAG = "RenderMaxY"
+		private const val RENDER_MAX_Z_TAG = "RenderMaxZ"
 		const val MAX_SPIDERS = 64
 		private const val MAX_TRANSFER_SIZE = 64
 

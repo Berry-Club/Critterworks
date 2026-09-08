@@ -160,11 +160,7 @@ class HoppingSpiderNestBlockRenderer(
 	}
 
 	override fun getRenderBoundingBox(blockEntity: HoppingSpiderNestBlockEntity): AABB {
-		return AABB.INFINITE
-	}
-
-	override fun shouldRenderOffScreen(blockEntity: HoppingSpiderNestBlockEntity): Boolean {
-		return true
+		return blockEntity.renderBounds
 	}
 
 	companion object {
