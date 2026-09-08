@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineInteractionHandler
-import net.minecraft.server.level.ServerPlayer
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 

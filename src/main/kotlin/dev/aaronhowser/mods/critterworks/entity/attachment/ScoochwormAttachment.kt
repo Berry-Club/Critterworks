@@ -1,9 +1,9 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment
 
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
 import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.sounds.SoundEvent
@@ -12,8 +12,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.items.IItemHandler
 
-abstract class ScoochwormAttachment(
-) {
+abstract class ScoochwormAttachment {
 	abstract val syncedData: SyncedAttachmentData
 	val type: ScoochwormAttachmentType<*>
 		get() = syncedData.resolveType()

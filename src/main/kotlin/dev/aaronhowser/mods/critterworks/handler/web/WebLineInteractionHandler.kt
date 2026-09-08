@@ -31,8 +31,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.common.Tags
 import org.joml.Intersectiond
 import org.joml.Vector3d
 import java.util.*
@@ -148,7 +148,7 @@ object WebLineInteractionHandler {
 		}
 	}
 
-	fun handleLineInteraction(player: ServerPlayer, event: WebLineInteractionEvent) {
+	fun handleLineInteraction(event: WebLineInteractionEvent) {
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
 		val savedData = WebSavedData.get(level)

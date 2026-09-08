@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.neoforged.bus.api.Event
 import net.neoforged.bus.api.ICancellableEvent
-import java.util.UUID
+import java.util.*
 
 class WebLineInteractionEvent(
 	val player: Player,

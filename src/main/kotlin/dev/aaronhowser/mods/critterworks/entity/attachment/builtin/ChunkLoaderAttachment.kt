@@ -7,8 +7,8 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.ChunkLoaderAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
-import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
+import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.TicketType
