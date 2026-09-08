@@ -12,14 +12,13 @@ import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.phys.Vec3
+import net.minecraft.world.level.Level
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
 object WebPortRenderer {
 
-	fun renderAll(poseStack: PoseStack, cameraPosition: Vec3) {
-		val minecraft = Minecraft.getInstance()
-		val level = minecraft.level ?: return
+	fun renderAll(minecraft: Minecraft, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
 		val bufferSource = minecraft.renderBuffers().bufferSource()
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
 

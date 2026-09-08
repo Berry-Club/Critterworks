@@ -13,14 +13,17 @@ import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import org.joml.Quaternionf
 
 object WebLineGeometryRenderer {
 
-	fun renderAll(poseStack: PoseStack, cameraPosition: Vec3) {
+	fun renderAll(minecraft: Minecraft, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
 		for (line in ClientWebLines.getLines()) {
 			render(
+				minecraft,
+				level,
 				poseStack,
 				line.firstNode.position,
 				line.secondNode.position,
@@ -31,6 +34,8 @@ object WebLineGeometryRenderer {
 	}
 
 	fun render(
+		minecraft: Minecraft,
+		level: Level,
 		poseStack: PoseStack,
 		start: Vec3,
 		end: Vec3,
@@ -41,8 +46,6 @@ object WebLineGeometryRenderer {
 		val height = offset.length()
 		if (height == 0.0) return
 
-		val minecraft = Minecraft.getInstance()
-		val level = minecraft.level ?: return
 		val bufferSource = minecraft.renderBuffers().bufferSource()
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
 		val direction = offset.scale(1.0 / height)

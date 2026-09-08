@@ -13,16 +13,16 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import net.minecraft.world.level.Level
 
 object WebLinePreviewRenderer {
 
-	fun render(poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
-		renderPlacement(poseStack, eyePosition, viewVector)
-		renderHoveredAnchor(poseStack, eyePosition, viewVector)
+	fun render(minecraft: Minecraft, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
+		renderPlacement(minecraft, level, poseStack, eyePosition, viewVector)
+		renderHoveredAnchor(minecraft, poseStack, eyePosition, viewVector)
 	}
 
-	private fun renderPlacement(poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
-		val minecraft = Minecraft.getInstance()
+	private fun renderPlacement(minecraft: Minecraft, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
 		val player = minecraft.player ?: return
 		val itemStack = getHeldArtificialSpinnerets(player.mainHandItem, player.offhandItem) ?: return
 
@@ -30,7 +30,7 @@ object WebLinePreviewRenderer {
 		val secondNode = getTargetedNode(minecraft, eyePosition, viewVector) ?: return
 
 		val isValid = WebLineInteractionHandler.canCreateLine(
-			player.level(),
+			level,
 			player,
 			itemStack,
 			firstNode,
@@ -40,6 +40,8 @@ object WebLinePreviewRenderer {
 		val color = if (isValid) VALID_PREVIEW_COLOR else INVALID_PREVIEW_COLOR
 
 		WebLineGeometryRenderer.render(
+			minecraft,
+			level,
 			poseStack,
 			firstNode.position,
 			secondNode.position,
@@ -48,8 +50,7 @@ object WebLinePreviewRenderer {
 		)
 	}
 
-	private fun renderHoveredAnchor(poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
-		val minecraft = Minecraft.getInstance()
+	private fun renderHoveredAnchor(minecraft: Minecraft, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
 		val player = minecraft.player ?: return
 
 		val targetedNode = ClientWebLineInteractionHandler.getHoveredAnchor(
