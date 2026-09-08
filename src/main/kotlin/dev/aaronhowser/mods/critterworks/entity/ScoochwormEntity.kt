@@ -59,6 +59,9 @@ class ScoochwormEntity(
 	private val movementPath = ScoochwormPath()
 	private val bodySegments = ScoochwormBody(this)
 
+	val pathPoints: List<ScoochwormPathPoint>
+		get() = movementPath.getPoints()
+
 	private var footstepPartIndex = HEAD_FOOTSTEP_INDEX
 	private var nextFootstepTick = random.nextInt(FOOTSTEP_CYCLE_PAUSE_TICKS + 1)
 	private var nextKissTick = 0
@@ -116,7 +119,12 @@ class ScoochwormEntity(
 			kissNearbyWorms()
 		}
 
-		if (isClientSide || !isTryingToMove) return
+		if (isClientSide) {
+			movementPath.record(position(), supportDirection)
+			return
+		}
+
+		if (!isTryingToMove) return
 
 		// Record the path that the head has traveled,
 		// and then set each segment to be a set distance from the head along that path

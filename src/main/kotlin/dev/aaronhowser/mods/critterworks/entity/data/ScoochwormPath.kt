@@ -71,6 +71,8 @@ class ScoochwormPath {
 
 	fun isEmpty(): Boolean = points.isEmpty()
 
+	fun getPoints(): List<ScoochwormPathPoint> = points.toList()
+
 	fun save(): ListTag {
 		val tag = ListTag()
 

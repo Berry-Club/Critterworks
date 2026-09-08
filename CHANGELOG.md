@@ -1,3 +1,9 @@
+# 1.2.0
+
+### Added
+
+- Debug client config that renders the movement path of every Scoochworm
+
 # 1.1.0
 
 ### Added

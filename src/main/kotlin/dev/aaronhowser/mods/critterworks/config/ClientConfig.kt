@@ -8,6 +8,7 @@ class ClientConfig(
 ) {
 
 	lateinit var renderScoochwormAttachmentProbe: ModConfigSpec.BooleanValue
+	lateinit var renderScoochwormPath: ModConfigSpec.BooleanValue
 	lateinit var renderWebLineDebugColors: ModConfigSpec.BooleanValue
 
 	init {
@@ -18,6 +19,10 @@ class ClientConfig(
 		renderScoochwormAttachmentProbe = builder
 			.comment("Render the Scoochworm attachment probe position through walls.")
 			.define("renderScoochwormAttachmentProbe", false)
+
+		renderScoochwormPath = builder
+			.comment("Render the client-recorded path of each Scoochworm.")
+			.define("renderScoochwormPath", false)
 
 		renderWebLineDebugColors = builder
 			.comment("Render each web line with a stable color derived from its UUID.")
