@@ -5,7 +5,19 @@
 			"loop": true
 		},
 		"animation.hopping_spider.idle_holding": {
-			"loop": true
+			"loop": true,
+			"bones": {
+				"l1": {
+					"position": {
+						"vector": [-2, 6, 0]
+					}
+				},
+				"r1": {
+					"position": {
+						"vector": [2, 6, 0]
+					}
+				}
+			}
 		}
 	}
 }
