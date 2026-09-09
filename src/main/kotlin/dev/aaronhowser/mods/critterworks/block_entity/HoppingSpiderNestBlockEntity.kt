@@ -101,9 +101,6 @@ class HoppingSpiderNestBlockEntity(
 
 		if (shouldSync || hasActiveBehaviors()) {
 			setChanged()
-		}
-
-		if (shouldSync) {
 			level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
 		}
 	}
