@@ -10,6 +10,7 @@
 ### Changed
 
 - New texture for the Scoochworm Depot and Stem-Encased Comparator
+- New texture and model for the Hopping Spider Nest
 - If Spiders have no path to their nest, they reset
 - Natural Hopping Spider Nests spawn with fewer spiders, especially when they have smaller webs
 - Hopping Spider nest and Scoochworm Apple worldgen rarity has been adjusted
@@ -18,8 +19,9 @@
 ### Fixed
 
 - Fixed Lockbox contents being lost after reloading a world
-- Hopefully fixed the crash when Scoochworm Apples spawn
 - Fixed Scoochworms that are on a wall when the world loads always moving downwards
+- Hopefully fixed the crash when Scoochworm Apples spawn
+- Fixed Critter Cage missing localization
 
 # 1.1.0
 
