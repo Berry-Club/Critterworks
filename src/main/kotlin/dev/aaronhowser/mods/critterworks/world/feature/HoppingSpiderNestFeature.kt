@@ -59,7 +59,10 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 
 		populateNest(level, nestPosition, random, configuration)
 		placeWebLines(level, rayHits, random, configuration)
-		sendTeleportMessage(level, nestPosition)
+
+		if (ServerConfig.CONFIG.sendHoppingSpiderNestTeleportMessage.get()) {
+			sendTeleportMessage(level, nestPosition)
+		}
 
 		return true
 	}
@@ -328,7 +331,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 	}
 
 	private fun sendTeleportMessage(level: WorldGenLevel, position: BlockPos) {
-		val message = Component.literal("[${position.x}, ${position.y}, ${position.z}]")
+		val message = Component.literal("Hopping Spider Nest [${position.x}, ${position.y}, ${position.z}]")
 			.withStyle(
 				Style.EMPTY
 					.withClickToRunCommand("/tp @s ${position.x} ${position.y} ${position.z}")

@@ -16,6 +16,9 @@ class ServerConfig(
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
 	lateinit var hoppingSpiderNestRarity: ModConfigSpec.IntValue
 
+	lateinit var sendScoochwormAppleTeleportMessage: ModConfigSpec.BooleanValue
+	lateinit var sendHoppingSpiderNestTeleportMessage: ModConfigSpec.BooleanValue
+
 	init {
 		general()
 	}
@@ -27,6 +30,10 @@ class ServerConfig(
 
 		builder.section("world_gen") {
 			worldGenConfigs()
+		}
+
+		builder.section("debug") {
+			debugConfigs()
 		}
 	}
 
@@ -56,6 +63,16 @@ class ServerConfig(
 		hoppingSpiderNestRarity = builder
 			.comment("The average number of chunks between Hopping Spider Nest generation attempts.")
 			.defineInRange("hoppingSpiderNestRarity", 128, 1, Int.MAX_VALUE)
+	}
+
+	private fun debugConfigs() {
+		sendScoochwormAppleTeleportMessage = builder
+			.comment("Send a clickable teleport message when a Scoochworm Apple generates.")
+			.define("sendScoochwormAppleTeleportMessage", false)
+
+		sendHoppingSpiderNestTeleportMessage = builder
+			.comment("Send a clickable teleport message when a Hopping Spider Nest generates.")
+			.define("sendHoppingSpiderNestTeleportMessage", false)
 	}
 
 	companion object {

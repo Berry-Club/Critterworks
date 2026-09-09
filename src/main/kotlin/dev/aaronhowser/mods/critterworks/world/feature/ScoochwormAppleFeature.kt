@@ -38,7 +38,10 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 		if (configuration.spawnScoochworm) {
 			spawnScoochworm(level, center.below(radius))
 		}
-//		sendTeleportMessage(level, center)
+
+		if (ServerConfig.CONFIG.sendScoochwormAppleTeleportMessage.get()) {
+			sendTeleportMessage(level, center)
+		}
 
 		return true
 	}
@@ -138,7 +141,7 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 	}
 
 	private fun sendTeleportMessage(level: WorldGenLevel, position: BlockPos) {
-		val message = Component.literal("[${position.x}, ${position.y}, ${position.z}]")
+		val message = Component.literal("Scoochworm Apple [${position.x}, ${position.y}, ${position.z}]")
 			.withStyle(
 				Style.EMPTY
 					.withClickToRunCommand("/tp @s ${position.x} ${position.y} ${position.z}")
