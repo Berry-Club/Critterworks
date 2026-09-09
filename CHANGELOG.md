@@ -5,6 +5,10 @@
 - Debug client config that renders the movement path of every Scoochworm
 - Debug server config that sends a clickable message in chat to tp to structures as they spawn
 
+### Changed
+
+- You can now configure the scale that Hopping Spiders render at on Web Lines
+
 ### Fixed
 
 - Hopefully fixed the crash when Scoochworm Apples spawn
