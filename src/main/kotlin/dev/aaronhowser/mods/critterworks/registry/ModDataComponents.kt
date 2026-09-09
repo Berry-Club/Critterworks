@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.registry.AaronDataComponentRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.data.WormColor
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
+import dev.aaronhowser.mods.critterworks.item.component.HoppingSpiderAnimation
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
 import dev.aaronhowser.mods.critterworks.item.component.WebPortComponent
 import net.minecraft.core.component.DataComponentType
@@ -31,5 +32,7 @@ object ModDataComponents : AaronDataComponentRegistry() {
 		register("web_port", WebPortComponent.CODEC, WebPortComponent.STREAM_CODEC)
 	val WEB_FLUID: DeferredHolder<DataComponentType<*>, DataComponentType<Double>> =
 		double("web_fluid")
+	val HOPPING_SPIDER_ANIMATION: DeferredHolder<DataComponentType<*>, DataComponentType<HoppingSpiderAnimation>> =
+		register("hopping_spider_animation", HoppingSpiderAnimation.CODEC, HoppingSpiderAnimation.STREAM_CODEC)
 
 }

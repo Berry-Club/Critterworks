@@ -1,5 +1,5 @@
 {
-	"format_version": "1.12.0",
+	"format_version": "1.21.110",
 	"minecraft:geometry": [
 		{
 			"description": {
@@ -34,22 +34,74 @@
 				{
 					"name": "left",
 					"parent": "legs",
-					"pivot": [0, 0, 0],
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "l1",
+					"parent": "left",
+					"pivot": [4, 2.5, -4],
 					"cubes": [
-						{"origin": [3, 1, -5], "size": [2, 3, 2], "uv": [0, 20]},
-						{"origin": [3, 1, -2], "size": [2, 3, 2], "uv": [8, 20]},
-						{"origin": [3, 1, 1], "size": [2, 3, 2], "uv": [20, 12]},
+						{"origin": [3, 1, -5], "size": [2, 3, 2], "uv": [0, 20]}
+					]
+				},
+				{
+					"name": "l2",
+					"parent": "left",
+					"pivot": [4, 2.5, -1],
+					"cubes": [
+						{"origin": [3, 1, -2], "size": [2, 3, 2], "uv": [8, 20]}
+					]
+				},
+				{
+					"name": "l3",
+					"parent": "left",
+					"pivot": [4, 2.5, 2],
+					"cubes": [
+						{"origin": [3, 1, 1], "size": [2, 3, 2], "uv": [20, 12]}
+					]
+				},
+				{
+					"name": "l4",
+					"parent": "left",
+					"pivot": [4, 2.5, 5],
+					"cubes": [
 						{"origin": [3, 1, 4], "size": [2, 3, 2], "uv": [16, 20]}
 					]
 				},
 				{
 					"name": "right",
 					"parent": "legs",
-					"pivot": [0, 0, 0],
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "r1",
+					"parent": "right",
+					"pivot": [-4, 2.5, -4],
 					"cubes": [
-						{"origin": [-5, 1, -5], "size": [2, 3, 2], "uv": [24, 17]},
-						{"origin": [-5, 1, -2], "size": [2, 3, 2], "uv": [24, 22]},
-						{"origin": [-5, 1, 1], "size": [2, 3, 2], "uv": [0, 25]},
+						{"origin": [-5, 1, -5], "size": [2, 3, 2], "uv": [24, 17]}
+					]
+				},
+				{
+					"name": "r2",
+					"parent": "right",
+					"pivot": [-4, 2.5, -1],
+					"cubes": [
+						{"origin": [-5, 1, -2], "size": [2, 3, 2], "uv": [24, 22]}
+					]
+				},
+				{
+					"name": "r3",
+					"parent": "right",
+					"pivot": [-4, 2.5, 2],
+					"cubes": [
+						{"origin": [-5, 1, 1], "size": [2, 3, 2], "uv": [0, 25]}
+					]
+				},
+				{
+					"name": "r4",
+					"parent": "right",
+					"pivot": [-4, 2.5, 5],
+					"cubes": [
 						{"origin": [-5, 1, 4], "size": [2, 3, 2], "uv": [8, 25]}
 					]
 				}

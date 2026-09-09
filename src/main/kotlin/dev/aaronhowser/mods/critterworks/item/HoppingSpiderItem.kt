@@ -3,6 +3,8 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.client.render.item.HoppingSpiderItemRenderer
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
+import dev.aaronhowser.mods.critterworks.item.component.HoppingSpiderAnimation
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.core.component.DataComponents
@@ -13,6 +15,11 @@ import software.bernie.geckolib.animatable.SingletonGeoAnimatable
 import software.bernie.geckolib.animatable.client.GeoRenderProvider
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animation.AnimationController
+import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.PlayState
+import software.bernie.geckolib.animation.RawAnimation
+import software.bernie.geckolib.constant.DataTickets
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.function.Consumer
 
@@ -41,7 +48,25 @@ class HoppingSpiderItem(properties: Properties) : Item(properties), GeoItem {
 		})
 	}
 
-	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {}
+	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
+		controllers.add(AnimationController(this, "main", 0, ::selectAnimation))
+	}
+
+	private fun selectAnimation(animationState: AnimationState<HoppingSpiderItem>): PlayState {
+		val stack = animationState.getData(DataTickets.ITEMSTACK)
+		val animation = if (stack == null) {
+			HoppingSpiderAnimation.IDLE
+		} else {
+			stack.getOrDefault(
+				ModDataComponents.HOPPING_SPIDER_ANIMATION,
+				HoppingSpiderAnimation.IDLE
+			)
+		}
+
+		return animationState.setAndContinue(
+			RawAnimation.begin().thenLoop(animation.animationName)
+		)
+	}
 
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 

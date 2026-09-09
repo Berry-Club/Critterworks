@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEntity
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
+import dev.aaronhowser.mods.critterworks.item.component.HoppingSpiderAnimation
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
@@ -114,6 +116,12 @@ class HoppingSpiderNestBlockRenderer(
 		packedLight: Int,
 		packedOverlay: Int
 	) {
+		val animation = HoppingSpiderAnimation.fromState(
+			isWalking = spider.route != null,
+			isHoldingItem = !spider.carriedStack.isEmpty
+		)
+		hoppingSpiderStack.set(ModDataComponents.HOPPING_SPIDER_ANIMATION, animation)
+
 		poseStack.withPose {
 			poseStack.scale(
 				HOPPING_SPIDER_SCALE,
