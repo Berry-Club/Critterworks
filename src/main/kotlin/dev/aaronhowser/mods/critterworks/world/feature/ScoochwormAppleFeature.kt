@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.withClickToRunCommand
 import dev.aaronhowser.mods.critterworks.block.ScoochstemBlock
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.world.feature.config.ScoochwormAppleConfiguration
@@ -11,7 +12,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
-import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
@@ -125,16 +125,19 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 	}
 
 	private fun spawnScoochworm(level: WorldGenLevel, floorPosition: BlockPos) {
-		val scoochworm = ModEntityTypes.SCOOCHWORM.get()
-			.spawn(
-				level.level,
-				floorPosition.above(),
-				MobSpawnType.STRUCTURE
-			) ?: return
+		val spawnPosition = floorPosition.above()
+		val scoochworm = ScoochwormEntity(ModEntityTypes.SCOOCHWORM.get(), level.level)
+		scoochworm.moveTo(
+			spawnPosition.x + 0.5,
+			spawnPosition.y.toDouble(),
+			spawnPosition.z + 0.5
+		)
 
 		scoochworm.attachToSupport(floorPosition, Direction.DOWN)
 		scoochworm.setPersistenceRequired()
 		scoochworm.isTryingToMove = true
+
+		level.addFreshEntity(scoochworm)
 	}
 
 	private fun sendTeleportMessage(level: WorldGenLevel, position: BlockPos) {
