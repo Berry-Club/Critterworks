@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.block.CritterCageBlock
 import dev.aaronhowser.mods.critterworks.block.DyeberryVinesBlock
 import dev.aaronhowser.mods.critterworks.block.ScoochstemBlock
+import dev.aaronhowser.mods.critterworks.block.StemEncasedComparatorBlock
 import dev.aaronhowser.mods.critterworks.entity.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModItems
@@ -21,7 +22,10 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.CaveVines
 import net.minecraft.world.level.block.HugeMushroomBlock
 import net.minecraft.world.level.block.RotatedPillarBlock
-import net.neoforged.neoforge.client.model.generators.*
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel
+import net.neoforged.neoforge.client.model.generators.ModelFile
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 
 class ModBlockStateProvider(
@@ -278,17 +282,36 @@ class ModBlockStateProvider(
 	private fun stemEncasedComparator() {
 		val block = ModBlocks.STEM_ENCASED_COMPARATOR.get()
 		val side = modLoc("block/stem_encased_comparator/side")
-		val disabledSide = modLoc("block/stem_encased_comparator/side_disabled")
 		val end = modLoc("block/stem_encased_comparator/top")
-		val disabledEnd = modLoc("block/stem_encased_comparator/top_disabled")
+		val sideOff = modLoc("block/stem_encased_comparator/side_off")
+		val endOff = modLoc("block/stem_encased_comparator/top_off")
 
-		scoochstemBlock(block, "stem_encased_comparator", side, disabledSide, end, disabledEnd)
-		simpleBlockItem(
-			block,
-			models()
-				.cube("stem_encased_comparator", end, end, side, side, side, side)
-				.particle(side)
-		)
+		val poweredModel = models()
+			.cube("stem_encased_comparator", end, end, side, side, side, side)
+			.particle(side)
+
+		val unpoweredModel = models()
+			.cube("stem_encased_comparator_off", endOff, endOff, sideOff, sideOff, sideOff, sideOff)
+			.particle(sideOff)
+
+		getVariantBuilder(block)
+			.forAllStates { state ->
+				val model = if (state.getValue(StemEncasedComparatorBlock.POWERED)) poweredModel else unpoweredModel
+				val configuredModel = ConfiguredModel.builder().modelFile(model)
+
+				val directionAxis = state.getValue(RotatedPillarBlock.AXIS)
+				if (directionAxis == Direction.Axis.X) {
+					configuredModel
+						.rotationX(90)
+						.rotationY(90)
+				} else if (directionAxis == Direction.Axis.Z) {
+					configuredModel.rotationX(90)
+				}
+
+				configuredModel.build()
+			}
+
+		simpleBlockItem(block, poweredModel)
 	}
 
 	private fun scoochstemBlock(

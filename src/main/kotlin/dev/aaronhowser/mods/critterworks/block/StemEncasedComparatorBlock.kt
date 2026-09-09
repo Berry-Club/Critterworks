@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormSegmentSupportBlock
+import dev.aaronhowser.mods.critterworks.block.base.ScoochwormTravelBlock
 import dev.aaronhowser.mods.critterworks.block_entity.StemEncasedComparatorBlockEntity
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
@@ -20,14 +21,33 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.RotatedPillarBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.neoforged.neoforge.items.ItemHandlerHelper
 
-class StemEncasedComparatorBlock : ScoochstemBlock(), ScoochwormSegmentSupportBlock, EntityBlock {
+class StemEncasedComparatorBlock :
+	RotatedPillarBlock(Properties.ofFullCopy(Blocks.OAK_LOG)),
+	ScoochwormTravelBlock,
+	ScoochwormSegmentSupportBlock,
+	EntityBlock {
+
+	init {
+		registerDefaultState(defaultBlockState().setValue(POWERED, false))
+	}
+
+	override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+		super.createBlockStateDefinition(builder)
+		builder.add(POWERED)
+	}
 
 	override fun useItemOn(
 		stack: ItemStack,
@@ -87,7 +107,18 @@ class StemEncasedComparatorBlock : ScoochstemBlock(), ScoochwormSegmentSupportBl
 	}
 
 	private fun notifyNeighbors(level: ServerLevel, position: BlockPos) {
+		updatePoweredState(level, position)
 		level.updateNeighborsAt(position, this)
+	}
+
+	fun updatePoweredState(level: ServerLevel, position: BlockPos) {
+		val state = level.getBlockState(position)
+		if (!state.isBlock(this)) return
+
+		val powered = calculateOutputSignal(level, position) > 0
+		if (state.getValue(POWERED) == powered) return
+
+		level.setBlock(position, state.setValue(POWERED, powered), UPDATE_CLIENTS)
 	}
 
 	override fun tick(
@@ -96,9 +127,31 @@ class StemEncasedComparatorBlock : ScoochstemBlock(), ScoochwormSegmentSupportBl
 		position: BlockPos,
 		random: RandomSource
 	) {
-		super.tick(state, level, position, random)
 		notifyNeighbors(level, position)
 	}
+
+	override fun canAttachToBlock(
+		blockState: BlockState,
+		scoochworm: ScoochwormEntity,
+		level: Level,
+		position: BlockPos,
+		supportDirection: Direction,
+		fromDirection: Direction
+	): Boolean = true
+
+	override fun getFlammability(
+		state: BlockState,
+		level: BlockGetter,
+		position: BlockPos,
+		direction: Direction
+	): Int = 5
+
+	override fun getFireSpreadSpeed(
+		state: BlockState,
+		level: BlockGetter,
+		position: BlockPos,
+		direction: Direction
+	): Int = 5
 
 	private fun calculateOutputSignal(level: Level, position: BlockPos): Int {
 		val blockEntity = level.getBlockEntity(position) as? StemEncasedComparatorBlockEntity
@@ -150,6 +203,10 @@ class StemEncasedComparatorBlock : ScoochstemBlock(), ScoochwormSegmentSupportBl
 		}
 
 		super.onRemove(state, level, pos, newState, movedByPiston)
+	}
+
+	companion object {
+		val POWERED: BooleanProperty = BlockStateProperties.POWERED
 	}
 
 }

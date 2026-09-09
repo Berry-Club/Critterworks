@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "critterworks:block/stem_encased_comparator/top_off",
+    "east": "critterworks:block/stem_encased_comparator/side_off",
+    "north": "critterworks:block/stem_encased_comparator/side_off",
+    "particle": "critterworks:block/stem_encased_comparator/side_off",
+    "south": "critterworks:block/stem_encased_comparator/side_off",
+    "up": "critterworks:block/stem_encased_comparator/top_off",
+    "west": "critterworks:block/stem_encased_comparator/side_off"
+  }
+}

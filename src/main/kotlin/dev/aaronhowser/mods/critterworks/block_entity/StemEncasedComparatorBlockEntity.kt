@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.aaron.container.ImprovedSimpleContainer
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.loadItems
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.saveItems
+import dev.aaronhowser.mods.critterworks.block.StemEncasedComparatorBlock
 import dev.aaronhowser.mods.critterworks.menu.stem_comparator.StemComparatorMenu
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
@@ -13,6 +14,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Container
 import net.minecraft.world.MenuProvider
 import net.minecraft.world.entity.player.Inventory
@@ -35,6 +37,19 @@ class StemEncasedComparatorBlockEntity(pos: BlockPos, state: BlockState) :
 
 	override fun createMenu(containerId: Int, playerInventory: Inventory, player: Player): AbstractContainerMenu {
 		return StemComparatorMenu(containerId, playerInventory, filterContainer)
+	}
+
+	override fun setChanged() {
+		super.setChanged()
+
+		val serverLevel = level
+		if (serverLevel !is ServerLevel) return
+
+		val comparator = blockState.block
+		if (comparator !is StemEncasedComparatorBlock) return
+
+		comparator.updatePoweredState(serverLevel, blockPos)
+		serverLevel.updateNeighborsAt(blockPos, comparator)
 	}
 
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
