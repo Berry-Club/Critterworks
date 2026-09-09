@@ -59,7 +59,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 			Block.UPDATE_CLIENTS
 		)
 
-		populateNest(level, nestPosition, random, configuration)
+		populateNest(level, nestPosition, rayHits.size, random, configuration)
 		placeWebLines(level, rayHits, random, configuration)
 
 		if (ServerConfig.CONFIG.sendHoppingSpiderNestTeleportMessage.get()) {
@@ -220,6 +220,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 	private fun populateNest(
 		level: WorldGenLevel,
 		position: BlockPos,
+		webLineCount: Int,
 		random: RandomSource,
 		configuration: HoppingSpiderNestConfiguration
 	) {
@@ -227,7 +228,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 		val spiderCount = random.nextIntBetweenInclusive(
 			configuration.spiders.minInclusive,
 			configuration.spiders.maxInclusive
-		)
+		).coerceAtMost(webLineCount)
 
 		for (spiderIndex in 0 until spiderCount) {
 			nest.hoppingSpiders.add(HoppingSpider())
