@@ -129,15 +129,21 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 
 	private fun spawnScoochworm(level: WorldGenLevel, floorPosition: BlockPos) {
 		val scoochworm = ModEntityTypes.SCOOCHWORM.get()
-			.spawn(
+			.create(
 				level.level,
+				null,
 				floorPosition.above(),
-				MobSpawnType.STRUCTURE
-			) ?: return
+				MobSpawnType.STRUCTURE,
+				false,
+				false
+			)
+			?: return
 
 		scoochworm.attachToSupport(floorPosition, Direction.DOWN)
 		scoochworm.setPersistenceRequired()
 		scoochworm.isTryingToMove = true
+
+		level.addFreshEntityWithPassengers(scoochworm)
 	}
 
 	private fun sendTeleportMessage(level: WorldGenLevel, position: BlockPos) {
