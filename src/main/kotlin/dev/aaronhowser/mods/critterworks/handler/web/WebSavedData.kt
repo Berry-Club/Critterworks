@@ -127,7 +127,7 @@ class WebSavedData : SavedData() {
 
 	@Synchronized
 	fun syncChunk(player: ServerPlayer, chunkPos: ChunkPos) {
-		val nearbyLines = lines.values.filter { line -> chunkPos in line.getEndpointChunkPositions() }
+		val nearbyLines = getLinesWithEndpointInChunk(chunkPos)
 		if (nearbyLines.isEmpty()) return
 
 		AddWebLinesPacket.fromLines(nearbyLines).messagePlayer(player)
@@ -137,9 +137,8 @@ class WebSavedData : SavedData() {
 	fun forgetChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val level = player.serverLevel()
 
-		for (line in lines.values) {
+		for (line in getLinesWithEndpointInChunk(chunkPos)) {
 			val lineChunks = line.getEndpointChunkPositions()
-			if (chunkPos !in lineChunks) continue
 
 			var stillTrackingLine = false
 			for (lineChunk in lineChunks) {
@@ -156,6 +155,20 @@ class WebSavedData : SavedData() {
 				RemoveWebLinePacket(line.uuid).messagePlayer(player)
 			}
 		}
+	}
+
+	private fun getLinesWithEndpointInChunk(chunkPos: ChunkPos): List<WebLine> {
+		val cachedUuids = lineUuidsByChunk[chunkPos] ?: return emptyList()
+		val matchingLines: MutableList<WebLine> = mutableListOf()
+
+		for (lineUuid in cachedUuids) {
+			val line = lines[lineUuid] ?: continue
+			if (chunkPos !in line.getEndpointChunkPositions()) continue
+
+			matchingLines.add(line)
+		}
+
+		return matchingLines
 	}
 
 	@Synchronized
