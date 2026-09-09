@@ -85,10 +85,13 @@
 - Carpenter ants? that's thematic
 - Is it even worth adding a whole new critter JUST for autocrafting?
 
-# Generic non critter stuff
+# Other stuff
 
 - Dripleaf Launchpad
-	- Basically the thing from Portal 
+	- Basically the thing from Portal
+- Pistol Shrimp?
+	- Could be a weapon or something
+    - Maybe it's much more powerful under water, or it adds range or something
 
 # Guidebook
 
