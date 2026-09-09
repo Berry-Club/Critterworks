@@ -5,13 +5,15 @@
 	"owners": [
 		"aaronhowser1"
 	],
-	"platforms": {},
+	"platforms": {
+		"curseforge": "critterworks"
+	},
 	"licenses": {
 		"project": {
 			"id": "MIT"
 		}
 	},
 	"versions": {
-		"1.21.1": "main"
+		"1.21.1": "1.21.1-Neoforge"
 	}
 }
