@@ -35,11 +35,11 @@ object ModConfiguredFeatures {
 				ModFeatures.HOPPING_SPIDER_NEST.get(),
 				HoppingSpiderNestConfiguration(
 					rayAttempts = 15,
-					webCount = InclusiveRange(1, 3),
+					webCount = InclusiveRange(1, 4),
 					webDistance = InclusiveRange(2.0, 10.0),
 					raySpread = 1.0,
 					connectionProgress = InclusiveRange(0.3, 0.7),
-					spiders = InclusiveRange(3, 8),
+					spiders = InclusiveRange(1, 3),
 					minimumDepthBelowSurface = 3,
 					connectWebs = true
 				)

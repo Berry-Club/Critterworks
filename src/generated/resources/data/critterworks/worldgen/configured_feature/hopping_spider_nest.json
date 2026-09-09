@@ -10,12 +10,12 @@
     "ray_attempts": 15,
     "ray_spread": 1.0,
     "spiders": [
-      3,
-      8
+      1,
+      3
     ],
     "web_count": [
       1,
-      3
+      4
     ],
     "web_distance": [
       2.0,
