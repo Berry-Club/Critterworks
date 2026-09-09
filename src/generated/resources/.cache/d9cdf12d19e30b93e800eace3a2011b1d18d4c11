@@ -1,4 +1,4 @@
-// 1.21.1	2026-09-06T15:57:41.5809866	Block States: critterworks
+// 1.21.1	2026-09-09T10:47:11.5976261	Block States: critterworks
 bff39bd414b05811bbd89c96d8e2121642432d62 assets/critterworks/blockstates/apple_slice.json
 92a92831fb4c696d7bdfa64e0b64ae262f78d98c assets/critterworks/blockstates/blue_scoochstem.json
 86fd608de8d6b5ed6348bcdeee10c53f6ede2662 assets/critterworks/blockstates/critter_cage.json
@@ -34,7 +34,7 @@ af6dcfe40e99b705f7f2e9a9d78f9afa58f5cb83 assets/critterworks/models/block/dyeber
 d9cc9208bb4eb9e7e5b3a7dd4dcd3b101bb357ce assets/critterworks/models/block/dyeberry_vines_yellow_lit.json
 c0ddeb76886d585fc2ea22067306d353dfb7885d assets/critterworks/models/block/dyeberry_vines_yellow_plant_lit.json
 af6766ecec48bff1f891a5b2aaa57ef2fb7a749a assets/critterworks/models/block/green_scoochstem.json
-f93041160ae36ca52752aea9e64795aca3cb3e03 assets/critterworks/models/block/hopping_spider_nest.json
+0d77efabe6d68f063029a2e5be4dc32be99640da assets/critterworks/models/block/hopping_spider_nest.json
 d6618917a72a2269a9621b9146f18785e509cbb1 assets/critterworks/models/block/magenta_scoochstem.json
 2e644ef29f34c5435d3d6200bd1cf71303465972 assets/critterworks/models/block/red_scoochstem.json
 ea9681fe6aa93dfe551d6422b5ae2a093a27db70 assets/critterworks/models/block/scoochstem.json

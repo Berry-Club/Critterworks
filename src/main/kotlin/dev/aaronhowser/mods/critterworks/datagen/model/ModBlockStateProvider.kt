@@ -42,13 +42,7 @@ class ModBlockStateProvider(
 
 	private fun hoppingSpiderNest() {
 		val block = ModBlocks.HOPPING_SPIDER_NEST.get()
-		val model = models().cubeBottomTop(
-			"hopping_spider_nest",
-			mcLoc("block/bee_nest_side"),
-			mcLoc("block/bee_nest_bottom"),
-			mcLoc("block/bee_nest_top")
-		)
-		simpleBlockWithItem(block, model)
+		simpleBlockWithItem(block, cubeAll(block))
 	}
 
 	private fun scoochwormDepot() {
