@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
 import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachmentType
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.ListTag
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -192,17 +193,17 @@ class ScoochwormBody(
 		}
 	}
 
-	fun save(): ListTag {
+	fun save(registries: HolderLookup.Provider): ListTag {
 		val tag = ListTag()
 
 		for (segment in segments) {
-			tag.add(segment.save())
+			tag.add(segment.save(registries))
 		}
 
 		return tag
 	}
 
-	fun load(tag: ListTag) {
+	fun load(tag: ListTag, registries: HolderLookup.Provider) {
 		discard()
 		segments.clear()
 
@@ -210,7 +211,7 @@ class ScoochwormBody(
 		for (index in 0 until segmentCount) {
 			segments.add(
 				if (index < tag.size) {
-					ScoochwormSegment.load(tag.getCompound(index))
+					ScoochwormSegment.load(tag.getCompound(index), registries)
 				} else {
 					ScoochwormSegment().also { it.assignBody(this) }
 				}

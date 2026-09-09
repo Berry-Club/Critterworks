@@ -7,8 +7,10 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.ItemStackScoochwormAt
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.LockboxAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -94,21 +96,25 @@ class LockboxAttachment(
 		updateItemContents()
 	}
 
-	override fun save(): CompoundTag {
-		val tag = super.save()
-		saveItemStack(tag)
+	override fun save(registries: HolderLookup.Provider): CompoundTag {
+		val tag = super.save(registries)
+		saveItemStack(tag, registries)
 		return tag
 	}
 
-	override fun load(tag: CompoundTag) {
+	override fun load(tag: CompoundTag, registries: HolderLookup.Provider) {
+		val registryOps = registries.createSerializationContext(NbtOps.INSTANCE)
+
 		val itemStack = ItemStack.OPTIONAL_CODEC
-			.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.getCompound("AttachmentItem"))
+			.parse(registryOps, tag.getCompound("AttachmentItem"))
 			.result()
 			.orElse(ItemStack.EMPTY)
+
 		val contents = itemStack.getOrDefault(
 			DataComponents.CONTAINER,
 			ItemContainerContents.EMPTY
 		)
+
 		contents.copyInto(container.items)
 	}
 

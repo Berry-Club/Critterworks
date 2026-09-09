@@ -392,7 +392,10 @@ class ScoochwormEntity(
 		super.readAdditionalSaveData(tag)
 
 		movementPath.load(tag.getList(PATH_TAG, CompoundTag.TAG_COMPOUND.toInt()))
-		bodySegments.load(tag.getList(SEGMENTS_TAG, CompoundTag.TAG_COMPOUND.toInt()))
+		bodySegments.load(
+			tag.getList(SEGMENTS_TAG, CompoundTag.TAG_COMPOUND.toInt()),
+			registryAccess()
+		)
 		isTryingToMove = tag.getBoolean(TRYING_TO_MOVE_TAG)
 		color = WormColor.fromOrdinal(tag.getInt(COLOR_TAG))
 
@@ -419,7 +422,7 @@ class ScoochwormEntity(
 	override fun addAdditionalSaveData(tag: CompoundTag) {
 		super.addAdditionalSaveData(tag)
 		tag.put(PATH_TAG, movementPath.save())
-		tag.put(SEGMENTS_TAG, bodySegments.save())
+		tag.put(SEGMENTS_TAG, bodySegments.save(registryAccess()))
 		tag.putBoolean(TRYING_TO_MOVE_TAG, isTryingToMove)
 		tag.putInt(COLOR_TAG, color.ordinal)
 		tag.putInt(SUPPORT_DIRECTION_TAG, supportDirection.get3DDataValue())

@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.entity.attachment
 
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.world.item.ItemStack
@@ -15,11 +16,12 @@ abstract class ItemStackScoochwormAttachment(
 
 	protected open fun synchronizeItemStack() {}
 
-	protected fun saveItemStack(tag: CompoundTag) {
+	protected fun saveItemStack(tag: CompoundTag, registries: HolderLookup.Provider) {
 		synchronizeItemStack()
+		val registryOps = registries.createSerializationContext(NbtOps.INSTANCE)
 
 		val stackTag = ItemStack.OPTIONAL_CODEC.encodeStart(
-			NbtOps.INSTANCE,
+			registryOps,
 			itemStack
 		)
 			.result()

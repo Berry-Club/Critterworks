@@ -13,6 +13,7 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.BlockPos
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
@@ -308,8 +309,8 @@ class ScoochwormSegment {
 		return bodyPart
 	}
 
-	fun save(): CompoundTag {
-		return attachment.save()
+	fun save(registries: HolderLookup.Provider): CompoundTag {
+		return attachment.save(registries)
 	}
 
 	fun predictInteraction(player: Player, heldStack: ItemStack): InteractionResult {
@@ -334,9 +335,9 @@ class ScoochwormSegment {
 	}
 
 	companion object {
-		fun load(tag: CompoundTag): ScoochwormSegment {
+		fun load(tag: CompoundTag, registries: HolderLookup.Provider): ScoochwormSegment {
 			val segment = ScoochwormSegment()
-			segment.attachment = ScoochwormAttachment.load(tag)
+			segment.attachment = ScoochwormAttachment.load(tag, registries)
 			return segment
 		}
 	}

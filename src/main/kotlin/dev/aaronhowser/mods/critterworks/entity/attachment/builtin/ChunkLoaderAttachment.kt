@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachment
 import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
 import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.TicketType
@@ -52,8 +53,8 @@ class ChunkLoaderAttachment : ScoochwormAttachment() {
 		return true
 	}
 
-	override fun save(): CompoundTag {
-		val tag = super.save()
+	override fun save(registries: HolderLookup.Provider): CompoundTag {
+		val tag = super.save(registries)
 		val data = syncedData as? ChunkLoaderAttachmentData ?: return tag
 
 		tag.putUUID(UUID_TAG, data.uuid)
@@ -62,7 +63,7 @@ class ChunkLoaderAttachment : ScoochwormAttachment() {
 		return tag
 	}
 
-	override fun load(tag: CompoundTag) {
+	override fun load(tag: CompoundTag, registries: HolderLookup.Provider) {
 		syncedData = ChunkLoaderAttachmentData(
 			tag.getUUID(UUID_TAG),
 			tag.getUUID(PLACER_UUID_TAG)

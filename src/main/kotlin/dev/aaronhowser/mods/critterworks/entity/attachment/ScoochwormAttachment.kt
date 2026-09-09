@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionResult
@@ -43,11 +44,13 @@ abstract class ScoochwormAttachment {
 
 	open fun applySyncedData(data: SyncedAttachmentData) {}
 
-	open fun save(): CompoundTag = CompoundTag().apply {
-		putString(ATTACHMENT_TYPE_TAG, syncedData.typeId.toString())
+	open fun save(registries: HolderLookup.Provider): CompoundTag {
+		val tag = CompoundTag()
+		tag.putString(ATTACHMENT_TYPE_TAG, syncedData.typeId.toString())
+		return tag
 	}
 
-	open fun load(tag: CompoundTag) {}
+	open fun load(tag: CompoundTag, registries: HolderLookup.Provider) {}
 
 	open fun remove(): ItemStack {
 		return ItemStack.EMPTY
@@ -79,12 +82,12 @@ abstract class ScoochwormAttachment {
 			return data.resolveType().createClientAttachment(data)
 		}
 
-		fun load(tag: CompoundTag): ScoochwormAttachment {
+		fun load(tag: CompoundTag, registries: HolderLookup.Provider): ScoochwormAttachment {
 			val typeId = net.minecraft.resources.ResourceLocation.parse(tag.getString(ATTACHMENT_TYPE_TAG))
 			val type = ModScoochwormAttachmentTypes.REGISTRY.get(typeId)
 				?: return NoAttachment()
 			val attachment = type.createEmptyAttachment()
-			attachment.load(tag)
+			attachment.load(tag, registries)
 			return attachment
 		}
 	}
