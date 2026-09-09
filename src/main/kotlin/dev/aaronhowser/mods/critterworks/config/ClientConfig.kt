@@ -8,6 +8,8 @@ class ClientConfig(
 	private val builder: ModConfigSpec.Builder
 ) {
 
+	lateinit var hoppingSpiderScale: ModConfigSpec.DoubleValue
+
 	lateinit var renderScoochwormAttachmentProbe: ModConfigSpec.BooleanValue
 	lateinit var renderScoochwormPath: ModConfigSpec.BooleanValue
 	lateinit var renderWebLineDebugColors: ModConfigSpec.BooleanValue
@@ -17,9 +19,19 @@ class ClientConfig(
 	}
 
 	private fun general() {
+		builder.section("rendering") {
+			renderingConfigs()
+		}
+
 		builder.section("debug") {
 			debugConfigs()
 		}
+	}
+
+	private fun renderingConfigs() {
+		hoppingSpiderScale = builder
+			.comment("The scale used to render Hopping Spiders in their nest.")
+			.defineInRange("hoppingSpiderScale", 0.5, 0.1, 2.0)
 	}
 
 	private fun debugConfigs() {

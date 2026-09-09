@@ -25,6 +25,9 @@ object ModConfigLang {
 		addConfig(ServerConfig.CONFIG.scoochwormAppleRarity, "Scoochworm Apple Rarity")
 		addConfig(ServerConfig.CONFIG.hoppingSpiderNestRarity, "Hopping Spider Nest Rarity")
 
+		addConfig("rendering", "Rendering")
+		addConfig(ClientConfig.CONFIG.hoppingSpiderScale, "Hopping Spider Scale")
+
 		addConfig("debug", "Debug")
 		addConfig(ServerConfig.CONFIG.sendScoochwormAppleTeleportMessage, "Send Scoochworm Apple Teleport Message")
 		addConfig(ServerConfig.CONFIG.sendHoppingSpiderNestTeleportMessage, "Send Hopping Spider Nest Teleport Message")

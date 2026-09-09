@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.client.render.block_entity
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEntity
+import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
 import dev.aaronhowser.mods.critterworks.item.component.HoppingSpiderAnimation
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -120,13 +121,15 @@ class HoppingSpiderNestBlockRenderer(
 			isWalking = spider.route != null,
 			isHoldingItem = !spider.carriedStack.isEmpty
 		)
+
 		hoppingSpiderStack.set(ModDataComponents.HOPPING_SPIDER_ANIMATION, animation)
 
+		val hoppingSpiderScale = ClientConfig.CONFIG.hoppingSpiderScale.get().toFloat()
 		poseStack.withPose {
 			poseStack.scale(
-				HOPPING_SPIDER_SCALE,
-				HOPPING_SPIDER_SCALE,
-				HOPPING_SPIDER_SCALE
+				hoppingSpiderScale,
+				hoppingSpiderScale,
+				hoppingSpiderScale
 			)
 
 			Minecraft.getInstance().itemRenderer.renderStatic(
@@ -176,7 +179,6 @@ class HoppingSpiderNestBlockRenderer(
 	}
 
 	companion object {
-		private const val HOPPING_SPIDER_SCALE = 0.5f
 		private const val ITEM_SCALE = 0.6f
 		private const val ITEM_HEIGHT = 0.18
 		private const val IDLE_OFFSET = 0.14
