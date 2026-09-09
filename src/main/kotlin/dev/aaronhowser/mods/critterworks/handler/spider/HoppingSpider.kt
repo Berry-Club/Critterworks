@@ -62,6 +62,16 @@ class HoppingSpider(
 		clearRoute()
 	}
 
+	fun cancelBehaviorAndReturnToNest(level: ServerLevel, nestPosition: Vec3) {
+		if (!carriedStack.isEmpty) {
+			dropCarriedItem(level)
+		}
+
+		activeBehavior = null
+		position = nestPosition
+		clearRoute()
+	}
+
 	fun travelTo(
 		level: ServerLevel,
 		currentNodeUuid: UUID,

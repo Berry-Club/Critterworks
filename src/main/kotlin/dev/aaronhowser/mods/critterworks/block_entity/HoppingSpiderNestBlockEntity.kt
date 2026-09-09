@@ -82,7 +82,8 @@ class HoppingSpiderNestBlockEntity(
 
 	private fun serverTick(level: ServerLevel) {
 		updateRenderBounds(level)
-		var shouldSync = assignTransportBehaviors(level)
+
+		var shouldSync = returnDisconnectedSpiders(level) || assignTransportBehaviors(level)
 
 		for (spider in hoppingSpiders) {
 			if (spider.activeBehavior == null) {
@@ -105,6 +106,39 @@ class HoppingSpiderNestBlockEntity(
 		if (shouldSync) {
 			level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
 		}
+	}
+
+	private fun returnDisconnectedSpiders(level: ServerLevel): Boolean {
+		if (level.gameTime % NETWORK_CHECK_INTERVAL != 0L) return false
+
+		val savedData = WebSavedData.get(level)
+		val nestNetworks = savedData.getNetworksAt(blockPos)
+		var returnedSpider = false
+
+		for (spider in hoppingSpiders) {
+			val currentNodeUuid = spider.activeBehavior?.currentNodeUuid ?: continue
+			val currentNode = savedData.getNode(currentNodeUuid)
+
+			if (currentNode != null && isConnectedToNest(savedData, nestNetworks, currentNode)) continue
+
+			spider.cancelBehaviorAndReturnToNest(level, blockPos.center)
+			returnedSpider = true
+		}
+
+		return returnedSpider
+	}
+
+	private fun isConnectedToNest(
+		savedData: WebSavedData,
+		nestNetworks: Set<WebNetwork>,
+		node: WebNode
+	): Boolean {
+		for (line in node.lines) {
+			val network = savedData.getNetwork(line.uuid) ?: continue
+			if (network in nestNetworks) return true
+		}
+
+		return false
 	}
 
 	private fun updateRenderBounds(level: ServerLevel) {
@@ -498,6 +532,7 @@ class HoppingSpiderNestBlockEntity(
 		private const val RENDER_MAX_Z_TAG = "RenderMaxZ"
 		const val MAX_SPIDERS = 64
 		private const val MAX_TRANSFER_SIZE = 64
+		private const val NETWORK_CHECK_INTERVAL = 100L
 
 		fun serverTick(
 			level: Level,

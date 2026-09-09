@@ -7,6 +7,7 @@
 
 ### Changed
 
+- If Spiders have no path to their nest, they reset
 - You can now configure the scale that Hopping Spiders render at on Web Lines
 
 ### Fixed
