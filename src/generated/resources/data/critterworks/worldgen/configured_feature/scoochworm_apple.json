@@ -4,7 +4,7 @@
     "radius": {
       "type": "minecraft:uniform",
       "max_inclusive": 2,
-      "min_inclusive": 1
+      "min_inclusive": 2
     },
     "spawn_scoochworm": true,
     "vertical_search_range": 24
