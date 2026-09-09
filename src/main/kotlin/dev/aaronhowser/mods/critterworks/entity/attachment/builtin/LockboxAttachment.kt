@@ -105,7 +105,7 @@ class LockboxAttachment(
 	override fun load(tag: CompoundTag, registries: HolderLookup.Provider) {
 		val registryOps = registries.createSerializationContext(NbtOps.INSTANCE)
 
-		val itemStack = ItemStack.OPTIONAL_CODEC
+		itemStack = ItemStack.OPTIONAL_CODEC
 			.parse(registryOps, tag.getCompound("AttachmentItem"))
 			.result()
 			.orElse(ItemStack.EMPTY)

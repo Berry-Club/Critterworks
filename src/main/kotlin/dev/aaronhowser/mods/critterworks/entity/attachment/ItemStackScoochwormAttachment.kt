@@ -10,7 +10,7 @@ abstract class ItemStackScoochwormAttachment(
 	itemStack: ItemStack
 ) : ScoochwormAttachment() {
 
-	protected val itemStack: ItemStack = itemStack.copy()
+	protected var itemStack: ItemStack = itemStack.copy()
 
 	override val consumesItemStack: Boolean = true
 

@@ -17,7 +17,7 @@
 
 ### Fixed
 
-- Fixed Lockbox contents not persisting after reloading a world
+- Fixed Lockbox contents being lost after reloading a world
 - Hopefully fixed the crash when Scoochworm Apples spawn
 - Fixed Scoochworms that are on a wall when the world loads always moving downwards
 
