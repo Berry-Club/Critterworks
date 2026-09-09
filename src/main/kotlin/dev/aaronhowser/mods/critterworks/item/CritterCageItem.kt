@@ -17,9 +17,44 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.component.CustomData
+import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 
 class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE.get(), properties) {
+
+	override fun useOn(context: UseOnContext): InteractionResult {
+		val stack = context.itemInHand
+		val player = context.player
+		if (!stack.has(ModDataComponents.ENTITY_DATA) || player?.isSecondaryUseActive == true) {
+			return super.useOn(context)
+		}
+
+		val level = context.level
+		if (level.isClientSide) return InteractionResult.SUCCESS
+
+		val clickedPosition = context.clickedPos
+		val clickedState = level.getBlockState(clickedPosition)
+		val spawnPosition = if (clickedState.getCollisionShape(level, clickedPosition).isEmpty) {
+			clickedPosition
+		} else {
+			clickedPosition.relative(context.clickedFace)
+		}
+
+		val worm = placeScoochworm(
+			stack,
+			level,
+			spawnPosition,
+			context.horizontalDirection
+		) ?: return InteractionResult.FAIL
+
+		if (!level.noCollision(worm)) {
+			worm.discard()
+			return InteractionResult.FAIL
+		}
+
+		stack.remove(ModDataComponents.ENTITY_DATA)
+		return InteractionResult.CONSUME
+	}
 
 	override fun interactLivingEntity(
 		stack: ItemStack,

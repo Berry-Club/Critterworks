@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Using a Critter Cage while not sneaking will place the Scoochworm instead of placing the block
 - New texture for the Scoochworm Depot and Stem-Encased Comparator
 - New texture and model for the Hopping Spider Nest
 - If Spiders have no path to their nest, they reset
