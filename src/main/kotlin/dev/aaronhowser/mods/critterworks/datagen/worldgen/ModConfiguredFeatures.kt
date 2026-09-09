@@ -22,7 +22,7 @@ object ModConfiguredFeatures {
 			ConfiguredFeature(
 				ModFeatures.SCOOCHWORM_APPLE.get(),
 				ScoochwormAppleConfiguration(
-					radius = UniformInt.of(2, 4),
+					radius = UniformInt.of(1, 2),
 					verticalSearchRange = 24,
 					spawnScoochworm = true
 				)
