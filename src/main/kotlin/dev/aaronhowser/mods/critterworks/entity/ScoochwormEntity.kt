@@ -403,6 +403,14 @@ class ScoochwormEntity(
 			null
 		}
 
+		if (tag.contains(MOVEMENT_DIRECTION_X_TAG)) {
+			rememberedMovementDirection = Vec3(
+				tag.getDouble(MOVEMENT_DIRECTION_X_TAG),
+				tag.getDouble(MOVEMENT_DIRECTION_Y_TAG),
+				tag.getDouble(MOVEMENT_DIRECTION_Z_TAG)
+			)
+		}
+
 		if (!movementPath.isEmpty()) {
 			bodySegments.update(movementPath)
 		}
@@ -420,6 +428,24 @@ class ScoochwormEntity(
 		if (currentSupportPosition != null) {
 			tag.putLong(SUPPORT_POSITION_TAG, currentSupportPosition.asLong())
 		}
+
+		val movementDirection = getMovementDirectionForSave()
+		if (movementDirection != null) {
+			tag.putDouble(MOVEMENT_DIRECTION_X_TAG, movementDirection.x)
+			tag.putDouble(MOVEMENT_DIRECTION_Y_TAG, movementDirection.y)
+			tag.putDouble(MOVEMENT_DIRECTION_Z_TAG, movementDirection.z)
+		}
+	}
+
+	private fun getMovementDirectionForSave(): Vec3? {
+		if (deltaMovement.lengthSqr() > MINIMUM_MOVEMENT_LENGTH_SQUARED) {
+			return deltaMovement.normalize()
+		}
+
+		val stemDirection = stemMoveControl.movementDirection
+		if (stemDirection != null) return stemDirection.normal.toVec3()
+
+		return rememberedMovementDirection
 	}
 
 	// Animation
@@ -448,6 +474,10 @@ class ScoochwormEntity(
 		const val SUPPORT_DIRECTION_TAG = "AttachmentBottom"
 		const val SUPPORT_POSITION_TAG = "AttachmentPosition"
 		private const val COLOR_TAG = "Color"
+		private const val MOVEMENT_DIRECTION_X_TAG = "MovementDirectionX"
+		private const val MOVEMENT_DIRECTION_Y_TAG = "MovementDirectionY"
+		private const val MOVEMENT_DIRECTION_Z_TAG = "MovementDirectionZ"
+		private const val MINIMUM_MOVEMENT_LENGTH_SQUARED = 0.000001
 
 		private val DATA_SUPPORT_DIRECTION: EntityDataAccessor<Direction> =
 			SynchedEntityData.defineId(
