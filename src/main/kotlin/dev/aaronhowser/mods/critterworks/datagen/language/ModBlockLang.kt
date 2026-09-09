@@ -11,6 +11,7 @@ object ModBlockLang {
 		provider.addBlock(ModBlocks.SCOOCHWORM_DEPOT, "Scoochworm Depot")
 		provider.addBlock(ModBlocks.APPLE_SLICE, "Apple Slice")
 		provider.addBlock(ModBlocks.HOPPING_SPIDER_NEST, "Hopping Spider Nest")
+		provider.addBlock(ModBlocks.CRITTER_CAGE, "Critter Cage")
 
 		provider.addBlock(ModBlocks.GREEN_SCOOCHSTEM, "Green Scoochstem")
 		provider.addBlock(ModBlocks.BLUE_SCOOCHSTEM, "Blue Scoochstem")
