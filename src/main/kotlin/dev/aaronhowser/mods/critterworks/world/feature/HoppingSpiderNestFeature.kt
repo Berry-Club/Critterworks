@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.world.feature
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.withClickToRunCommand
 import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEntity
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
@@ -33,12 +34,13 @@ import java.util.*
 class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(HoppingSpiderNestConfiguration.CODEC) {
 
 	override fun place(context: FeaturePlaceContext<HoppingSpiderNestConfiguration>): Boolean {
+		val random = context.random()
+		val rarity = ServerConfig.CONFIG.hoppingSpiderNestRarity.get()
+		if (random.oneIn(rarity)) return false
+
 		val level = context.level()
 		val configuration = context.config()
 		val nestPosition = context.origin()
-		val random = context.random()
-		val rarity = ServerConfig.CONFIG.hoppingSpiderNestRarity.get()
-		if (random.nextRange(0, rarity) != 0) return false
 
 		val nestState = level.getBlockState(nestPosition)
 		if (!nestState.isCollisionShapeFullBlock(level, nestPosition)) return false

@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.world.feature
 
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.withClickToRunCommand
 import dev.aaronhowser.mods.critterworks.block.ScoochstemBlock
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
@@ -22,11 +22,11 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
 class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormAppleConfiguration.CODEC) {
 
 	override fun place(context: FeaturePlaceContext<ScoochwormAppleConfiguration>): Boolean {
-		val level = context.level()
 		val configuration = context.config()
 		val rarity = ServerConfig.CONFIG.scoochwormAppleRarity.get()
-		if (context.random().nextRange(0, rarity) != 0) return false
+		if (context.random().oneIn(rarity)) return false
 
+		val level = context.level()
 		val radius = configuration.radius.sample(context.random())
 		val floorPosition = findFloor(level, context.origin(), configuration.verticalSearchRange) ?: return false
 		val center = floorPosition.above(radius)
