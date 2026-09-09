@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.critterworks.block
 
-import com.mojang.serialization.MapCodec
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEntity
@@ -14,23 +13,32 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 
-class HoppingSpiderNestBlock(
-	properties: Properties = Properties.ofFullCopy(Blocks.OAK_PLANKS)
-) : BaseEntityBlock(properties) {
+class HoppingSpiderNestBlock : Block(
+	Properties.ofFullCopy(Blocks.OAK_PLANKS).noOcclusion()
+), EntityBlock {
 
-	override fun codec(): MapCodec<out BaseEntityBlock> = CODEC
-
-	override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
+	override fun getShape(
+		state: BlockState,
+		level: BlockGetter,
+		position: BlockPos,
+		context: CollisionContext
+	): VoxelShape {
+		return SHAPE
+	}
 
 	override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
 		return HoppingSpiderNestBlockEntity(pos, state)
@@ -146,15 +154,20 @@ class HoppingSpiderNestBlock(
 		blockEntityType: BlockEntityType<T>
 	): BlockEntityTicker<T>? {
 		if (level.isClientSide) return null
+		if (blockEntityType != ModBlockEntityTypes.HOPPING_SPIDER_NEST.get()) return null
 
-		return createTickerHelper(
-			blockEntityType,
-			ModBlockEntityTypes.HOPPING_SPIDER_NEST.get(),
-			HoppingSpiderNestBlockEntity::serverTick
-		)
+		val ticker = BlockEntityTicker(HoppingSpiderNestBlockEntity::serverTick)
+
+		@Suppress("UNCHECKED_CAST")
+		return ticker as BlockEntityTicker<T>
 	}
 
 	companion object {
-		val CODEC: MapCodec<HoppingSpiderNestBlock> = simpleCodec(::HoppingSpiderNestBlock)
+		private val SHAPE = Shapes.or(
+			box(5.0, 0.0, 5.0, 11.0, 16.0, 11.0),
+			box(2.0, 1.0, 2.0, 14.0, 15.0, 14.0),
+			box(1.0, 3.0, 0.0, 15.0, 13.0, 16.0),
+			box(0.0, 3.0, 1.0, 16.0, 13.0, 15.0)
+		)
 	}
 }
