@@ -36,7 +36,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 	override fun place(context: FeaturePlaceContext<HoppingSpiderNestConfiguration>): Boolean {
 		val random = context.random()
 		val rarity = ServerConfig.CONFIG.hoppingSpiderNestRarity.get()
-		if (random.oneIn(rarity)) return false
+		if (!random.oneIn(rarity)) return false
 
 		val level = context.level()
 		val configuration = context.config()
