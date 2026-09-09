@@ -1,4 +1,4 @@
-// 1.21.1	2026-09-09T14:53:23.5157613	Block States: critterworks
+// 1.21.1	2026-09-09T15:06:00.9471045	Block States: critterworks
 bff39bd414b05811bbd89c96d8e2121642432d62 assets/critterworks/blockstates/apple_slice.json
 92a92831fb4c696d7bdfa64e0b64ae262f78d98c assets/critterworks/blockstates/blue_scoochstem.json
 86fd608de8d6b5ed6348bcdeee10c53f6ede2662 assets/critterworks/blockstates/critter_cage.json
@@ -11,7 +11,7 @@ a59a4bba1ce33bf179a2da492eff9e52bf345162 assets/critterworks/blockstates/magenta
 038b5bf584b0d3ba96e497612595f9d95e55fddb assets/critterworks/blockstates/red_scoochstem.json
 d5f39a6fb4764469d8127f6aa15418b237e535e1 assets/critterworks/blockstates/scoochstem.json
 5d7608dc48911571d564e1829d65461fc1e7245f assets/critterworks/blockstates/scoochstem_wood.json
-51d74e238ab166614b3afa6c33f0fd0ec7746d9a assets/critterworks/blockstates/scoochworm_depot.json
+08a22eb3df58d376ff1cacb02715967f6252ecb3 assets/critterworks/blockstates/scoochworm_depot.json
 48b32e6f38edd86c120063bf79367bf93f21bcc7 assets/critterworks/blockstates/stem_encased_comparator.json
 0a70c5d2f57e933735d10acc45e6cadc37460441 assets/critterworks/blockstates/yellow_scoochstem.json
 7be2e3396385d849e09e89b0f6d4fe069f52794b assets/critterworks/models/block/apple_slice.json
@@ -45,7 +45,8 @@ ade6e67016b0a3b8be260d8357fd98e9c8942afe assets/critterworks/models/block/scooch
 256037bc138205916c67c0c1b25b5a7fb4dd2454 assets/critterworks/models/block/scoochstem_wood.json
 ade6e67016b0a3b8be260d8357fd98e9c8942afe assets/critterworks/models/block/scoochstem_wood_side.json
 2f5c99f222d16879ba54965172f6ac72010a113a assets/critterworks/models/block/scoochstem_wood_side_disabled.json
-a7a1c26a7c6b0979efcf548430b04d9fca654080 assets/critterworks/models/block/scoochworm_depot.json
+c8d1bc58808e62d7ba91217bb1f3bc9899c0c44f assets/critterworks/models/block/scoochworm_depot.json
+f802f7d9d9f892de66bf9b904ab15ce2feb4e6dd assets/critterworks/models/block/scoochworm_depot_powered.json
 984816b9875ce400dc94b43fab9fddcfaa2c6488 assets/critterworks/models/block/stem_encased_comparator.json
 c56a244dfb9680676876c9705aab4085f7806315 assets/critterworks/models/block/stem_encased_comparator_off.json
 a6eeda31d0d419a7b884a1a3e14e8aef147864e8 assets/critterworks/models/block/yellow_scoochstem.json

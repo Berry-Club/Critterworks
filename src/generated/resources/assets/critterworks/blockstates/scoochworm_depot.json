@@ -1,7 +1,28 @@
 {
   "variants": {
-    "": {
+    "axis=x,powered=false": {
+      "model": "critterworks:block/scoochworm_depot",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,powered=true": {
+      "model": "critterworks:block/scoochworm_depot_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,powered=false": {
       "model": "critterworks:block/scoochworm_depot"
+    },
+    "axis=y,powered=true": {
+      "model": "critterworks:block/scoochworm_depot_powered"
+    },
+    "axis=z,powered=false": {
+      "model": "critterworks:block/scoochworm_depot",
+      "x": 90
+    },
+    "axis=z,powered=true": {
+      "model": "critterworks:block/scoochworm_depot_powered",
+      "x": 90
     }
   }
 }

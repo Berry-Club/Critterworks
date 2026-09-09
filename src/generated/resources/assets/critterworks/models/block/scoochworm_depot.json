@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "minecraft:block/iron_block"
+    "down": "critterworks:block/scoochstem/top",
+    "east": "critterworks:block/scoochworm_depot/side_unpowered",
+    "north": "critterworks:block/scoochworm_depot/side_unpowered",
+    "particle": "critterworks:block/scoochworm_depot/side_unpowered",
+    "south": "critterworks:block/scoochworm_depot/side_unpowered",
+    "up": "critterworks:block/scoochstem/top",
+    "west": "critterworks:block/scoochworm_depot/side_unpowered"
   }
 }

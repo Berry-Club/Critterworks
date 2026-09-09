@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.particle
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.block.CritterCageBlock
 import dev.aaronhowser.mods.critterworks.block.DyeberryVinesBlock
+import dev.aaronhowser.mods.critterworks.block.ScoochwormDepotBlock
 import dev.aaronhowser.mods.critterworks.block.ScoochstemBlock
 import dev.aaronhowser.mods.critterworks.block.StemEncasedComparatorBlock
 import dev.aaronhowser.mods.critterworks.entity.data.WormColor
@@ -51,8 +52,37 @@ class ModBlockStateProvider(
 
 	private fun scoochwormDepot() {
 		val block = ModBlocks.SCOOCHWORM_DEPOT.get()
-		val model = models().cubeAll("scoochworm_depot", mcLoc("block/iron_block"))
-		simpleBlockWithItem(block, model)
+		val end = modLoc("block/scoochstem/top")
+		val poweredSide = modLoc("block/scoochworm_depot/side_powered")
+		val unpoweredSide = modLoc("block/scoochworm_depot/side_unpowered")
+
+		val poweredModel = models()
+			.cube("scoochworm_depot_powered", end, end, poweredSide, poweredSide, poweredSide, poweredSide)
+			.particle(poweredSide)
+
+		val unpoweredModel = models()
+			.cube("scoochworm_depot", end, end, unpoweredSide, unpoweredSide, unpoweredSide, unpoweredSide)
+			.particle(unpoweredSide)
+
+		getVariantBuilder(block)
+			.forAllStates { state ->
+				val model = if (state.getValue(ScoochwormDepotBlock.POWERED)) poweredModel else unpoweredModel
+				val configuredModel = ConfiguredModel.builder()
+					.modelFile(model)
+
+				val directionAxis = state.getValue(RotatedPillarBlock.AXIS)
+				if (directionAxis == Direction.Axis.X) {
+					configuredModel
+						.rotationX(90)
+						.rotationY(90)
+				} else if (directionAxis == Direction.Axis.Z) {
+					configuredModel.rotationX(90)
+				}
+
+				configuredModel.build()
+			}
+
+		simpleBlockItem(block, unpoweredModel)
 	}
 
 	private fun dyeberryVines() {
