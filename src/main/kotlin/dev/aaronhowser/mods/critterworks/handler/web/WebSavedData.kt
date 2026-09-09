@@ -271,11 +271,8 @@ class WebSavedData : SavedData() {
 
 	private fun addLineToNetwork(line: WebLine) {
 		val connectedNetworks: MutableSet<WebNetwork> = mutableSetOf()
-		for (otherLine in lines.values) {
-			if (otherLine.uuid == line.uuid) continue
-			if (!areConnected(line, otherLine)) continue
-
-			val network = networksByLineUuid[otherLine.uuid] ?: continue
+		for (connectedLine in getConnectedLines(line)) {
+			val network = networksByLineUuid[connectedLine.uuid] ?: continue
 			connectedNetworks.add(network)
 		}
 
@@ -298,6 +295,27 @@ class WebSavedData : SavedData() {
 
 		network.addLine(line)
 		networksByLineUuid[line.uuid] = network
+	}
+
+	private fun getConnectedLines(line: WebLine): Set<WebLine> {
+		val connectedLines: MutableSet<WebLine> = mutableSetOf()
+		addLinesConnectedAtNode(line.firstNode, connectedLines)
+		addLinesConnectedAtNode(line.secondNode, connectedLines)
+
+		for (attachment in line.attachedAnchors) {
+			connectedLines.addAll(attachment.anchor.lines)
+		}
+
+		connectedLines.remove(line)
+		return connectedLines
+	}
+
+	private fun addLinesConnectedAtNode(node: WebNode, connectedLines: MutableSet<WebLine>) {
+		connectedLines.addAll(node.lines)
+		if (node !is WebLineAnchor) return
+
+		val referencedLine = lines[node.lineUuid] ?: return
+		connectedLines.add(referencedLine)
 	}
 
 	private fun removeLineFromNetwork(line: WebLine) {
