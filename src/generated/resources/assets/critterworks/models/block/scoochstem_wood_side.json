@@ -5,7 +5,6 @@
       "faces": {
         "north": {
           "cullface": "north",
-          "rotation": 90,
           "texture": "#texture"
         }
       },
@@ -22,7 +21,7 @@
     }
   ],
   "textures": {
-    "particle": "critterworks:block/scoochstem/top_disabled",
-    "texture": "critterworks:block/scoochstem/top_disabled"
+    "particle": "critterworks:block/scoochstem/side",
+    "texture": "critterworks:block/scoochstem/side"
   }
 }

@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side",
         "x": 90
       },
       "when": {
@@ -12,7 +12,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side_disabled",
         "x": 90
       },
       "when": {
@@ -22,7 +22,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top",
+        "model": "critterworks:block/stem_encased_comparator_end",
         "x": 90
       },
       "when": {
@@ -32,7 +32,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_disabled",
+        "model": "critterworks:block/stem_encased_comparator_end_disabled",
         "x": 90
       },
       "when": {
@@ -62,7 +62,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side",
         "x": 270
       },
       "when": {
@@ -72,7 +72,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side_disabled",
         "x": 270
       },
       "when": {
@@ -82,7 +82,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top",
+        "model": "critterworks:block/stem_encased_comparator_end",
         "x": 270
       },
       "when": {
@@ -92,7 +92,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_disabled",
+        "model": "critterworks:block/stem_encased_comparator_end_disabled",
         "x": 270
       },
       "when": {
@@ -122,7 +122,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_rotated"
+        "model": "critterworks:block/stem_encased_comparator_side"
       },
       "when": {
         "axis": "x",
@@ -131,7 +131,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_disabled_rotated"
+        "model": "critterworks:block/stem_encased_comparator_side_disabled"
       },
       "when": {
         "axis": "x",
@@ -158,7 +158,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_rotated"
+        "model": "critterworks:block/stem_encased_comparator_end"
       },
       "when": {
         "axis": "z",
@@ -167,7 +167,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_disabled_rotated"
+        "model": "critterworks:block/stem_encased_comparator_end_disabled"
       },
       "when": {
         "axis": "z",
@@ -176,7 +176,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side",
         "y": 180
       },
       "when": {
@@ -186,7 +186,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side_disabled",
         "y": 180
       },
       "when": {
@@ -216,7 +216,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_rotated",
+        "model": "critterworks:block/stem_encased_comparator_end",
         "y": 180
       },
       "when": {
@@ -226,7 +226,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_end_disabled",
         "y": 180
       },
       "when": {
@@ -236,7 +236,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_rotated",
+        "model": "critterworks:block/stem_encased_comparator_end",
         "y": 270
       },
       "when": {
@@ -246,7 +246,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_end_disabled",
         "y": 270
       },
       "when": {
@@ -276,7 +276,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side",
         "y": 270
       },
       "when": {
@@ -286,7 +286,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side_disabled",
         "y": 270
       },
       "when": {
@@ -296,7 +296,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_rotated",
+        "model": "critterworks:block/stem_encased_comparator_end",
         "y": 90
       },
       "when": {
@@ -306,7 +306,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_top_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_end_disabled",
         "y": 90
       },
       "when": {
@@ -336,7 +336,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side",
         "y": 90
       },
       "when": {
@@ -346,7 +346,7 @@
     },
     {
       "apply": {
-        "model": "critterworks:block/stem_encased_comparator_side_disabled_rotated",
+        "model": "critterworks:block/stem_encased_comparator_side_disabled",
         "y": 90
       },
       "when": {
