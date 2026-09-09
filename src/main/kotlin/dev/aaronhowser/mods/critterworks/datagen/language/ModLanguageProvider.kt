@@ -11,6 +11,7 @@ class ModLanguageProvider(
 	override fun addTranslations() {
 		ModAdvancementLang.add(this)
 		ModBlockLang.add(this)
+		ModConfigLang.add(this)
 		ModEffectLang.add(this)
 		ModEntityLang.add(this)
 		ModItemLang.add(this)
