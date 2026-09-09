@@ -22,12 +22,14 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
 class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormAppleConfiguration.CODEC) {
 
 	override fun place(context: FeaturePlaceContext<ScoochwormAppleConfiguration>): Boolean {
-		val configuration = context.config()
+		val random = context.random()
 		val rarity = ServerConfig.CONFIG.scoochwormAppleRarity.get()
-		if (context.random().oneIn(rarity)) return false
+		if (!random.oneIn(rarity)) return false
+
+		val configuration = context.config()
+		val radius = configuration.radius.sample(random)
 
 		val level = context.level()
-		val radius = configuration.radius.sample(context.random())
 		val floorPosition = findFloor(level, context.origin(), configuration.verticalSearchRange) ?: return false
 		val center = floorPosition.above(radius)
 
