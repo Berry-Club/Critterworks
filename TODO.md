@@ -86,6 +86,7 @@
 - Pistol Shrimp?
 	- Could be a weapon or something
     - Maybe it's much more powerful under water, or it adds range or something
+- Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 
 # Guidebook
 
