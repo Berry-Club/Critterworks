@@ -4,6 +4,7 @@
 	- Think Flintstones rules
 - Not everything is a mob, some are items
 - Not all are to do with logistics, some are tools and weapons
+- Not all are bugs, necessarily, either
 
 # Scoochworms
 
