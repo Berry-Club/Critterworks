@@ -91,10 +91,26 @@
 
 - Dripleaf Launchpad
 	- Basically the thing from Portal
+- Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
+- Bug lamp?
+	- Kinda like the firefly jar from twilight forest
+
+# "Pet" critters
+
+- Mobs that follow you around specifically
+- Pack Rat that can store items, like the Luggage
+
+# Tool/Weapon critters
+
 - Pistol Shrimp?
 	- Could be a weapon or something
 	- Maybe it's much more powerful under water, or it adds range or something
-- Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
+- Mantis blades??
+	- Basically a sword? Anything else?
+- Bombardier Beetle
+	- Shoots potions maybe?
+- One of those shield-head ants
+- Some kind of item that when held in both hands (?) lets you climb walls, has a cooldown
 
 # Guidebook
 
