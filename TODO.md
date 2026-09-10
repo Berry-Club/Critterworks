@@ -1,3 +1,10 @@
+# General
+
+- All "technology" is critters
+	- Think Flintstones rules
+- Not everything is a mob, some are items
+- Not all are to do with logistics, some are tools and weapons
+
 # Scoochworms
 
 - Attachments for fluids and energy
@@ -85,7 +92,7 @@
 	- Basically the thing from Portal
 - Pistol Shrimp?
 	- Could be a weapon or something
-    - Maybe it's much more powerful under water, or it adds range or something
+	- Maybe it's much more powerful under water, or it adds range or something
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 
 # Guidebook
