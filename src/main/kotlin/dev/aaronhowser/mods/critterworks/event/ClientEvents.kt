@@ -1,11 +1,11 @@
 package dev.aaronhowser.mods.critterworks.event
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.client.render.item.CritterCageItemRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormRenderer
+import dev.aaronhowser.mods.critterworks.client.render.item.CritterCageItemRenderer
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes

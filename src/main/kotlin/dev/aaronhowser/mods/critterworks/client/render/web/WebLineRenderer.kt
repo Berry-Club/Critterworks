@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.critterworks.client.render.web
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
 import dev.aaronhowser.mods.critterworks.Critterworks
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.MultiBufferSource
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber

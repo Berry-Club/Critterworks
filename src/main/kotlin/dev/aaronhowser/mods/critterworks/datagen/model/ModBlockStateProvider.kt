@@ -6,11 +6,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronDsls.transform
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.transforms
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.particle
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.block.CritterCageBlock
-import dev.aaronhowser.mods.critterworks.block.DyeberryVinesBlock
-import dev.aaronhowser.mods.critterworks.block.ScoochwormDepotBlock
-import dev.aaronhowser.mods.critterworks.block.ScoochstemBlock
-import dev.aaronhowser.mods.critterworks.block.StemEncasedComparatorBlock
+import dev.aaronhowser.mods.critterworks.block.*
 import dev.aaronhowser.mods.critterworks.entity.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModItems
