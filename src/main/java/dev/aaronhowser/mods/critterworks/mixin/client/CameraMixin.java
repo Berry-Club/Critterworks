@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.mixin.client;
 
+import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormModel;
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity;
 import net.minecraft.client.Camera;
 import net.minecraft.core.Direction;
@@ -10,7 +11,6 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,7 +21,10 @@ public abstract class CameraMixin {
 	@Shadow
 	protected abstract void setPosition(Vec3 position);
 
-	@Inject(method = "setup", at = @At("RETURN"))
+	@Inject(
+		method = "setup(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/world/entity/Entity;ZZF)V",
+		at = @At("RETURN")
+	)
 	private void critterworks$orientScoochwormPassenger(
 		BlockGetter level,
 		Entity entity,
@@ -36,7 +39,7 @@ public abstract class CameraMixin {
 
 		Direction supportDirection = scoochwormPart.getSupportDirection();
 
-		Quaternionf surfaceRotation = critterworks$getSurfaceRotation(supportDirection);
+		Quaternionf surfaceRotation = ScoochwormModel.getSurfaceRotation(supportDirection);
 		Camera camera = (Camera) (Object) this;
 
 		double entityY = Mth.lerp(partialTick, entity.yo, entity.getY());
@@ -66,18 +69,6 @@ public abstract class CameraMixin {
 		surfaceRotation.transform(camera.getUpVector());
 		surfaceRotation.transform(camera.getLeftVector());
 		surfaceRotation.mul(camera.rotation(), camera.rotation());
-	}
-
-	@Unique
-	private static Quaternionf critterworks$getSurfaceRotation(Direction supportDirection) {
-		return switch (supportDirection) {
-			case DOWN -> new Quaternionf();
-			case UP -> new Quaternionf().rotationZ(Mth.PI);
-			case EAST -> new Quaternionf().rotationZ(Mth.HALF_PI);
-			case WEST -> new Quaternionf().rotationZ(-Mth.HALF_PI);
-			case NORTH -> new Quaternionf().rotationX(Mth.HALF_PI);
-			case SOUTH -> new Quaternionf().rotationX(-Mth.HALF_PI);
-		};
 	}
 
 }
