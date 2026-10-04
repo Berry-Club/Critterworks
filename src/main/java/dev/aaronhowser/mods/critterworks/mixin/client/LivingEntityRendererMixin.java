@@ -60,7 +60,11 @@ public abstract class LivingEntityRendererMixin {
 		Operation<Void> original
 	) {
 		if (entity.getVehicle() instanceof ScoochwormPartEntity scoochwormPart) {
+			double rotationOffset = entity.getBbHeight() / scale;
+
+			poseStack.translate(0.0, rotationOffset, 0.0);
 			poseStack.mulPose(ScoochwormModel.getSurfaceRotation(scoochwormPart.getSupportDirection()));
+			poseStack.translate(0.0, -rotationOffset, 0.0);
 		}
 
 		original.call(entity, poseStack, bob, bodyRotation, partialTick, scale);
