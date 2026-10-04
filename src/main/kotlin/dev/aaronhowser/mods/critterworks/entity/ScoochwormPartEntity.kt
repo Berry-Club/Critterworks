@@ -138,19 +138,45 @@ class ScoochwormPartEntity(
 		dimensions: EntityDimensions,
 		partialTick: Float
 	): Vec3 {
-		val attachmentDistance = super.getPassengerAttachmentPoint(
-			entity,
-			dimensions,
-			partialTick
-		).y
+		val topFaceCenter = getTopFaceCenterOffset(dimensions)
+		val topDirection = supportDirection.opposite
 
-		val attachmentDirection = supportDirection.opposite
+		val passengerExtent = when (topDirection.axis) {
+			Direction.Axis.Y -> if (topDirection == Direction.DOWN) {
+				entity.bbHeight.toDouble()
+			} else {
+				0.0
+			}
 
-		return Vec3(
-			attachmentDirection.stepX * attachmentDistance,
-			attachmentDirection.stepY * attachmentDistance,
-			attachmentDirection.stepZ * attachmentDistance
-		)
+			else -> entity.bbWidth / 2.0
+		}
+
+		val passengerAttachmentPoint = entity.getVehicleAttachmentPoint(this)
+		val distanceFromFace = passengerExtent + PASSENGER_CLEARANCE
+
+		return topFaceCenter.add(
+			topDirection.stepX * distanceFromFace,
+			topDirection.stepY * distanceFromFace,
+			topDirection.stepZ * distanceFromFace
+		).add(passengerAttachmentPoint)
+	}
+
+	fun getTopFaceCenterOffset(): Vec3 {
+		return getTopFaceCenterOffset(getDimensions(pose))
+	}
+
+	private fun getTopFaceCenterOffset(dimensions: EntityDimensions): Vec3 {
+		val halfWidth = dimensions.width / 2.0
+		val halfHeight = dimensions.height / 2.0
+
+		return when (supportDirection) {
+			Direction.DOWN -> Vec3(0.0, dimensions.height.toDouble(), 0.0)
+			Direction.UP -> Vec3.ZERO
+			Direction.NORTH -> Vec3(0.0, halfHeight, halfWidth)
+			Direction.SOUTH -> Vec3(0.0, halfHeight, -halfWidth)
+			Direction.WEST -> Vec3(halfWidth, halfHeight, 0.0)
+			Direction.EAST -> Vec3(-halfWidth, halfHeight, 0.0)
+		}
 	}
 
 	// Lifecycle
@@ -258,6 +284,7 @@ class ScoochwormPartEntity(
 	companion object {
 		private const val NO_PARENT = -1
 		private const val MINIMUM_MOVEMENT_DISTANCE_SQUARED = 0.000001
+		private const val PASSENGER_CLEARANCE = 0.001
 		private val DATA_PARENT_ID: EntityDataAccessor<Int> =
 			SynchedEntityData.defineId(ScoochwormPartEntity::class.java, EntityDataSerializers.INT)
 

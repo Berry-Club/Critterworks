@@ -45,16 +45,6 @@ public abstract class CameraMixin {
 		double entityY = Mth.lerp(partialTick, entity.yo, entity.getY());
 		double eyeHeight = camera.getPosition().y - entityY;
 
-		double passengerAttachmentDistance = scoochwormPart
-			.getPassengerRidingPosition(entity)
-			.distanceTo(scoochwormPart.position());
-
-		double vehicleAttachmentHeight = entity
-			.getVehicleAttachmentPoint(scoochwormPart)
-			.y;
-
-		double cameraDistance = passengerAttachmentDistance - vehicleAttachmentHeight + eyeHeight;
-
 		Vec3 segmentPosition = new Vec3(
 			Mth.lerp(partialTick, scoochwormPart.xo, scoochwormPart.getX()),
 			Mth.lerp(partialTick, scoochwormPart.yo, scoochwormPart.getY()),
@@ -62,8 +52,9 @@ public abstract class CameraMixin {
 		);
 
 		Vec3 topNormal = Vec3.atLowerCornerOf(supportDirection.getNormal()).reverse();
+		Vec3 passengerAttachmentPosition = segmentPosition.add(scoochwormPart.getTopFaceCenterOffset());
 
-		setPosition(segmentPosition.add(topNormal.scale(cameraDistance)));
+		setPosition(passengerAttachmentPosition.add(topNormal.scale(eyeHeight)));
 
 		surfaceRotation.transform(camera.getLookVector());
 		surfaceRotation.transform(camera.getUpVector());
