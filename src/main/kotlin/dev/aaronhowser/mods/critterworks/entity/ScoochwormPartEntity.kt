@@ -143,7 +143,7 @@ class ScoochwormPartEntity(
 
 		return when (supportDirection) {
 			Direction.DOWN -> Vec3(0.0, height, 0.0)
-			Direction.UP -> Vec3.ZERO
+			Direction.UP -> Vec3(0.0, -height, 0.0)
 			Direction.NORTH -> Vec3(0.0, halfHeight, height)
 			Direction.SOUTH -> Vec3(0.0, halfHeight, -height)
 			Direction.WEST -> Vec3(height, halfHeight, 0.0)
