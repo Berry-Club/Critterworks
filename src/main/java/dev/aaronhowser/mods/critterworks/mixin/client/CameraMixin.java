@@ -1,12 +1,14 @@
 package dev.aaronhowser.mods.critterworks.mixin.client;
 
 import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormModel;
+import dev.aaronhowser.mods.critterworks.config.ClientConfig;
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity;
 import net.minecraft.client.Camera;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -48,12 +50,15 @@ public abstract class CameraMixin {
 			Mth.lerp(partialTick, entity.yo, entity.getY()),
 			Mth.lerp(partialTick, entity.zo, entity.getZ())
 		);
+
 		Vec3 actualAttachmentOffset = scoochwormPart
 			.getPassengerRidingPosition(entity)
 			.subtract(scoochwormPart.position());
+
 		Vec3 renderOffset = scoochwormPart
 			.getVisualPassengerAttachmentOffset()
 			.subtract(actualAttachmentOffset);
+
 		Vec3 passengerAttachmentPoint = entity.getVehicleAttachmentPoint(scoochwormPart);
 
 		Vector3f eyeOffsetFromAttachment = new Vector3f(
@@ -61,8 +66,9 @@ public abstract class CameraMixin {
 			(float) (interpolatedEyeHeight - passengerAttachmentPoint.y),
 			(float) -passengerAttachmentPoint.z
 		);
-		ScoochwormModel.getSurfaceRotation(scoochwormPart.getSupportDirection())
-			.transform(eyeOffsetFromAttachment);
+
+		Quaternionf surfaceRotation = ScoochwormModel.getSurfaceRotation(scoochwormPart.getSupportDirection());
+		surfaceRotation.transform(eyeOffsetFromAttachment);
 
 		Vec3 cameraPosition = entityPosition
 			.add(renderOffset)
@@ -70,6 +76,15 @@ public abstract class CameraMixin {
 			.add(new Vec3(eyeOffsetFromAttachment));
 
 		setPosition(cameraPosition);
+
+		if (ClientConfig.CONFIG.rotateScoochwormPassengerCamera.get()) {
+			Camera camera = (Camera) (Object) this;
+
+			surfaceRotation.transform(camera.getLookVector());
+			surfaceRotation.transform(camera.getUpVector());
+			surfaceRotation.transform(camera.getLeftVector());
+			surfaceRotation.mul(camera.rotation(), camera.rotation());
+		}
 	}
 
 }

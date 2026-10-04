@@ -9,6 +9,7 @@ class ClientConfig(
 ) {
 
 	lateinit var hoppingSpiderScale: ModConfigSpec.DoubleValue
+	lateinit var rotateScoochwormPassengerCamera: ModConfigSpec.BooleanValue
 
 	lateinit var renderScoochwormAttachmentProbe: ModConfigSpec.BooleanValue
 	lateinit var renderScoochwormPath: ModConfigSpec.BooleanValue
@@ -32,6 +33,10 @@ class ClientConfig(
 		hoppingSpiderScale = builder
 			.comment("The scale used to render Hopping Spiders in their nest.")
 			.defineInRange("hoppingSpiderScale", 0.5, 0.1, 2.0)
+
+		rotateScoochwormPassengerCamera = builder
+			.comment("Rotate the first-person camera to match the surface a ridden Scoochworm is walking on.")
+			.define("rotateScoochwormPassengerCamera", true)
 	}
 
 	private fun debugConfigs() {
@@ -51,7 +56,9 @@ class ClientConfig(
 	companion object {
 		private val configPair: Pair<ClientConfig, ModConfigSpec> = ModConfigSpec.Builder().configure(::ClientConfig)
 
+		@JvmField
 		val CONFIG: ClientConfig = configPair.left
 		val CONFIG_SPEC: ModConfigSpec = configPair.right
+
 	}
 }
