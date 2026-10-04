@@ -138,16 +138,16 @@ class ScoochwormPartEntity(
 		dimensions: EntityDimensions,
 		partialTick: Float
 	): Vec3 {
-		val halfWidth = dimensions.width / 2.0
-		val halfHeight = dimensions.height / 2.0
+		val height = dimensions.height.toDouble()
+		val halfHeight = height / 2.0
 
 		return when (supportDirection) {
-			Direction.DOWN -> Vec3(0.0, dimensions.height.toDouble(), 0.0)
+			Direction.DOWN -> Vec3(0.0, height, 0.0)
 			Direction.UP -> Vec3.ZERO
-			Direction.NORTH -> Vec3(0.0, halfHeight, halfWidth)
-			Direction.SOUTH -> Vec3(0.0, halfHeight, -halfWidth)
-			Direction.WEST -> Vec3(halfWidth, halfHeight, 0.0)
-			Direction.EAST -> Vec3(-halfWidth, halfHeight, 0.0)
+			Direction.NORTH -> Vec3(0.0, halfHeight, height)
+			Direction.SOUTH -> Vec3(0.0, halfHeight, -height)
+			Direction.WEST -> Vec3(height, halfHeight, 0.0)
+			Direction.EAST -> Vec3(-height, halfHeight, 0.0)
 		}
 	}
 
