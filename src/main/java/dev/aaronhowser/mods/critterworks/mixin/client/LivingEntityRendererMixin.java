@@ -61,6 +61,17 @@ public abstract class LivingEntityRendererMixin {
 		Operation<Void> original
 	) {
 		if (entity.getVehicle() instanceof ScoochwormPartEntity scoochwormPart) {
+			Vec3 actualAttachmentOffset = scoochwormPart
+				.getPassengerRidingPosition(entity)
+				.subtract(scoochwormPart.position());
+
+			Vec3 renderOffset = scoochwormPart
+				.getVisualPassengerAttachmentOffset()
+				.subtract(actualAttachmentOffset)
+				.scale(1.0 / scale);
+
+			poseStack.translate(renderOffset.x, renderOffset.y, renderOffset.z);
+
 			Vec3 passengerAttachmentPoint = entity
 				.getVehicleAttachmentPoint(scoochwormPart)
 				.scale(1.0 / scale);

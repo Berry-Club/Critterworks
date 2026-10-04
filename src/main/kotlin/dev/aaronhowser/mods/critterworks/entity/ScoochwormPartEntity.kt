@@ -138,12 +138,26 @@ class ScoochwormPartEntity(
 		dimensions: EntityDimensions,
 		partialTick: Float
 	): Vec3 {
+		val visualAttachmentOffset = getVisualPassengerAttachmentOffset(dimensions)
+
+		return if (supportDirection == Direction.UP) {
+			visualAttachmentOffset.add(0.0, -dimensions.height.toDouble(), 0.0)
+		} else {
+			visualAttachmentOffset
+		}
+	}
+
+	fun getVisualPassengerAttachmentOffset(): Vec3 {
+		return getVisualPassengerAttachmentOffset(getDimensions(pose))
+	}
+
+	private fun getVisualPassengerAttachmentOffset(dimensions: EntityDimensions): Vec3 {
 		val height = dimensions.height.toDouble()
 		val halfHeight = height / 2.0
 
 		return when (supportDirection) {
 			Direction.DOWN -> Vec3(0.0, height, 0.0)
-			Direction.UP -> Vec3(0.0, -height, 0.0)
+			Direction.UP -> Vec3.ZERO
 			Direction.NORTH -> Vec3(0.0, halfHeight, height)
 			Direction.SOUTH -> Vec3(0.0, halfHeight, -height)
 			Direction.WEST -> Vec3(height, halfHeight, 0.0)
