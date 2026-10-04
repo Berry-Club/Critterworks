@@ -11,6 +11,7 @@
 	],
 	"client": [
 		"client.AbstractClientPlayerMixin",
+		"client.CameraMixin",
 		"client.ItemInHandRendererMixin",
 		"client.LivingEntityRendererMixin"
 	],
