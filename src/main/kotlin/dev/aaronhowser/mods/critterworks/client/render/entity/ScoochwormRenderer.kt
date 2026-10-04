@@ -53,7 +53,14 @@ class ScoochwormRenderer(
 		) {
 			poseStack.translate(0.0, ROTATION_CENTER, 0.0)
 
-			poseStack.mulPose(ScoochwormModel.getSurfaceRotation(bottom))
+			when (bottom) {
+				Direction.DOWN -> Unit
+				Direction.UP -> poseStack.mulPose(Axis.ZP.rotationDegrees(180f))
+				Direction.NORTH -> poseStack.mulPose(Axis.XP.rotationDegrees(90f))
+				Direction.SOUTH -> poseStack.mulPose(Axis.XP.rotationDegrees(-90f))
+				Direction.WEST -> poseStack.mulPose(Axis.ZP.rotationDegrees(-90f))
+				Direction.EAST -> poseStack.mulPose(Axis.ZP.rotationDegrees(90f))
+			}
 
 			val surfaceYaw = if (bottom == Direction.UP) -yaw else yaw
 			poseStack.mulPose(Axis.YP.rotationDegrees(180f - surfaceYaw))

@@ -74,23 +74,18 @@ class ScoochwormModel : DefaultedEntityGeoModel<ScoochwormEntity>(
 	}
 
 	companion object {
-		@JvmStatic
-		fun getSurfaceRotation(supportDirection: Direction): Quaternionf {
-			return when (supportDirection) {
-				Direction.DOWN -> Quaternionf()
+		fun getModelRotation(
+			supportDirection: Direction,
+			bodyYaw: Float
+		): Quaternionf {
+			val modelRotation = when (supportDirection) {
+				Direction.DOWN -> Axis.YP.rotationDegrees(0f)
 				Direction.UP -> Axis.ZP.rotationDegrees(180f)
 				Direction.NORTH -> Axis.XP.rotationDegrees(90f)
 				Direction.SOUTH -> Axis.XP.rotationDegrees(-90f)
 				Direction.WEST -> Axis.ZP.rotationDegrees(-90f)
 				Direction.EAST -> Axis.ZP.rotationDegrees(90f)
 			}
-		}
-
-		fun getModelRotation(
-			supportDirection: Direction,
-			bodyYaw: Float
-		): Quaternionf {
-			val modelRotation = getSurfaceRotation(supportDirection)
 
 			val surfaceYaw = if (supportDirection == Direction.UP) -bodyYaw else bodyYaw
 			modelRotation.mul(Axis.YP.rotationDegrees(180f - surfaceYaw))
