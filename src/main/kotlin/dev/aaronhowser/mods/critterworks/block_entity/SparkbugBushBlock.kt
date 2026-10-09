@@ -46,21 +46,10 @@ class SparkbugBushBlock(
 			TODO("Not yet implemented")
 		}
 
-		override fun getEnergyStored(): Int {
-			TODO("Not yet implemented")
-		}
-
-		override fun getMaxEnergyStored(): Int {
-			TODO("Not yet implemented")
-		}
-
-		override fun canExtract(): Boolean {
-			TODO("Not yet implemented")
-		}
-
-		override fun canReceive(): Boolean {
-			TODO("Not yet implemented")
-		}
+		override fun getEnergyStored(): Int = getCachedEnergyHandlers().sumOf(IEnergyStorage::getEnergyStored)
+		override fun getMaxEnergyStored(): Int = getCachedEnergyHandlers().sumOf(IEnergyStorage::getMaxEnergyStored)
+		override fun canExtract(): Boolean = getCachedEnergyHandlers().any(IEnergyStorage::canExtract)
+		override fun canReceive(): Boolean = getCachedEnergyHandlers().any(IEnergyStorage::canReceive)
 
 	}
 
