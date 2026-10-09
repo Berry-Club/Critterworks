@@ -54,6 +54,14 @@
 	- Fireflies with low charge move to inputs and drain them
 	- Fireflies with high charge move to outputs and fill them
 - Glow brighter when high charge? Maybe make electric crackles or something?
+- Sparkpollen Pouch
+	- Item that holds Sparkpollen, maybe like 32
+		- Should Sparkpollen even actually be an item?
+		- Maybe you should just click the Pouch on flowers or something
+	- Click on block face to mark as an IO
+		- Feeding = input, blue
+		- Grounding = output, orange
+	- Sneak click the nest to bind it
 
 # Dragginflies
 
