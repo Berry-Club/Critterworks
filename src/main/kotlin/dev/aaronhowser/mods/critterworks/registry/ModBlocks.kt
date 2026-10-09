@@ -39,6 +39,9 @@ object ModBlocks : AaronBlockRegistry() {
 			HugeMushroomBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK))
 		}
 
+	val SPARKBUG_BUSH =
+		basicStoneBlock("sparkbug_bush")
+
 	val GREEN_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.GREEN)
 
