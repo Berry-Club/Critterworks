@@ -19,17 +19,16 @@ object ModBlocks : AaronBlockRegistry() {
 	val SCOOCHSTEM: DeferredBlock<ScoochstemBlock> =
 		registerBlock("scoochstem", ::ScoochstemBlock)
 
+	val SCOOCHSTEM_WOOD: DeferredBlock<ScoochstemBlock> =
+		registerBlock("scoochstem_wood", ::ScoochstemBlock)
+
 	val STEM_ENCASED_COMPARATOR: DeferredBlock<StemEncasedComparatorBlock> =
 		registerBlock("stem_encased_comparator", ::StemEncasedComparatorBlock)
 
 	val CRITTER_CAGE: DeferredBlock<CritterCageBlock> =
 		registerBlockWithoutItem("critter_cage", ::CritterCageBlock)
-
 	val HOPPING_SPIDER_NEST: DeferredBlock<HoppingSpiderNestBlock> =
 		registerBlock("hopping_spider_nest", ::HoppingSpiderNestBlock)
-
-	val SCOOCHSTEM_WOOD: DeferredBlock<ScoochstemBlock> =
-		registerBlock("scoochstem_wood", ::ScoochstemBlock)
 
 	val SCOOCHWORM_DEPOT: DeferredBlock<ScoochwormDepotBlock> =
 		registerBlock("scoochworm_depot", ::ScoochwormDepotBlock)
