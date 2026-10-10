@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.block
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
+import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
@@ -11,12 +12,15 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.material.PushReaction
@@ -84,6 +88,14 @@ class SparkbugBushBlock : Block(
 
 	override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
 		return SparkbugBushBlockEntity(pos, state)
+	}
+
+	override fun <T : BlockEntity> getTicker(level: Level, state: BlockState, blockEntityType: BlockEntityType<T>): BlockEntityTicker<T>? {
+		return BaseEntityBlock.createTickerHelper(
+			blockEntityType,
+			ModBlockEntityTypes.SPARKBUG_BUSH.get(),
+			SparkbugBushBlockEntity::tick
+		)
 	}
 
 }

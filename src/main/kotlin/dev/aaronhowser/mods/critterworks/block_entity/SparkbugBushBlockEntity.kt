@@ -9,6 +9,8 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
 class SparkbugBushBlockEntity(
@@ -43,6 +45,10 @@ class SparkbugBushBlockEntity(
 		return success
 	}
 
+	private fun serverTick(level: ServerLevel) {
+
+	}
+
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
 		super.saveAdditional(tag, registries)
 
@@ -67,6 +73,17 @@ class SparkbugBushBlockEntity(
 
 	companion object {
 		const val POLLEN_SPOTS_TAG = "pollen_spots"
+
+		fun tick(
+			level: Level,
+			blockPos: BlockPos,
+			blockState: BlockState,
+			blockEntity: SparkbugBushBlockEntity
+		) {
+			if (level is ServerLevel) {
+				blockEntity.serverTick(level)
+			}
+		}
 	}
 
 	data class PollenSpot(
