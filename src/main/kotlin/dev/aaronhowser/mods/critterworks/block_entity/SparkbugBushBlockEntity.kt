@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.neoforged.neoforge.capabilities.Capabilities
+import net.neoforged.neoforge.energy.IEnergyStorage
 
 class SparkbugBushBlockEntity(
 	pos: BlockPos,
@@ -32,17 +33,18 @@ class SparkbugBushBlockEntity(
 		direction: Direction,
 		isInput: Boolean
 	): Boolean {
+		val level = level ?: return false
+
 		val alreadyOne = (inputPollenSpots + outputPollenSpots).any { it.pos == pos && it.direction == direction }
 		if (alreadyOne) return false
 
-		val energyHandler = level?.getCapability(Capabilities.EnergyStorage.BLOCK, pos, direction)
-		val hasEnergyHandler = energyHandler != null
-		if (!hasEnergyHandler) return false
+		val spot = PollenSpot(pos, direction)
+		if (spot.getEnergyHandler(level) == null) return false
 
 		if (isInput) {
-			inputPollenSpots.add(PollenSpot(pos, direction))
+			inputPollenSpots.add(spot)
 		} else {
-			outputPollenSpots.add(PollenSpot(pos, direction))
+			outputPollenSpots.add(spot)
 		}
 
 		setChanged()
@@ -116,10 +118,40 @@ class SparkbugBushBlockEntity(
 		}
 	}
 
+	inner class DistributedEnergyStorage : IEnergyStorage {
+		override fun receiveEnergy(toReceive: Int, simulate: Boolean): Int {
+			TODO("Not yet implemented")
+		}
+
+		override fun extractEnergy(toExtract: Int, simulate: Boolean): Int {
+			TODO("Not yet implemented")
+		}
+
+		override fun getEnergyStored(): Int {
+			TODO("Not yet implemented")
+		}
+
+		override fun getMaxEnergyStored(): Int {
+			TODO("Not yet implemented")
+		}
+
+		override fun canExtract(): Boolean {
+			TODO("Not yet implemented")
+		}
+
+		override fun canReceive(): Boolean {
+			TODO("Not yet implemented")
+		}
+	}
+
 	data class PollenSpot(
 		val pos: BlockPos,
 		val direction: Direction
 	) {
+
+		fun getEnergyHandler(level: Level): IEnergyStorage? {
+			return level.getCapability(Capabilities.EnergyStorage.BLOCK, pos, direction)
+		}
 
 		fun toTag(): CompoundTag {
 			val tag = CompoundTag()
