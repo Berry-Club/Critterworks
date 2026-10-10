@@ -50,9 +50,8 @@ class ModBlockLootTablesSubProvider(
 					rolls(1f)
 					item(ModBlocks.CRITTER_CAGE.get()) {
 						apply(
-							CopyComponentsFunction.copyComponents(
-								CopyComponentsFunction.Source.BLOCK_ENTITY
-							)
+							CopyComponentsFunction
+								.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
 								.include(ModDataComponents.ENTITY_DATA.get())
 						)
 					}
@@ -65,6 +64,7 @@ class ModBlockLootTablesSubProvider(
 		val fortune = provider
 			.lookupOrThrow(Registries.ENCHANTMENT)
 			.getOrThrow(Enchantments.FORTUNE)
+
 		val appleDrops = LootItem.lootTableItem(Items.APPLE)
 			.apply(SetItemCountFunction.setCount(UniformGenerator.between(1f, 3f)))
 			.apply(ApplyBonusCount.addUniformBonusCount(fortune))
