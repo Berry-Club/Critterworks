@@ -29,7 +29,7 @@ class SparkpollenPouchItem(properties: Properties) : Item(properties) {
 		val bushPos = stack.get(ModDataComponents.SPARKBUG_BUSH)
 			?.toBlockPos()
 			?: return InteractionResult.PASS
-		val be = level.getBlockEntity(bushPos, ModBlockEntityTypes.SPARKBUG_BUSH.get())
+		val bushBe = level.getBlockEntity(bushPos, ModBlockEntityTypes.SPARKBUG_BUSH.get())
 			.getOrNull()
 			?: return InteractionResult.PASS
 
@@ -39,7 +39,7 @@ class SparkpollenPouchItem(properties: Properties) : Item(properties) {
 
 			val player = context.player
 
-			val added = be.addPollenSpot(pos, clickedDirection, isInput)
+			val added = bushBe.addPollenSpot(pos, clickedDirection, isInput)
 			if (added) {
 				if (isInput) {
 					player?.tell("Added a Charging Sparkpollen Pinch")
@@ -47,7 +47,7 @@ class SparkpollenPouchItem(properties: Properties) : Item(properties) {
 					player?.tell("Added a Grounding Sparkpollen Pinch")
 				}
 			} else {
-				val removed = be.removePollenSpot(pos, clickedDirection)
+				val removed = bushBe.removePollenSpot(pos, clickedDirection)
 				if (removed) {
 					if (isInput) {
 						player?.tell("Removed a Charging Sparkpollen Pinch")
