@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.block_entity
 
 import dev.aaronhowser.mods.aaron.block_entity.SyncingBlockEntity
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenSpot
@@ -72,7 +73,7 @@ class SparkbugBushBlockEntity(
 
 		for (pollenSpot in displayPollenSpots) {
 			if (!pollenSpot.isActive) continue
-			if (level.random.nextDouble() > spawnChance) continue
+			if (!level.random.chance(spawnChance)) continue
 
 			val faceCenter = pollenSpot.pos.center
 				.add(
