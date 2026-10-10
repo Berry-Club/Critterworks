@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderTypes
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
+import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenSpot
 import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.client.Minecraft
@@ -39,7 +40,7 @@ class SparkbugBushBlockRenderer(
 		vertexConsumer: VertexConsumer,
 		pose: PoseStack.Pose,
 		blockPos: BlockPos,
-		pollenSpots: Collection<SparkbugBushBlockEntity.DisplayPollenSpot>
+		pollenSpots: Collection<DisplayPollenSpot>
 	) {
 		for (pollenSpot in pollenSpots) {
 			val alpha = if (pollenSpot.isActive) ACTIVE_ALPHA else INACTIVE_ALPHA
