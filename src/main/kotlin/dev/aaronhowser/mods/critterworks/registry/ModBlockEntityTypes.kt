@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.aaron.registry.AaronBlockEntityTypeRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.block_entity.CritterCageBlockEntity
 import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEntity
-import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlock
+import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
 import dev.aaronhowser.mods.critterworks.block_entity.StemEncasedComparatorBlockEntity
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -24,6 +24,6 @@ object ModBlockEntityTypes : AaronBlockEntityTypeRegistry() {
 		register("hopping_spider_nest", ::HoppingSpiderNestBlockEntity, ModBlocks.HOPPING_SPIDER_NEST)
 	val STEM_ENCASED_COMPARATOR: DeferredHolder<BlockEntityType<*>, BlockEntityType<StemEncasedComparatorBlockEntity>> =
 		register("stem_encased_comparator", ::StemEncasedComparatorBlockEntity, ModBlocks.STEM_ENCASED_COMPARATOR)
-	val SPARKBUG_BUSH: DeferredHolder<BlockEntityType<*>, BlockEntityType<SparkbugBushBlock>> =
-		register("sparkbug_bush", ::SparkbugBushBlock, ModBlocks.SPARKBUG_BUSH)
+	val SPARKBUG_BUSH: DeferredHolder<BlockEntityType<*>, BlockEntityType<SparkbugBushBlockEntity>> =
+		register("sparkbug_bush", ::SparkbugBushBlockEntity, ModBlocks.SPARKBUG_BUSH)
 }

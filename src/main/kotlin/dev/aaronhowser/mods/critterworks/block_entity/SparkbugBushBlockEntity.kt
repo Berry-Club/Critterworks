@@ -11,7 +11,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.world.level.block.state.BlockState
 
-class SparkbugBushBlock(
+class SparkbugBushBlockEntity(
 	pos: BlockPos,
 	blockState: BlockState
 ) : SyncingBlockEntity(ModBlockEntityTypes.SPARKBUG_BUSH.get(), pos, blockState) {
