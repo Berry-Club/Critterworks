@@ -266,7 +266,7 @@ class HoppingSpiderNestBlockEntity(
 
 			val candidate = findTransportBehaviorInNetwork(level, network, reservations, spider, startingNode)
 
-			if (candidate?.isPreferredOver(bestCandidate) == true) {
+			if (candidate?.isPreferredOver(bestCandidate).isTrue()) {
 				bestCandidate = candidate
 			}
 		}
@@ -346,7 +346,7 @@ class HoppingSpiderNestBlockEntity(
 				startingNode
 			)
 
-			if (candidate?.isPreferredOver(bestCandidate) == true) {
+			if (candidate?.isPreferredOver(bestCandidate).isTrue()) {
 				bestCandidate = candidate
 			}
 		}

@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getMinimalTag
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -25,7 +26,7 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 	override fun useOn(context: UseOnContext): InteractionResult {
 		val stack = context.itemInHand
 		val player = context.player
-		if (!stack.has(ModDataComponents.ENTITY_DATA) || player?.isSecondaryUseActive == true) {
+		if (!stack.has(ModDataComponents.ENTITY_DATA) || player?.isSecondaryUseActive.isTrue()) {
 			return super.useOn(context)
 		}
 
