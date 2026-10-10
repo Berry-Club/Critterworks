@@ -31,6 +31,9 @@ object ModItems : AaronItemRegistry() {
 	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =
 		register("web_pathfinder", ::WebPathfinderItem, PROPERTIES_SINGLE_STACK)
 
+	val SPARKPOLLEN_POUCH: DeferredItem<SparkpollenPouchItem> =
+		register("sparkpollen_pouch", ::SparkpollenPouchItem, SparkpollenPouchItem.DEFAULT_PROPERTIES)
+
 	val ITEM_FILTER: DeferredItem<ItemFilterItem> =
 		register("item_filter", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
 
