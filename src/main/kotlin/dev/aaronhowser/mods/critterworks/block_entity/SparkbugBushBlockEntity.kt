@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.block_entity
 
 import dev.aaronhowser.mods.aaron.block_entity.SyncingBlockEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toBlockPos
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -21,6 +22,7 @@ class SparkbugBushBlockEntity(
 ) : SyncingBlockEntity(ModBlockEntityTypes.SPARKBUG_BUSH.get(), pos, blockState) {
 
 	override val syncImmediately: Boolean = true
+	private val energyStorage = DistributedEnergyStorage()
 
 	val inputPollenSpots: Set<PollenSpot>
 		field = mutableSetOf()
@@ -36,6 +38,7 @@ class SparkbugBushBlockEntity(
 		val level = level ?: return false
 
 		val spot = PollenSpot(pos, direction)
+		if (spot in inputPollenSpots || spot in outputPollenSpots) return false
 		if (spot.getEnergyHandler(level) == null) return false
 
 		val success = if (isInput) {
@@ -62,7 +65,32 @@ class SparkbugBushBlockEntity(
 	}
 
 	private fun serverTick(level: ServerLevel) {
+		val maximumTransfer = ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput.get()
 
+		for (inputHandler in getInputHandlers(level)) {
+			if (!inputHandler.canExtract()) continue
+
+			val availableEnergy = inputHandler.extractEnergy(maximumTransfer, true)
+			if (availableEnergy <= 0) continue
+
+			val acceptedEnergy = energyStorage.receiveEnergy(availableEnergy, true)
+			if (acceptedEnergy <= 0) continue
+
+			val extractedEnergy = inputHandler.extractEnergy(acceptedEnergy, false)
+			if (extractedEnergy <= 0) continue
+
+			energyStorage.receiveEnergy(extractedEnergy, false)
+		}
+	}
+
+	private fun getInputHandlers(level: Level?): List<IEnergyStorage> {
+		if (level == null) return emptyList()
+		return inputPollenSpots.mapNotNull { it.getEnergyHandler(level) }
+	}
+
+	private fun getOutputHandlers(level: Level?): List<IEnergyStorage> {
+		if (level == null) return emptyList()
+		return outputPollenSpots.mapNotNull { it.getEnergyHandler(level) }
 	}
 
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
@@ -118,29 +146,67 @@ class SparkbugBushBlockEntity(
 	}
 
 	inner class DistributedEnergyStorage : IEnergyStorage {
+		private var nextOutputIndex = 0
+
 		override fun receiveEnergy(toReceive: Int, simulate: Boolean): Int {
-			TODO("Not yet implemented")
+			if (toReceive <= 0) return 0
+
+			val outputHandlers = mutableListOf<IEnergyStorage>()
+			for (outputHandler in getOutputHandlers(level)) {
+				if (outputHandler.canReceive()) {
+					outputHandlers.add(outputHandler)
+				}
+			}
+
+			if (outputHandlers.isEmpty()) return 0
+			if (simulate) return getSimulatedReceivedEnergy(outputHandlers, toReceive)
+
+			val startingIndex = nextOutputIndex % outputHandlers.size
+			var amountReceived = 0
+
+			while (amountReceived < toReceive) {
+				var receivedThisPass = 0
+
+				for (offset in outputHandlers.indices) {
+					val outputIndex = (startingIndex + offset) % outputHandlers.size
+					val received = outputHandlers[outputIndex].receiveEnergy(1, false)
+					if (received <= 0) continue
+
+					amountReceived += received
+					receivedThisPass += received
+					nextOutputIndex = (outputIndex + 1) % outputHandlers.size
+
+					if (amountReceived >= toReceive) break
+				}
+
+				if (receivedThisPass == 0) break
+			}
+
+			return amountReceived
+		}
+
+		private fun getSimulatedReceivedEnergy(
+			outputHandlers: List<IEnergyStorage>,
+			toReceive: Int
+		): Int {
+			var amountReceived = 0L
+
+			for (outputHandler in outputHandlers) {
+				amountReceived += outputHandler.receiveEnergy(toReceive, true).toLong()
+				if (amountReceived >= toReceive) return toReceive
+			}
+
+			return amountReceived.toInt()
 		}
 
 		override fun extractEnergy(toExtract: Int, simulate: Boolean): Int {
-			TODO("Not yet implemented")
+			return 0
 		}
 
-		override fun getEnergyStored(): Int {
-			TODO("Not yet implemented")
-		}
-
-		override fun getMaxEnergyStored(): Int {
-			TODO("Not yet implemented")
-		}
-
-		override fun canExtract(): Boolean {
-			TODO("Not yet implemented")
-		}
-
-		override fun canReceive(): Boolean {
-			TODO("Not yet implemented")
-		}
+		override fun getEnergyStored(): Int = getOutputHandlers(level).sumOf { it.energyStored.toLong() }.toInt()
+		override fun getMaxEnergyStored(): Int = getOutputHandlers(level).sumOf { it.maxEnergyStored.toLong() }.toInt()
+		override fun canExtract(): Boolean = false
+		override fun canReceive(): Boolean = getOutputHandlers(level).any(IEnergyStorage::canReceive)
 	}
 
 	data class PollenSpot(

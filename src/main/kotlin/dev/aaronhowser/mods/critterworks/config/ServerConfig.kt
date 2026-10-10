@@ -11,6 +11,7 @@ class ServerConfig(
 	lateinit var lockboxDropIntervalTicks: ModConfigSpec.IntValue
 	lateinit var lockboxDropAmount: ModConfigSpec.IntValue
 	lateinit var maxChunkLoadersPerPlayer: ModConfigSpec.IntValue
+	lateinit var sparkbugBushMaxEnergyTransferPerInput: ModConfigSpec.IntValue
 
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
@@ -32,6 +33,10 @@ class ServerConfig(
 			worldGenConfigs()
 		}
 
+		builder.section("sparkbug_bush") {
+			sparkbugBushConfigs()
+		}
+
 		builder.section("debug") {
 			debugConfigs()
 		}
@@ -49,6 +54,12 @@ class ServerConfig(
 		maxChunkLoadersPerPlayer = builder
 			.comment("How many Chunkloader Attachments can each player own?")
 			.defineInRange("maxChunkLoadersPerPlayer", 15, 1, Int.MAX_VALUE)
+	}
+
+	private fun sparkbugBushConfigs() {
+		sparkbugBushMaxEnergyTransferPerInput = builder
+			.comment("The maximum energy a Sparkbug Bush pulls from each input per tick.")
+			.defineInRange("sparkbugBushMaxEnergyTransferPerInput", 25_600, 1, Int.MAX_VALUE)
 	}
 
 	private fun worldGenConfigs() {

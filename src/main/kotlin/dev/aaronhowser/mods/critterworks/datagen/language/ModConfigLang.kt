@@ -25,6 +25,9 @@ object ModConfigLang {
 		addConfig(ServerConfig.CONFIG.scoochwormAppleRarity, "Scoochworm Apple Rarity")
 		addConfig(ServerConfig.CONFIG.hoppingSpiderNestRarity, "Hopping Spider Nest Rarity")
 
+		addConfig("sparkbug_bush", "Sparkbug Bush")
+		addConfig(ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput, "Maximum Energy Transfer per Input (FE/t)")
+
 		addConfig("rendering", "Rendering")
 		addConfig(ClientConfig.CONFIG.hoppingSpiderScale, "Hopping Spider Scale")
 		addConfig(ClientConfig.CONFIG.rotateScoochwormPassengerCamera, "Rotate Scoochworm Passenger Camera")
