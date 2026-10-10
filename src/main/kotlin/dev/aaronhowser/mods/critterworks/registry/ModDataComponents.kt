@@ -38,5 +38,7 @@ object ModDataComponents : AaronDataComponentRegistry() {
 		int("held_sparkpollen")
 	val SPARKBUG_BUSH: DeferredHolder<DataComponentType<*>, DataComponentType<Long>> =
 		long("sparkbug_bush")
+	val IS_INPUT: DeferredHolder<DataComponentType<*>, DataComponentType<Boolean>> =
+		boolean("is_input")
 
 }
