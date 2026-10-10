@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getMinimalTag
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
@@ -16,7 +17,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
@@ -68,8 +68,13 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		if (player.isServerSide) {
 			val filledCage = stack.copyWithCount(1)
 			filledCage.set(ModDataComponents.ENTITY_DATA, createEntityData(interactionTarget))
-			val remainingStack = ItemUtils.createFilledResult(stack, player, filledCage)
-			player.setItemInHand(usedHand, remainingStack)
+
+			if (!player.hasInfiniteMaterials() && stack.count == 1) {
+				player.setItemInHand(usedHand, filledCage)
+			} else {
+				stack.consume(1, player)
+				player.giveOrDropStack(filledCage)
+			}
 
 			interactionTarget.discard()
 		}
