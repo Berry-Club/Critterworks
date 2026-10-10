@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.block_entity
 
+import dev.aaronhowser.mods.aaron.block_entity.SyncingBlockEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toBlockPos
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import net.minecraft.core.BlockPos
@@ -8,18 +9,39 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
-//TODO cache the IEnergyStorages too instead of recalculating every time?
-// but what if between calls the capability changes or something
 class SparkbugBushBlock(
 	pos: BlockPos,
 	blockState: BlockState
-) : BlockEntity(ModBlockEntityTypes.SPARKBUG_BUSH.get(), pos, blockState) {
+) : SyncingBlockEntity(ModBlockEntityTypes.SPARKBUG_BUSH.get(), pos, blockState) {
+
+	override val syncImmediately: Boolean = true
 
 	val pollenSpots: List<PollenSpot>
 		field = mutableListOf()
+
+	fun addPollenSpot(
+		pos: BlockPos,
+		direction: Direction,
+		isSource: Boolean
+	): Boolean {
+		val alreadyOne = pollenSpots.any { it.pos == pos && it.direction == direction }
+		if (alreadyOne) return false
+
+		pollenSpots.add(PollenSpot(pos, direction, isSource))
+		setChanged()
+		return true
+	}
+
+	fun removePollenSpot(
+		pos: BlockPos,
+		direction: Direction
+	): Boolean {
+		val success = pollenSpots.removeIf { it.pos == pos && it.direction == direction }
+		if (success) setChanged()
+		return success
+	}
 
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
 		super.saveAdditional(tag, registries)
