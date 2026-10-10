@@ -22,6 +22,7 @@ object ModItemLang {
 			addItem(ModItems.CYAN_DYEBERRY, "Cyan Dyeberry")
 			addItem(ModItems.AARONBERRY, "Aaronberry")
 			addItem(ModItems.SCOOCHWORM_SPAWN_EGG, "Scoochworm Spawn Egg")
+			addItem(ModItems.SPARKPOLLEN_POUCH, "Sparkpollen Pouch")
 			add(ModCreativeModeTabs.CREATIVE_TAB_TRANSLATION_KEY, "Critterworks")
 		}
 	}

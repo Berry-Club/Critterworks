@@ -70,6 +70,7 @@ class ModItemModelProvider(
 		basicItem(ModItems.ITEM_FILTER.get())
 		basicItem(ModItems.WEB_PORT.get())
 		basicItem(ModItems.SCOOCHWORM_GPS.get())
+		basicItem(ModItems.SPARKPOLLEN_POUCH.get())
 	}
 
 	private fun dyeberryItems() {
