@@ -5,15 +5,15 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 
-data class DisplayPollenSpot(
+data class DisplayPollenPoint(
 	val pos: BlockPos,
 	val direction: Direction,
 	val isInput: Boolean,
 	val isActive: Boolean
 ) {
 
-	fun toPollenSpot(): PollenSpot {
-		return PollenSpot(pos, direction)
+	fun toPollenPoint(): PollenPoint {
+		return PollenPoint(pos, direction)
 	}
 
 	fun toTag(): CompoundTag {
@@ -31,13 +31,13 @@ data class DisplayPollenSpot(
 		private const val IS_INPUT_TAG = "is_input"
 		private const val IS_ACTIVE_TAG = "is_active"
 
-		fun fromTag(tag: CompoundTag): DisplayPollenSpot {
+		fun fromTag(tag: CompoundTag): DisplayPollenPoint {
 			val pos = tag.getLong(POS_TAG).toBlockPos()
 			val directionOrdinal = tag.getInt(DIRECTION_TAG)
 			val direction = Direction.entries[directionOrdinal]
 			val isInput = tag.getBoolean(IS_INPUT_TAG)
 			val isActive = tag.getBoolean(IS_ACTIVE_TAG)
-			return DisplayPollenSpot(pos, direction, isInput, isActive)
+			return DisplayPollenPoint(pos, direction, isInput, isActive)
 		}
 	}
 

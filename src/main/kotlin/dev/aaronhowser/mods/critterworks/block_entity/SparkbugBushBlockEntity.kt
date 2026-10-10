@@ -5,8 +5,8 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.randomPos
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
-import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenSpot
-import dev.aaronhowser.mods.critterworks.handler.sparkbug.PollenSpotHandler
+import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenPoint
+import dev.aaronhowser.mods.critterworks.handler.sparkbug.PollenPointHandler
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModParticleTypes
 import net.minecraft.core.BlockPos
@@ -28,29 +28,29 @@ class SparkbugBushBlockEntity(
 
 	override val syncImmediately: Boolean = true
 
-	private val pollenSpotHandler = PollenSpotHandler()
+	private val pollenPointHandler = PollenPointHandler()
 
-	val displayPollenSpots: Set<DisplayPollenSpot>
-		get() = pollenSpotHandler.displayPollenSpots
+	val displayPollenPoints: Set<DisplayPollenPoint>
+		get() = pollenPointHandler.displayPollenPoints
 
-	fun addPollenSpot(
+	fun addPollenPoint(
 		pos: BlockPos,
 		direction: Direction,
 		isInput: Boolean
 	): Boolean {
 		val level = level ?: return false
-		val success = pollenSpotHandler.addPollenSpot(level, pos, direction, isInput)
+		val success = pollenPointHandler.addPollenPoint(level, pos, direction, isInput)
 		if (!success) return false
 
 		setChanged()
 		return true
 	}
 
-	fun removePollenSpot(
+	fun removePollenPoint(
 		pos: BlockPos,
 		direction: Direction
 	): Boolean {
-		val success = pollenSpotHandler.removePollenSpot(pos, direction)
+		val success = pollenPointHandler.removePollenPoint(pos, direction)
 		if (!success) return false
 
 		setChanged()
@@ -59,12 +59,12 @@ class SparkbugBushBlockEntity(
 
 	private fun serverTick(level: ServerLevel) {
 		val maximumTransfer = ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput.get()
-		val displayChanged = pollenSpotHandler.serverTick(level, maximumTransfer)
+		val displayChanged = pollenPointHandler.serverTick(level, maximumTransfer)
 		if (displayChanged) setChanged()
 	}
 
 	private fun clientTick(level: Level) {
-		pollenSpotHandler.clientTick()
+		pollenPointHandler.clientTick()
 		spawnActivePollenParticles(level)
 	}
 
@@ -72,7 +72,7 @@ class SparkbugBushBlockEntity(
 		val spawnChance = ClientConfig.CONFIG.fireflyParticleSpawnChance.get()
 		val spawnRadius = ClientConfig.CONFIG.fireflyParticleSpawnRadius.get()
 
-		for (pollenSpot in displayPollenSpots) {
+		for (pollenSpot in displayPollenPoints) {
 			if (!pollenSpot.isActive) continue
 			if (!level.random.chance(spawnChance)) continue
 
@@ -103,24 +103,24 @@ class SparkbugBushBlockEntity(
 
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
 		super.saveAdditional(tag, registries)
-		pollenSpotHandler.savePersistentData(tag)
+		pollenPointHandler.savePersistentData(tag)
 	}
 
 	override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
 		super.loadAdditional(tag, registries)
-		pollenSpotHandler.loadPersistentData(tag)
+		pollenPointHandler.loadPersistentData(tag)
 	}
 
 	override fun getUpdateTag(pRegistries: HolderLookup.Provider): CompoundTag {
 		val tag = saveWithoutMetadata(pRegistries)
-		pollenSpotHandler.removePersistentData(tag)
-		pollenSpotHandler.saveDisplayData(tag)
+		pollenPointHandler.removePersistentData(tag)
+		pollenPointHandler.saveDisplayData(tag)
 		return tag
 	}
 
 	override fun handleUpdateTag(tag: CompoundTag, lookupProvider: HolderLookup.Provider) {
 		super.handleUpdateTag(tag, lookupProvider)
-		pollenSpotHandler.loadDisplayData(tag)
+		pollenPointHandler.loadDisplayData(tag)
 	}
 
 	override fun onDataPacket(

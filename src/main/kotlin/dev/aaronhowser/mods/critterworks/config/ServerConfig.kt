@@ -11,7 +11,9 @@ class ServerConfig(
 	lateinit var lockboxDropIntervalTicks: ModConfigSpec.IntValue
 	lateinit var lockboxDropAmount: ModConfigSpec.IntValue
 	lateinit var maxChunkLoadersPerPlayer: ModConfigSpec.IntValue
+
 	lateinit var sparkbugBushMaxEnergyTransferPerInput: ModConfigSpec.IntValue
+	lateinit var sparkbugBushPollenRadius: ModConfigSpec.DoubleValue
 
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
@@ -60,6 +62,9 @@ class ServerConfig(
 		sparkbugBushMaxEnergyTransferPerInput = builder
 			.comment("The maximum energy a Sparkbug Bush pulls from each input per tick.")
 			.defineInRange("sparkbugBushMaxEnergyTransferPerInput", 2_560, 1, Int.MAX_VALUE)
+
+		sparkbugBushPollenRadius = builder
+			.comment("The maximum distance a Pollen Point")
 	}
 
 	private fun worldGenConfigs() {

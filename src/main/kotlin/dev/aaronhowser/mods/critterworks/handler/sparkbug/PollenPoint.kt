@@ -8,13 +8,13 @@ import net.minecraft.world.level.Level
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.energy.IEnergyStorage
 
-data class PollenSpot(
+data class PollenPoint(
 	val pos: BlockPos,
 	val direction: Direction
 ) {
 
-	fun toDisplaySpot(isInput: Boolean, isActive: Boolean): DisplayPollenSpot {
-		return DisplayPollenSpot(pos, direction, isInput, isActive)
+	fun toDisplaySpot(isInput: Boolean, isActive: Boolean): DisplayPollenPoint {
+		return DisplayPollenPoint(pos, direction, isInput, isActive)
 	}
 
 	fun getEnergyHandler(level: Level): IEnergyStorage? {
@@ -32,11 +32,11 @@ data class PollenSpot(
 		private const val POS_TAG = "pos"
 		private const val DIRECTION_TAG = "direction"
 
-		fun fromTag(tag: CompoundTag): PollenSpot {
+		fun fromTag(tag: CompoundTag): PollenPoint {
 			val pos = tag.getLong(POS_TAG).toBlockPos()
 			val directionOrdinal = tag.getInt(DIRECTION_TAG)
 			val direction = Direction.entries[directionOrdinal]
-			return PollenSpot(pos, direction)
+			return PollenPoint(pos, direction)
 		}
 	}
 

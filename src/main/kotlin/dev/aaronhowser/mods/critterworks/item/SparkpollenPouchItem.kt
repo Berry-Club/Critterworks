@@ -65,7 +65,7 @@ class SparkpollenPouchItem(properties: Properties) : Item(properties) {
 
 			val player = context.player
 
-			val added = bushBe.addPollenSpot(pos, clickedDirection, isInput)
+			val added = bushBe.addPollenPoint(pos, clickedDirection, isInput)
 			if (added) {
 				if (isInput) {
 					player?.tell("Added a Charging Sparkpollen Pinch")
@@ -73,7 +73,7 @@ class SparkpollenPouchItem(properties: Properties) : Item(properties) {
 					player?.tell("Added a Grounding Sparkpollen Pinch")
 				}
 			} else {
-				val removed = bushBe.removePollenSpot(pos, clickedDirection)
+				val removed = bushBe.removePollenPoint(pos, clickedDirection)
 				if (removed) {
 					if (isInput) {
 						player?.tell("Removed a Charging Sparkpollen Pinch")

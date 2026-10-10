@@ -9,60 +9,60 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.neoforged.neoforge.energy.IEnergyStorage
 
-class PollenSpotHandler {
+class PollenPointHandler {
 
-	private val inputPollenSpots: MutableSet<PollenSpot> = mutableSetOf()
-	private val outputPollenSpots: MutableSet<PollenSpot> = mutableSetOf()
+	private val inputPollenPoints: MutableSet<PollenPoint> = mutableSetOf()
+	private val outputPollenPoints: MutableSet<PollenPoint> = mutableSetOf()
 	private val energyDistributor = PollenEnergyDistributor()
 
-	private var serverDisplayPollenSpots: Set<DisplayPollenSpot> = setOf()
-	private val remainingActiveDisplayTicks: MutableMap<PollenSpot, Int> = mutableMapOf()
+	private var serverDisplayPollenPoints: Set<DisplayPollenPoint> = setOf()
+	private val remainingActiveDisplayTicks: MutableMap<PollenPoint, Int> = mutableMapOf()
 
-	var displayPollenSpots: Set<DisplayPollenSpot> = setOf()
+	var displayPollenPoints: Set<DisplayPollenPoint> = setOf()
 		private set
 
-	fun addPollenSpot(
+	fun addPollenPoint(
 		level: Level,
 		pos: BlockPos,
 		direction: Direction,
 		isInput: Boolean
 	): Boolean {
-		val pollenSpot = PollenSpot(pos, direction)
-		if (pollenSpot in inputPollenSpots || pollenSpot in outputPollenSpots) return false
-		if (pollenSpot.getEnergyHandler(level) == null) return false
+		val pollenPoint = PollenPoint(pos, direction)
+		if (pollenPoint in inputPollenPoints || pollenPoint in outputPollenPoints) return false
+		if (pollenPoint.getEnergyHandler(level) == null) return false
 
 		return if (isInput) {
-			inputPollenSpots.add(pollenSpot)
+			inputPollenPoints.add(pollenPoint)
 		} else {
-			outputPollenSpots.add(pollenSpot)
+			outputPollenPoints.add(pollenPoint)
 		}
 	}
 
-	fun removePollenSpot(pos: BlockPos, direction: Direction): Boolean {
-		val pollenSpot = PollenSpot(pos, direction)
-		return inputPollenSpots.remove(pollenSpot) || outputPollenSpots.remove(pollenSpot)
+	fun removePollenPoint(pos: BlockPos, direction: Direction): Boolean {
+		val pollenPoint = PollenPoint(pos, direction)
+		return inputPollenPoints.remove(pollenPoint) || outputPollenPoints.remove(pollenPoint)
 	}
 
 	fun serverTick(level: ServerLevel, maximumTransfer: Int): Boolean {
-		val displaySpots = mutableSetOf<DisplayPollenSpot>()
+		val displaySpots = mutableSetOf<DisplayPollenPoint>()
 		energyDistributor.resetTickActivity()
 
-		for (inputSpot in inputPollenSpots) {
+		for (inputSpot in inputPollenPoints) {
 			val inputHandler = inputSpot.getEnergyHandler(level) ?: continue
 			val isActive = transferEnergyFromInput(level, inputHandler, maximumTransfer)
 			displaySpots += inputSpot.toDisplaySpot(isInput = true, isActive)
 		}
 
-		for (outputSpot in outputPollenSpots) {
+		for (outputSpot in outputPollenPoints) {
 			if (outputSpot.getEnergyHandler(level) == null) continue
 
 			val isActive = energyDistributor.wasActiveThisTick(outputSpot)
 			displaySpots += outputSpot.toDisplaySpot(isInput = false, isActive)
 		}
 
-		if (displaySpots == displayPollenSpots) return false
+		if (displaySpots == displayPollenPoints) return false
 
-		displayPollenSpots = displaySpots
+		displayPollenPoints = displaySpots
 		return true
 	}
 
@@ -80,22 +80,22 @@ class PollenSpotHandler {
 		val availableEnergy = inputHandler.extractEnergy(maximumTransfer, true)
 		if (availableEnergy <= 0) return false
 
-		val acceptedEnergy = energyDistributor.simulateReceive(level, outputPollenSpots, availableEnergy)
+		val acceptedEnergy = energyDistributor.simulateReceive(level, outputPollenPoints, availableEnergy)
 		if (acceptedEnergy <= 0) return false
 
 		val extractedEnergy = inputHandler.extractEnergy(acceptedEnergy, false)
 		if (extractedEnergy <= 0) return false
 
-		energyDistributor.receive(level, outputPollenSpots, extractedEnergy)
+		energyDistributor.receive(level, outputPollenPoints, extractedEnergy)
 		return true
 	}
 
 	private fun updateClientDisplaySpots(advanceTimers: Boolean) {
-		val updatedActiveDisplayTicks = mutableMapOf<PollenSpot, Int>()
-		val updatedDisplaySpots = mutableSetOf<DisplayPollenSpot>()
+		val updatedActiveDisplayTicks = mutableMapOf<PollenPoint, Int>()
+		val updatedDisplaySpots = mutableSetOf<DisplayPollenPoint>()
 
-		for (displaySpot in serverDisplayPollenSpots) {
-			val pollenSpot = displaySpot.toPollenSpot()
+		for (displaySpot in serverDisplayPollenPoints) {
+			val pollenSpot = displaySpot.toPollenPoint()
 			val previousTicks = remainingActiveDisplayTicks[pollenSpot] ?: 0
 
 			val remainingTicks = when {
@@ -113,17 +113,17 @@ class PollenSpotHandler {
 
 		remainingActiveDisplayTicks.clear()
 		remainingActiveDisplayTicks.putAll(updatedActiveDisplayTicks)
-		displayPollenSpots = updatedDisplaySpots
+		displayPollenPoints = updatedDisplaySpots
 	}
 
 	fun savePersistentData(tag: CompoundTag) {
 		val inputSpotsTag = ListTag()
-		for (spot in inputPollenSpots) {
+		for (spot in inputPollenPoints) {
 			inputSpotsTag += spot.toTag()
 		}
 
 		val outputSpotsTag = ListTag()
-		for (spot in outputPollenSpots) {
+		for (spot in outputPollenPoints) {
 			outputSpotsTag += spot.toTag()
 		}
 
@@ -132,19 +132,19 @@ class PollenSpotHandler {
 	}
 
 	fun loadPersistentData(tag: CompoundTag) {
-		inputPollenSpots.clear()
-		outputPollenSpots.clear()
+		inputPollenPoints.clear()
+		outputPollenPoints.clear()
 
 		val inputSpotsTag = tag.getList(INPUT_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
 		for (index in inputSpotsTag.indices) {
 			val spotTag = inputSpotsTag.getCompound(index)
-			inputPollenSpots += PollenSpot.fromTag(spotTag)
+			inputPollenPoints += PollenPoint.fromTag(spotTag)
 		}
 
 		val outputSpotsTag = tag.getList(OUTPUT_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
 		for (index in outputSpotsTag.indices) {
 			val spotTag = outputSpotsTag.getCompound(index)
-			outputPollenSpots += PollenSpot.fromTag(spotTag)
+			outputPollenPoints += PollenPoint.fromTag(spotTag)
 		}
 	}
 
@@ -155,7 +155,7 @@ class PollenSpotHandler {
 
 	fun saveDisplayData(tag: CompoundTag) {
 		val displaySpotsTag = ListTag()
-		for (spot in displayPollenSpots) {
+		for (spot in displayPollenPoints) {
 			displaySpotsTag += spot.toTag()
 		}
 
@@ -163,15 +163,15 @@ class PollenSpotHandler {
 	}
 
 	fun loadDisplayData(tag: CompoundTag) {
-		val displaySpots = mutableSetOf<DisplayPollenSpot>()
+		val displaySpots = mutableSetOf<DisplayPollenPoint>()
 		val displaySpotsTag = tag.getList(DISPLAY_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
 
 		for (index in displaySpotsTag.indices) {
 			val spotTag = displaySpotsTag.getCompound(index)
-			displaySpots += DisplayPollenSpot.fromTag(spotTag)
+			displaySpots += DisplayPollenPoint.fromTag(spotTag)
 		}
 
-		serverDisplayPollenSpots = displaySpots
+		serverDisplayPollenPoints = displaySpots
 		updateClientDisplaySpots(advanceTimers = false)
 	}
 

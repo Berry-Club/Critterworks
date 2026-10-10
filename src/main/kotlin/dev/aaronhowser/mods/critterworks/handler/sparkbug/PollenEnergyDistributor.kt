@@ -6,22 +6,22 @@ import net.neoforged.neoforge.energy.IEnergyStorage
 class PollenEnergyDistributor {
 
 	private var nextOutputIndex = 0
-	private val activeOutputSpots: MutableSet<PollenSpot> = mutableSetOf()
+	private val activeOutputSpots: MutableSet<PollenPoint> = mutableSetOf()
 
 	fun resetTickActivity() {
 		activeOutputSpots.clear()
 	}
 
-	fun wasActiveThisTick(pollenSpot: PollenSpot): Boolean {
-		return pollenSpot in activeOutputSpots
+	fun wasActiveThisTick(pollenPoint: PollenPoint): Boolean {
+		return pollenPoint in activeOutputSpots
 	}
 
 	fun simulateReceive(
 		level: Level,
-		outputPollenSpots: Collection<PollenSpot>,
+		outputPollenPoints: Collection<PollenPoint>,
 		amount: Int
 	): Int {
-		val resolvedOutputSpots = getResolvedOutputSpots(level, outputPollenSpots)
+		val resolvedOutputSpots = getResolvedOutputSpots(level, outputPollenPoints)
 		var amountReceived = 0L
 
 		for (output in resolvedOutputSpots) {
@@ -34,12 +34,12 @@ class PollenEnergyDistributor {
 
 	fun receive(
 		level: Level,
-		outputPollenSpots: Collection<PollenSpot>,
+		outputPollenPoints: Collection<PollenPoint>,
 		amount: Int
 	): Int {
 		if (amount <= 0) return 0
 
-		val resolvedOutputSpots = getResolvedOutputSpots(level, outputPollenSpots)
+		val resolvedOutputSpots = getResolvedOutputSpots(level, outputPollenPoints)
 		if (resolvedOutputSpots.isEmpty()) return 0
 
 		val startingIndex = nextOutputIndex % resolvedOutputSpots.size
@@ -56,7 +56,7 @@ class PollenEnergyDistributor {
 
 				amountReceived += received
 				receivedThisPass += received
-				activeOutputSpots += output.pollenSpot
+				activeOutputSpots += output.pollenPoint
 				nextOutputIndex = (outputIndex + 1) % resolvedOutputSpots.size
 
 				if (amountReceived >= amount) break
@@ -70,22 +70,22 @@ class PollenEnergyDistributor {
 
 	private fun getResolvedOutputSpots(
 		level: Level,
-		outputPollenSpots: Collection<PollenSpot>
-	): List<ResolvedPollenSpot> {
-		val resolvedOutputSpots = mutableListOf<ResolvedPollenSpot>()
+		outputPollenPoints: Collection<PollenPoint>
+	): List<ResolvedPollenPoint> {
+		val resolvedOutputSpots = mutableListOf<ResolvedPollenPoint>()
 
-		for (outputSpot in outputPollenSpots) {
+		for (outputSpot in outputPollenPoints) {
 			val outputHandler = outputSpot.getEnergyHandler(level) ?: continue
 			if (!outputHandler.canReceive()) continue
 
-			resolvedOutputSpots += ResolvedPollenSpot(outputSpot, outputHandler)
+			resolvedOutputSpots += ResolvedPollenPoint(outputSpot, outputHandler)
 		}
 
 		return resolvedOutputSpots
 	}
 
-	private data class ResolvedPollenSpot(
-		val pollenSpot: PollenSpot,
+	private data class ResolvedPollenPoint(
+		val pollenPoint: PollenPoint,
 		val energyHandler: IEnergyStorage
 	)
 

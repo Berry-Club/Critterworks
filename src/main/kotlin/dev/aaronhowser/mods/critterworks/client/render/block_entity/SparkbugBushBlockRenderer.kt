@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderTypes
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
-import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenSpot
+import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenPoint
 import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.client.Minecraft
@@ -33,14 +33,14 @@ class SparkbugBushBlockRenderer(
 		val vertexConsumer = bufferSource.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
 		val pose = poseStack.last()
 
-		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.displayPollenSpots)
+		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.displayPollenPoints)
 	}
 
 	private fun drawSpots(
 		vertexConsumer: VertexConsumer,
 		pose: PoseStack.Pose,
 		blockPos: BlockPos,
-		pollenSpots: Collection<DisplayPollenSpot>
+		pollenSpots: Collection<DisplayPollenPoint>
 	) {
 		for (pollenSpot in pollenSpots) {
 			val alpha = if (pollenSpot.isActive) ACTIVE_ALPHA else INACTIVE_ALPHA
@@ -85,7 +85,7 @@ class SparkbugBushBlockRenderer(
 	override fun getRenderBoundingBox(blockEntity: SparkbugBushBlockEntity): AABB {
 		var bounds = AABB(blockEntity.blockPos)
 
-		for (pollenSpot in blockEntity.displayPollenSpots) {
+		for (pollenSpot in blockEntity.displayPollenPoints) {
 			bounds = bounds.minmax(AABB(pollenSpot.pos))
 		}
 
