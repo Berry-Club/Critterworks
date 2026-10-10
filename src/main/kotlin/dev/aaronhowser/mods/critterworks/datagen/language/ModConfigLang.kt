@@ -31,6 +31,8 @@ object ModConfigLang {
 		addConfig("rendering", "Rendering")
 		addConfig(ClientConfig.CONFIG.hoppingSpiderScale, "Hopping Spider Scale")
 		addConfig(ClientConfig.CONFIG.rotateScoochwormPassengerCamera, "Rotate Scoochworm Passenger Camera")
+		addConfig(ClientConfig.CONFIG.fireflyParticleSpawnChance, "Firefly Particle Spawn Chance")
+		addConfig(ClientConfig.CONFIG.fireflyParticleSpawnRadius, "Firefly Particle Spawn Radius")
 
 		addConfig("debug", "Debug")
 		addConfig(ServerConfig.CONFIG.sendScoochwormAppleTeleportMessage, "Send Scoochworm Apple Teleport Message")

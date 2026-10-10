@@ -10,6 +10,8 @@ class ClientConfig(
 
 	lateinit var hoppingSpiderScale: ModConfigSpec.DoubleValue
 	lateinit var rotateScoochwormPassengerCamera: ModConfigSpec.BooleanValue
+	lateinit var fireflyParticleSpawnChance: ModConfigSpec.DoubleValue
+	lateinit var fireflyParticleSpawnRadius: ModConfigSpec.DoubleValue
 
 	lateinit var renderScoochwormAttachmentProbe: ModConfigSpec.BooleanValue
 	lateinit var renderScoochwormPath: ModConfigSpec.BooleanValue
@@ -37,6 +39,14 @@ class ClientConfig(
 		rotateScoochwormPassengerCamera = builder
 			.comment("Rotate the first-person camera to match the surface a ridden Scoochworm is walking on.")
 			.define("rotateScoochwormPassengerCamera", true)
+
+		fireflyParticleSpawnChance = builder
+			.comment("The chance that each active pollen spot spawns a firefly particle each tick.")
+			.defineInRange("fireflyParticleSpawnChance", 0.05, 0.0, 1.0)
+
+		fireflyParticleSpawnRadius = builder
+			.comment("The distance firefly particles can spawn from an active pollen spot.")
+			.defineInRange("fireflyParticleSpawnRadius", 0.75, 0.0, 16.0)
 	}
 
 	private fun debugConfigs() {
