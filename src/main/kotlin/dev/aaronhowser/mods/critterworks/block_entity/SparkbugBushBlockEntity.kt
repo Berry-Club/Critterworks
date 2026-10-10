@@ -22,11 +22,11 @@ class SparkbugBushBlockEntity(
 
 	override val syncImmediately: Boolean = true
 
-	val inputPollenSpots: List<PollenSpot>
-		field = mutableListOf()
+	val inputPollenSpots: Set<PollenSpot>
+		field = mutableSetOf()
 
-	val outputPollenSpots: List<PollenSpot>
-		field = mutableListOf()
+	val outputPollenSpots: Set<PollenSpot>
+		field = mutableSetOf()
 
 	fun addPollenSpot(
 		pos: BlockPos,
@@ -35,17 +35,16 @@ class SparkbugBushBlockEntity(
 	): Boolean {
 		val level = level ?: return false
 
-		val alreadyOne = (inputPollenSpots + outputPollenSpots).any { it.pos == pos && it.direction == direction }
-		if (alreadyOne) return false
-
 		val spot = PollenSpot(pos, direction)
 		if (spot.getEnergyHandler(level) == null) return false
 
-		if (isInput) {
+		val success = if (isInput) {
 			inputPollenSpots.add(spot)
 		} else {
 			outputPollenSpots.add(spot)
 		}
+
+		if (!success) return false
 
 		setChanged()
 		return true

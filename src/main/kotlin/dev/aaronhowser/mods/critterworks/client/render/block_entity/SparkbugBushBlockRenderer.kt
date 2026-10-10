@@ -40,7 +40,7 @@ class SparkbugBushBlockRenderer(
 		vertexConsumer: VertexConsumer,
 		pose: PoseStack.Pose,
 		blockPos: BlockPos,
-		pollenSpots: List<SparkbugBushBlockEntity.PollenSpot>,
+		pollenSpots: Collection<SparkbugBushBlockEntity.PollenSpot>,
 		color: Int
 	) {
 		for (pollenSpot in pollenSpots) {
