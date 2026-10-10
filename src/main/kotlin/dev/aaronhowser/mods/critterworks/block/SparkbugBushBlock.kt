@@ -33,7 +33,7 @@ class SparkbugBushBlock : Block(
 		val posBelow = pos.below()
 		val stateBelow = level.getBlockState(posBelow)
 		val canBelowSustain = stateBelow.canSustainPlant(level, posBelow, Direction.UP, state)
-		if (canBelowSustain.isDefault) return canBelowSustain.isTrue
+		if (!canBelowSustain.isDefault) return canBelowSustain.isTrue
 		return state.isBlock(BlockTags.DIRT)
 	}
 
