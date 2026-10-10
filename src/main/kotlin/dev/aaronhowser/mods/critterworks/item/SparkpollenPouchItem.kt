@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.status
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.tell
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toBlockPos
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
@@ -27,8 +28,14 @@ class SparkpollenPouchItem(properties: Properties) : Item(properties) {
 		if (!player.isSecondaryUseActive) return super.use(level, player, usedHand)
 
 		val usedStack = player.getItemInHand(usedHand)
-		val isInput = usedStack.getOrDefault(ModDataComponents.IS_INPUT, true)
-		usedStack.set(ModDataComponents.IS_INPUT, !isInput)
+		val wasInput = usedStack.getOrDefault(ModDataComponents.IS_INPUT, true)
+		usedStack.set(ModDataComponents.IS_INPUT, !wasInput)
+
+		if (wasInput) {
+			player.status("Set to output")
+		} else {
+			player.status("Set to input")
+		}
 
 		return InteractionResultHolder.sidedSuccess(usedStack, level.isClientSide)
 	}
