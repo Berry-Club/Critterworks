@@ -22,13 +22,14 @@ class SparkbugBushBlockEntity(
 ) : SyncingBlockEntity(ModBlockEntityTypes.SPARKBUG_BUSH.get(), pos, blockState) {
 
 	override val syncImmediately: Boolean = true
+
 	private val energyStorage = DistributedEnergyStorage()
 
-	val inputPollenSpots: Set<PollenSpot>
-		field = mutableSetOf()
+	private val inputPollenSpots: MutableSet<PollenSpot> = mutableSetOf()
+	private val outputPollenSpots: MutableSet<PollenSpot> = mutableSetOf()
 
-	val outputPollenSpots: Set<PollenSpot>
-		field = mutableSetOf()
+	var displayPollenSpots: Set<DisplayPollenSpot> = setOf()
+		private set
 
 	fun addPollenSpot(
 		pos: BlockPos,
@@ -67,25 +68,45 @@ class SparkbugBushBlockEntity(
 	private fun serverTick(level: ServerLevel) {
 		val maximumTransfer = ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput.get()
 
-		for (inputHandler in getInputHandlers(level)) {
-			if (!inputHandler.canExtract()) continue
+		val displaySpots = mutableSetOf<DisplayPollenSpot>()
+		energyStorage.resetTickActivity()
 
-			val availableEnergy = inputHandler.extractEnergy(maximumTransfer, true)
-			if (availableEnergy <= 0) continue
+		for (inputSpot in inputPollenSpots) {
+			val inputHandler = inputSpot.getEnergyHandler(level) ?: continue
+			val isActive = transferEnergyFromInput(inputHandler, maximumTransfer)
+			displaySpots += inputSpot.toDisplaySpot(isInput = true, isActive)
+		}
 
-			val acceptedEnergy = energyStorage.receiveEnergy(availableEnergy, true)
-			if (acceptedEnergy <= 0) continue
+		for (outputSpot in outputPollenSpots) {
+			if (outputSpot.getEnergyHandler(level) == null) continue
 
-			val extractedEnergy = inputHandler.extractEnergy(acceptedEnergy, false)
-			if (extractedEnergy <= 0) continue
+			val isActive = energyStorage.wasActiveThisTick(outputSpot)
+			displaySpots += outputSpot.toDisplaySpot(isInput = false, isActive)
+		}
 
-			energyStorage.receiveEnergy(extractedEnergy, false)
+		if (displaySpots != displayPollenSpots) {
+			displayPollenSpots = displaySpots
+			setChanged()
 		}
 	}
 
-	private fun getInputHandlers(level: Level?): List<IEnergyStorage> {
-		if (level == null) return emptyList()
-		return inputPollenSpots.mapNotNull { it.getEnergyHandler(level) }
+	private fun transferEnergyFromInput(
+		inputHandler: IEnergyStorage,
+		maximumTransfer: Int
+	): Boolean {
+		if (!inputHandler.canExtract()) return false
+
+		val availableEnergy = inputHandler.extractEnergy(maximumTransfer, true)
+		if (availableEnergy <= 0) return false
+
+		val acceptedEnergy = energyStorage.receiveEnergy(availableEnergy, true)
+		if (acceptedEnergy <= 0) return false
+
+		val extractedEnergy = inputHandler.extractEnergy(acceptedEnergy, false)
+		if (extractedEnergy <= 0) return false
+
+		energyStorage.receiveEnergy(extractedEnergy, false)
+		return true
 	}
 
 	private fun getOutputHandlers(level: Level?): List<IEnergyStorage> {
@@ -98,12 +119,12 @@ class SparkbugBushBlockEntity(
 
 		val inputSpotsTag = ListTag()
 		for (spot in inputPollenSpots) {
-			inputSpotsTag.add(spot.toTag())
+			inputSpotsTag += spot.toTag()
 		}
 
 		val outputSpotsTag = ListTag()
 		for (spot in outputPollenSpots) {
-			outputSpotsTag.add(spot.toTag())
+			outputSpotsTag += spot.toTag()
 		}
 
 		tag.put(INPUT_SPOTS_TAG, inputSpotsTag)
@@ -119,19 +140,48 @@ class SparkbugBushBlockEntity(
 		val inputSpotsTag = tag.getList(INPUT_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
 		for (i in inputSpotsTag.indices) {
 			val spotTag = inputSpotsTag.getCompound(i)
-			inputPollenSpots.add(PollenSpot.fromTag(spotTag))
+			inputPollenSpots += PollenSpot.fromTag(spotTag)
 		}
 
 		val outputSpotsTag = tag.getList(OUTPUT_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
 		for (i in outputSpotsTag.indices) {
 			val spotTag = outputSpotsTag.getCompound(i)
-			outputPollenSpots.add(PollenSpot.fromTag(spotTag))
+			outputPollenSpots += PollenSpot.fromTag(spotTag)
 		}
+	}
+
+	override fun getUpdateTag(pRegistries: HolderLookup.Provider): CompoundTag {
+		val tag = saveWithoutMetadata(pRegistries)
+		tag.remove(INPUT_SPOTS_TAG)
+		tag.remove(OUTPUT_SPOTS_TAG)
+
+		val displaySpotsTag = ListTag()
+		for (spot in displayPollenSpots) {
+			displaySpotsTag += spot.toTag()
+		}
+
+		tag.put(DISPLAY_SPOTS_TAG, displaySpotsTag)
+		return tag
+	}
+
+	override fun handleUpdateTag(tag: CompoundTag, lookupProvider: HolderLookup.Provider) {
+		super.handleUpdateTag(tag, lookupProvider)
+
+		val displaySpots = mutableSetOf<DisplayPollenSpot>()
+
+		val visibleSpotsTag = tag.getList(DISPLAY_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
+		for (i in visibleSpotsTag.indices) {
+			val spotTag = visibleSpotsTag.getCompound(i)
+			displaySpots += DisplayPollenSpot.fromTag(spotTag)
+		}
+
+		displayPollenSpots = displaySpots
 	}
 
 	companion object {
 		const val INPUT_SPOTS_TAG = "input_spots"
 		const val OUTPUT_SPOTS_TAG = "output_spots"
+		const val DISPLAY_SPOTS_TAG = "display_spots"
 
 		fun tick(
 			level: Level,
@@ -147,14 +197,25 @@ class SparkbugBushBlockEntity(
 
 	inner class DistributedEnergyStorage : IEnergyStorage {
 		private var nextOutputIndex = 0
+		private val activeOutputSpots: MutableSet<PollenSpot> = mutableSetOf()
+
+		fun resetTickActivity() {
+			activeOutputSpots.clear()
+		}
+
+		fun wasActiveThisTick(pollenSpot: PollenSpot): Boolean {
+			return pollenSpot in activeOutputSpots
+		}
 
 		override fun receiveEnergy(toReceive: Int, simulate: Boolean): Int {
 			if (toReceive <= 0) return 0
+			val currentLevel = level ?: return 0
 
-			val outputHandlers = mutableListOf<IEnergyStorage>()
-			for (outputHandler in getOutputHandlers(level)) {
+			val outputHandlers = mutableListOf<ResolvedPollenSpot>()
+			for (outputSpot in outputPollenSpots) {
+				val outputHandler = outputSpot.getEnergyHandler(currentLevel) ?: continue
 				if (outputHandler.canReceive()) {
-					outputHandlers.add(outputHandler)
+					outputHandlers += ResolvedPollenSpot(outputSpot, outputHandler)
 				}
 			}
 
@@ -169,11 +230,13 @@ class SparkbugBushBlockEntity(
 
 				for (offset in outputHandlers.indices) {
 					val outputIndex = (startingIndex + offset) % outputHandlers.size
-					val received = outputHandlers[outputIndex].receiveEnergy(1, false)
+					val output = outputHandlers[outputIndex]
+					val received = output.energyHandler.receiveEnergy(1, false)
 					if (received <= 0) continue
 
 					amountReceived += received
 					receivedThisPass += received
+					activeOutputSpots += output.pollenSpot
 					nextOutputIndex = (outputIndex + 1) % outputHandlers.size
 
 					if (amountReceived >= toReceive) break
@@ -186,13 +249,13 @@ class SparkbugBushBlockEntity(
 		}
 
 		private fun getSimulatedReceivedEnergy(
-			outputHandlers: List<IEnergyStorage>,
+			outputHandlers: List<ResolvedPollenSpot>,
 			toReceive: Int
 		): Int {
 			var amountReceived = 0L
 
-			for (outputHandler in outputHandlers) {
-				amountReceived += outputHandler.receiveEnergy(toReceive, true).toLong()
+			for (output in outputHandlers) {
+				amountReceived += output.energyHandler.receiveEnergy(toReceive, true).toLong()
 				if (amountReceived >= toReceive) return toReceive
 			}
 
@@ -213,6 +276,9 @@ class SparkbugBushBlockEntity(
 		val pos: BlockPos,
 		val direction: Direction
 	) {
+		fun toDisplaySpot(isInput: Boolean, isActive: Boolean): DisplayPollenSpot {
+			return DisplayPollenSpot(pos, direction, isInput, isActive)
+		}
 
 		fun getEnergyHandler(level: Level): IEnergyStorage? {
 			return level.getCapability(Capabilities.EnergyStorage.BLOCK, pos, direction)
@@ -234,6 +300,44 @@ class SparkbugBushBlockEntity(
 				val directionOrdinal = tag.getInt(DIRECTION_TAG)
 				val direction = Direction.entries[directionOrdinal]
 				return PollenSpot(pos, direction)
+			}
+		}
+	}
+
+	private data class ResolvedPollenSpot(
+		val pollenSpot: PollenSpot,
+		val energyHandler: IEnergyStorage
+	)
+
+	data class DisplayPollenSpot(
+		val pos: BlockPos,
+		val direction: Direction,
+		val isInput: Boolean,
+		val isActive: Boolean
+	) {
+
+		fun toTag(): CompoundTag {
+			val tag = CompoundTag()
+			tag.putLong(POS_TAG, pos.asLong())
+			tag.putInt(DIRECTION_TAG, direction.ordinal)
+			tag.putBoolean(IS_INPUT_TAG, isInput)
+			tag.putBoolean(IS_ACTIVE_TAG, isActive)
+			return tag
+		}
+
+		companion object {
+			const val POS_TAG = "pos"
+			const val DIRECTION_TAG = "direction"
+			const val IS_INPUT_TAG = "is_input"
+			const val IS_ACTIVE_TAG = "is_active"
+
+			fun fromTag(tag: CompoundTag): DisplayPollenSpot {
+				val pos = tag.getLong(POS_TAG).toBlockPos()
+				val directionOrdinal = tag.getInt(DIRECTION_TAG)
+				val direction = Direction.entries[directionOrdinal]
+				val isInput = tag.getBoolean(IS_INPUT_TAG)
+				val isActive = tag.getBoolean(IS_ACTIVE_TAG)
+				return DisplayPollenSpot(pos, direction, isInput, isActive)
 			}
 		}
 	}

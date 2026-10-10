@@ -32,18 +32,19 @@ class SparkbugBushBlockRenderer(
 		val vertexConsumer = bufferSource.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
 		val pose = poseStack.last()
 
-		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.inputPollenSpots, INPUT_COLOR)
-		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.outputPollenSpots, OUTPUT_COLOR)
+		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.displayPollenSpots)
 	}
 
 	private fun drawSpots(
 		vertexConsumer: VertexConsumer,
 		pose: PoseStack.Pose,
 		blockPos: BlockPos,
-		pollenSpots: Collection<SparkbugBushBlockEntity.PollenSpot>,
-		color: Int
+		pollenSpots: Collection<SparkbugBushBlockEntity.DisplayPollenSpot>
 	) {
 		for (pollenSpot in pollenSpots) {
+			val alpha = if (pollenSpot.isActive) ACTIVE_ALPHA else INACTIVE_ALPHA
+			val baseColor = if (pollenSpot.isInput) INPUT_COLOR else OUTPUT_COLOR
+			val color = alpha shl 24 or baseColor
 			val blockOffset = pollenSpot.pos.subtract(blockPos)
 			val vertices = AaronRenderUtil.getVertices(pollenSpot.direction, 1f, 1f, 1f)
 
@@ -83,11 +84,7 @@ class SparkbugBushBlockRenderer(
 	override fun getRenderBoundingBox(blockEntity: SparkbugBushBlockEntity): AABB {
 		var bounds = AABB(blockEntity.blockPos)
 
-		for (pollenSpot in blockEntity.inputPollenSpots) {
-			bounds = bounds.minmax(AABB(pollenSpot.pos))
-		}
-
-		for (pollenSpot in blockEntity.outputPollenSpots) {
+		for (pollenSpot in blockEntity.displayPollenSpots) {
 			bounds = bounds.minmax(AABB(pollenSpot.pos))
 		}
 
@@ -99,7 +96,9 @@ class SparkbugBushBlockRenderer(
 		private const val FACE_INSET = (1f - FACE_SIZE) / 2f
 		private const val PLANE_OFFSET = 0.002f
 
-		private const val INPUT_COLOR = 0x600066FF
-		private const val OUTPUT_COLOR = 0x60FF8000
+		private const val INACTIVE_ALPHA = 0x60
+		private const val ACTIVE_ALPHA = 0xC0
+		private const val INPUT_COLOR = 0x0066FF
+		private const val OUTPUT_COLOR = 0xFF8000
 	}
 }
