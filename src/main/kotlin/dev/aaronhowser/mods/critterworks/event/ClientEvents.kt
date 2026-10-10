@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.event
 
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.SparkbugBushBlockRenderer
@@ -12,12 +13,14 @@ import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
+import dev.aaronhowser.mods.critterworks.registry.ModParticleTypes
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent
 import net.neoforged.neoforge.client.event.EntityRenderersEvent
 import net.neoforged.neoforge.client.event.InputEvent
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent
 
 @EventBusSubscriber(
@@ -45,6 +48,11 @@ object ClientEvents {
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.SPARKBUG_BUSH.get(), ::SparkbugBushBlockRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM.get(), ::ScoochwormRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM_PART.get(), ::ScoochwormPartRenderer)
+	}
+
+	@SubscribeEvent
+	fun registerParticleProviders(event: RegisterParticleProvidersEvent) {
+		event.registerSpriteSet(ModParticleTypes.FIREFLY.get(), ::FireflyParticleProvider)
 	}
 
 	@SubscribeEvent

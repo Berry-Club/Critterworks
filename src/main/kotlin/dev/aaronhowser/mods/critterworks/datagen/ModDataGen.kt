@@ -69,6 +69,11 @@ object ModDataGen {
 		)
 
 		generator.addProvider(
+			event.includeClient(),
+			ModParticleDescriptionProvider(output, existingFileHelper)
+		)
+
+		generator.addProvider(
 			event.includeServer(),
 			ModLootTableProvider(output, lookupProvider)
 		)

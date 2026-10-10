@@ -19,7 +19,8 @@ object ModRegistries {
 			ModMenuTypes.MENU_TYPE_REGISTRY,
 			ModMobEffects.MOB_EFFECT_REGISTRY,
 			ModPotions.POTION_REGISTRY,
-			ModFeatures.FEATURE_REGISTRY
+			ModFeatures.FEATURE_REGISTRY,
+			ModParticleTypes.PARTICLE_TYPE_REGISTRY
 		)
 
 		for (registry in registries) {
