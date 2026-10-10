@@ -17,20 +17,22 @@ object ModItems : AaronItemRegistry() {
 		register("lockbox", ::LockboxItem, LockboxItem.DEFAULT_PROPERTIES)
 	val SCOOCHWORM_GPS: DeferredItem<Item> =
 		register("scoochworm_gps", ::Item, PROPERTIES_SINGLE_STACK)
-	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
-		register("artificial_spinnerets", ::ArtificialSpinneretsItem, ArtificialSpinneretsItem.DEFAULT_PROPERTIES)
-	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =
-		register("web_pathfinder", ::WebPathfinderItem, PROPERTIES_SINGLE_STACK)
-	val ITEM_FILTER: DeferredItem<ItemFilterItem> =
-		register("item_filter", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
-	val WEB_PORT: DeferredItem<WebPortItem> =
-		register("web_port", ::WebPortItem, PROPERTIES_SINGLE_STACK)
-	val HOPPING_SPIDER: DeferredItem<HoppingSpiderItem> =
-		register("hopping_spider", ::HoppingSpiderItem)
 	val CRITTER_CAGE: DeferredItem<CritterCageItem> =
 		register("critter_cage", ::CritterCageItem)
 	val SCOOCHWORM_SPAWN_EGG: DeferredItem<ScoochwormSpawnEggItem> =
 		register("scoochworm_spawn_egg", ::ScoochwormSpawnEggItem)
+
+	val HOPPING_SPIDER: DeferredItem<HoppingSpiderItem> =
+		register("hopping_spider", ::HoppingSpiderItem)
+	val WEB_PORT: DeferredItem<WebPortItem> =
+		register("web_port", ::WebPortItem, PROPERTIES_SINGLE_STACK)
+	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
+		register("artificial_spinnerets", ::ArtificialSpinneretsItem, ArtificialSpinneretsItem.DEFAULT_PROPERTIES)
+	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =
+		register("web_pathfinder", ::WebPathfinderItem, PROPERTIES_SINGLE_STACK)
+
+	val ITEM_FILTER: DeferredItem<ItemFilterItem> =
+		register("item_filter", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
 
 	val GREEN_DYEBERRY: DeferredItem<DyeberryItem> =
 		registerDyeberry(WormColor.GREEN)
