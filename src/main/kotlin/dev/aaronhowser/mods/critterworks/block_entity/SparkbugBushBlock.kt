@@ -1,15 +1,15 @@
 package dev.aaronhowser.mods.critterworks.block_entity
 
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toBlockPos
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.server.level.ServerLevel
+import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.Tag
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.neoforged.neoforge.capabilities.Capabilities
-import net.neoforged.neoforge.energy.IEnergyStorage
 
 //TODO cache the IEnergyStorages too instead of recalculating every time?
 // but what if between calls the capability changes or something
@@ -18,40 +18,33 @@ class SparkbugBushBlock(
 	blockState: BlockState
 ) : BlockEntity(ModBlockEntityTypes.SPARKBUG_BUSH.get(), pos, blockState) {
 
-	private val energyStorage = DistributedEnergyStorage()
+	val pollenSpots: List<PollenSpot>
+		field = mutableListOf()
 
-	private val cachedReceivers: MutableList<BlockEntity> = mutableListOf()
-	private fun getCachedEnergyHandlers(): List<IEnergyStorage> {
-		val level = level as? ServerLevel ?: return emptyList()
+	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
+		super.saveAdditional(tag, registries)
 
-		return cachedReceivers
-			.asSequence()
-			.filterNot(BlockEntity::isRemoved)
-			.mapNotNull {
-				DIRECTIONS_OR_NULL.firstNotNullOfOrNull { dir ->
-					level.getCapability(Capabilities.EnergyStorage.BLOCK, it.blockPos, dir)
-				}
-			}
-			.toList()
+		val pollenSpotsTag = ListTag()
+		for (spot in pollenSpots) {
+			pollenSpotsTag.add(spot.toTag())
+		}
+
+		tag.put(POLLEN_SPOTS_TAG, pollenSpotsTag)
+	}
+
+	override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
+		super.loadAdditional(tag, registries)
+
+		pollenSpots.clear()
+		val pollenSpotsTag = tag.getList(POLLEN_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
+		for (i in pollenSpotsTag.indices) {
+			val spotTag = pollenSpotsTag.getCompound(i)
+			pollenSpots.add(PollenSpot.fromTag(spotTag))
+		}
 	}
 
 	companion object {
-		val DIRECTIONS_OR_NULL = Direction.entries + null
-	}
-
-	inner class DistributedEnergyStorage : IEnergyStorage {
-		override fun receiveEnergy(toReceive: Int, simulate: Boolean): Int {
-			TODO("Not yet implemented")
-		}
-
-		override fun extractEnergy(toExtract: Int, simulate: Boolean): Int {
-			TODO("Not yet implemented")
-		}
-
-		override fun getEnergyStored(): Int = getCachedEnergyHandlers().sumOf(IEnergyStorage::getEnergyStored)
-		override fun getMaxEnergyStored(): Int = getCachedEnergyHandlers().sumOf(IEnergyStorage::getMaxEnergyStored)
-		override fun canExtract(): Boolean = getCachedEnergyHandlers().any(IEnergyStorage::canExtract)
-		override fun canReceive(): Boolean = getCachedEnergyHandlers().any(IEnergyStorage::canReceive)
+		const val POLLEN_SPOTS_TAG = "pollen_spots"
 	}
 
 	data class PollenSpot(
@@ -59,21 +52,27 @@ class SparkbugBushBlock(
 		val direction: Direction,
 		val isSource: Boolean
 	) {
+
+		fun toTag(): CompoundTag {
+			val tag = CompoundTag()
+			tag.putLong(POS_TAG, pos.asLong())
+			tag.putInt(DIRECTION_TAG, direction.ordinal)
+			tag.putBoolean(IS_SOURCE_TAG, isSource)
+			return tag
+		}
+
 		companion object {
-			val CODEC: Codec<PollenSpot> =
-				RecordCodecBuilder.create { instance ->
-					instance.group(
-						BlockPos.CODEC
-							.fieldOf("pos")
-							.forGetter(PollenSpot::pos),
-						Direction.CODEC
-							.fieldOf("direction")
-							.forGetter(PollenSpot::direction),
-						Codec.BOOL
-							.optionalFieldOf("is_source", true)
-							.forGetter(PollenSpot::isSource)
-					).apply(instance, ::PollenSpot)
-				}
+			const val POS_TAG = "pos"
+			const val DIRECTION_TAG = "direction"
+			const val IS_SOURCE_TAG = "is_source"
+
+			fun fromTag(tag: CompoundTag): PollenSpot {
+				val pos = tag.getLong(POS_TAG).toBlockPos()
+				val directionOrdinal = tag.getInt(DIRECTION_TAG)
+				val direction = Direction.entries[directionOrdinal]
+				val isSource = tag.getBoolean(IS_SOURCE_TAG)
+				return PollenSpot(pos, direction, isSource)
+			}
 		}
 	}
 
