@@ -34,13 +34,8 @@ object ModBlocks : AaronBlockRegistry() {
 	val HOPPING_SPIDER_NEST: DeferredBlock<HoppingSpiderNestBlock> =
 		registerBlock("hopping_spider_nest", ::HoppingSpiderNestBlock)
 
-	val APPLE_SLICE: DeferredBlock<HugeMushroomBlock> =
-		registerBlock("apple_slice") {
-			HugeMushroomBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK))
-		}
-
-	val SPARKBUG_BUSH =
-		basicStoneBlock("sparkbug_bush")
+	val SPARKBUG_BUSH: DeferredBlock<SparkbugBushBlock> =
+		registerBlock("sparkbug_bush", ::SparkbugBushBlock)
 
 	val GREEN_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.GREEN)
