@@ -29,12 +29,12 @@ class ServerConfig(
 			scoochwormAttachmentConfigs()
 		}
 
-		builder.section("world_gen") {
-			worldGenConfigs()
-		}
-
 		builder.section("sparkbug_bush") {
 			sparkbugBushConfigs()
+		}
+
+		builder.section("world_gen") {
+			worldGenConfigs()
 		}
 
 		builder.section("debug") {
@@ -59,7 +59,7 @@ class ServerConfig(
 	private fun sparkbugBushConfigs() {
 		sparkbugBushMaxEnergyTransferPerInput = builder
 			.comment("The maximum energy a Sparkbug Bush pulls from each input per tick.")
-			.defineInRange("sparkbugBushMaxEnergyTransferPerInput", 25_600, 1, Int.MAX_VALUE)
+			.defineInRange("sparkbugBushMaxEnergyTransferPerInput", 2_560, 1, Int.MAX_VALUE)
 	}
 
 	private fun worldGenConfigs() {
