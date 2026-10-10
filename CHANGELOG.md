@@ -1,3 +1,15 @@
+# 1.3.0
+
+### Added
+
+- Sparkpollen Pouch
+- Sparkbug Bush
+	- New block used to transfer FE wirelessly
+	- Bind the Pouch to a Bush, and then mark nearby block faces as inputs or outputs
+	- Every tick it tries to transfer energy from inputs to outputs
+		- Inputs spread their FE equally across all outputs that accept
+		- Firefly particles spawn near Pollen Spots that are doing work
+
 # 1.2.0
 
 ### Added
