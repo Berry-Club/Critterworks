@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.critterworks.block_entity
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -50,7 +52,29 @@ class SparkbugBushBlock(
 		override fun getMaxEnergyStored(): Int = getCachedEnergyHandlers().sumOf(IEnergyStorage::getMaxEnergyStored)
 		override fun canExtract(): Boolean = getCachedEnergyHandlers().any(IEnergyStorage::canExtract)
 		override fun canReceive(): Boolean = getCachedEnergyHandlers().any(IEnergyStorage::canReceive)
+	}
 
+	data class PollenSpot(
+		val pos: BlockPos,
+		val direction: Direction,
+		val isSource: Boolean
+	) {
+		companion object {
+			val CODEC: Codec<PollenSpot> =
+				RecordCodecBuilder.create { instance ->
+					instance.group(
+						BlockPos.CODEC
+							.fieldOf("pos")
+							.forGetter(PollenSpot::pos),
+						Direction.CODEC
+							.fieldOf("direction")
+							.forGetter(PollenSpot::direction),
+						Codec.BOOL
+							.optionalFieldOf("is_source", true)
+							.forGetter(PollenSpot::isSource)
+					).apply(instance, ::PollenSpot)
+				}
+		}
 	}
 
 }
