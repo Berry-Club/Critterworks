@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.block_entity
 
 import dev.aaronhowser.mods.aaron.block_entity.SyncingBlockEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.randomPos
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenSpot
@@ -15,10 +16,10 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.Connection
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.RandomSource
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.AABB
+import kotlin.math.abs
 
 class SparkbugBushBlockEntity(
 	pos: BlockPos,
@@ -75,18 +76,18 @@ class SparkbugBushBlockEntity(
 			if (!pollenSpot.isActive) continue
 			if (!level.random.chance(spawnChance)) continue
 
-			val faceCenter = pollenSpot.pos.center
-				.add(
-					pollenSpot.direction.stepX * 0.5,
-					pollenSpot.direction.stepY * 0.5,
-					pollenSpot.direction.stepZ * 0.5
+			val direction = pollenSpot.direction
+			val faceCenter = pollenSpot.pos.center.relative(direction, 0.5)
+			val outwardEdge = faceCenter.relative(direction, spawnRadius)
+
+			val spawnArea = AABB(faceCenter, outwardEdge)
+				.inflate(
+					spawnRadius * (1 - abs(direction.stepX)),
+					spawnRadius * (1 - abs(direction.stepY)),
+					spawnRadius * (1 - abs(direction.stepZ))
 				)
-			val particlePosition = getParticlePosition(
-				level.random,
-				faceCenter,
-				pollenSpot.direction,
-				spawnRadius
-			)
+
+			val particlePosition = spawnArea.randomPos(level.random)
 
 			level.addParticle(
 				ModParticleTypes.FIREFLY.get(),
@@ -98,31 +99,6 @@ class SparkbugBushBlockEntity(
 				0.0
 			)
 		}
-	}
-
-	private fun getParticlePosition(
-		random: RandomSource,
-		faceCenter: Vec3,
-		direction: Direction,
-		spawnRadius: Double
-	): Vec3 {
-		val xOffset = getParticleOffset(random, direction, Direction.Axis.X, spawnRadius)
-		val yOffset = getParticleOffset(random, direction, Direction.Axis.Y, spawnRadius)
-		val zOffset = getParticleOffset(random, direction, Direction.Axis.Z, spawnRadius)
-		return faceCenter.add(xOffset, yOffset, zOffset)
-	}
-
-	private fun getParticleOffset(
-		random: RandomSource,
-		direction: Direction,
-		axis: Direction.Axis,
-		spawnRadius: Double
-	): Double {
-		if (direction.axis == axis) {
-			return random.nextDouble() * spawnRadius * direction.axisDirection.step
-		}
-
-		return (random.nextDouble() * 2 - 1) * spawnRadius
 	}
 
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
