@@ -41,6 +41,7 @@
   "critterworks.configuration.renderScoochwormPath": "Render Scoochworm Path",
   "critterworks.configuration.renderWebLineDebugColors": "Render Web Line Debug Colors",
   "critterworks.configuration.rendering": "Rendering",
+  "critterworks.configuration.rotateScoochwormPassengerCamera": "Rotate Scoochworm Passenger Camera",
   "critterworks.configuration.scoochwormAppleRarity": "Scoochworm Apple Rarity",
   "critterworks.configuration.scoochworm_attachments": "Scoochworm Attachments",
   "critterworks.configuration.sendHoppingSpiderNestTeleportMessage": "Send Hopping Spider Nest Teleport Message",

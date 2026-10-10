@@ -28,6 +28,7 @@ class ModBlockLootTablesSubProvider(
 		dropSelf(ModBlocks.SCOOCHSTEM_WOOD.get())
 		dropSelf(ModBlocks.HOPPING_SPIDER_NEST.get())
 		dropSelf(ModBlocks.SCOOCHWORM_DEPOT.get())
+		dropSelf(ModBlocks.SPARKBUG_BUSH.get())
 		appleSlice()
 
 		dropSelf(ModBlocks.GREEN_SCOOCHSTEM.get())
@@ -37,11 +38,8 @@ class ModBlockLootTablesSubProvider(
 		dropSelf(ModBlocks.MAGENTA_SCOOCHSTEM.get())
 		dropSelf(ModBlocks.CYAN_SCOOCHSTEM.get())
 
-		for (block in ModBlocks.BLOCK_REGISTRY.entries) {
-			if (block.id.path.endsWith("dyeberry_vines") || block.id.path.endsWith("dyeberry_vines_plant")) {
-				add(block.get(), noDrop())
-			}
-		}
+		add(ModBlocks.DYEBERRY_VINES.get(), noDrop())
+		add(ModBlocks.DYEBERRY_VINES_PLANT.get(), noDrop())
 	}
 
 	private fun critterCage() {

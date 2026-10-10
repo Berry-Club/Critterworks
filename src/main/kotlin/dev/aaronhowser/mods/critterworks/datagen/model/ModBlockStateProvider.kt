@@ -39,14 +39,24 @@ class ModBlockStateProvider(
 		stemEncasedComparator()
 		coloredScoochstem()
 		dyeberryVines()
+		sparkbugBush()
+	}
+
+	private fun sparkbugBush() {
+		val block = ModBlocks.SPARKBUG_BUSH.get()
+		val model = models()
+			.cross("sparkbug_bush", modLoc("block/sparkbug_bush"))
+			.particle(modLoc("block/sparkbug_bush"))
+			.renderType(RenderType.CUTOUT.name)
+
+		simpleBlockWithItem(block, model)
 	}
 
 	private fun hoppingSpiderNest() {
 		val block = ModBlocks.HOPPING_SPIDER_NEST.get()
 		val model = ModelFile.UncheckedModelFile(modLoc("block/hopping_spider_nest"))
 
-		simpleBlock(block, model)
-		simpleBlockItem(block, model)
+		simpleBlockWithItem(block, model)
 	}
 
 	private fun scoochwormDepot() {

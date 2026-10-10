@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "critterworks:block/sparkbug_bush",
+    "particle": "critterworks:block/sparkbug_bush"
+  }
+}
