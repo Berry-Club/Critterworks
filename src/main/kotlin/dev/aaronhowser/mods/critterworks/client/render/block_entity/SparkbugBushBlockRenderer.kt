@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderTypes
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
 import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
@@ -22,6 +24,9 @@ class SparkbugBushBlockRenderer(
 		packedLight: Int,
 		packedOverlay: Int
 	) {
+		val player = Minecraft.getInstance().player ?: return
+		if (!player.isHolding { it.get(ModDataComponents.SPARKBUG_BUSH) == blockEntity.blockPos.asLong() }) return
+
 		val vertexConsumer = bufferSource.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
 		val pose = poseStack.last()
 
