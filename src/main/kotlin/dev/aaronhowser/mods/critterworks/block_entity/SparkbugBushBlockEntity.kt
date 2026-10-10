@@ -12,6 +12,7 @@ import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
+import net.neoforged.neoforge.capabilities.Capabilities
 
 class SparkbugBushBlockEntity(
 	pos: BlockPos,
@@ -30,6 +31,10 @@ class SparkbugBushBlockEntity(
 	): Boolean {
 		val alreadyOne = pollenSpots.any { it.pos == pos && it.direction == direction }
 		if (alreadyOne) return false
+
+		val energyHandler = level?.getCapability(Capabilities.EnergyStorage.BLOCK, pos, direction)
+		val hasEnergyHandler = energyHandler != null
+		if (!hasEnergyHandler) return false
 
 		pollenSpots.add(PollenSpot(pos, direction, isSource))
 		setChanged()
