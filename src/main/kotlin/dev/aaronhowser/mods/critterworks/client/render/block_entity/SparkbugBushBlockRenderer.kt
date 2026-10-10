@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.client.render.block_entity
 
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderTypes
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
 import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
@@ -9,6 +10,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.phys.AABB
 
@@ -30,9 +32,19 @@ class SparkbugBushBlockRenderer(
 		val vertexConsumer = bufferSource.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
 		val pose = poseStack.last()
 
-		for (pollenSpot in blockEntity.pollenSpots) {
-			val blockOffset = pollenSpot.pos.subtract(blockEntity.blockPos)
-			val color = if (pollenSpot.isSource) SOURCE_COLOR else NON_SOURCE_COLOR
+		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.inputPollenSpots, INPUT_COLOR)
+		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.outputPollenSpots, OUTPUT_COLOR)
+	}
+
+	private fun drawSpots(
+		vertexConsumer: VertexConsumer,
+		pose: PoseStack.Pose,
+		blockPos: BlockPos,
+		pollenSpots: List<SparkbugBushBlockEntity.PollenSpot>,
+		color: Int
+	) {
+		for (pollenSpot in pollenSpots) {
+			val blockOffset = pollenSpot.pos.subtract(blockPos)
 			val vertices = AaronRenderUtil.getVertices(pollenSpot.direction, 1f, 1f, 1f)
 
 			for (vertex in vertices) {
@@ -71,7 +83,11 @@ class SparkbugBushBlockRenderer(
 	override fun getRenderBoundingBox(blockEntity: SparkbugBushBlockEntity): AABB {
 		var bounds = AABB(blockEntity.blockPos)
 
-		for (pollenSpot in blockEntity.pollenSpots) {
+		for (pollenSpot in blockEntity.inputPollenSpots) {
+			bounds = bounds.minmax(AABB(pollenSpot.pos))
+		}
+
+		for (pollenSpot in blockEntity.outputPollenSpots) {
 			bounds = bounds.minmax(AABB(pollenSpot.pos))
 		}
 
@@ -83,7 +99,7 @@ class SparkbugBushBlockRenderer(
 		private const val FACE_INSET = (1f - FACE_SIZE) / 2f
 		private const val PLANE_OFFSET = 0.002f
 
-		private const val SOURCE_COLOR = 0x600066FF
-		private const val NON_SOURCE_COLOR = 0x60FF8000
+		private const val INPUT_COLOR = 0x600066FF
+		private const val OUTPUT_COLOR = 0x60FF8000
 	}
 }

@@ -21,22 +21,30 @@ class SparkbugBushBlockEntity(
 
 	override val syncImmediately: Boolean = true
 
-	val pollenSpots: List<PollenSpot>
+	val inputPollenSpots: List<PollenSpot>
+		field = mutableListOf()
+
+	val outputPollenSpots: List<PollenSpot>
 		field = mutableListOf()
 
 	fun addPollenSpot(
 		pos: BlockPos,
 		direction: Direction,
-		isSource: Boolean
+		isInput: Boolean
 	): Boolean {
-		val alreadyOne = pollenSpots.any { it.pos == pos && it.direction == direction }
+		val alreadyOne = (inputPollenSpots + outputPollenSpots).any { it.pos == pos && it.direction == direction }
 		if (alreadyOne) return false
 
 		val energyHandler = level?.getCapability(Capabilities.EnergyStorage.BLOCK, pos, direction)
 		val hasEnergyHandler = energyHandler != null
 		if (!hasEnergyHandler) return false
 
-		pollenSpots.add(PollenSpot(pos, direction, isSource))
+		if (isInput) {
+			inputPollenSpots.add(PollenSpot(pos, direction))
+		} else {
+			outputPollenSpots.add(PollenSpot(pos, direction))
+		}
+
 		setChanged()
 		return true
 	}
@@ -45,7 +53,9 @@ class SparkbugBushBlockEntity(
 		pos: BlockPos,
 		direction: Direction
 	): Boolean {
-		val success = pollenSpots.removeIf { it.pos == pos && it.direction == direction }
+		val success = inputPollenSpots.removeIf { it.pos == pos && it.direction == direction }
+			|| outputPollenSpots.removeIf { it.pos == pos && it.direction == direction }
+
 		if (success) setChanged()
 		return success
 	}
@@ -57,27 +67,42 @@ class SparkbugBushBlockEntity(
 	override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
 		super.saveAdditional(tag, registries)
 
-		val pollenSpotsTag = ListTag()
-		for (spot in pollenSpots) {
-			pollenSpotsTag.add(spot.toTag())
+		val inputSpotsTag = ListTag()
+		for (spot in inputPollenSpots) {
+			inputSpotsTag.add(spot.toTag())
 		}
 
-		tag.put(POLLEN_SPOTS_TAG, pollenSpotsTag)
+		val outputSpotsTag = ListTag()
+		for (spot in outputPollenSpots) {
+			outputSpotsTag.add(spot.toTag())
+		}
+
+		tag.put(INPUT_SPOTS_TAG, inputSpotsTag)
+		tag.put(OUTPUT_SPOTS_TAG, outputSpotsTag)
 	}
 
 	override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
 		super.loadAdditional(tag, registries)
 
-		pollenSpots.clear()
-		val pollenSpotsTag = tag.getList(POLLEN_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
-		for (i in pollenSpotsTag.indices) {
-			val spotTag = pollenSpotsTag.getCompound(i)
-			pollenSpots.add(PollenSpot.fromTag(spotTag))
+		inputPollenSpots.clear()
+		outputPollenSpots.clear()
+
+		val inputSpotsTag = tag.getList(INPUT_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
+		for (i in inputSpotsTag.indices) {
+			val spotTag = inputSpotsTag.getCompound(i)
+			inputPollenSpots.add(PollenSpot.fromTag(spotTag))
+		}
+
+		val outputSpotsTag = tag.getList(OUTPUT_SPOTS_TAG, Tag.TAG_COMPOUND.toInt())
+		for (i in outputSpotsTag.indices) {
+			val spotTag = outputSpotsTag.getCompound(i)
+			outputPollenSpots.add(PollenSpot.fromTag(spotTag))
 		}
 	}
 
 	companion object {
-		const val POLLEN_SPOTS_TAG = "pollen_spots"
+		const val INPUT_SPOTS_TAG = "input_spots"
+		const val OUTPUT_SPOTS_TAG = "output_spots"
 
 		fun tick(
 			level: Level,
@@ -93,29 +118,25 @@ class SparkbugBushBlockEntity(
 
 	data class PollenSpot(
 		val pos: BlockPos,
-		val direction: Direction,
-		val isSource: Boolean
+		val direction: Direction
 	) {
 
 		fun toTag(): CompoundTag {
 			val tag = CompoundTag()
 			tag.putLong(POS_TAG, pos.asLong())
 			tag.putInt(DIRECTION_TAG, direction.ordinal)
-			tag.putBoolean(IS_SOURCE_TAG, isSource)
 			return tag
 		}
 
 		companion object {
 			const val POS_TAG = "pos"
 			const val DIRECTION_TAG = "direction"
-			const val IS_SOURCE_TAG = "is_source"
 
 			fun fromTag(tag: CompoundTag): PollenSpot {
 				val pos = tag.getLong(POS_TAG).toBlockPos()
 				val directionOrdinal = tag.getInt(DIRECTION_TAG)
 				val direction = Direction.entries[directionOrdinal]
-				val isSource = tag.getBoolean(IS_SOURCE_TAG)
-				return PollenSpot(pos, direction, isSource)
+				return PollenSpot(pos, direction)
 			}
 		}
 	}
