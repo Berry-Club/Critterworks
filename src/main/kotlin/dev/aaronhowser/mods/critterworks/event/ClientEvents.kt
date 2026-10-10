@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.event
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
+import dev.aaronhowser.mods.critterworks.client.render.block_entity.SparkbugBushBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormRenderer
 import dev.aaronhowser.mods.critterworks.client.render.item.CritterCageItemRenderer
@@ -41,6 +42,7 @@ object ClientEvents {
 			ModBlockEntityTypes.HOPPING_SPIDER_NEST.get(),
 			::HoppingSpiderNestBlockRenderer
 		)
+		event.registerBlockEntityRenderer(ModBlockEntityTypes.SPARKBUG_BUSH.get(), ::SparkbugBushBlockRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM.get(), ::ScoochwormRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM_PART.get(), ::ScoochwormPartRenderer)
 	}
