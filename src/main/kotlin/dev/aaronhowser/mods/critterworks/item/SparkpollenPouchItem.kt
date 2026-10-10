@@ -7,12 +7,31 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toBlockPos
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.UseOnContext
+import net.minecraft.world.level.Level
 import kotlin.jvm.optionals.getOrNull
 
 class SparkpollenPouchItem(properties: Properties) : Item(properties) {
+
+	override fun use(
+		level: Level,
+		player: Player,
+		usedHand: InteractionHand
+	): InteractionResultHolder<ItemStack> {
+		if (!player.isSecondaryUseActive) return super.use(level, player, usedHand)
+
+		val usedStack = player.getItemInHand(usedHand)
+		val isInput = usedStack.getOrDefault(ModDataComponents.IS_INPUT, true)
+		usedStack.set(ModDataComponents.IS_INPUT, !isInput)
+
+		return InteractionResultHolder.sidedSuccess(usedStack, level.isClientSide)
+	}
 
 	override fun useOn(context: UseOnContext): InteractionResult {
 		val level = context.level
