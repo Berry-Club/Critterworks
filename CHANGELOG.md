@@ -14,6 +14,7 @@
 		- Technically only applies to damage sources that use the tag `#critterworks:tardigrade_protects_from`
 			- Only includes `#c:is_environment` by default
         - Config that makes it also disable expiring after 5 minutes
+    - Craft a Tardigraded item with a Potion of Poison to remove it
 
 # 1.2.0
 
