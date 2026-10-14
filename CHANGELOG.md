@@ -4,7 +4,7 @@
 
 - Sparkpollen Pouch
 - Sparkbug Bush
-	- New block used to transfer FE wirelessly
+	- New block used to transfer FE wirelessly, can be found rarely in forests and swamps
 	- Bind the Pouch to a Bush, and then mark nearby block faces as inputs or outputs
 	- Every tick it tries to transfer energy from inputs to outputs
 		- Inputs spread their FE equally across all outputs that accept
