@@ -33,7 +33,33 @@ class SparkbugBushBlockRenderer(
 		val vertexConsumer = bufferSource.getBuffer(AaronRenderTypes.QUADS_THROUGH_WALLS)
 		val pose = poseStack.last()
 
+		drawBoundBush(vertexConsumer, pose)
 		drawSpots(vertexConsumer, pose, blockEntity.blockPos, blockEntity.displayPollenPoints)
+	}
+
+	private fun drawBoundBush(
+		vertexConsumer: VertexConsumer,
+		pose: PoseStack.Pose
+	) {
+		for (direction in Direction.entries) {
+			val vertices = AaronRenderUtil.getVertices(
+				direction,
+				BOUND_BUSH_SIZE,
+				BOUND_BUSH_SIZE,
+				BOUND_BUSH_SIZE
+			)
+
+			for (vertex in vertices) {
+				AaronRenderUtil.addColoredVertex(
+					pose,
+					vertexConsumer,
+					BOUND_BUSH_COLOR,
+					vertex.x + BOUND_BUSH_INSET,
+					vertex.y + BOUND_BUSH_INSET,
+					vertex.z + BOUND_BUSH_INSET
+				)
+			}
+		}
 	}
 
 	private fun drawSpots(
@@ -93,6 +119,10 @@ class SparkbugBushBlockRenderer(
 	}
 
 	companion object {
+		private const val BOUND_BUSH_INSET = 0.025f
+		private const val BOUND_BUSH_SIZE = 1f - BOUND_BUSH_INSET * 2
+		private const val BOUND_BUSH_COLOR = 0x07FFFFFF
+
 		private const val FACE_SIZE = 0.5f
 		private const val FACE_INSET = (1f - FACE_SIZE) / 2f
 		private const val PLANE_OFFSET = 0.002f
