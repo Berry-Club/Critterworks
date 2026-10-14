@@ -82,8 +82,6 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		return InteractionResult.sidedSuccess(player.isClientSide)
 	}
 
-	override fun isFoil(stack: ItemStack): Boolean = stack.has(ModDataComponents.ENTITY_DATA)
-
 	companion object {
 		fun createEntityData(scoochworm: ScoochwormEntity): CustomData {
 			val wormTag = scoochworm.getMinimalTag(stripUniqueness = true)
