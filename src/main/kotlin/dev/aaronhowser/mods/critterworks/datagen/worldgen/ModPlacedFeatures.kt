@@ -3,17 +3,20 @@ package dev.aaronhowser.mods.critterworks.datagen.worldgen
 import dev.aaronhowser.mods.critterworks.Critterworks
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
+import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.levelgen.VerticalAnchor
 import net.minecraft.world.level.levelgen.placement.BiomeFilter
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import net.minecraft.world.level.levelgen.placement.RarityFilter
 
 object ModPlacedFeatures {
 
 	val SCOOCHWORM_APPLE: ResourceKey<PlacedFeature> = key("scoochworm_apple")
 	val HOPPING_SPIDER_NEST: ResourceKey<PlacedFeature> = key("hopping_spider_nest")
+	val SPARKBUG_BUSH: ResourceKey<PlacedFeature> = key("sparkbug_bush")
 
 	fun bootstrap(context: BootstrapContext<PlacedFeature>) {
 		val configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE)
@@ -43,6 +46,19 @@ object ModPlacedFeatures {
 						VerticalAnchor.bottom(),
 						VerticalAnchor.absolute(64)
 					),
+					BiomeFilter.biome()
+				)
+			)
+		)
+
+		context.register(
+			SPARKBUG_BUSH,
+			PlacedFeature(
+				configuredFeatures.getOrThrow(ModConfiguredFeatures.SPARKBUG_BUSH),
+				listOf(
+					RarityFilter.onAverageOnceEvery(16),
+					InSquarePlacement.spread(),
+					PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
 					BiomeFilter.biome()
 				)
 			)

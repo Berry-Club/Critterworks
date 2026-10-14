@@ -15,6 +15,7 @@ object ModBiomeModifiers {
 
 	val ADD_SCOOCHWORM_APPLE: ResourceKey<BiomeModifier> = key("add_scoochworm_apple")
 	val ADD_HOPPING_SPIDER_NEST: ResourceKey<BiomeModifier> = key("add_hopping_spider_nest")
+	val ADD_SPARKBUG_BUSH: ResourceKey<BiomeModifier> = key("add_sparkbug_bush")
 
 	fun bootstrap(context: BootstrapContext<BiomeModifier>) {
 		val biomes = context.lookup(Registries.BIOME)
@@ -35,6 +36,15 @@ object ModBiomeModifiers {
 				biomes.getOrThrow(ModBiomeTagsProvider.HAS_HOPPING_SPIDER_NEST),
 				HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.HOPPING_SPIDER_NEST)),
 				GenerationStep.Decoration.UNDERGROUND_DECORATION
+			)
+		)
+
+		context.register(
+			ADD_SPARKBUG_BUSH,
+			BiomeModifiers.AddFeaturesBiomeModifier(
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_SPARKBUG_BUSH),
+				HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.SPARKBUG_BUSH)),
+				GenerationStep.Decoration.VEGETAL_DECORATION
 			)
 		)
 	}

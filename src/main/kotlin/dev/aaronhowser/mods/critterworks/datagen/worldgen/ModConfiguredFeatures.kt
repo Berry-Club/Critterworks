@@ -1,20 +1,27 @@
 package dev.aaronhowser.mods.critterworks.datagen.worldgen
 
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModFeatures
 import dev.aaronhowser.mods.critterworks.world.feature.config.HoppingSpiderNestConfiguration
 import dev.aaronhowser.mods.critterworks.world.feature.config.ScoochwormAppleConfiguration
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
+import net.minecraft.data.worldgen.placement.PlacementUtils
 import net.minecraft.resources.ResourceKey
 import net.minecraft.util.InclusiveRange
 import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
+import net.minecraft.world.level.levelgen.feature.Feature
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 
 object ModConfiguredFeatures {
 
 	val SCOOCHWORM_APPLE: ResourceKey<ConfiguredFeature<*, *>> = key("scoochworm_apple")
 	val HOPPING_SPIDER_NEST: ResourceKey<ConfiguredFeature<*, *>> = key("hopping_spider_nest")
+	val SPARKBUG_BUSH: ResourceKey<ConfiguredFeature<*, *>> = key("sparkbug_bush")
 
 	fun bootstrap(context: BootstrapContext<ConfiguredFeature<*, *>>) {
 		context.register(
@@ -42,6 +49,24 @@ object ModConfiguredFeatures {
 					spiders = InclusiveRange(1, 3),
 					minimumDepthBelowSurface = 3,
 					connectWebs = true
+				)
+			)
+		)
+
+		context.register(
+			SPARKBUG_BUSH,
+			ConfiguredFeature(
+				Feature.RANDOM_PATCH,
+				RandomPatchConfiguration(
+					1,
+					0,
+					0,
+					PlacementUtils.onlyWhenEmpty(
+						Feature.SIMPLE_BLOCK,
+						SimpleBlockConfiguration(
+							BlockStateProvider.simple(ModBlocks.SPARKBUG_BUSH.get())
+						)
+					)
 				)
 			)
 		)

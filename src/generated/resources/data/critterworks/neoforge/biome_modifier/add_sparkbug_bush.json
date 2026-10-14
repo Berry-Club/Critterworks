@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#critterworks:has_sparkbug_bush",
+  "features": "critterworks:sparkbug_bush",
+  "step": "vegetal_decoration"
+}

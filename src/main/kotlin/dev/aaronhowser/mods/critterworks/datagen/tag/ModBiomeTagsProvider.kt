@@ -9,6 +9,7 @@ import net.minecraft.tags.BiomeTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.biome.Biomes
+import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 import java.util.concurrent.CompletableFuture
 
@@ -29,6 +30,12 @@ class ModBiomeTagsProvider(
 
 		tag(HAS_HOPPING_SPIDER_NEST)
 			.addTag(BiomeTags.IS_OVERWORLD)
+
+		tag(HAS_SPARKBUG_BUSH)
+			.addTags(
+				BiomeTags.IS_FOREST,
+				Tags.Biomes.IS_SWAMP
+			)
 	}
 
 	companion object {
@@ -37,6 +44,7 @@ class ModBiomeTagsProvider(
 
 		val HAS_SCOOCHWORM_APPLE: TagKey<Biome> = key("has_scoochworm_apple")
 		val HAS_HOPPING_SPIDER_NEST: TagKey<Biome> = key("has_hopping_spider_nest")
+		val HAS_SPARKBUG_BUSH: TagKey<Biome> = key("has_sparkbug_bush")
 	}
 
 }
