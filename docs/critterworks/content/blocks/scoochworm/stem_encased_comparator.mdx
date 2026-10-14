@@ -5,8 +5,10 @@ related_items: [critterworks:stem_encased_comparator]
 type: block
 ---
 
-The **Stem-Encased Comparator** is a [Scoochstem](@critterworks:scoochstem) that reads the fullness of any Scoochworm storage attachment currently passing over it.
+The **Stem-Encased Comparator** is a [Scoochstem](@critterworks:scoochstem) that reads the storage attachments of [Scoochworms](@critterworks:scoochworm) traveling across it. Specifically, Scoochworm *segments* that are using it as support.
 
-It produces a stronger redstone signal as the attachment fills, just like a Comparator reading a container. If several attached segments are on the block at once, it uses the strongest signal.
+Without a filter, it produces a stronger redstone signal as an attachment fills, just like a Comparator reading a container. If several storage attachments are on the block at once, it uses the strongest signal.
 
-Craft one by combining a Scoochstem with a Comparator. Its faces can be enabled and disabled with an axe in the same way as ordinary Scoochstem.
+Use the block to open its menu. Inserting an [Item Filter](@critterworks:item_filter) changes it to filtered mode: it outputs a signal of 15 if any slot in a storage attachment on the block passes the filter, and no signal otherwise. The filter's options, including inversion and tag matching, are respected. Removing the filter returns it to fullness mode.
+
+The block can support Scoochworm travel on every face. Unlike an ordinary Scoochstem, its faces cannot be disabled with an axe.
