@@ -64,7 +64,8 @@ class ServerConfig(
 			.defineInRange("sparkbugBushMaxEnergyTransferPerInput", 2_560, 1, Int.MAX_VALUE)
 
 		sparkbugBushPollenRadius = builder
-			.comment("The maximum distance a Pollen Point")
+			.comment("The maximum distance a Pollen Point can be from the Sparkbug Bush")
+			.defineInRange("sparkbugBushPollenRadius", 16.0, 0.0, Double.MAX_VALUE)
 	}
 
 	private fun worldGenConfigs() {
