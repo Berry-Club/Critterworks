@@ -1,6 +1,7 @@
-// 1.21.1	2026-09-06T23:53:24.0209653	Tags for minecraft:item mod id critterworks
+// 1.21.1	2026-10-14T09:23:23.7999	Tags for minecraft:item mod id critterworks
 1e65bdb682a7782e8211da82359233d034083e8c data/critterworks/tags/item/dyeberries.json
 c184d5492c06a6b6465bf364d3b719921644fa01 data/critterworks/tags/item/requires_existing_node.json
+17bfc4b9c051ec105edb950a9d204196ff617b23 data/critterworks/tags/item/scoochstem_logs.json
 d03518e8ce9cc41bee42f2a279d292d83c55693d data/critterworks/tags/item/scoochworm_look_at.json
 471061c3ad8a5e7467f471173c341089fd2df4b3 data/critterworks/tags/item/scoochworm_saddles.json
 e1c96a0411685f979ab9015b86fe8a3001ae7b8a data/critterworks/tags/item/snap_to_node.json

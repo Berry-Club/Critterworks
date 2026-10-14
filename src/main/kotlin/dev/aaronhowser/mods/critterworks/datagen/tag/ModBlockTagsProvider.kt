@@ -86,6 +86,12 @@ class ModBlockTagsProvider(
 				ModBlocks.MAGENTA_SCOOCHSTEM,
 				ModBlocks.CYAN_SCOOCHSTEM
 			)
+
+		tag(SCOOCHSTEM_LOGS)
+			.add(
+				ModBlocks.SCOOCHSTEM,
+				ModBlocks.SCOOCHSTEM_WOOD
+			)
 	}
 
 	companion object {
@@ -95,6 +101,7 @@ class ModBlockTagsProvider(
 		val SUPPORTS_SCOOCHWORM_TRAVEL = tk("supports_scoochworm_travel")
 		val PREVENTS_SCOOCHWORM_WANDERING = tk("prevents_scoochworm_wandering")
 		val SCOOCHSTEM_REPLACEABLE = tk("scooch_replaceable")
+		val SCOOCHSTEM_LOGS = tk("scoochstem_logs")
 	}
 
 }

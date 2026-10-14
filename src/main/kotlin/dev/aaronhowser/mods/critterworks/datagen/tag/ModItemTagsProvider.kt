@@ -71,17 +71,20 @@ class ModItemTagsProvider(
 				ModItems.WEB_PATHFINDER,
 				ModItems.WEB_PORT
 			)
+
+		copy(ModBlockTagsProvider.SCOOCHSTEM_LOGS, SCOOCHSTEM_LOGS)
 	}
 
 	companion object {
-		val DYEBERRIES = create("dyeberries")
-		val SCOOCHWORM_LOOK_AT = create("scoochworm_look_at")
-		val SCOOCHWORM_SADDLES = create("scoochworm_saddles")
-		val WEB_LINE_INTERACTABLE = create("web_line_interactable")
-		val SNAP_TO_NODE = create("snap_to_node")
-		val REQUIRES_EXISTING_NODE = create("requires_existing_node")
-
-		private fun create(id: String): TagKey<Item> =
+		private fun tk(id: String): TagKey<Item> =
 			ItemTags.create(Critterworks.modResource(id))
+
+		val DYEBERRIES = tk("dyeberries")
+		val SCOOCHWORM_LOOK_AT = tk("scoochworm_look_at")
+		val SCOOCHWORM_SADDLES = tk("scoochworm_saddles")
+		val WEB_LINE_INTERACTABLE = tk("web_line_interactable")
+		val SNAP_TO_NODE = tk("snap_to_node")
+		val REQUIRES_EXISTING_NODE = tk("requires_existing_node")
+		val SCOOCHSTEM_LOGS = tk("scoochstem_logs")
 	}
 }
