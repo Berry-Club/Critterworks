@@ -59,6 +59,14 @@ class ModRecipeProvider(
 			)
 		).save(recipeOutput)
 
+		shapelessRecipe(
+			ModBlocks.SCOOCHWORM_DEPOT,
+			listOf(
+				ModItemTagsProvider.SCOOCHSTEM_LOGS.asIngredient(),
+				Tags.Items.FENCE_GATES_WOODEN.asIngredient()
+			)
+		).save(recipeOutput)
+
 		fun coloredScoochstem(dyeBerry: DeferredItem<out Item>, output: DeferredBlock<out Block>) {
 			shapelessRecipe(
 				output,
@@ -165,15 +173,6 @@ class ModRecipeProvider(
 				'S' to Tags.Items.STRINGS.asIngredient(),
 				'P' to Items.PAPER.asIngredient(),
 				'C' to Items.COMPARATOR.asIngredient()
-			)
-		).save(recipeOutput)
-
-		shapedRecipe(
-			ModBlocks.SCOOCHWORM_DEPOT.toStack(),
-			"W,G,W",
-			mapOf(
-				'W' to ModItemTagsProvider.SCOOCHSTEM_LOGS.asIngredient(),
-				'G' to Tags.Items.FENCE_GATES_WOODEN.asIngredient()
 			)
 		).save(recipeOutput)
 	}

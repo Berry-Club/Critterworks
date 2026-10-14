@@ -1,18 +1,13 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "key": {
-    "G": {
-      "tag": "c:fence_gates/wooden"
-    },
-    "W": {
+  "ingredients": [
+    {
       "tag": "critterworks:scoochstem_logs"
+    },
+    {
+      "tag": "c:fence_gates/wooden"
     }
-  },
-  "pattern": [
-    "W",
-    "G",
-    "W"
   ],
   "result": {
     "count": 1,
