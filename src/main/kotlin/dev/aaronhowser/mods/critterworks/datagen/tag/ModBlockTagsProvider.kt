@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.add
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import net.minecraft.core.HolderLookup
-import net.minecraft.core.registries.Registries
 import net.minecraft.data.PackOutput
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
@@ -91,7 +90,7 @@ class ModBlockTagsProvider(
 
 	companion object {
 		fun tk(name: String): TagKey<Block> =
-			TagKey.create(Registries.BLOCK, Critterworks.modResource(name))
+			BlockTags.create(Critterworks.modResource(name))
 
 		val SUPPORTS_SCOOCHWORM_TRAVEL = tk("supports_scoochworm_travel")
 		val PREVENTS_SCOOCHWORM_WANDERING = tk("prevents_scoochworm_wandering")

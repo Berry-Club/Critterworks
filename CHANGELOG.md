@@ -9,6 +9,10 @@
 	- Every tick it tries to transfer energy from inputs to outputs
 		- Inputs spread their FE equally across all outputs that accept
 		- Firefly particles spawn near Pollen Spots that are doing work
+- Tardigrade
+	- Craft with any arbitrary itemstack to make it unkillable while dropped
+		- Technically only applies to damage sources that use the tag `#critterworks:tardigrade_protects_from`
+			- Only includes `#c:is_environment` by default
 
 # 1.2.0
 

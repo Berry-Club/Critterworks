@@ -110,6 +110,11 @@ object ModDataGen {
 
 		generator.addProvider(
 			event.includeServer(),
+			ModDamageTypeTagsProvider(output, lookupProvider, existingFileHelper)
+		)
+
+		generator.addProvider(
+			event.includeServer(),
 			ModMobEffectTagsProvider(output, lookupProvider, existingFileHelper)
 		)
 	}

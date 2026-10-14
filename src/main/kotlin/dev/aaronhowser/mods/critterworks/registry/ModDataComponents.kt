@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
 import dev.aaronhowser.mods.critterworks.item.component.WebPortComponent
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.Registries
+import net.minecraft.util.Unit
 import net.minecraft.world.item.component.CustomData
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -40,5 +41,7 @@ object ModDataComponents : AaronDataComponentRegistry() {
 		long("sparkbug_bush")
 	val IS_INPUT: DeferredHolder<DataComponentType<*>, DataComponentType<Boolean>> =
 		boolean("is_input")
+	val HAS_TARDIGRADE: DeferredHolder<DataComponentType<*>, DataComponentType<Unit>> =
+		unit("has_tardigrade")
 
 }

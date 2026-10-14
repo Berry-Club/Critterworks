@@ -81,6 +81,7 @@ class ModItemTagsProvider(
 		val SNAP_TO_NODE = create("snap_to_node")
 		val REQUIRES_EXISTING_NODE = create("requires_existing_node")
 
-		private fun create(id: String): TagKey<Item> = ItemTags.create(Critterworks.modResource(id))
+		private fun create(id: String): TagKey<Item> =
+			ItemTags.create(Critterworks.modResource(id))
 	}
 }

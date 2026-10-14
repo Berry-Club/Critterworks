@@ -1,18 +1,23 @@
 package dev.aaronhowser.mods.critterworks.event
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModDamageTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModPotions
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.item.ItemEntity
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
+import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
 import net.neoforged.neoforge.event.tick.ServerTickEvent
@@ -79,6 +84,17 @@ object CommonEvents {
 	@SubscribeEvent
 	fun registerBrewingRecipes(event: RegisterBrewingRecipesEvent) {
 		ModPotions.registerRecipes(event)
+	}
+
+	@SubscribeEvent
+	fun onEntityInvulnerabilityCheck(event: EntityInvulnerabilityCheckEvent) {
+		val entity = event.entity
+		if (entity is ItemEntity
+			&& event.source.isDamageSource(ModDamageTypeTagsProvider.TARDIGRADE_PROTECTS_FROM)
+			&& entity.item.has(ModDataComponents.HAS_TARDIGRADE)
+		) {
+			event.isInvulnerable = true
+		}
 	}
 
 }
