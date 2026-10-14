@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "c:fence_gates/wooden"
+    },
+    "W": {
+      "tag": "critterworks:scoochstem_logs"
+    }
+  },
+  "pattern": [
+    "W",
+    "G",
+    "W"
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:scoochworm_depot"
+  }
+}

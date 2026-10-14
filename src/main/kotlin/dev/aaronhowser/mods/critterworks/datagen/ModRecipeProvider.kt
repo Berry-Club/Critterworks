@@ -167,6 +167,15 @@ class ModRecipeProvider(
 				'C' to Items.COMPARATOR.asIngredient()
 			)
 		).save(recipeOutput)
+
+		shapedRecipe(
+			ModBlocks.SCOOCHWORM_DEPOT.toStack(),
+			"W,G,W",
+			mapOf(
+				'W' to ModItemTagsProvider.SCOOCHSTEM_LOGS.asIngredient(),
+				'G' to Tags.Items.FENCE_GATES_WOODEN.asIngredient()
+			)
+		).save(recipeOutput)
 	}
 
 	private fun buildNamedRecipes(recipeOutput: RecipeOutput, holderLookup: HolderLookup.Provider) {
