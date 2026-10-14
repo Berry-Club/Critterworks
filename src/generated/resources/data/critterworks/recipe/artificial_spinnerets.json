@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:glass_bottle"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "S": {
+      "tag": "c:slime_balls"
+    },
+    "T": {
+      "tag": "c:strings"
+    }
+  },
+  "pattern": [
+    "I I",
+    "TGT",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:artificial_spinnerets"
+  }
+}

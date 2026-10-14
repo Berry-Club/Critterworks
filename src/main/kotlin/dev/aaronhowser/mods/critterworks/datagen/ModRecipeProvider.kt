@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.datagen.AaronRecipeProvider
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getAsStack
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.recipe.crafting.ApplyTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.recipe.crafting.RemoveTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
@@ -16,6 +17,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.block.Block
+import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredItem
 import java.util.concurrent.CompletableFuture
@@ -77,10 +79,92 @@ class ModRecipeProvider(
 
 	private fun buildShapedRecipes(recipeOutput: RecipeOutput, holderLookup: HolderLookup.Provider) {
 		shapedRecipe(
-			ModBlocks.SCOOCHSTEM_WOOD.toStack(4),
+			ModBlocks.SCOOCHSTEM_WOOD,
+			4,
 			"WW,WW",
 			mapOf(
 				'W' to ModBlocks.SCOOCHSTEM.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.LOCKBOX.toStack(),
+			"WWW,WIW,WWW",
+			mapOf(
+				'W' to ModItemTagsProvider.SCOOCHSTEM_LOGS.asIngredient(),
+				'I' to Tags.Items.NUGGETS_IRON.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.SCOOCHWORM_GPS.toStack(),
+			" E ,WCW, E ",
+			mapOf(
+				'E' to Tags.Items.ENDER_PEARLS.asIngredient(),
+				'W' to ModItemTagsProvider.SCOOCHSTEM_LOGS.asIngredient(),
+				'C' to Items.COMPASS.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.CRITTER_CAGE.toStack(),
+			"III,IRI,WWW",
+			mapOf(
+				'I' to Items.IRON_BARS.asIngredient(),
+				'W' to ModItemTagsProvider.SCOOCHSTEM_LOGS.asIngredient(),
+				'R' to Tags.Items.DUSTS_REDSTONE.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.ARTIFICIAL_SPINNERETS.toStack(),
+			"I I,TGT, S ",
+			mapOf(
+				'I' to Tags.Items.INGOTS_IRON.asIngredient(),
+				'T' to Tags.Items.STRINGS.asIngredient(),
+				'G' to Items.GLASS_BOTTLE.asIngredient(),
+				'S' to Tags.Items.SLIME_BALLS.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.WEB_PORT.toStack(),
+			"ISI,SHS,ISI",
+			mapOf(
+				'I' to Tags.Items.NUGGETS_IRON.asIngredient(),
+				'S' to Tags.Items.STRINGS.asIngredient(),
+				'H' to Items.HOPPER.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.WEB_PATHFINDER.toStack(),
+			" A ,SCS, R ",
+			mapOf(
+				'A' to Items.AMETHYST_SHARD.asIngredient(),
+				'S' to Tags.Items.STRINGS.asIngredient(),
+				'C' to Items.COMPASS.asIngredient(),
+				'R' to Tags.Items.DUSTS_REDSTONE.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.SPARKPOLLEN_POUCH.toStack(),
+			"SGS,RRR",
+			mapOf(
+				'S' to Tags.Items.STRINGS.asIngredient(),
+				'R' to Items.RABBIT_HIDE.asIngredient(),
+				'G' to Tags.Items.DUSTS_GLOWSTONE.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.ITEM_FILTER.toStack(),
+			"SPS,PCP, P ",
+			mapOf(
+				'S' to Tags.Items.STRINGS.asIngredient(),
+				'P' to Items.PAPER.asIngredient(),
+				'C' to Items.COMPARATOR.asIngredient()
 			)
 		).save(recipeOutput)
 	}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "I": {
+      "tag": "c:nuggets/iron"
+    },
+    "S": {
+      "tag": "c:strings"
+    }
+  },
+  "pattern": [
+    "ISI",
+    "SHS",
+    "ISI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:web_port"
+  }
+}

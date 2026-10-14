@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "E": {
+      "tag": "c:ender_pearls"
+    },
+    "W": {
+      "tag": "critterworks:scoochstem_logs"
+    }
+  },
+  "pattern": [
+    " E ",
+    "WCW",
+    " E "
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:scoochworm_gps"
+  }
+}

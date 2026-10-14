@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "c:dusts/glowstone"
+    },
+    "R": {
+      "item": "minecraft:rabbit_hide"
+    },
+    "S": {
+      "tag": "c:strings"
+    }
+  },
+  "pattern": [
+    "SGS",
+    "RRR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:sparkpollen_pouch"
+  }
+}
