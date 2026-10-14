@@ -12,6 +12,7 @@
 	- Iron Stomach or something for fluids?
 		- Or is that too gross and unwholesome? It's kinda body horror. It's not an attachment, it's surgery
 	- Maybe a cage full of the electric fireflies for the energy?
+	- Beehive Battery?
 - Block that exposes item/fluid/energy handlers to pipes etc?
 	- Would trivialize the whole thing with stopping them while they're upside down until they're empty
 
@@ -62,6 +63,7 @@
 		- Wait this is just how Amethyst things work, shit
 - Probably should be more than just multiple channels of wire
 - Logic gates? would that even make sense?
+- Clock Cuckoo
 
 # Farm critters?
 
@@ -90,6 +92,9 @@
 
 - Mobs that follow you around specifically
 - Pack Rat that can store items, like the Luggage
+	- Or a Hamster storing items in its cheeks, which bulge out the more items are held
+- Magpie item magnet
+- Homing Pigeon that you can use to send items back to your base, or request from storage?
 
 # Tool/Weapon critters
 
@@ -101,7 +106,7 @@
 - Bombardier Beetle
 	- Shoots potions maybe?
 - One of those shield-head ants
-- Some kind of item that when held in both hands (?) lets you climb walls, has a cooldown
+- Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
 
 # Guidebook
 
