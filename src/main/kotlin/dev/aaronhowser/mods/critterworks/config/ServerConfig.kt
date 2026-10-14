@@ -8,6 +8,8 @@ class ServerConfig(
 	private val builder: ModConfigSpec.Builder
 ) {
 
+	lateinit var tardigradeDisablesExpiring: ModConfigSpec.BooleanValue
+
 	lateinit var lockboxDropIntervalTicks: ModConfigSpec.IntValue
 	lateinit var lockboxDropAmount: ModConfigSpec.IntValue
 	lateinit var maxChunkLoadersPerPlayer: ModConfigSpec.IntValue
@@ -27,6 +29,10 @@ class ServerConfig(
 	}
 
 	private fun general() {
+		tardigradeDisablesExpiring = builder
+			.comment("Whether or not Tardigrades attached to items prevent the item entity from expiring")
+			.define("tardigradeDisablesExpiring", true)
+
 		builder.section("scoochworm_attachments") {
 			scoochwormAttachmentConfigs()
 		}

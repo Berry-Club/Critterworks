@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.event
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModDamageTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
@@ -18,6 +19,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent
+import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
 import net.neoforged.neoforge.event.tick.ServerTickEvent
@@ -94,6 +96,15 @@ object CommonEvents {
 			&& entity.item.has(ModDataComponents.HAS_TARDIGRADE)
 		) {
 			event.isInvulnerable = true
+		}
+	}
+
+	@SubscribeEvent
+	fun onItemExpire(event: ItemExpireEvent) {
+		if (ServerConfig.CONFIG.tardigradeDisablesExpiring.get()
+			&& event.entity.item.has(ModDataComponents.HAS_TARDIGRADE)
+		) {
+			event.entity.setUnlimitedLifetime()
 		}
 	}
 

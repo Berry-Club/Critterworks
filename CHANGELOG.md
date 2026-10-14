@@ -13,6 +13,7 @@
 	- Craft with any arbitrary itemstack to make it unkillable while dropped
 		- Technically only applies to damage sources that use the tag `#critterworks:tardigrade_protects_from`
 			- Only includes `#c:is_environment` by default
+        - Config that makes it also disable expiring after 5 minutes
 
 # 1.2.0
 
