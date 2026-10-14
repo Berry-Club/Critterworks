@@ -5,9 +5,9 @@ related_items: [critterworks:sparkbug_bush]
 type: block
 ---
 
-The **Sparkbug Bush** transfers Forge Energy wirelessly between blocks marked with a [Sparkpollen Pouch](@critterworks:sparkpollen_pouch).
+The **Sparkbug Bush** transfers FE wirelessly between blocks marked with a [Sparkpollen Pouch](@critterworks:sparkpollen_pouch).
 
-Each bush stores its own set of input and output points. Every tick, it pulls energy from each input and distributes that energy across outputs that can receive it. Energy is shared among available outputs instead of always filling the same destination first.
+Each bush stores its own set of input and output points. Every tick, it pulls energy from each input and equally distributes that energy across outputs that can receive it.
 
 Active points emit firefly particles. Hold a Sparkpollen Pouch bound to the bush to see all of its marked block faces; charging inputs are shown in yellow and grounding outputs are shown in blue.
 
@@ -15,6 +15,6 @@ Sparkbug Bushes must be planted on Dirt or another block that can support them. 
 
 ## Configuration
 
-By default, a Sparkbug Bush can pull up to 2,560 FE from each input every tick. Server owners can configure this limit. The frequency and spread of the firefly particles can be configured on the client.
+By default, a Sparkbug Bush can pull up to 1,024 FE from each input every tick. Server owners can configure this limit.
 
-The Sparkbug Bush is currently only available from the Creative inventory.
+The frequency and spread of the firefly particles can be configured on the client.
