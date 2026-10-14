@@ -58,8 +58,7 @@ class SparkbugBushBlockEntity(
 	}
 
 	private fun serverTick(level: ServerLevel) {
-		val maximumTransfer = ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput.get()
-		val displayChanged = pollenPointHandler.serverTick(level, maximumTransfer)
+		val displayChanged = pollenPointHandler.serverTick(level)
 		if (displayChanged) setChanged()
 	}
 

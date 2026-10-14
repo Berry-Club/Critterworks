@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.handler.sparkbug
 
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -43,9 +44,11 @@ class PollenPointHandler {
 		return inputPollenPoints.remove(pollenPoint) || outputPollenPoints.remove(pollenPoint)
 	}
 
-	fun serverTick(level: ServerLevel, maximumTransfer: Int): Boolean {
+	fun serverTick(level: ServerLevel): Boolean {
 		val displaySpots = mutableSetOf<DisplayPollenPoint>()
 		energyDistributor.resetTickActivity()
+
+		val maximumTransfer = ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput.get()
 
 		for (inputSpot in inputPollenPoints) {
 			val inputHandler = inputSpot.getEnergyHandler(level) ?: continue
