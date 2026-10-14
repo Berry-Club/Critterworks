@@ -67,7 +67,7 @@ class ServerConfig(
 	private fun sparkbugBushConfigs() {
 		sparkbugBushMaxEnergyTransferPerInput = builder
 			.comment("The maximum energy a Sparkbug Bush pulls from each input per tick.")
-			.defineInRange("sparkbugBushMaxEnergyTransferPerInput", 2_560, 1, Int.MAX_VALUE)
+			.defineInRange("sparkbugBushMaxEnergyTransferPerInput", 1024, 1, Int.MAX_VALUE)
 
 		sparkbugBushPollenRadius = builder
 			.comment("The maximum distance a Pollen Point can be from the Sparkbug Bush")
