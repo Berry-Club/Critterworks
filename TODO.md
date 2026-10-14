@@ -11,6 +11,7 @@
 - Attachments for fluids and energy
 	- Iron Stomach or something for fluids?
 		- Or is that too gross and unwholesome? It's kinda body horror. It's not an attachment, it's surgery
+    - Pitcher Plant tank
 	- Maybe a cage full of the electric fireflies for the energy?
 	- Beehive Battery?
 - Block that exposes item/fluid/energy handlers to pipes etc?
