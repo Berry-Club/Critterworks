@@ -1,8 +1,10 @@
 package dev.aaronhowser.mods.critterworks.compatibility.jei
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.compatibility.jei.extension.ApplyTardigradeJeiExtension
 import dev.aaronhowser.mods.critterworks.compatibility.jei.extension.RemoveTardigradeJeiExtension
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.recipe.crafting.ApplyTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.recipe.crafting.RemoveTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -41,9 +43,10 @@ class ModJeiPlugin : IModPlugin {
 		val targetStacks = mutableListOf<ItemStack>()
 
 		for (itemStack in allItemStacks) {
-			if (itemStack.isEmpty) continue
-			if (itemStack.item === ModItems.TARDIGRADE.get()) continue
-			if (itemStack.has(ModDataComponents.HAS_TARDIGRADE)) continue
+			if (itemStack.isEmpty
+				|| itemStack.has(ModDataComponents.HAS_TARDIGRADE)
+				|| itemStack.isItem(ModItemTagsProvider.TARDIGRADE_BLACKLIST)
+			) continue
 
 			targetStacks.add(itemStack.copyWithCount(1))
 		}

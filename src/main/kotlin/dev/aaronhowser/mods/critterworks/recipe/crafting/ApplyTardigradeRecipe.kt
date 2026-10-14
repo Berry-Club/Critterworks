@@ -1,7 +1,9 @@
 package dev.aaronhowser.mods.critterworks.recipe.crafting
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.setUnit
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import dev.aaronhowser.mods.critterworks.registry.ModRecipeSerializers
@@ -49,7 +51,10 @@ class ApplyTardigradeRecipe(
 				continue
 			}
 
-			if (targetStack != null || itemStack.has(ModDataComponents.HAS_TARDIGRADE)) return null
+			if (targetStack != null
+				|| itemStack.has(ModDataComponents.HAS_TARDIGRADE)
+				|| itemStack.isItem(ModItemTagsProvider.TARDIGRADE_BLACKLIST)
+			) return null
 
 			targetStack = itemStack
 		}

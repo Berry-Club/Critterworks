@@ -73,6 +73,9 @@ class ModItemTagsProvider(
 			)
 
 		copy(ModBlockTagsProvider.SCOOCHSTEM_LOGS, SCOOCHSTEM_LOGS)
+
+		tag(TARDIGRADE_BLACKLIST)
+			.add(ModItems.TARDIGRADE)
 	}
 
 	companion object {
@@ -86,5 +89,6 @@ class ModItemTagsProvider(
 		val SNAP_TO_NODE = tk("snap_to_node")
 		val REQUIRES_EXISTING_NODE = tk("requires_existing_node")
 		val SCOOCHSTEM_LOGS = tk("scoochstem_logs")
+		val TARDIGRADE_BLACKLIST = tk("tardigrade_blacklist")
 	}
 }
