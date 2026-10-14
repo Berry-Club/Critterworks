@@ -7,6 +7,7 @@ object ModItemLang {
 
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {
+			add(ModCreativeModeTabs.CREATIVE_TAB_TRANSLATION_KEY, "Critterworks")
 			addItem(ModItems.LOCKBOX, "Lockbox")
 			addItem(ModItems.SCOOCHWORM_GPS, "Scoochworm GPS")
 			addItem(ModItems.ARTIFICIAL_SPINNERETS, "Artificial Spinnerets")
@@ -23,7 +24,7 @@ object ModItemLang {
 			addItem(ModItems.AARONBERRY, "Aaronberry")
 			addItem(ModItems.SCOOCHWORM_SPAWN_EGG, "Scoochworm Spawn Egg")
 			addItem(ModItems.SPARKPOLLEN_POUCH, "Sparkpollen Pouch")
-			add(ModCreativeModeTabs.CREATIVE_TAB_TRANSLATION_KEY, "Critterworks")
+			addItem(ModItems.TARDIGRADE, "Tardigrade")
 		}
 	}
 }
