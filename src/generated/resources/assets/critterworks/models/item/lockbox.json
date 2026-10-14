@@ -4,7 +4,7 @@
     "firstperson_lefthand": {
       "rotation": [
         0,
-        225,
+        135,
         0
       ],
       "scale": [
@@ -16,7 +16,7 @@
     "firstperson_righthand": {
       "rotation": [
         0,
-        45,
+        135,
         0
       ],
       "scale": [
@@ -47,6 +47,11 @@
         1.4,
         1.4,
         1.4
+      ],
+      "translation": [
+        0,
+        -4,
+        0
       ]
     },
     "thirdperson_righthand": {

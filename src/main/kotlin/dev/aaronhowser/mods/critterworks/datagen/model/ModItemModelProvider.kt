@@ -39,12 +39,12 @@ class ModItemModelProvider(
 			}
 
 			transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
-				rotation(0f, 45f, 0f)
+				rotation(0f, 135f, 0f)
 				scale(0.9f)
 			}
 
 			transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
-				rotation(0f, 225f, 0f)
+				rotation(0f, 135f, 0f)
 				scale(0.9f)
 			}
 
@@ -55,6 +55,7 @@ class ModItemModelProvider(
 
 			transform(ItemDisplayContext.GUI) {
 				rotation(30f, 225f, 0f)
+				translation(0f, -4f, 0f)
 				scale(1.4f)
 			}
 
