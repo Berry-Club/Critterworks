@@ -1,6 +1,227 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:block/block",
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "scale": [
+        1.4,
+        1.4,
+        1.4
+      ]
+    }
+  },
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#texture",
+          "uv": [
+            3.0,
+            3.0,
+            0.0,
+            6.0
+          ]
+        },
+        "east": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            0.0,
+            9.0,
+            2.0
+          ]
+        },
+        "north": {
+          "texture": "#texture",
+          "uv": [
+            0.0,
+            6.0,
+            3.0,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            2.0,
+            9.0,
+            4.0
+          ]
+        },
+        "up": {
+          "texture": "#texture",
+          "uv": [
+            3.0,
+            3.0,
+            0.0,
+            0.0
+          ]
+        },
+        "west": {
+          "texture": "#texture",
+          "uv": [
+            3.0,
+            6.0,
+            6.0,
+            8.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        5,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            3.0,
+            3.0,
+            6.0
+          ]
+        },
+        "east": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            5.0,
+            9.0,
+            6.0
+          ]
+        },
+        "north": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            4.0,
+            9.0,
+            5.0
+          ]
+        },
+        "south": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            6.0,
+            9.0,
+            7.0
+          ]
+        },
+        "up": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            3.0,
+            3.0,
+            0.0
+          ]
+        },
+        "west": {
+          "texture": "#texture",
+          "uv": [
+            6.0,
+            7.0,
+            9.0,
+            8.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        9,
+        5
+      ],
+      "to": [
+        11,
+        11,
+        11
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#texture",
+          "uv": [
+            5.0,
+            8.0,
+            4.0,
+            8.5
+          ]
+        },
+        "east": {
+          "texture": "#texture",
+          "uv": [
+            2.0,
+            8.0,
+            2.5,
+            9.0
+          ]
+        },
+        "north": {
+          "texture": "#texture",
+          "uv": [
+            0.0,
+            8.0,
+            1.0,
+            9.0
+          ]
+        },
+        "south": {
+          "texture": "#texture",
+          "uv": [
+            1.0,
+            8.0,
+            2.0,
+            9.0
+          ]
+        },
+        "up": {
+          "texture": "#texture",
+          "uv": [
+            4.0,
+            8.5,
+            3.0,
+            8.0
+          ]
+        },
+        "west": {
+          "texture": "#texture",
+          "uv": [
+            2.5,
+            8.0,
+            3.0,
+            9.0
+          ]
+        }
+      },
+      "from": [
+        7,
+        8,
+        4
+      ],
+      "to": [
+        9,
+        10,
+        5
+      ]
+    }
+  ],
   "textures": {
-    "layer0": "critterworks:item/lockbox"
+    "particle": "#texture",
+    "texture": "critterworks:entity/scoochworm/lockbox"
   }
 }
