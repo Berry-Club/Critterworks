@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderTypes
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
-import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenPoint
 import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
+import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenPoint
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource

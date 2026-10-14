@@ -7,11 +7,7 @@ import dev.aaronhowser.mods.critterworks.registry.ModItems
 import dev.aaronhowser.mods.critterworks.registry.ModRecipeSerializers
 import net.minecraft.core.HolderLookup
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.crafting.CraftingBookCategory
-import net.minecraft.world.item.crafting.CraftingInput
-import net.minecraft.world.item.crafting.CustomRecipe
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.item.crafting.RecipeSerializer
+import net.minecraft.world.item.crafting.*
 import net.minecraft.world.level.Level
 
 class ApplyTardigradeRecipe(

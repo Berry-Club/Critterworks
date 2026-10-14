@@ -1,7 +1,6 @@
 package dev.aaronhowser.mods.critterworks.event
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.SparkbugBushBlockRenderer
@@ -11,6 +10,7 @@ import dev.aaronhowser.mods.critterworks.client.render.item.CritterCageItemRende
 import dev.aaronhowser.mods.critterworks.client.render.item.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
@@ -19,11 +19,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
-import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent
-import net.neoforged.neoforge.client.event.EntityRenderersEvent
-import net.neoforged.neoforge.client.event.InputEvent
-import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent
+import net.neoforged.neoforge.client.event.*
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent
 
 @EventBusSubscriber(
