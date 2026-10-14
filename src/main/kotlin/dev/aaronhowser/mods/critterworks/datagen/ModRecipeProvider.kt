@@ -2,14 +2,19 @@ package dev.aaronhowser.mods.critterworks.datagen
 
 import dev.aaronhowser.mods.aaron.datagen.AaronRecipeProvider
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getAsStack
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.recipe.crafting.ApplyTardigradeRecipe
+import dev.aaronhowser.mods.critterworks.recipe.crafting.RemoveTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.RecipeOutput
+import net.minecraft.data.recipes.SpecialRecipeBuilder
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.block.Block
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredItem
@@ -26,6 +31,21 @@ class ModRecipeProvider(
 		buildShapedRecipes(recipeOutput, holderLookup)
 		buildShapelessRecipes(recipeOutput, holderLookup)
 		buildNamedRecipes(recipeOutput, holderLookup)
+		buildTardigradeRecipes(recipeOutput)
+	}
+
+	private fun buildTardigradeRecipes(recipeOutput: RecipeOutput) {
+		SpecialRecipeBuilder
+			.special(::ApplyTardigradeRecipe)
+			.save(recipeOutput, modLoc("apply_tardigrade"))
+
+		val poisonIngredient = Potions.POISON.getAsStack().asIngredient()
+
+		recipeOutput.accept(
+			modLoc("remove_tardigrade"),
+			RemoveTardigradeRecipe(poisonIngredient),
+			null
+		)
 	}
 
 	private fun buildShapelessRecipes(recipeOutput: RecipeOutput, holderLookup: HolderLookup.Provider) {
