@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "critterworks:block/sparkbug_bush"
+    "layer0": "critterworks:item/sparkbug_bush"
   }
 }

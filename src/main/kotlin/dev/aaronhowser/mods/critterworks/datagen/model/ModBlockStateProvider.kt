@@ -44,17 +44,20 @@ class ModBlockStateProvider(
 
 	private fun sparkbugBush() {
 		val block = ModBlocks.SPARKBUG_BUSH.get()
-		val texture = modLoc("block/sparkbug_bush")
+		val blockTexture = modLoc("block/sparkbug_bush")
+		val emissiveTexture = modLoc("block/sparkbug_bush_emissive")
+		val itemTexture = modLoc("item/sparkbug_bush")
 		val model = models()
-			.cross("sparkbug_bush", texture)
-			.particle(texture)
+			.withExistingParent("sparkbug_bush", modLoc("block/cross_emissive"))
+			.texture("cross", blockTexture)
+			.texture("cross_emissive", emissiveTexture)
 			.renderType(RenderType.CUTOUT.name)
 
 		simpleBlock(block, model)
 
 		itemModels()
 			.withExistingParent("sparkbug_bush", mcLoc("item/generated"))
-			.texture("layer0", texture)
+			.texture("layer0", itemTexture)
 	}
 
 	private fun hoppingSpiderNest() {
