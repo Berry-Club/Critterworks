@@ -7,7 +7,8 @@
 		"CaveVinesBlockMixin",
 		"GrowingPlantBlockMixin",
 		"GrowingPlantBodyBlockMixin",
-		"GrowingPlantHeadBlockMixin"
+		"GrowingPlantHeadBlockMixin",
+		"ItemUtilsMixin"
 	],
 	"client": [
 		"client.AbstractClientPlayerMixin",
