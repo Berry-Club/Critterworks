@@ -24,7 +24,7 @@ class SparkbugBushBlock : Block(
 	Properties.of()
 		.mapColor(MapColor.PLANT)
 		.ignitedByLava()
-		.lightLevel { 2 }
+		.lightLevel { 4 }
 		.noCollission()
 		.instabreak()
 		.sound(SoundType.SWEET_BERRY_BUSH)
