@@ -8,13 +8,19 @@
 	- Bind the Pouch to a Bush, and then mark nearby block faces as inputs or outputs
 	- Every tick it tries to transfer energy from inputs to outputs
 		- Inputs spread their FE equally across all outputs that accept
-		- Firefly particles spawn near Pollen Spots that are doing work
+		- Firefly particles spawn near Pollen Points that are doing work
 - Tardigrade
 	- Craft with any arbitrary itemstack to make it unkillable while dropped
 		- Technically only applies to damage sources that use the tag `#critterworks:tardigrade_protects_from`
 			- Only includes `#c:is_environment` by default
-        - Config that makes it also disable expiring after 5 minutes
-    - Craft a Tardigraded item with a Potion of Poison to remove it
+		- Config that makes it also disable expiring after 5 minutes
+	- Craft a Tardigraded item with a Potion of Poison to remove it
+
+### Changed
+
+- When riding a Scoochworm, your view is rotated to match its rotation
+	- Aka, when you're on the ceiling, the world looks upside down
+    - This can be disabled in the client config
 
 # 1.2.0
 
