@@ -1,3 +1,9 @@
+# 1.3.1
+
+### Changed
+
+- Tardigrades drop from 1% of Moss Blocks, increasing with Fortune
+
 # 1.3.0
 
 ### Added
