@@ -21,7 +21,8 @@ object ModRegistries {
 			ModPotions.POTION_REGISTRY,
 			ModFeatures.FEATURE_REGISTRY,
 			ModParticleTypes.PARTICLE_TYPE_REGISTRY,
-			ModRecipeSerializers.RECIPE_SERIALIZER_REGISTRY
+			ModRecipeSerializers.RECIPE_SERIALIZER_REGISTRY,
+			ModLootItemConditionTypes.LOOT_CONDITION_TYPE_REGISTRY
 		)
 
 		for (registry in registries) {

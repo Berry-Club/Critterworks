@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.datagen
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModLanguageProvider
+import dev.aaronhowser.mods.critterworks.datagen.loot.ModGlobalLootModifierProvider
 import dev.aaronhowser.mods.critterworks.datagen.loot.ModLootTableProvider
 import dev.aaronhowser.mods.critterworks.datagen.model.ModBlockStateProvider
 import dev.aaronhowser.mods.critterworks.datagen.model.ModItemModelProvider
@@ -76,6 +77,11 @@ object ModDataGen {
 		generator.addProvider(
 			event.includeServer(),
 			ModLootTableProvider(output, lookupProvider)
+		)
+
+		generator.addProvider(
+			event.includeServer(),
+			ModGlobalLootModifierProvider(output, lookupProvider)
 		)
 
 		generator.addProvider(

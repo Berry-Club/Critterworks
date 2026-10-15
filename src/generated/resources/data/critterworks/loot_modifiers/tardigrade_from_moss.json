@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "block": "minecraft:moss_block",
+      "condition": "minecraft:block_state_property"
+    }
+  ],
+  "table": "critterworks:block/tardigrade_from_moss"
+}

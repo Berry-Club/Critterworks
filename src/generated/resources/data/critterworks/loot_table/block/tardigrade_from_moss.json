@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "critterworks:tool_enchantment_chance",
+          "enchanted_chance": {
+            "type": "minecraft:linear",
+            "base": 0.03,
+            "per_level_above_first": 0.02
+          },
+          "enchantment": "minecraft:fortune",
+          "unenchanted_chance": 0.01
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "critterworks:tardigrade"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "critterworks:block/tardigrade_from_moss"
+}

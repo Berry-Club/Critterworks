@@ -16,6 +16,10 @@ class ModLootTableProvider(
 			SubProviderEntry(
 				::ModBlockLootTablesSubProvider,
 				LootContextParamSets.BLOCK
+			),
+			SubProviderEntry(
+				::ModOtherLootTablesSubProvider,
+				LootContextParamSets.BLOCK
 			)
 		)
 	}
