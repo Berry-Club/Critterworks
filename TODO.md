@@ -16,6 +16,7 @@
 	- Beehive Battery?
 - Block that exposes item/fluid/energy handlers to pipes etc?
 	- Would trivialize the whole thing with stopping them while they're upside down until they're empty
+- Filter slot for Lockboxes
 
 # Hopping Spiders
 
