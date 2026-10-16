@@ -7,7 +7,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 
 data class ScoochstemVineConfiguration(
 	val length: IntProvider,
-	val verticalSearchRange: Int,
+	val surfaceSearchRange: Int,
 	val turnChance: Float
 ) : FeatureConfiguration {
 
@@ -18,8 +18,8 @@ data class ScoochstemVineConfiguration(
 					.fieldOf("length")
 					.forGetter(ScoochstemVineConfiguration::length),
 				Codec.intRange(1, 128)
-					.fieldOf("vertical_search_range")
-					.forGetter(ScoochstemVineConfiguration::verticalSearchRange),
+					.fieldOf("surface_search_range")
+					.forGetter(ScoochstemVineConfiguration::surfaceSearchRange),
 				Codec.floatRange(0f, 1f)
 					.fieldOf("turn_chance")
 					.forGetter(ScoochstemVineConfiguration::turnChance)

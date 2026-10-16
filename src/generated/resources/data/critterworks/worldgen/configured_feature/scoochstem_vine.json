@@ -6,7 +6,7 @@
       "max_inclusive": 50,
       "min_inclusive": 3
     },
-    "turn_chance": 0.03,
-    "vertical_search_range": 24
+    "surface_search_range": 24,
+    "turn_chance": 0.03
   }
 }
