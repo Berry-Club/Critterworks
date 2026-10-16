@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Style
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.biome.BiomeManager
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.RotatedPillarBlock
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -62,7 +63,9 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		random: RandomSource
 	): SurfacePosition? {
 		val cavePositions = findCavePositions(level, origin, surfaceSearchRange)
-		val requiredBiome = level.getBiome(origin)
+		val generationBiomeManager = level.biomeManager
+			.withDifferentSource(level::getUncachedNoiseBiome)
+		val requiredBiome = generationBiomeManager.getBiome(origin)
 
 		while (cavePositions.isNotEmpty()) {
 			val cavePosition = cavePositions.removeAt(random.nextInt(cavePositions.size))
@@ -70,6 +73,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 				level,
 				cavePosition,
 				surfaceSearchRange,
+				generationBiomeManager,
 				requiredBiome
 			)
 
@@ -121,6 +125,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		level: WorldGenLevel,
 		cavePosition: BlockPos,
 		surfaceSearchRange: Int,
+		generationBiomeManager: BiomeManager,
 		requiredBiome: Holder<Biome>
 	): List<Surface> {
 		val surfaces: MutableList<Surface> = mutableListOf()
@@ -131,6 +136,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 				cavePosition,
 				supportDirection,
 				surfaceSearchRange,
+				generationBiomeManager,
 				requiredBiome
 			) ?: continue
 
@@ -145,6 +151,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		origin: BlockPos,
 		supportDirection: Direction,
 		surfaceSearchRange: Int,
+		generationBiomeManager: BiomeManager,
 		requiredBiome: Holder<Biome>
 	): Surface? {
 		var surfacePosition = origin
@@ -159,7 +166,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 
 			val vinePosition = surfacePosition.relative(supportDirection.opposite)
 			if (!canVineReplace(level, vinePosition)) return null
-			if (level.getBiome(vinePosition) != requiredBiome) return null
+			if (generationBiomeManager.getBiome(vinePosition) != requiredBiome) return null
 
 			return Surface(vinePosition, supportDirection)
 		}
