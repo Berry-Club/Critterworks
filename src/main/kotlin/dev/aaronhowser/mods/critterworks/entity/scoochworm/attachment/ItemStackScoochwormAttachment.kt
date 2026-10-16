@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.entity.attachment
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment
 
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag

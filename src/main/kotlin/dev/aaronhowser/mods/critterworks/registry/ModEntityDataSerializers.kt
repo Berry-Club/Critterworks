@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
 import net.minecraft.network.syncher.EntityDataSerializer
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister

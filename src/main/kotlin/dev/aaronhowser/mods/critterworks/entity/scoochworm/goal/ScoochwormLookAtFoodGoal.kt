@@ -1,8 +1,8 @@
-package dev.aaronhowser.mods.critterworks.entity.goal
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.goal
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.Goal
 import java.util.*

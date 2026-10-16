@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.effect
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isHolder
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModMobEffectTags
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect

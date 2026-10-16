@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronDsls.transforms
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.particle
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.block.*
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.renderer.RenderType

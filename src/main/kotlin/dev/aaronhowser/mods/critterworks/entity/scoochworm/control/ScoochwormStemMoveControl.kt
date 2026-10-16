@@ -1,7 +1,7 @@
-package dev.aaronhowser.mods.critterworks.entity.control
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.control
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl

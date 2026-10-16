@@ -5,8 +5,8 @@ import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormPartModel
 import dev.aaronhowser.mods.critterworks.client.render.entity.layer.ScoochwormChunkLoaderLayer
 import dev.aaronhowser.mods.critterworks.client.render.entity.layer.ScoochwormLockboxLayer
 import dev.aaronhowser.mods.critterworks.client.render.entity.layer.ScoochwormSaddleLayer
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth

@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.aaronhowser.mods.critterworks.client.render.TintingMultiBufferSource;
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor;
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor;
 import dev.aaronhowser.mods.critterworks.registry.ModMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

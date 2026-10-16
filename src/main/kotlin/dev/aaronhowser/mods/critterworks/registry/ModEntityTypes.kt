@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory

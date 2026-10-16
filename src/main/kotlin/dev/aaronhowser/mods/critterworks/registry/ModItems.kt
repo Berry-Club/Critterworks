@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.aaron.registry.AaronItemRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.item.*
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem

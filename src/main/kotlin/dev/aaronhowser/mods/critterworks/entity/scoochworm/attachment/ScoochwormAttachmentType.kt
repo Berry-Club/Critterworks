@@ -1,6 +1,6 @@
-package dev.aaronhowser.mods.critterworks.entity.attachment
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment
 
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack

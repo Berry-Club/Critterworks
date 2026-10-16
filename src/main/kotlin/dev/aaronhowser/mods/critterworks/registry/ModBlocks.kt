@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.registry
 import dev.aaronhowser.mods.aaron.registry.AaronBlockRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.block.*
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HugeMushroomBlock
 import net.minecraft.world.level.block.state.BlockBehaviour

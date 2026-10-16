@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.critterworks.client.model.entity
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.LockboxAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.LockboxAttachment
 import net.minecraft.util.Mth
 import software.bernie.geckolib.model.DefaultedEntityGeoModel
 

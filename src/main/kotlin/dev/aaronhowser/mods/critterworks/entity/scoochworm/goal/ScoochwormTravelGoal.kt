@@ -1,10 +1,10 @@
-package dev.aaronhowser.mods.critterworks.entity.goal
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.goal
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
 import dev.aaronhowser.mods.critterworks.block.CritterCageBlock
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormTravelBlock
 import dev.aaronhowser.mods.critterworks.block_entity.CritterCageBlockEntity
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.ai.goal.Goal

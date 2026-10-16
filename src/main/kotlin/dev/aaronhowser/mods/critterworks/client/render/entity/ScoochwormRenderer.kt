@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.client.render.entity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormModel
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation

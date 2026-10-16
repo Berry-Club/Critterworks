@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.mixin.client;
 
 import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormModel;
 import dev.aaronhowser.mods.critterworks.config.ClientConfig;
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity;
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity;
 import net.minecraft.client.Camera;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;

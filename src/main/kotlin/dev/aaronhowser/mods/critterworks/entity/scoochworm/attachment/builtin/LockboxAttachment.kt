@@ -1,11 +1,11 @@
-package dev.aaronhowser.mods.critterworks.entity.attachment.builtin
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.ItemStackScoochwormAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.LockboxAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.ItemStackScoochwormAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.LockboxAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponents

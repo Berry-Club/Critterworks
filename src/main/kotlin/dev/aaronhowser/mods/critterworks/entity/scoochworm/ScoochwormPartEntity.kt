@@ -1,11 +1,11 @@
-package dev.aaronhowser.mods.critterworks.entity
+package dev.aaronhowser.mods.critterworks.entity.scoochworm
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
-import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.NoAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.ScoochwormAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.NoAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormSegment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModEntityDataSerializers
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag

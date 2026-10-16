@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.block
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.roll
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.world.DyeberryVineReplacement
 import net.minecraft.core.BlockPos

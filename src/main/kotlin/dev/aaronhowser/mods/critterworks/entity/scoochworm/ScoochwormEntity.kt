@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.entity
+package dev.aaronhowser.mods.critterworks.entity.scoochworm
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
@@ -9,11 +9,15 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
 import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormTravelBlock
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModBlockTagsProvider
-import dev.aaronhowser.mods.critterworks.entity.control.ScoochwormStemMoveControl
-import dev.aaronhowser.mods.critterworks.entity.data.*
-import dev.aaronhowser.mods.critterworks.entity.goal.ScoochwormLookAtFoodGoal
-import dev.aaronhowser.mods.critterworks.entity.goal.ScoochwormTravelGoal
-import dev.aaronhowser.mods.critterworks.entity.goal.ScoochwormWanderGoal
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.control.ScoochwormStemMoveControl
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.goal.ScoochwormLookAtFoodGoal
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.goal.ScoochwormTravelGoal
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.goal.ScoochwormWanderGoal
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormBody
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormPath
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormPathPoint
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormSegment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModSoundEvents

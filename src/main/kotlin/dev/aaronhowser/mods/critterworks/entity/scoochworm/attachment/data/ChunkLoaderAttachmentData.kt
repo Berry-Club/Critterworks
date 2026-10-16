@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.entity.attachment.data
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data
 
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import io.netty.buffer.ByteBuf

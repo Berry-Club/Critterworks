@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.item
 
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel

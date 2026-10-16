@@ -1,12 +1,13 @@
-package dev.aaronhowser.mods.critterworks.entity.attachment
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment
 
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.NoAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormSegment
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
@@ -83,7 +84,7 @@ abstract class ScoochwormAttachment {
 		}
 
 		fun load(tag: CompoundTag, registries: HolderLookup.Provider): ScoochwormAttachment {
-			val typeId = net.minecraft.resources.ResourceLocation.parse(tag.getString(ATTACHMENT_TYPE_TAG))
+			val typeId = ResourceLocation.parse(tag.getString(ATTACHMENT_TYPE_TAG))
 			val type = ModScoochwormAttachmentTypes.REGISTRY.get(typeId)
 				?: return NoAttachment()
 			val attachment = type.createEmptyAttachment()

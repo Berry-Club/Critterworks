@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.entity.data
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.data
 
 import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.critterworks.Critterworks

@@ -5,7 +5,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.random
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.roll
 import dev.aaronhowser.mods.critterworks.block.DyeberryVinesBlock
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Blocks

@@ -1,16 +1,16 @@
-package dev.aaronhowser.mods.critterworks.entity.data
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.data
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormSegmentSupportBlock
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.LockboxAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.NoAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.ScoochwormAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.LockboxAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.NoAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup

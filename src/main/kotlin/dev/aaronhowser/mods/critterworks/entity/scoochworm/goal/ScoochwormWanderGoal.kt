@@ -1,11 +1,11 @@
-package dev.aaronhowser.mods.critterworks.entity.goal
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.goal
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toDegrees
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toRadians
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModBlockTagsProvider
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.Mth

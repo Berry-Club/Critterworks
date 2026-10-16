@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.aaron.registry.AaronMobEffectsRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.effect.AaronMobEffect
 import dev.aaronhowser.mods.critterworks.effect.DyedMobEffect
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.effect.MobEffect

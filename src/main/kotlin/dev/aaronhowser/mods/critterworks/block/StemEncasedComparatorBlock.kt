@@ -7,8 +7,8 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormSegmentSupportBlock
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormTravelBlock
 import dev.aaronhowser.mods.critterworks.block_entity.StemEncasedComparatorBlockEntity
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
 import dev.aaronhowser.mods.critterworks.item.ItemFilterItem
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

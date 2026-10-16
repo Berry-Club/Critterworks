@@ -1,9 +1,9 @@
-package dev.aaronhowser.mods.critterworks.entity.data
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.data
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormEntity
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachmentType
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.ScoochwormAttachmentType
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.ListTag
 import net.minecraft.world.InteractionHand

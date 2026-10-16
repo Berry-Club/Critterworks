@@ -1,9 +1,9 @@
-package dev.aaronhowser.mods.critterworks.entity.attachment.builtin
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin
 
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.ItemStackScoochwormAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SaddleAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.ItemStackScoochwormAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SaddleAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionResult

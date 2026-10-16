@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.aaron.registry.AaronDataComponentRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.item.component.HoppingSpiderAnimation
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent

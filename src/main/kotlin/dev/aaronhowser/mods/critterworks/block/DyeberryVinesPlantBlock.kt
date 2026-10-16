@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.block
 
-import dev.aaronhowser.mods.critterworks.entity.data.WormColor
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

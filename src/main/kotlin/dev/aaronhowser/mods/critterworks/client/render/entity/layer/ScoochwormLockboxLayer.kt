@@ -2,8 +2,8 @@ package dev.aaronhowser.mods.critterworks.client.render.entity.layer
 
 import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormLockboxModel
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormPartRenderer
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.builtin.LockboxAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.LockboxAttachment
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 
 class ScoochwormLockboxLayer private constructor(

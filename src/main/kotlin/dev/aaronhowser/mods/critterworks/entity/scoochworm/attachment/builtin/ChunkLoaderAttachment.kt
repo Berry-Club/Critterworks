@@ -1,12 +1,12 @@
-package dev.aaronhowser.mods.critterworks.entity.attachment.builtin
+package dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
-import dev.aaronhowser.mods.critterworks.entity.ScoochwormPartEntity
-import dev.aaronhowser.mods.critterworks.entity.attachment.ScoochwormAttachment
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.ChunkLoaderAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.attachment.data.SyncedAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.data.ScoochwormSegment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.ScoochwormAttachment
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.ChunkLoaderAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormSegment
 import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import net.minecraft.core.HolderLookup
