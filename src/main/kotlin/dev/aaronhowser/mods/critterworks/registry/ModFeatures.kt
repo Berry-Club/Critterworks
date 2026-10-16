@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.world.feature.HoppingSpiderNestFeature
-import dev.aaronhowser.mods.critterworks.world.feature.ScoochstemVineFeature
+import dev.aaronhowser.mods.critterworks.world.feature.scoochstem_vine.ScoochstemVineFeature
 import dev.aaronhowser.mods.critterworks.world.feature.ScoochwormAppleFeature
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.levelgen.feature.Feature

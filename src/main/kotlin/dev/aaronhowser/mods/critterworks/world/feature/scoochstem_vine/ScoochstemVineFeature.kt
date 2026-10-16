@@ -1,9 +1,8 @@
-package dev.aaronhowser.mods.critterworks.world.feature
+package dev.aaronhowser.mods.critterworks.world.feature.scoochstem_vine
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.random
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.withClickToRunCommand
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
-import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.world.feature.config.ScoochstemVineConfiguration
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction

@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.world.feature
+package dev.aaronhowser.mods.critterworks.world.feature.scoochstem_vine
 
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import net.minecraft.core.BlockPos
