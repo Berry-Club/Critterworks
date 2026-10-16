@@ -86,7 +86,6 @@ object ModConfiguredFeatures {
 		)
 	}
 
-	private fun key(name: String): ResourceKey<ConfiguredFeature<*, *>> {
-		return ResourceKey.create(Registries.CONFIGURED_FEATURE, Critterworks.modResource(name))
-	}
+	private fun key(name: String): ResourceKey<ConfiguredFeature<*, *>> =
+		ResourceKey.create(Registries.CONFIGURED_FEATURE, Critterworks.modResource(name))
 }
