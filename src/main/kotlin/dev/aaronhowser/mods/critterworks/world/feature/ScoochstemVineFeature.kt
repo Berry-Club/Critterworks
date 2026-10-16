@@ -41,7 +41,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 			random
 		)
 
-		if (positions.size < MINIMUM_LENGTH) return false
+		if (positions.size < configuration.length.minValue) return false
 
 		placeVine(level, positions)
 
@@ -392,7 +392,4 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		val destination: SurfacePosition
 	)
 
-	companion object {
-		private const val MINIMUM_LENGTH = 3
-	}
 }

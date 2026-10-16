@@ -80,7 +80,7 @@ object ModConfiguredFeatures {
 				ScoochstemVineConfiguration(
 					length = UniformInt.of(3, 50),
 					surfaceSearchRange = 24,
-					turnChance = 0.03f
+					turnChance = 0.15f
 				)
 			)
 		)

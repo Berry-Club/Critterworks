@@ -7,6 +7,6 @@
       "min_inclusive": 3
     },
     "surface_search_range": 24,
-    "turn_chance": 0.03
+    "turn_chance": 0.15
   }
 }
