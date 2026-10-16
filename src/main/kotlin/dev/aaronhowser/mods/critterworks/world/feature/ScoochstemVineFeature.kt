@@ -46,7 +46,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		placeVine(level, positions)
 
 		if (ServerConfig.CONFIG.sendScoochstemVineTeleportMessage.get()) {
-			sendTeleportMessage(level, seedPosition.position)
+			sendTeleportMessage(level, seedPosition.position, positions.size)
 		}
 
 		return true
@@ -362,8 +362,8 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		return direction.axis
 	}
 
-	private fun sendTeleportMessage(level: WorldGenLevel, position: BlockPos) {
-		val message = Component.literal("Scoochstem Vine [${position.x}, ${position.y}, ${position.z}]")
+	private fun sendTeleportMessage(level: WorldGenLevel, position: BlockPos, length: Int) {
+		val message = Component.literal("Scoochstem Vine ($length)")
 			.withStyle(
 				Style.EMPTY
 					.withClickToRunCommand("/tp @s ${position.x} ${position.y} ${position.z}")
