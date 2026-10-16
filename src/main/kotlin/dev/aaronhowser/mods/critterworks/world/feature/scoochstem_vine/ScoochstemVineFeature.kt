@@ -60,9 +60,9 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		random: RandomSource
 	): ScoochstemVinePlan.SurfacePosition? {
 		val cavePositions = findCavePositions(level, origin, surfaceSearchRange)
-		val generationBiomeManager = level.biomeManager
+		val biomeManager = level.biomeManager
 			.withDifferentSource(level::getUncachedNoiseBiome)
-		val requiredBiome = generationBiomeManager.getBiome(origin)
+		val requiredBiome = biomeManager.getBiome(origin)
 
 		while (cavePositions.isNotEmpty()) {
 			val cavePosition = cavePositions.removeAt(random.nextInt(cavePositions.size))
@@ -70,7 +70,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 				level,
 				cavePosition,
 				surfaceSearchRange,
-				generationBiomeManager,
+				biomeManager,
 				requiredBiome
 			)
 
@@ -122,7 +122,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		level: WorldGenLevel,
 		cavePosition: BlockPos,
 		surfaceSearchRange: Int,
-		generationBiomeManager: BiomeManager,
+		biomeManager: BiomeManager,
 		requiredBiome: Holder<Biome>
 	): List<Surface> {
 		val surfaces: MutableList<Surface> = mutableListOf()
@@ -133,7 +133,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 				cavePosition,
 				supportDirection,
 				surfaceSearchRange,
-				generationBiomeManager,
+				biomeManager,
 				requiredBiome
 			) ?: continue
 
@@ -148,7 +148,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		origin: BlockPos,
 		supportDirection: Direction,
 		surfaceSearchRange: Int,
-		generationBiomeManager: BiomeManager,
+		biomeManager: BiomeManager,
 		requiredBiome: Holder<Biome>
 	): Surface? {
 		var surfacePosition = origin
@@ -163,7 +163,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 
 			val vinePosition = surfacePosition.relative(supportDirection.opposite)
 			if (!ScoochstemVinePlan.canReplace(level, vinePosition)) return null
-			if (generationBiomeManager.getBiome(vinePosition) != requiredBiome) return null
+			if (biomeManager.getBiome(vinePosition) != requiredBiome) return null
 
 			return Surface(vinePosition, supportDirection)
 		}
