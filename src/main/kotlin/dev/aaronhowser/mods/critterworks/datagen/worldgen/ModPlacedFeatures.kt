@@ -17,6 +17,7 @@ object ModPlacedFeatures {
 	val SCOOCHWORM_APPLE: ResourceKey<PlacedFeature> = key("scoochworm_apple")
 	val HOPPING_SPIDER_NEST: ResourceKey<PlacedFeature> = key("hopping_spider_nest")
 	val SPARKBUG_BUSH: ResourceKey<PlacedFeature> = key("sparkbug_bush")
+	val SCOOCHSTEM_VINE: ResourceKey<PlacedFeature> = key("scoochstem_vine")
 
 	fun bootstrap(context: BootstrapContext<PlacedFeature>) {
 		val configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE)
@@ -59,6 +60,22 @@ object ModPlacedFeatures {
 					RarityFilter.onAverageOnceEvery(16),
 					InSquarePlacement.spread(),
 					PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
+					BiomeFilter.biome()
+				)
+			)
+		)
+
+		context.register(
+			SCOOCHSTEM_VINE,
+			PlacedFeature(
+				configuredFeatures.getOrThrow(ModConfiguredFeatures.SCOOCHSTEM_VINE),
+				listOf(
+					RarityFilter.onAverageOnceEvery(2),
+					InSquarePlacement.spread(),
+					HeightRangePlacement.uniform(
+						VerticalAnchor.bottom(),
+						VerticalAnchor.absolute(64)
+					),
 					BiomeFilter.biome()
 				)
 			)

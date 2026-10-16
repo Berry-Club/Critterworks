@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#critterworks:has_scoochstem_vine",
+  "features": "critterworks:scoochstem_vine",
+  "step": "vegetal_decoration"
+}

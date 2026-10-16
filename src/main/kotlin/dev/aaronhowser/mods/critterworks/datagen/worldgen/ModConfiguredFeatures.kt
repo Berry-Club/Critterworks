@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModFeatures
 import dev.aaronhowser.mods.critterworks.world.feature.config.HoppingSpiderNestConfiguration
+import dev.aaronhowser.mods.critterworks.world.feature.config.ScoochstemVineConfiguration
 import dev.aaronhowser.mods.critterworks.world.feature.config.ScoochwormAppleConfiguration
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
@@ -22,6 +23,7 @@ object ModConfiguredFeatures {
 	val SCOOCHWORM_APPLE: ResourceKey<ConfiguredFeature<*, *>> = key("scoochworm_apple")
 	val HOPPING_SPIDER_NEST: ResourceKey<ConfiguredFeature<*, *>> = key("hopping_spider_nest")
 	val SPARKBUG_BUSH: ResourceKey<ConfiguredFeature<*, *>> = key("sparkbug_bush")
+	val SCOOCHSTEM_VINE: ResourceKey<ConfiguredFeature<*, *>> = key("scoochstem_vine")
 
 	fun bootstrap(context: BootstrapContext<ConfiguredFeature<*, *>>) {
 		context.register(
@@ -67,6 +69,18 @@ object ModConfiguredFeatures {
 							BlockStateProvider.simple(ModBlocks.SPARKBUG_BUSH.get())
 						)
 					)
+				)
+			)
+		)
+
+		context.register(
+			SCOOCHSTEM_VINE,
+			ConfiguredFeature(
+				ModFeatures.SCOOCHSTEM_VINE.get(),
+				ScoochstemVineConfiguration(
+					length = UniformInt.of(3, 50),
+					verticalSearchRange = 24,
+					turnChance = 0.03f
 				)
 			)
 		)

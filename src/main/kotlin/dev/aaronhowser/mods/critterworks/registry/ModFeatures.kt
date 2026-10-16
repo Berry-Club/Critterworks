@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.world.feature.HoppingSpiderNestFeature
+import dev.aaronhowser.mods.critterworks.world.feature.ScoochstemVineFeature
 import dev.aaronhowser.mods.critterworks.world.feature.ScoochwormAppleFeature
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.levelgen.feature.Feature
@@ -18,6 +19,8 @@ object ModFeatures {
 		register("scoochworm_apple", ::ScoochwormAppleFeature)
 	val HOPPING_SPIDER_NEST: DeferredHolder<Feature<*>, HoppingSpiderNestFeature> =
 		register("hopping_spider_nest", ::HoppingSpiderNestFeature)
+	val SCOOCHSTEM_VINE: DeferredHolder<Feature<*>, ScoochstemVineFeature> =
+		register("scoochstem_vine", ::ScoochstemVineFeature)
 
 	private fun <T : Feature<*>> register(string: String, function: Supplier<T>): DeferredHolder<Feature<*>, T> {
 		return FEATURE_REGISTRY.register(string, function)

@@ -36,6 +36,9 @@ class ModBiomeTagsProvider(
 				BiomeTags.IS_FOREST,
 				Tags.Biomes.IS_SWAMP
 			)
+
+		tag(HAS_SCOOCHSTEM_VINE)
+			.add(Biomes.LUSH_CAVES)
 	}
 
 	companion object {
@@ -45,6 +48,7 @@ class ModBiomeTagsProvider(
 		val HAS_SCOOCHWORM_APPLE: TagKey<Biome> = key("has_scoochworm_apple")
 		val HAS_HOPPING_SPIDER_NEST: TagKey<Biome> = key("has_hopping_spider_nest")
 		val HAS_SPARKBUG_BUSH: TagKey<Biome> = key("has_sparkbug_bush")
+		val HAS_SCOOCHSTEM_VINE: TagKey<Biome> = key("has_scoochstem_vine")
 	}
 
 }

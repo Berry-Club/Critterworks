@@ -23,6 +23,7 @@ class ServerConfig(
 
 	lateinit var sendScoochwormAppleTeleportMessage: ModConfigSpec.BooleanValue
 	lateinit var sendHoppingSpiderNestTeleportMessage: ModConfigSpec.BooleanValue
+	lateinit var sendScoochstemVineTeleportMessage: ModConfigSpec.BooleanValue
 
 	init {
 		general()
@@ -96,6 +97,10 @@ class ServerConfig(
 		sendHoppingSpiderNestTeleportMessage = builder
 			.comment("Send a clickable teleport message when a Hopping Spider Nest generates.")
 			.define("sendHoppingSpiderNestTeleportMessage", false)
+
+		sendScoochstemVineTeleportMessage = builder
+			.comment("Send a clickable teleport message when a Scoochstem Vine generates.")
+			.define("sendScoochstemVineTeleportMessage", false)
 	}
 
 	companion object {
