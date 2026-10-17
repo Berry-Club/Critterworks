@@ -20,6 +20,7 @@ class ModItemModelProvider(
 	override fun registerModels() {
 		basicItems()
 		dyeberryItems()
+		filterfeederItems()
 		hoppingSpider()
 		lockbox()
 
@@ -116,12 +117,63 @@ class ModItemModelProvider(
 	private fun basicItems() {
 		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
 		basicItem(ModItems.WEB_PATHFINDER.get())
-		basicItem(ModItems.ITEM_FILTERFEEDER.get())
-		basicItem(ModItems.FLUID_FILTERFEEDER.get())
 		basicItem(ModItems.WEB_PORT.get())
 		basicItem(ModItems.SCOOCHWORM_GPS.get())
 		basicItem(ModItems.SPARKPOLLEN_POUCH.get())
 		basicItem(ModItems.TARDIGRADE.get())
+	}
+
+	private fun filterfeederItems() {
+		filterfeederItem(ModItems.ITEM_FILTERFEEDER.get())
+		filterfeederItem(ModItems.FLUID_FILTERFEEDER.get())
+	}
+
+	private fun filterfeederItem(item: Item) {
+		val itemName = BuiltInRegistries.ITEM.getKey(item).path
+		val model = getBuilder(itemName)
+			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
+
+		model.transforms {
+			transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+				rotation(75f, 45f, 0f)
+					.translation(0f, 2.5f, 0f)
+					.scale(0.375f)
+			}
+
+			transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+				rotation(75f, 45f, 0f)
+					.translation(0f, 2.5f, 0f)
+					.scale(0.375f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
+				rotation(0f, 45f, 0f)
+					.scale(0.4f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
+				rotation(0f, 225f, 0f)
+					.scale(0.4f)
+			}
+
+			transform(ItemDisplayContext.GROUND) {
+				translation(0f, 3f, 0f)
+					.scale(0.25f)
+			}
+
+			transform(ItemDisplayContext.GUI) {
+				rotation(30f, 225f, 0f)
+					.scale(0.625f)
+			}
+
+			transform(ItemDisplayContext.HEAD) {
+				scale(1f)
+			}
+
+			transform(ItemDisplayContext.FIXED) {
+				scale(0.5f)
+			}
+		}
 	}
 
 	private fun dyeberryItems() {

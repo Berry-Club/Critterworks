@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isNotEmpty
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterMenu
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -13,12 +14,14 @@ import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.MenuConstructor
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 
-class ItemFilterItem(properties: Properties) : Item(properties) {
+class ItemFilterItem(properties: Properties) : FilterfeederItem(
+	properties,
+	FilterfeederEntity.FilterType.ITEM
+) {
 
 	override fun use(
 		level: Level,

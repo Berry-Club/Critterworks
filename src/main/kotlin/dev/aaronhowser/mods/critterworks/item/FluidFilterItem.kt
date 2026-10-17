@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.item.component.FluidFilterComponent
 import dev.aaronhowser.mods.critterworks.menu.fluid_filter.FluidFilterMenu
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -12,14 +13,16 @@ import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.MenuConstructor
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.FluidUtil
 
-class FluidFilterItem(properties: Properties) : Item(properties) {
+class FluidFilterItem(properties: Properties) : FilterfeederItem(
+	properties,
+	FilterfeederEntity.FilterType.FLUID
+) {
 
 	override fun use(
 		level: Level,
