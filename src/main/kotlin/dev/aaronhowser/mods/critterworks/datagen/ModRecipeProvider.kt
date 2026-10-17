@@ -165,26 +165,6 @@ class ModRecipeProvider(
 				'G' to Tags.Items.DUSTS_GLOWSTONE.asIngredient()
 			)
 		).save(recipeOutput)
-
-		shapedRecipe(
-			ModItems.ITEM_FILTERFEEDER.toStack(),
-			"SPS,PCP, P ",
-			mapOf(
-				'S' to Tags.Items.STRINGS.asIngredient(),
-				'P' to Items.PAPER.asIngredient(),
-				'C' to Items.COMPARATOR.asIngredient()
-			)
-		).save(recipeOutput)
-
-		shapedRecipe(
-			ModItems.FLUID_FILTERFEEDER.toStack(),
-			"LSL,STS,LSL",
-			mapOf(
-				'L' to Tags.Items.GEMS_LAPIS.asIngredient(),
-				'S' to Tags.Items.RODS_WOODEN.asIngredient(),
-				'T' to Tags.Items.STRINGS.asIngredient()
-			)
-		).save(recipeOutput)
 	}
 
 	private fun buildNamedRecipes(recipeOutput: RecipeOutput, holderLookup: HolderLookup.Provider) {
