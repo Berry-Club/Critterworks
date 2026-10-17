@@ -41,6 +41,7 @@ class ItemFilterfeederBlockEntity(
 	companion object {
 		fun ItemFilterFeederCarrier.getFilterFeederPositions(): LongOpenHashSet = `critterworks$getItemFilterFeederPositions`()
 
+		@JvmStatic
 		fun isWithinRange(level: Level, position: BlockPos): Boolean {
 			if (level !is ItemFilterFeederCarrier) return false
 

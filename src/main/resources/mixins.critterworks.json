@@ -1,23 +1,24 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "dev.aaronhowser.mods.critterworks.mixin",
-  "mixins": [
-    "BlockColumnFeatureMixin",
-    "CaveVinesBlockMixin",
-    "GrowingPlantBlockMixin",
-    "GrowingPlantBodyBlockMixin",
-    "GrowingPlantHeadBlockMixin",
-    "ItemUtilsMixin",
-    "LevelMixin"
-  ],
-  "client": [
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.aaronhowser.mods.critterworks.mixin",
+	"mixins": [
+		"BlockColumnFeatureMixin",
+		"CaveVinesBlockMixin",
+		"GrowingPlantBlockMixin",
+		"GrowingPlantBodyBlockMixin",
+		"GrowingPlantHeadBlockMixin",
+		"ItemUtilsMixin",
+		"LevelMixin"
+	],
+	"client": [
 		"AbstractClientPlayerMixin",
 		"CameraMixin",
 		"ItemInHandRendererMixin",
-		"LivingEntityRendererMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
+		"LivingEntityRendererMixin",
+		"LocalPlayerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
 	}
 }
