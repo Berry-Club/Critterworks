@@ -117,6 +117,7 @@ class ModItemModelProvider(
 		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
 		basicItem(ModItems.WEB_PATHFINDER.get())
 		basicItem(ModItems.ITEM_FILTER.get())
+		basicItem(ModItems.FLUID_FILTER.get())
 		basicItem(ModItems.WEB_PORT.get())
 		basicItem(ModItems.SCOOCHWORM_GPS.get())
 		basicItem(ModItems.SPARKPOLLEN_POUCH.get())

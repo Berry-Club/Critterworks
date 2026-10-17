@@ -2,6 +2,8 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.aaron.registry.AaronMenuTypesRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.menu.fluid_filter.FluidFilterMenu
+import dev.aaronhowser.mods.critterworks.menu.fluid_filter.FluidFilterScreen
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterMenu
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterScreen
 import dev.aaronhowser.mods.critterworks.menu.spider_nest.SpiderNestMenu
@@ -26,6 +28,8 @@ object ModMenuTypes : AaronMenuTypesRegistry() {
 
 	val ITEM_FILTER: DeferredHolder<MenuType<*>, MenuType<ItemFilterMenu>> =
 		register("item_filter") { IMenuTypeExtension.create(::ItemFilterMenu) }
+	val FLUID_FILTER: DeferredHolder<MenuType<*>, MenuType<FluidFilterMenu>> =
+		register("fluid_filter") { IMenuTypeExtension.create(::FluidFilterMenu) }
 
 	val WEB_PORT: DeferredHolder<MenuType<*>, MenuType<WebPortMenu>> =
 		register("web_port") { IMenuTypeExtension.create(WebPortMenu::fromNetwork) }
@@ -38,6 +42,7 @@ object ModMenuTypes : AaronMenuTypesRegistry() {
 
 	override fun registerScreens(event: RegisterMenuScreensEvent) {
 		event.register(ITEM_FILTER.get(), ::ItemFilterScreen)
+		event.register(FLUID_FILTER.get(), ::FluidFilterScreen)
 		event.register(WEB_PORT.get(), ::WebPortScreen)
 		event.register(SPIDER_NEST.get(), ::SpiderNestScreen)
 		event.register(STEM_COMPARATOR.get(), ::StemComparatorScreen)

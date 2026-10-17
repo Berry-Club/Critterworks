@@ -36,6 +36,8 @@ object ModItems : AaronItemRegistry() {
 
 	val ITEM_FILTER: DeferredItem<ItemFilterItem> =
 		register("item_filter", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
+	val FLUID_FILTER: DeferredItem<FluidFilterItem> =
+		register("fluid_filter", ::FluidFilterItem, PROPERTIES_SINGLE_STACK)
 	val TARDIGRADE: DeferredItem<Item> =
 		basic("tardigrade")
 

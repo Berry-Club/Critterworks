@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.registry
 import dev.aaronhowser.mods.aaron.registry.AaronDataComponentRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
+import dev.aaronhowser.mods.critterworks.item.component.FluidFilterComponent
 import dev.aaronhowser.mods.critterworks.item.component.HoppingSpiderAnimation
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
@@ -29,6 +30,8 @@ object ModDataComponents : AaronDataComponentRegistry() {
 		register("web_node", WebNodeDataComponent.CODEC, WebNodeDataComponent.STREAM_CODEC)
 	val ITEM_FILTER: DeferredHolder<DataComponentType<*>, DataComponentType<ItemFilterComponent>> =
 		register("item_filter", ItemFilterComponent.CODEC, ItemFilterComponent.STREAM_CODEC)
+	val FLUID_FILTER: DeferredHolder<DataComponentType<*>, DataComponentType<FluidFilterComponent>> =
+		register("fluid_filter", FluidFilterComponent.CODEC, FluidFilterComponent.STREAM_CODEC)
 	val WEB_PORT: DeferredHolder<DataComponentType<*>, DataComponentType<WebPortComponent>> =
 		register("web_port", WebPortComponent.CODEC, WebPortComponent.STREAM_CODEC)
 	val WEB_FLUID: DeferredHolder<DataComponentType<*>, DataComponentType<Double>> =

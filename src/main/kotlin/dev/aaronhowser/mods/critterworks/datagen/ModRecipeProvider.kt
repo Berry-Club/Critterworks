@@ -175,6 +175,16 @@ class ModRecipeProvider(
 				'C' to Items.COMPARATOR.asIngredient()
 			)
 		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.FLUID_FILTER.toStack(),
+			"LSL,STS,LSL",
+			mapOf(
+				'L' to Tags.Items.GEMS_LAPIS.asIngredient(),
+				'S' to Tags.Items.RODS_WOODEN.asIngredient(),
+				'T' to Tags.Items.STRINGS.asIngredient()
+			)
+		).save(recipeOutput)
 	}
 
 	private fun buildNamedRecipes(recipeOutput: RecipeOutput, holderLookup: HolderLookup.Provider) {

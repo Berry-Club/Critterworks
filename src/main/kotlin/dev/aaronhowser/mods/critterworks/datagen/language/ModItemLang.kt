@@ -13,6 +13,7 @@ object ModItemLang {
 			addItem(ModItems.ARTIFICIAL_SPINNERETS, "Artificial Spinnerets")
 			addItem(ModItems.WEB_PATHFINDER, "Web Pathfinder")
 			addItem(ModItems.ITEM_FILTER, "Item Filter")
+			addItem(ModItems.FLUID_FILTER, "Fluid Filter")
 			addItem(ModItems.WEB_PORT, "Web Port")
 			addItem(ModItems.HOPPING_SPIDER, "Hopping Spider")
 			addItem(ModItems.GREEN_DYEBERRY, "Green Dyeberry")
