@@ -25,6 +25,12 @@ class ModBiomeTagsProvider(
 ) {
 
 	override fun addTags(provider: HolderLookup.Provider) {
+		tag(HAS_FILTERFEEDER)
+			.addTags(
+				BiomeTags.IS_OCEAN,
+				BiomeTags.IS_RIVER
+			)
+
 		tag(HAS_SCOOCHWORM_APPLE)
 			.add(Biomes.LUSH_CAVES)
 
@@ -45,6 +51,7 @@ class ModBiomeTagsProvider(
 		fun key(name: String): TagKey<Biome> =
 			TagKey.create(Registries.BIOME, Critterworks.modResource(name))
 
+		val HAS_FILTERFEEDER: TagKey<Biome> = key("has_filterfeeder")
 		val HAS_SCOOCHWORM_APPLE: TagKey<Biome> = key("has_scoochworm_apple")
 		val HAS_HOPPING_SPIDER_NEST: TagKey<Biome> = key("has_hopping_spider_nest")
 		val HAS_SPARKBUG_BUSH: TagKey<Biome> = key("has_sparkbug_bush")
