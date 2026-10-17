@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-15T15:53:43.5361288	Loot Tables
+// 1.21.1	2026-10-17T02:22:13.9813215	Loot Tables
 dfb6776539ef4f66eb99bc9590fc5419bed3967f data/critterworks/loot_table/blocks/apple_slice.json
 04a3171f4aa5322f422d727d4ed49fafe8774b9b data/critterworks/loot_table/blocks/blue_scoochstem.json
 bf05e11a4a6d0e85e4e9286cdf6fe57180795d2a data/critterworks/loot_table/blocks/critter_cage.json
@@ -7,6 +7,7 @@ bf05e11a4a6d0e85e4e9286cdf6fe57180795d2a data/critterworks/loot_table/blocks/cri
 3dcaa9d5a3a655a3b6cf0a3fe893648b6815f271 data/critterworks/loot_table/blocks/dyeberry_vines_plant.json
 db08354324e4b89a6423cc87c27078a07ac3b6af data/critterworks/loot_table/blocks/green_scoochstem.json
 8afc9bcbe18f04507e28402f3a5ae9aff1fa3b5f data/critterworks/loot_table/blocks/hopping_spider_nest.json
+b06ef11c64d6144574a7489c4f1143779181ca92 data/critterworks/loot_table/blocks/item_filterfeeder.json
 47f6d08b8fc1645c8be8f889e6c98832f7cce3d9 data/critterworks/loot_table/blocks/magenta_scoochstem.json
 54889de36d7ffd483f37fe07becad2c28c704ffa data/critterworks/loot_table/blocks/red_scoochstem.json
 8146c906c556520d4ef4e85ccfc07efabac3c4bb data/critterworks/loot_table/blocks/scoochstem.json
