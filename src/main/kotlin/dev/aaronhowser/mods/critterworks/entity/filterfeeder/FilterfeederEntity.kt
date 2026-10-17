@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.entity.filterfeeder
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDefaultInstance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
@@ -8,6 +9,8 @@ import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.control.FilterfeederMoveControl
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederSwimGoal
+import dev.aaronhowser.mods.critterworks.item.FilterfeederItem
+import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -51,7 +54,9 @@ class FilterfeederEntity(
 
 	var filterType: FilterType
 		get() = FilterType.fromOrdinal(entityData.get(DATA_FILTER_TYPE))
-		set(value) = entityData.set(DATA_FILTER_TYPE, value.ordinal)
+		private set(value) = entityData.set(DATA_FILTER_TYPE, value.ordinal)
+
+	private var filterStack = ItemStack.EMPTY
 
 	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
 
@@ -62,7 +67,33 @@ class FilterfeederEntity(
 	override fun getBucketItemStack(): ItemStack = ItemStack.EMPTY
 
 	protected override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
-		return InteractionResult.PASS
+		if (level().isClientSide) return InteractionResult.SUCCESS
+
+		val returnedStack = getFilterStack().copy()
+		if (!player.addItem(returnedStack)) {
+			player.drop(returnedStack, false)
+		}
+
+		discard()
+		return InteractionResult.CONSUME
+	}
+
+	fun setFilterStack(stack: ItemStack) {
+		filterStack = stack.copy()
+
+		val filterItem = stack.item
+		if (filterItem is FilterfeederItem) {
+			filterType = filterItem.filterType
+		}
+	}
+
+	private fun getFilterStack(): ItemStack {
+		if (!filterStack.isEmpty) return filterStack
+
+		return when (filterType) {
+			FilterType.ITEM -> ModItems.ITEM_FILTERFEEDER.getDefaultInstance()
+			FilterType.FLUID -> ModItems.FLUID_FILTERFEEDER.getDefaultInstance()
+		}
 	}
 
 	protected override fun getFlopSound(): SoundEvent = SoundEvents.COD_FLOP
@@ -115,11 +146,27 @@ class FilterfeederEntity(
 	override fun readAdditionalSaveData(tag: CompoundTag) {
 		super.readAdditionalSaveData(tag)
 		filterType = FilterType.fromOrdinal(tag.getInt(FILTER_TYPE_TAG))
+
+		if (tag.contains(FILTER_STACK_TAG)) {
+			val savedStack = ItemStack.parseOptional(
+				registryAccess(),
+				tag.getCompound(FILTER_STACK_TAG)
+			)
+
+			setFilterStack(savedStack)
+		}
 	}
 
 	override fun addAdditionalSaveData(tag: CompoundTag) {
 		super.addAdditionalSaveData(tag)
 		tag.putInt(FILTER_TYPE_TAG, filterType.ordinal)
+
+		if (!filterStack.isEmpty) {
+			tag.put(
+				FILTER_STACK_TAG,
+				filterStack.save(registryAccess())
+			)
+		}
 	}
 
 	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) = Unit
@@ -131,6 +178,7 @@ class FilterfeederEntity(
 		const val MAXIMUM_FLOOR_DISTANCE = 10
 		private const val FLUID_SPAWN_CHANCE = 0.2f
 		private const val FILTER_TYPE_TAG = "FilterType"
+		private const val FILTER_STACK_TAG = "FilterStack"
 
 		private val DATA_FILTER_TYPE: EntityDataAccessor<Int> =
 			SynchedEntityData.defineId(
