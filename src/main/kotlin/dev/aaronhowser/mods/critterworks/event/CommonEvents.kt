@@ -12,7 +12,9 @@ import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModPotions
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.SpawnPlacementTypes
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.level.levelgen.Heightmap
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.capabilities.Capabilities
@@ -20,6 +22,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
@@ -70,6 +73,17 @@ object CommonEvents {
 	fun registerEntityAttributes(event: EntityAttributeCreationEvent) {
 		event.put(ModEntityTypes.FILTERFEEDER.get(), FilterfeederEntity.createAttributes())
 		event.put(ModEntityTypes.SCOOCHWORM.get(), ScoochwormEntity.createAttributes())
+	}
+
+	@SubscribeEvent
+	fun registerSpawnPlacements(event: RegisterSpawnPlacementsEvent) {
+		event.register(
+			ModEntityTypes.FILTERFEEDER.get(),
+			SpawnPlacementTypes.IN_WATER,
+			Heightmap.Types.OCEAN_FLOOR,
+			FilterfeederEntity::checkSpawnRules,
+			RegisterSpawnPlacementsEvent.Operation.REPLACE
+		)
 	}
 
 	@SubscribeEvent
