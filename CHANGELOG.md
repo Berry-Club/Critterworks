@@ -1,5 +1,17 @@
 # 1.4.0
 
+### Removed
+
+- Item Filter
+
+### Added
+
+- Item/Fluid Filterfeeders
+	- New clam mobs found in ocean and river biomes
+	- Click to collect as an item, works like an Item/Fluid Filter
+	- Drop the item in water to turn it back into a mob
+    - Also removes water fog within a radius around them
+
 ### Changed
 
 - Tardigrades drop from 1% of Moss Blocks, increasing with Fortune
@@ -27,7 +39,7 @@
 
 - When riding a Scoochworm, your view is rotated to match its rotation
 	- Aka, when you're on the ceiling, the world looks upside down
-    - This can be disabled in the client config
+	- This can be disabled in the client config
 - Added recipes to everything that was missing one
 
 # 1.2.0
