@@ -167,7 +167,7 @@ class ModRecipeProvider(
 		).save(recipeOutput)
 
 		shapedRecipe(
-			ModItems.ITEM_FILTER.toStack(),
+			ModItems.ITEM_FILTERFEEDER.toStack(),
 			"SPS,PCP, P ",
 			mapOf(
 				'S' to Tags.Items.STRINGS.asIngredient(),
@@ -177,7 +177,7 @@ class ModRecipeProvider(
 		).save(recipeOutput)
 
 		shapedRecipe(
-			ModItems.FLUID_FILTER.toStack(),
+			ModItems.FLUID_FILTERFEEDER.toStack(),
 			"LSL,STS,LSL",
 			mapOf(
 				'L' to Tags.Items.GEMS_LAPIS.asIngredient(),

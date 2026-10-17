@@ -72,7 +72,7 @@ class FluidFilterMenu(
 	}
 
 	override fun isValidHeldItem(heldItem: ItemStack): Boolean {
-		return heldItem.isItem(ModItems.FLUID_FILTER)
+		return heldItem.isItem(ModItems.FLUID_FILTERFEEDER)
 	}
 
 	override fun handleButtonPressed(buttonId: Int, isShiftDown: Boolean) {

@@ -70,7 +70,7 @@ class ItemFilterMenu(
 	}
 
 	override fun isValidHeldItem(heldItem: ItemStack): Boolean {
-		return heldItem.isItem(ModItems.ITEM_FILTER)
+		return heldItem.isItem(ModItems.ITEM_FILTERFEEDER)
 	}
 
 	override fun handleButtonPressed(buttonId: Int, isShiftDown: Boolean) {

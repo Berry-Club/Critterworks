@@ -40,7 +40,7 @@ class WebPortMenu private constructor(
 
 	private val filterSlot = object : ItemStackHandler(1) {
 		override fun isItemValid(slot: Int, stack: ItemStack): Boolean {
-			return stack.isItem(ModItems.ITEM_FILTER)
+			return stack.isItem(ModItems.ITEM_FILTERFEEDER)
 		}
 
 		override fun onContentsChanged(slot: Int) {

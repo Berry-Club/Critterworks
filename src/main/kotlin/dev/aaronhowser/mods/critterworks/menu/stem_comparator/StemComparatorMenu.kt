@@ -26,7 +26,7 @@ class StemComparatorMenu(
 
 	override fun addContainerSlots() {
 		val slot = FilteredSlot(filterContainer, 0, 80, 34) {
-			it.isItem(ModItems.ITEM_FILTER)
+			it.isItem(ModItems.ITEM_FILTERFEEDER)
 		}
 
 		addSlot(slot)

@@ -34,10 +34,10 @@ object ModItems : AaronItemRegistry() {
 	val SPARKPOLLEN_POUCH: DeferredItem<SparkpollenPouchItem> =
 		register("sparkpollen_pouch", ::SparkpollenPouchItem, SparkpollenPouchItem.DEFAULT_PROPERTIES)
 
-	val ITEM_FILTER: DeferredItem<ItemFilterItem> =
-		register("item_filter", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
-	val FLUID_FILTER: DeferredItem<FluidFilterItem> =
-		register("fluid_filter", ::FluidFilterItem, PROPERTIES_SINGLE_STACK)
+	val ITEM_FILTERFEEDER: DeferredItem<ItemFilterItem> =
+		register("item_filterfeeder", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
+	val FLUID_FILTERFEEDER: DeferredItem<FluidFilterItem> =
+		register("fluid_filterfeeder", ::FluidFilterItem, PROPERTIES_SINGLE_STACK)
 	val TARDIGRADE: DeferredItem<Item> =
 		basic("tardigrade")
 

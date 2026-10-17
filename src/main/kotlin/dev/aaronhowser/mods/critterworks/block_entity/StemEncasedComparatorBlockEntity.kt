@@ -28,7 +28,7 @@ class StemEncasedComparatorBlockEntity(pos: BlockPos, state: BlockState) :
 
 	val filterContainer = object : ImprovedSimpleContainer(this, 1) {
 		override fun canPlaceItem(slot: Int, stack: ItemStack): Boolean =
-			stack.isItem(ModItems.ITEM_FILTER.get())
+			stack.isItem(ModItems.ITEM_FILTERFEEDER.get())
 	}
 
 	override fun getContainers(): List<Container> = listOf(filterContainer)

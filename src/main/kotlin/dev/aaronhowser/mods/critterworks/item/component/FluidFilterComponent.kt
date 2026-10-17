@@ -76,7 +76,7 @@ data class FluidFilterComponent(
 			val stackInFilter = itemContents.getStackInSlot(slot)
 			if (stackInFilter.isEmpty) continue
 
-			if (stackInFilter.isItem(ModItems.FLUID_FILTER)) {
+			if (stackInFilter.isItem(ModItems.FLUID_FILTERFEEDER)) {
 				val passesNestedFilter = FluidFilterItem.passesFilter(stackInFilter, checkedStack)
 				return passesNestedFilter != isInverted
 			}

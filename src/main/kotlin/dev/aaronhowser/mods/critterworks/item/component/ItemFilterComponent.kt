@@ -71,7 +71,7 @@ data class ItemFilterComponent(
 			val stackInFilter = itemContents.getStackInSlot(slot)
 			if (stackInFilter.isEmpty) continue
 
-			if (stackInFilter.isItem(ModItems.ITEM_FILTER)) {
+			if (stackInFilter.isItem(ModItems.ITEM_FILTERFEEDER)) {
 				val passesNestedFilter = ItemFilterItem.passesFilter(stackInFilter, checkedStack)
 				return passesNestedFilter != isInverted
 			}
