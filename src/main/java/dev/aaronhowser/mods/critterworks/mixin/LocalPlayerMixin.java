@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.mixin;
 
-import dev.aaronhowser.mods.critterworks.block_entity.ItemFilterfeederBlockEntity;
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,15 +12,15 @@ public abstract class LocalPlayerMixin {
 
 	@Inject(
 		method = "getWaterVision",
-		at = @At("HEAD"),
+		at = @At("RETURN"),
 		cancellable = true
 	)
-	private void critterworks$clamFog(CallbackInfoReturnable<Float> cir) {
+	private void critterworks$filterfeederFog(CallbackInfoReturnable<Float> cir) {
 		var player = (LocalPlayer) (Object) this;
-		var isInRange = ItemFilterfeederBlockEntity.isWithinRange(player.level(), player.blockPosition());
+		var minimumWaterVision = FilterfeederEntity.getMinWaterFog(player.level(), player.position());
 
-		if (isInRange) {
-			cir.setReturnValue(1f);
+		if (minimumWaterVision > cir.getReturnValue()) {
+			cir.setReturnValue(minimumWaterVision);
 		}
 	}
 

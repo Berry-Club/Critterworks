@@ -1,10 +1,13 @@
 package dev.aaronhowser.mods.critterworks.entity.filterfeeder
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.control.FilterfeederMoveControl
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederSwimGoal
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -28,6 +31,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
+import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
@@ -132,6 +136,34 @@ class FilterfeederEntity(
 
 			return level.getFluidState(position).isFluid(FluidTags.WATER)
 				&& level.getBlockState(floorPosition).isFaceSturdy(level, floorPosition, Direction.UP)
+		}
+
+		@JvmStatic
+		fun getMinWaterFog(level: Level, position: Vec3): Float {
+			if (level.isServerSide) return 0f
+			if (level !is ClientLevel) return 0f
+
+			val radius = ServerConfig.CONFIG.filterfeederWaterFogRadius.get()
+			if (radius <= 0.0) return 0f
+
+			val radiusSquared = radius * radius
+			var nearestDistanceSquared = Double.POSITIVE_INFINITY
+
+			for (entity in level.entitiesForRendering()) {
+				if (entity !is FilterfeederEntity) continue
+
+				val distanceSquared = entity.position().distanceToSqr(position)
+				if (distanceSquared >= nearestDistanceSquared) continue
+
+				nearestDistanceSquared = distanceSquared
+			}
+
+			if (nearestDistanceSquared >= radiusSquared) return 0f
+
+			val normalizedDistanceSquared = nearestDistanceSquared / radiusSquared
+			val fogStrength = 1.0 - normalizedDistanceSquared * normalizedDistanceSquared
+
+			return fogStrength.toFloat()
 		}
 	}
 
