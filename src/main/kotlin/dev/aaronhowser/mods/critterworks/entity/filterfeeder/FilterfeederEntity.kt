@@ -3,6 +3,8 @@ package dev.aaronhowser.mods.critterworks.entity.filterfeeder
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.control.FilterfeederMoveControl
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederSwimGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -36,6 +38,10 @@ class FilterfeederEntity(
 	level: Level
 ) : AbstractSchoolingFish(entityType, level), GeoEntity {
 
+	init {
+		moveControl = FilterfeederMoveControl(this)
+	}
+
 	var filterType: FilterType
 		get() = FilterType.fromOrdinal(entityData.get(DATA_FILTER_TYPE))
 		set(value) = entityData.set(DATA_FILTER_TYPE, value.ordinal)
@@ -53,6 +59,31 @@ class FilterfeederEntity(
 	}
 
 	protected override fun getFlopSound(): SoundEvent = SoundEvents.COD_FLOP
+
+	override fun registerGoals() {
+		super.registerGoals()
+		goalSelector.addGoal(4, FilterfeederSwimGoal(this))
+	}
+
+	protected override fun canRandomSwim(): Boolean = false
+
+	fun isWithinFloorRange(
+		position: BlockPos = blockPosition(),
+		maximumDistance: Int = MAXIMUM_FLOOR_DISTANCE
+	): Boolean {
+		val floorPosition = position.mutable()
+		var distance = 0
+
+		while (distance <= maximumDistance) {
+			val floorState = level().getBlockState(floorPosition)
+			if (floorState.isFaceSturdy(level(), floorPosition, Direction.UP)) return true
+
+			floorPosition.move(Direction.DOWN)
+			distance++
+		}
+
+		return false
+	}
 
 	override fun defineSynchedData(builder: SynchedEntityData.Builder) {
 		super.defineSynchedData(builder)
@@ -75,6 +106,7 @@ class FilterfeederEntity(
 	companion object {
 		const val WIDTH = 0.5f
 		const val HEIGHT = 0.125f
+		const val MAXIMUM_FLOOR_DISTANCE = 10
 		private const val FILTER_TYPE_TAG = "FilterType"
 
 		private val DATA_FILTER_TYPE: EntityDataAccessor<Int> =
