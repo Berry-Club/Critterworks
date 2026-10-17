@@ -30,36 +30,28 @@ object ModBlocks : AaronBlockRegistry() {
 		registerBlock("apple_slice") {
 			HugeMushroomBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK))
 		}
-
 	val HOPPING_SPIDER_NEST: DeferredBlock<HoppingSpiderNestBlock> =
 		registerBlock("hopping_spider_nest", ::HoppingSpiderNestBlock)
-
 	val SPARKBUG_BUSH: DeferredBlock<SparkbugBushBlock> =
 		registerBlock("sparkbug_bush", ::SparkbugBushBlock)
-
 	val GREEN_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.GREEN)
-
 	val BLUE_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.BLUE)
-
 	val RED_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.RED)
-
 	val YELLOW_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.YELLOW)
-
 	val MAGENTA_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.MAGENTA)
-
 	val CYAN_SCOOCHSTEM: DeferredBlock<ColoredScoochstemBlock> =
 		coloredScoochstem(WormColor.CYAN)
-
 	val DYEBERRY_VINES: DeferredBlock<DyeberryVinesBlock> =
 		registerBlockWithoutItem("dyeberry_vines", ::DyeberryVinesBlock)
-
 	val DYEBERRY_VINES_PLANT: DeferredBlock<DyeberryVinesPlantBlock> =
 		registerBlockWithoutItem("dyeberry_vines_plant", ::DyeberryVinesPlantBlock)
+	val ITEM_FILTERFEEDER =
+		registerBlock("item_filterfeeder", ::ItemFilterfeederBlock)
 
 	private fun coloredScoochstem(wormColor: WormColor): DeferredBlock<ColoredScoochstemBlock> =
 		registerBlock(wormColor.colorName + "_scoochstem") { ColoredScoochstemBlock(wormColor) }
