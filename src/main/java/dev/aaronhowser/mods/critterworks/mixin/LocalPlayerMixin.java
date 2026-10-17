@@ -20,7 +20,7 @@ public abstract class LocalPlayerMixin {
 		var isInRange = ItemFilterfeederBlockEntity.isWithinRange(player.level(), player.blockPosition());
 
 		if (isInRange) {
-			cir.setReturnValue(0f);
+			cir.setReturnValue(1f);
 		}
 	}
 
