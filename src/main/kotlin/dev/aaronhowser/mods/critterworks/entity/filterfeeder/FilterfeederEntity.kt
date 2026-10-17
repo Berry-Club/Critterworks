@@ -6,7 +6,6 @@ import net.minecraft.core.Direction
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -22,13 +21,6 @@ class FilterfeederEntity(
 	entityType: EntityType<out FilterfeederEntity>,
 	level: Level
 ) : WaterAnimal(entityType, level), GeoEntity {
-
-	override fun onAddedToLevel() {
-		super.onAddedToLevel()
-		val player = level().players().firstOrNull()
-		val pos = position()
-		player?.teleportTo(pos.x, pos.y, pos.z)
-	}
 
 	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
 
