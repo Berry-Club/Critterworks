@@ -11,7 +11,7 @@
 - Attachments for fluids and energy
 	- Iron Stomach or something for fluids?
 		- Or is that too gross and unwholesome? It's kinda body horror. It's not an attachment, it's surgery
-    - Pitcher Plant tank
+	- Pitcher Plant tank
 	- Maybe a cage full of the electric fireflies for the energy?
 	- Beehive Battery?
 - Block that exposes item/fluid/energy handlers to pipes etc?
@@ -89,6 +89,9 @@
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 - Bug lamp?
 	- Kinda like the firefly jar from twilight forest
+- Item Filterfeeder, like a clam or something
+	- Replaces the Item Filter
+	- It's also a block that disables water fog nearby
 
 # "Pet" critters
 
