@@ -4,6 +4,8 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.item.FilterfeederItem
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
+import software.bernie.geckolib.animation.AnimationState
 import software.bernie.geckolib.model.DefaultedItemGeoModel
 
 class FilterfeederItemModel : DefaultedItemGeoModel<FilterfeederItem>(
@@ -18,6 +20,15 @@ class FilterfeederItemModel : DefaultedItemGeoModel<FilterfeederItem>(
 			FilterfeederEntity.FilterType.ITEM -> ITEM_TEXTURE
 			FilterfeederEntity.FilterType.FLUID -> FLUID_TEXTURE
 		}
+	}
+
+	override fun setCustomAnimations(
+		animatable: FilterfeederItem,
+		instanceId: Long,
+		animationState: AnimationState<FilterfeederItem>
+	) {
+		val top = animationProcessor.getBone("top")
+		top.rotX = Mth.HALF_PI / 2f
 	}
 
 	companion object {
