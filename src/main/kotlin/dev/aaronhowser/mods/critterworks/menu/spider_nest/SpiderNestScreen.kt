@@ -1,12 +1,12 @@
 package dev.aaronhowser.mods.critterworks.menu.spider_nest
 
-import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.HoppingSpiderTransportBehavior
+import dev.aaronhowser.mods.critterworks.menu.CritterworksScreen
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
@@ -16,7 +16,7 @@ class SpiderNestScreen(
 	menu: SpiderNestMenu,
 	playerInventory: Inventory,
 	title: Component
-) : BaseScreen<SpiderNestMenu>(menu, playerInventory, title) {
+) : CritterworksScreen<SpiderNestMenu>(menu, playerInventory, title) {
 
 	override val background: ScreenBackground = BACKGROUND
 	override val showInventoryLabel: Boolean = false

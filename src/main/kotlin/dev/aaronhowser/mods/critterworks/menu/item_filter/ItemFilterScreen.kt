@@ -1,11 +1,11 @@
 package dev.aaronhowser.mods.critterworks.menu.item_filter
 
-import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenSprite
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
+import dev.aaronhowser.mods.critterworks.menu.CritterworksScreen
 import dev.aaronhowser.mods.critterworks.menu.ToggleSpriteButton
 import net.minecraft.client.gui.components.Button
 import net.minecraft.network.chat.Component
@@ -15,7 +15,7 @@ class ItemFilterScreen(
 	menu: ItemFilterMenu,
 	playerInventory: Inventory,
 	title: Component
-) : BaseScreen<ItemFilterMenu>(menu, playerInventory, title) {
+) : CritterworksScreen<ItemFilterMenu>(menu, playerInventory, title) {
 
 	override val background: ScreenBackground = BACKGROUND
 	override val inventoryLabelOffsetY: Int = 73

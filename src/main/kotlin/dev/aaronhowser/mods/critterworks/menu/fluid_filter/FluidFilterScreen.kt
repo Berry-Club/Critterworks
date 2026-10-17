@@ -1,10 +1,10 @@
 package dev.aaronhowser.mods.critterworks.menu.fluid_filter
 
-import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
+import dev.aaronhowser.mods.critterworks.menu.CritterworksScreen
 import dev.aaronhowser.mods.critterworks.menu.ToggleSpriteButton
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterScreen
 import net.minecraft.network.chat.Component
@@ -14,7 +14,7 @@ class FluidFilterScreen(
 	menu: FluidFilterMenu,
 	playerInventory: Inventory,
 	title: Component
-) : BaseScreen<FluidFilterMenu>(menu, playerInventory, title) {
+) : CritterworksScreen<FluidFilterMenu>(menu, playerInventory, title) {
 
 	override val background: ScreenBackground = BACKGROUND
 	override val inventoryLabelOffsetY: Int = 55

@@ -1,13 +1,13 @@
 package dev.aaronhowser.mods.critterworks.menu.stem_comparator
 
-import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.menu.CritterworksScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
 
 class StemComparatorScreen(menu: StemComparatorMenu, inventory: Inventory, title: Component) :
-	BaseScreen<StemComparatorMenu>(menu, inventory, title) {
+	CritterworksScreen<StemComparatorMenu>(menu, inventory, title) {
 
 	override val background: ScreenBackground = BACKGROUND
 

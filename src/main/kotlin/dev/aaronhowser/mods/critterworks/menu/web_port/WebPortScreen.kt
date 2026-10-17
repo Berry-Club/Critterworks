@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.critterworks.menu.web_port
 
-import dev.aaronhowser.mods.aaron.menu.BaseScreen
 import dev.aaronhowser.mods.aaron.menu.ScreenWithStrings
 import dev.aaronhowser.mods.aaron.menu.textures.ScreenBackground
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getNameComponent
@@ -9,6 +8,7 @@ import dev.aaronhowser.mods.aaron.packet.c2s.ClientChangedMenuString
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.menu.ColorButton
+import dev.aaronhowser.mods.critterworks.menu.CritterworksScreen
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -18,7 +18,7 @@ import net.minecraft.world.entity.player.Inventory
 import org.lwjgl.glfw.GLFW
 
 class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
-	BaseScreen<WebPortMenu>(menu, inventory, title), ScreenWithStrings {
+	CritterworksScreen<WebPortMenu>(menu, inventory, title), ScreenWithStrings {
 
 	override val background: ScreenBackground = BACKGROUND
 	override val inventoryLabelOffsetY: Int = -2
