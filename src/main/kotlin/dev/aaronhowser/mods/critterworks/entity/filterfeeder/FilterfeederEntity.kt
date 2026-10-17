@@ -10,13 +10,20 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.entity.animal.WaterAnimal
+import net.minecraft.world.entity.animal.AbstractFish
+import net.minecraft.world.entity.animal.AbstractSchoolingFish
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.ServerLevelAccessor
 import software.bernie.geckolib.animatable.GeoEntity
@@ -27,7 +34,7 @@ import software.bernie.geckolib.animation.AnimatableManager
 class FilterfeederEntity(
 	entityType: EntityType<out FilterfeederEntity>,
 	level: Level
-) : WaterAnimal(entityType, level), GeoEntity {
+) : AbstractSchoolingFish(entityType, level), GeoEntity {
 
 	var filterType: FilterType
 		get() = FilterType.fromOrdinal(entityData.get(DATA_FILTER_TYPE))
@@ -38,6 +45,14 @@ class FilterfeederEntity(
 	protected override fun getTypeName(): Component {
 		return filterType.translationKey.toComponent()
 	}
+
+	override fun getBucketItemStack(): ItemStack = ItemStack.EMPTY
+
+	protected override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+		return InteractionResult.PASS
+	}
+
+	protected override fun getFlopSound(): SoundEvent = SoundEvents.COD_FLOP
 
 	override fun defineSynchedData(builder: SynchedEntityData.Builder) {
 		super.defineSynchedData(builder)
@@ -69,9 +84,8 @@ class FilterfeederEntity(
 			)
 
 		fun createAttributes(): AttributeSupplier {
-			return createMobAttributes()
-				.add(Attributes.MAX_HEALTH, 4.0)
-				.add(Attributes.MOVEMENT_SPEED, 0.1)
+			return AbstractFish.createAttributes()
+				.add(Attributes.ARMOR, 4.0)
 				.build()
 		}
 
