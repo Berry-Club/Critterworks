@@ -12,10 +12,10 @@
     "LevelMixin"
   ],
   "client": [
-    "client.AbstractClientPlayerMixin",
-    "client.CameraMixin",
-    "client.ItemInHandRendererMixin",
-    "client.LivingEntityRendererMixin"
+		"AbstractClientPlayerMixin",
+		"CameraMixin",
+		"ItemInHandRendererMixin",
+		"LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

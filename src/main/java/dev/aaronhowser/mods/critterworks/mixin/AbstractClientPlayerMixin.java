@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.mixin.client;
+package dev.aaronhowser.mods.critterworks.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

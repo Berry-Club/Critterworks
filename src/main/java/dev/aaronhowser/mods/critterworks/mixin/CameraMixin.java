@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.mixin.client;
+package dev.aaronhowser.mods.critterworks.mixin;
 
 import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormModel;
 import dev.aaronhowser.mods.critterworks.config.ClientConfig;
