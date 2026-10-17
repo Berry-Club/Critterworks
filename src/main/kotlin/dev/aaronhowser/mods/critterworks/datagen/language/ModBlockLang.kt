@@ -16,7 +16,6 @@ object ModBlockLang {
 			addBlock(ModBlocks.DYEBERRY_VINES, "Dyeberry Vines")
 			addBlock(ModBlocks.DYEBERRY_VINES_PLANT, "Dyeberry Vines Plant")
 			addBlock(ModBlocks.SPARKBUG_BUSH, "Sparkbug Bush")
-			addBlock(ModBlocks.ITEM_FILTERFEEDER, "Item Filterfeeder")
 
 			addBlock(ModBlocks.GREEN_SCOOCHSTEM, "Green Scoochstem")
 			addBlock(ModBlocks.BLUE_SCOOCHSTEM, "Blue Scoochstem")

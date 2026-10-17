@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.aaron.registry.AaronBlockEntityTypeRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.block_entity.CritterCageBlockEntity
 import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEntity
-import dev.aaronhowser.mods.critterworks.block_entity.ItemFilterfeederBlockEntity
 import dev.aaronhowser.mods.critterworks.block_entity.SparkbugBushBlockEntity
 import dev.aaronhowser.mods.critterworks.block_entity.StemEncasedComparatorBlockEntity
 import net.minecraft.core.registries.BuiltInRegistries
@@ -27,7 +26,5 @@ object ModBlockEntityTypes : AaronBlockEntityTypeRegistry() {
 		register("stem_encased_comparator", ::StemEncasedComparatorBlockEntity, ModBlocks.STEM_ENCASED_COMPARATOR)
 	val SPARKBUG_BUSH: DeferredHolder<BlockEntityType<*>, BlockEntityType<SparkbugBushBlockEntity>> =
 		register("sparkbug_bush", ::SparkbugBushBlockEntity, ModBlocks.SPARKBUG_BUSH)
-	val ITEM_FILTER_FEEDER =
-		register("item_filterfeeder", ::ItemFilterfeederBlockEntity, ModBlocks.ITEM_FILTERFEEDER)
 
 }

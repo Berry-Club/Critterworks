@@ -29,7 +29,6 @@ class ModBlockLootTablesSubProvider(
 		dropSelf(ModBlocks.HOPPING_SPIDER_NEST.get())
 		dropSelf(ModBlocks.SCOOCHWORM_DEPOT.get())
 		dropSelf(ModBlocks.SPARKBUG_BUSH.get())
-		dropSelf(ModBlocks.ITEM_FILTERFEEDER.get())
 		appleSlice()
 
 		dropSelf(ModBlocks.GREEN_SCOOCHSTEM.get())
