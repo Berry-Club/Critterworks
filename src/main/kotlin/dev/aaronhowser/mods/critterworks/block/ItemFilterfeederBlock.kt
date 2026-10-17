@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
 class ItemFilterfeederBlock : Block(
-	Properties.ofFullCopy(Blocks.BRAIN_CORAL)
+	Properties.ofFullCopy(Blocks.FIRE_CORAL_BLOCK)
 ), EntityBlock {
 
 	override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
