@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
 import net.minecraft.core.registries.BuiltInRegistries
@@ -14,6 +15,13 @@ object ModEntityTypes {
 
 	val ENTITY_TYPE_REGISTRY: DeferredRegister<EntityType<*>> =
 		DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Critterworks.MOD_ID)
+
+	val FILTERFEEDER: DeferredHolder<EntityType<*>, EntityType<FilterfeederEntity>> =
+		ENTITY_TYPE_REGISTRY.register("filterfeeder", Supplier {
+			EntityType.Builder.of(::FilterfeederEntity, MobCategory.WATER_CREATURE)
+				.sized(FilterfeederEntity.WIDTH, FilterfeederEntity.HEIGHT)
+				.build("filterfeeder")
+		})
 
 	val SCOOCHWORM: DeferredHolder<EntityType<*>, EntityType<ScoochwormEntity>> =
 		ENTITY_TYPE_REGISTRY.register("scoochworm", Supplier {
