@@ -1,0 +1,30 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#critterworks:has_filterfeeder",
+  "spawners": [
+    {
+      "type": "critterworks:filterfeeder",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 1
+    },
+    {
+      "type": "critterworks:filterfeeder",
+      "maxCount": 2,
+      "minCount": 2,
+      "weight": 3
+    },
+    {
+      "type": "critterworks:filterfeeder",
+      "maxCount": 3,
+      "minCount": 3,
+      "weight": 3
+    },
+    {
+      "type": "critterworks:filterfeeder",
+      "maxCount": 4,
+      "minCount": 4,
+      "weight": 1
+    }
+  ]
+}

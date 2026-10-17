@@ -2,10 +2,12 @@ package dev.aaronhowser.mods.critterworks.datagen.worldgen
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModBiomeTagsProvider
+import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.HolderSet
 import net.minecraft.core.registries.Registries
 import net.minecraft.data.worldgen.BootstrapContext
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.level.biome.MobSpawnSettings
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.neoforged.neoforge.common.world.BiomeModifier
 import net.neoforged.neoforge.common.world.BiomeModifiers
@@ -13,6 +15,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 
 object ModBiomeModifiers {
 
+	val ADD_FILTERFEEDER: ResourceKey<BiomeModifier> = key("add_filterfeeder")
 	val ADD_SCOOCHWORM_APPLE: ResourceKey<BiomeModifier> = key("add_scoochworm_apple")
 	val ADD_HOPPING_SPIDER_NEST: ResourceKey<BiomeModifier> = key("add_hopping_spider_nest")
 	val ADD_SPARKBUG_BUSH: ResourceKey<BiomeModifier> = key("add_sparkbug_bush")
@@ -21,6 +24,19 @@ object ModBiomeModifiers {
 	fun bootstrap(context: BootstrapContext<BiomeModifier>) {
 		val biomes = context.lookup(Registries.BIOME)
 		val placedFeatures = context.lookup(Registries.PLACED_FEATURE)
+
+		context.register(
+			ADD_FILTERFEEDER,
+			BiomeModifiers.AddSpawnsBiomeModifier(
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_FILTERFEEDER),
+				listOf(
+					MobSpawnSettings.SpawnerData(ModEntityTypes.FILTERFEEDER.get(), 1, 1, 1),
+					MobSpawnSettings.SpawnerData(ModEntityTypes.FILTERFEEDER.get(), 3, 2, 2),
+					MobSpawnSettings.SpawnerData(ModEntityTypes.FILTERFEEDER.get(), 3, 3, 3),
+					MobSpawnSettings.SpawnerData(ModEntityTypes.FILTERFEEDER.get(), 1, 4, 4)
+				)
+			)
+		)
 
 		context.register(
 			ADD_SCOOCHWORM_APPLE,
