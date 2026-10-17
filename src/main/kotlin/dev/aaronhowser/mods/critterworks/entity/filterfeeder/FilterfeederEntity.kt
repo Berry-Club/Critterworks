@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.entity.filterfeeder
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
@@ -19,10 +20,12 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
+import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.animal.AbstractFish
@@ -89,6 +92,21 @@ class FilterfeederEntity(
 		return false
 	}
 
+	override fun finalizeSpawn(
+		level: ServerLevelAccessor,
+		difficulty: DifficultyInstance,
+		spawnType: MobSpawnType,
+		spawnGroupData: SpawnGroupData?
+	): SpawnGroupData? {
+		val finalizedSpawnGroupData = super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData)
+
+		if (random.chance(FLUID_SPAWN_CHANCE)) {
+			filterType = FilterType.FLUID
+		}
+
+		return finalizedSpawnGroupData
+	}
+
 	override fun defineSynchedData(builder: SynchedEntityData.Builder) {
 		super.defineSynchedData(builder)
 		builder.define(DATA_FILTER_TYPE, FilterType.ITEM.ordinal)
@@ -111,6 +129,7 @@ class FilterfeederEntity(
 		const val WIDTH = 0.5f
 		const val HEIGHT = 0.125f
 		const val MAXIMUM_FLOOR_DISTANCE = 10
+		private const val FLUID_SPAWN_CHANCE = 0.2f
 		private const val FILTER_TYPE_TAG = "FilterType"
 
 		private val DATA_FILTER_TYPE: EntityDataAccessor<Int> =
