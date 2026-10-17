@@ -5,6 +5,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.neoforged.neoforge.common.NeoForgeMod
+import kotlin.math.sqrt
 
 class FilterfeederMoveControl(
 	private val filterfeeder: FilterfeederEntity
@@ -24,7 +25,8 @@ class FilterfeederMoveControl(
 		filterfeeder.speed = Mth.lerp(0.125f, filterfeeder.speed, targetSpeed)
 
 		val horizontalDifference = wantedX - filterfeeder.x
-		val targetY = if (filterfeeder.isWithinFloorRange()) {
+		val isWithinFloorRange = filterfeeder.isWithinFloorRange()
+		val targetY = if (isWithinFloorRange) {
 			wantedY
 		} else {
 			minOf(wantedY, filterfeeder.y - 1.0)
@@ -34,15 +36,21 @@ class FilterfeederMoveControl(
 		val depthDifference = wantedZ - filterfeeder.z
 
 		if (verticalDifference != 0.0) {
-			val distance = Math.sqrt(
-				horizontalDifference * horizontalDifference
-					+ verticalDifference * verticalDifference
-					+ depthDifference * depthDifference
-			)
+			val verticalMovement = if (isWithinFloorRange) {
+				val distance = sqrt(
+					horizontalDifference * horizontalDifference
+						+ verticalDifference * verticalDifference
+						+ depthDifference * depthDifference
+				)
+
+				filterfeeder.speed * (verticalDifference / distance) * 0.1
+			} else {
+				-filterfeeder.speed * 0.1 / 3.0
+			}
 
 			filterfeeder.deltaMovement = filterfeeder.deltaMovement.add(
 				0.0,
-				filterfeeder.speed * (verticalDifference / distance) * 0.1,
+				verticalMovement,
 				0.0
 			)
 		}
