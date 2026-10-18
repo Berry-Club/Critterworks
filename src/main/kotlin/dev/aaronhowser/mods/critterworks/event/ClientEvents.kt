@@ -12,6 +12,7 @@ import dev.aaronhowser.mods.critterworks.client.render.item.TardigradeItemDecora
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
+import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
@@ -28,6 +29,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 	value = [Dist.CLIENT]
 )
 object ClientEvents {
+
 	@SubscribeEvent
 	fun interactWithWebLine(event: InputEvent.InteractionKeyMappingTriggered) {
 		ClientWebLineInteractionHandler.handleInteraction(event)
@@ -69,6 +71,21 @@ object ClientEvents {
 			CritterCageItemRenderer.ClientItemExtensions,
 			ModItems.CRITTER_CAGE.get()
 		)
+	}
+
+	@SubscribeEvent
+	fun onUpdateInput(event: MovementInputUpdateEvent) {
+		val player = event.entity
+		if (player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) {
+			val input = event.input
+			input.up = false
+			input.down = false
+			input.left = false
+			input.right = false
+			input.jumping = false
+			input.leftImpulse = 0f
+			input.forwardImpulse = 0f
+		}
 	}
 
 }
