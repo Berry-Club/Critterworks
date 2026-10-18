@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.critterworks.datagen
 import dev.aaronhowser.mods.aaron.advancement.BlockBrokenTrigger
 import dev.aaronhowser.mods.aaron.datagen.AaronAdvancementSubProvider
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.withComponent
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.datagen.language.ModAdvancementLang
@@ -170,23 +169,10 @@ class ModAdvancementSubProvider(
 			.hasAny(ModItems.ITEM_FILTERFEEDER, ModItems.FLUID_FILTERFEEDER)
 			.save(ModAdvancements.CATCH_FILTERFEEDER)
 
-		val findTardigrade = advancement()
+		advancement()
 			.parent(root)
 			.display(
-				ModItems.TARDIGRADE,
-				ModAdvancementLang.FIND_TARDIGRADE_TITLE.toComponent(),
-				ModAdvancementLang.FIND_TARDIGRADE_DESC.toComponent(),
-			)
-			.has(ModItems.TARDIGRADE)
-			.save(ModAdvancements.FIND_TARDIGRADE)
-
-		advancement()
-			.parent(findTardigrade)
-			.display(
-				Items.IRON_PICKAXE.withComponent(
-					ModDataComponents.HAS_TARDIGRADE.get(),
-					Unit.INSTANCE
-				),
+				ModItems.APPLY_TARDIGRADE,
 				ModAdvancementLang.APPLY_TARDIGRADE_TITLE.toComponent(),
 				ModAdvancementLang.APPLY_TARDIGRADE_DESC.toComponent(),
 			)

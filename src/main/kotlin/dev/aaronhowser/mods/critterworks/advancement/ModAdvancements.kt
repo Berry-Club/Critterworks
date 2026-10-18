@@ -27,7 +27,6 @@ object ModAdvancements {
 	val USE_SPARKPOLLEN = guide("use_sparkpollen")
 
 	val CATCH_FILTERFEEDER = guide("catch_filterfeeder")
-	val FIND_TARDIGRADE = guide("find_tardigrade")
 	val APPLY_TARDIGRADE = guide("apply_tardigade")
 
 	fun trigger(player: Player, action: ResourceLocation) {

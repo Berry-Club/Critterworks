@@ -36,8 +36,6 @@ object ModAdvancementLang {
 
 	const val CATCH_FILTERFEEDER_TITLE = "advancements.critterworks.catch_filterfeeder.title"
 	const val CATCH_FILTERFEEDER_DESC = "advancements.critterworks.catch_filterfeeder.desc"
-	const val FIND_TARDIGRADE_TITLE = "advancements.critterworks.find_tardigade.title"
-	const val FIND_TARDIGRADE_DESC = "advancements.critterworks.find_tardigade.desc"
 	const val APPLY_TARDIGRADE_TITLE = "advancements.critterworks.apply_tardigade.title"
 	const val APPLY_TARDIGRADE_DESC = "advancements.critterworks.apply_tardigade.desc"
 
@@ -69,10 +67,8 @@ object ModAdvancementLang {
 			add(WEB_PORT_DESC, "Make a Web Port, which lets Spiders interact with the connected inventory")
 			add(CATCH_FILTERFEEDER_TITLE, "It's OK They Like It")
 			add(CATCH_FILTERFEEDER_DESC, "Catch a Filterfeeder")
-			add(FIND_TARDIGRADE_TITLE, "Water Bear!")
-			add(FIND_TARDIGRADE_DESC, "Find a Tardigrade")
-			add(APPLY_TARDIGRADE_TITLE, "Peak Performance")
-			add(APPLY_TARDIGRADE_DESC, "Craft the Tardigrade with an item to protect it while dropped")
+			add(APPLY_TARDIGRADE_TITLE, "Water Bear!")
+			add(APPLY_TARDIGRADE_DESC, "Find a Tardigrade and craft it with an item")
 		}
 	}
 }

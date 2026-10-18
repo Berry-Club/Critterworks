@@ -75,7 +75,7 @@ class ModItemTagsProvider(
 		copy(ModBlockTagsProvider.SCOOCHSTEM_LOGS, SCOOCHSTEM_LOGS)
 
 		tag(TARDIGRADE_BLACKLIST)
-			.add(ModItems.TARDIGRADE)
+			.add(ModItems.APPLY_TARDIGRADE)
 	}
 
 	companion object {

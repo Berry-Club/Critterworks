@@ -1,5 +1,5 @@
 {
-  "parent": "critterworks:guide/find_tardigrade",
+  "parent": "critterworks:guide/root",
   "criteria": {
     "apply_tardigrade": {
       "conditions": {
@@ -19,11 +19,8 @@
       "translate": "advancements.critterworks.apply_tardigade.desc"
     },
     "icon": {
-      "components": {
-        "critterworks:has_tardigrade": {}
-      },
       "count": 1,
-      "id": "minecraft:iron_pickaxe"
+      "id": "critterworks:tardigrade"
     },
     "title": {
       "translate": "advancements.critterworks.apply_tardigade.title"
