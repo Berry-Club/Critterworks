@@ -69,6 +69,10 @@ object ModAdvancementLang {
 			add(CATCH_FILTERFEEDER_DESC, "Catch a Filterfeeder")
 			add(APPLY_TARDIGRADE_TITLE, "Water Bear!")
 			add(APPLY_TARDIGRADE_DESC, "Find a Tardigrade and craft it with an item")
+			add(SPARKBUG_BUSH_TITLE, "You Would Not Believe Your Eyes")
+			add(SPARKBUG_BUSH_DESC, "Find a Sparkbug Bush, which transfers FE")
+			add(USE_SPARKPOLLEN_TITLE, "Smells like Energy")
+			add(USE_SPARKPOLLEN_DESC, "Link the Sparkbug Bush to machines with Sparkpollen")
 		}
 	}
 }
