@@ -21,7 +21,7 @@ class LockboxMenu(
 	init {
 		checkContainerSize(lockboxContainer, LockboxContainer.CONTAINER_SIZE)
 		lockboxContainer.startOpen(playerInventory.player)
-		addSlots(85)
+		addSlots(100)
 	}
 
 	override fun addContainerSlots() {
@@ -29,8 +29,8 @@ class LockboxMenu(
 			ContainerSlot(
 				lockboxContainer,
 				LockboxContainer.FILTER_SLOT,
-				8,
-				1
+				152,
+				7
 			)
 		)
 
@@ -38,7 +38,7 @@ class LockboxMenu(
 			for (column in 0 until 9) {
 				val slotIndex = column + row * 9
 				val x = 8 + column * 18
-				val y = 18 + row * 18
+				val y =  28 + row * 18
 
 				addSlot(ContainerSlot(lockboxContainer, slotIndex, x, y))
 			}

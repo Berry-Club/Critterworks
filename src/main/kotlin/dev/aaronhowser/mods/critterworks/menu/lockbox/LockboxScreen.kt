@@ -14,8 +14,10 @@ class LockboxScreen(
 
 	override val background: ScreenBackground = BACKGROUND
 
+	override val inventoryLabelOffsetY: Int = -3
+
 	companion object {
-		val BACKGROUND = ScreenBackground(Critterworks.modResource("textures/gui/lockbox.png"), 176, 181)
+		val BACKGROUND = ScreenBackground(Critterworks.modResource("textures/gui/lockbox.png"), 176, 182)
 	}
 
 }
