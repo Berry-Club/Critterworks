@@ -10,6 +10,10 @@
     - Also cannot left or right click during this
 - Several advancements
 
+### Fixed
+
+- Lockbox items were opening when one attached to a Scoochworm was also open (#2)
+
 # 1.4.0
 
 ### Added
