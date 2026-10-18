@@ -16,7 +16,6 @@
 	- Beehive Battery?
 - Block that exposes item/fluid/energy handlers to pipes etc?
 	- Would trivialize the whole thing with stopping them while they're upside down until they're empty
-- Filter slot for Lockboxes
 
 # Hopping Spiders
 
@@ -87,14 +86,13 @@
 - Dripleaf Launchpad
 	- Basically the thing from Portal
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
-- Bug lamp?
-	- Kinda like the firefly jar from twilight forest
 
 # "Pet" critters
 
 - Mobs that follow you around specifically
 - Pack Rat that can store items, like the Luggage
 	- Or a Hamster storing items in its cheeks, which bulge out the more items are held
+	- Backpack Packrat
 - Magpie item magnet
 - Homing Pigeon that you can use to send items back to your base, or request from storage?
 
@@ -103,6 +101,10 @@
 - Pistol Shrimp?
 	- Could be a weapon or something
 	- Maybe it's much more powerful under water, or it adds range or something
+- Mantis Shrimp
+	- Rides your head like Ratatouille
+	- Massively increases damage and knockback of barehand punches
+		- Cooldown
 - Mantis blades??
 	- Basically a sword? Anything else?
 - Bombardier Beetle
@@ -119,14 +121,14 @@
 		- It moves in a straight line towards you at all times, going through blocks because pathfinding is a pain
 		- Probably wouldn't actually be an entity to prevent compatibility shenanigans
 			- SavedData or something instead? LevelActor? Needs to be synced and rendered
-            - Could literally be an entity attachment or something lol
+			- Could literally be an entity attachment or something lol
 		- How would you win this?
 			- Re-contain it?
 				- How does that get you its shell though?
 			- Kill it?
 				- Not exactly an IMMORTAL snail then though
 			- Remove its shell and turn it into a slug or something?
-            - It should probably not be super trivial
+			- It should probably not be super trivial
 
 # Guidebook
 
