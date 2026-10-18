@@ -21,9 +21,9 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemContainerContents
-import net.neoforged.neoforge.items.IItemHandler
 import net.neoforged.neoforge.items.ItemHandlerHelper
 import net.neoforged.neoforge.items.wrapper.InvWrapper
+import net.neoforged.neoforge.items.wrapper.RangedWrapper
 
 class LockboxAttachment(
 	lockbox: ItemStack
@@ -55,7 +55,11 @@ class LockboxAttachment(
 		}
 	}
 
-	override val itemHandler: IItemHandler = InvWrapper(container)
+	override val itemHandler = RangedWrapper(
+		InvWrapper(container),
+		0,
+		LockboxContainer.STORAGE_SLOT_COUNT
+	)
 
 	init {
 		val contents = lockbox.getOrDefault(
