@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.critterworks.datagen.tag.ModDamageTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
+import dev.aaronhowser.mods.critterworks.item.SnailShellItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
@@ -26,11 +27,13 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
+import net.neoforged.neoforge.event.tick.PlayerTickEvent
 import net.neoforged.neoforge.event.tick.ServerTickEvent
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 
 @EventBusSubscriber(modid = Critterworks.MOD_ID)
 object CommonEvents {
+
 	@SubscribeEvent
 	fun registerPayloads(event: RegisterPayloadHandlersEvent) {
 		ModPacketHandler.registerPayloads(event)
@@ -122,6 +125,11 @@ object CommonEvents {
 		) {
 			event.entity.setUnlimitedLifetime()
 		}
+	}
+
+	@SubscribeEvent
+	fun afterPlayerTick(event: PlayerTickEvent.Post) {
+		SnailShellItem.handlePlayerTick(event)
 	}
 
 }
