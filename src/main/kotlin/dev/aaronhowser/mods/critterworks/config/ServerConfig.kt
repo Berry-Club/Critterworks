@@ -9,6 +9,7 @@ class ServerConfig(
 ) {
 
 	lateinit var tardigradeDisablesExpiring: ModConfigSpec.BooleanValue
+	lateinit var filterfeederWaterFogRadius: ModConfigSpec.DoubleValue
 
 	lateinit var lockboxDropIntervalTicks: ModConfigSpec.IntValue
 	lateinit var lockboxDropAmount: ModConfigSpec.IntValue
@@ -16,7 +17,6 @@ class ServerConfig(
 
 	lateinit var sparkbugBushMaxEnergyTransferPerInput: ModConfigSpec.IntValue
 	lateinit var sparkbugBushPollenRadius: ModConfigSpec.DoubleValue
-	lateinit var filterfeederWaterFogRadius: ModConfigSpec.DoubleValue
 
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
@@ -35,16 +35,16 @@ class ServerConfig(
 			.comment("Whether or not Tardigrades attached to items prevent the item entity from expiring")
 			.define("tardigradeDisablesExpiring", true)
 
+		filterfeederWaterFogRadius = builder
+			.comment("The distance at which Filterfeeders begin clearing water fog. Set to 0 to disable.")
+			.defineInRange("waterFogRadius", 64.0, 0.0, Double.MAX_VALUE)
+
 		builder.section("scoochworm_attachments") {
 			scoochwormAttachmentConfigs()
 		}
 
 		builder.section("sparkbug_bush") {
 			sparkbugBushConfigs()
-		}
-
-		builder.section("filterfeeder") {
-			filterfeederConfigs()
 		}
 
 		builder.section("world_gen") {
@@ -78,12 +78,6 @@ class ServerConfig(
 		sparkbugBushPollenRadius = builder
 			.comment("The maximum distance a Pollen Point can be from the Sparkbug Bush")
 			.defineInRange("sparkbugBushPollenRadius", 16.0, 0.0, Double.MAX_VALUE)
-	}
-
-	private fun filterfeederConfigs() {
-		filterfeederWaterFogRadius = builder
-			.comment("The distance at which Filterfeeders begin clearing water fog. Set to 0 to disable.")
-			.defineInRange("waterFogRadius", 64.0, 0.0, Double.MAX_VALUE)
 	}
 
 	private fun worldGenConfigs() {
