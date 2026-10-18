@@ -3,6 +3,7 @@
 ### Removed
 
 - Item Filter
+	- Aliased it to the new item though
 
 ### Added
 
@@ -10,7 +11,7 @@
 	- New clam mobs found in ocean and river biomes
 	- Click to collect as an item, works like an Item/Fluid Filter
 	- Drop the item in water to turn it back into a mob
-    - Also removes water fog within a radius around them
+	- Also removes water fog within a radius around them
 
 ### Changed
 
