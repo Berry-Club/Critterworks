@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.mixin;
 
-import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormModel;
+import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormModel;
 import dev.aaronhowser.mods.critterworks.config.ClientConfig;
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity;
 import net.minecraft.client.Camera;

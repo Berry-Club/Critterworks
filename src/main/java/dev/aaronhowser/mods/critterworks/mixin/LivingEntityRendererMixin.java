@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.mixin;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.aaronhowser.mods.critterworks.client.model.entity.ScoochwormModel;
+import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormModel;
 import dev.aaronhowser.mods.critterworks.client.render.TintingMultiBufferSource;
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity;
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor;
