@@ -1,10 +1,5 @@
 # 1.4.0
 
-### Removed
-
-- Item Filter
-	- Aliased it to the new item though
-
 ### Added
 
 - Item/Fluid Filterfeeders
@@ -19,6 +14,11 @@
 - Schoochstem vines now generate along Lush Cave surfaces
 - The Lockbox can now take an Item Filterfeeder to limit what can go into it
 - Updated the Lockbox's screen texture
+
+### Removed
+
+- Item Filter
+	- Aliased it to the new item though
 
 # 1.3.0
 
