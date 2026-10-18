@@ -12,6 +12,7 @@ import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.advancements.Advancement
 import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.advancements.AdvancementType
+import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.*
 import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
@@ -154,10 +155,85 @@ class ModAdvancementSubProvider(
 			)
 			.addCriterion("eat_aaronberry", consumed(ModItems.AARONBERRY.get()))
 			.save(ModAdvancements.EAT_AARONBERRY)
+
+		advancement()
+			.parent(root)
+			.display(
+				ModItems.ITEM_FILTERFEEDER,
+				ModAdvancementLang.CATCH_FILTERFEEDER_TITLE.toComponent(),
+				ModAdvancementLang.CATCH_FILTERFEEDER_DESC.toComponent(),
+			)
+			.hasAny(ModItems.ITEM_FILTERFEEDER, ModItems.FLUID_FILTERFEEDER)
+			.save(ModAdvancements.CATCH_FILTERFEEDER)
+
+		advancement()
+			.parent(root)
+			.display(
+				ModItems.TARDIGRADE,
+				ModAdvancementLang.TARDIGRADE_TITLE.toComponent(),
+				ModAdvancementLang.TARDIGRADE_DESC.toComponent(),
+			)
+			.has(ModItems.TARDIGRADE)
+			.save(ModAdvancements.TARDIGRADE)
+
+		val spiderNest = advancement()
+			.parent(root)
+			.display(
+				ModItems.HOPPING_SPIDER,
+				ModAdvancementLang.FIND_SPIDER_TITLE.toComponent(),
+				ModAdvancementLang.FIND_SPIDER_DESC.toComponent(),
+			)
+			.hasAny(ModItems.HOPPING_SPIDER, ModBlocks.HOPPING_SPIDER_NEST)
+			.save(ModAdvancements.FIND_SPIDER)
+
+		val webMaking = advancement()
+			.parent(spiderNest)
+			.display(
+				ModItems.ARTIFICIAL_SPINNERETS,
+				ModAdvancementLang.WEB_MAKING_TITLE.toComponent(),
+				ModAdvancementLang.WEB_MAKING_DESC.toComponent(),
+			)
+			.has(ModItems.ARTIFICIAL_SPINNERETS)
+			.save(ModAdvancements.WEB_MAKING)
+
+		advancement()
+			.parent(webMaking)
+			.display(
+				ModItems.ARTIFICIAL_SPINNERETS,
+				ModAdvancementLang.WEB_PORT_TITLE.toComponent(),
+				ModAdvancementLang.WEB_PORT_DESC.toComponent(),
+			)
+			.has(ModItems.WEB_PORT)
+			.save(ModAdvancements.WEB_PORT)
+
+		val sparkbugBush = advancement()
+			.display(
+				ModBlocks.SPARKBUG_BUSH,
+				ModAdvancementLang.SPARKBUG_BUSH_TITLE.toComponent(),
+				ModAdvancementLang.SPARKBUG_BUSH_DESC.toComponent(),
+			)
+			.has(ModBlocks.SPARKBUG_BUSH)
+			.save(ModAdvancements.SPARKBUG_BUSH)
+
+		advancement()
+			.display(
+				ModItems.SPARKPOLLEN_POUCH,
+				ModAdvancementLang.USE_SPARKPOLLEN_TITLE.toComponent(),
+				ModAdvancementLang.USE_SPARKPOLLEN_DESC.toComponent(),
+			)
+			.parent(sparkbugBush)
+			.addCriterion(
+				"use_sparkpollen",
+				ItemUsedOnLocationTrigger.TriggerInstance.itemUsedOnBlock(
+					LocationPredicate.Builder.location(),
+					ItemPredicate.Builder.item().of(ModItems.SPARKPOLLEN_POUCH)
+				)
+			)
+			.save(ModAdvancements.USE_SPARKPOLLEN)
 	}
 
-	private fun interactedWith(entityType: EntityType<*>) =
-		PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
+	private fun interactedWith(entityType: EntityType<*>): Criterion<PlayerInteractTrigger.TriggerInstance> {
+		return PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
 			ItemPredicate.Builder.item(),
 			Optional.of(
 				EntityPredicate.wrap(
@@ -166,10 +242,12 @@ class ModAdvancementSubProvider(
 				)
 			)
 		)
+	}
 
-	private fun consumed(item: ItemLike) =
-		ConsumeItemTrigger.TriggerInstance.usedItem(
-			ItemPredicate.Builder.item()
-				.of(item)
+	private fun consumed(item: ItemLike): Criterion<ConsumeItemTrigger.TriggerInstance> {
+		return ConsumeItemTrigger.TriggerInstance.usedItem(
+			ItemPredicate.Builder.item().of(item)
 		)
+	}
+
 }

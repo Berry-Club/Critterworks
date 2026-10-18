@@ -4,6 +4,7 @@ object ModAdvancementLang {
 
 	const val ROOT_TITLE = "advancements.critterworks.root.title"
 	const val ROOT_DESC = "advancements.critterworks.root.desc"
+
 	const val BREAK_APPLE_SLICE_TITLE = "advancements.critterworks.break_apple_slice.title"
 	const val BREAK_APPLE_SLICE_DESC = "advancements.critterworks.break_apple_slice.desc"
 	const val INTERACT_WITH_SCOOCHWORM_TITLE = "advancements.critterworks.interact_with_scoochworm.title"
@@ -20,6 +21,23 @@ object ModAdvancementLang {
 	const val EAT_DYEBERRY_DESC = "advancements.critterworks.eat_dyeberry.desc"
 	const val EAT_AARONBERRY_TITLE = "advancements.critterworks.eat_aaronberry.title"
 	const val EAT_AARONBERRY_DESC = "advancements.critterworks.eat_aaronberry.desc"
+
+	const val FIND_SPIDER_TITLE = "advancements.critterworks.find_spider.title"
+	const val FIND_SPIDER_DESC = "advancement.critterworks.find_spider.desc"
+	const val WEB_MAKING_TITLE = "advancements.critterworks.web_making.title"
+	const val WEB_MAKING_DESC = "advancements.critterworks.web_making.desc"
+	const val WEB_PORT_TITLE = "advancements.critterworks.web_port.title"
+	const val WEB_PORT_DESC = "advancements.critterworks.web_port.desc"
+
+	const val SPARKBUG_BUSH_TITLE = "advancements.critterworks.sparkbug_bush.title"
+	const val SPARKBUG_BUSH_DESC = "advancements.critterworks.sparkbug_bush.desc"
+	const val USE_SPARKPOLLEN_TITLE = "advancements.critterworks.use_sparkpollen.title"
+	const val USE_SPARKPOLLEN_DESC = "advancements.critterworks.use_sparkpollen.desc"
+
+	const val CATCH_FILTERFEEDER_TITLE = "advancements.critterworks.catch_filterfeeder.title"
+	const val CATCH_FILTERFEEDER_DESC = "advancements.critterworks.catch_filterfeeder.desc"
+	const val TARDIGRADE_TITLE = "advancements.critterworks.tardigade.title"
+	const val TARDIGRADE_DESC = "advancements.critterworks.tardigade.desc"
 
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {

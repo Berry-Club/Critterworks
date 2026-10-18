@@ -8,6 +8,7 @@
 		- By default this includes movement from outside sources like gravity
 		- Can be configured to instead only zero out the player's movement input
     - Also cannot left or right click during this
+- Several advancements
 
 # 1.4.0
 
