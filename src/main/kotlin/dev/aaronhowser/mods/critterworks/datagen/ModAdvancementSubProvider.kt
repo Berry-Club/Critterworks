@@ -172,7 +172,7 @@ class ModAdvancementSubProvider(
 		advancement()
 			.parent(root)
 			.display(
-				ModItems.APPLY_TARDIGRADE,
+				ModItems.TARDIGRADE,
 				ModAdvancementLang.APPLY_TARDIGRADE_TITLE.toComponent(),
 				ModAdvancementLang.APPLY_TARDIGRADE_DESC.toComponent(),
 			)

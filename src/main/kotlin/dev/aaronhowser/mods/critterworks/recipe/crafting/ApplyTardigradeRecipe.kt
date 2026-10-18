@@ -65,6 +65,6 @@ class ApplyTardigradeRecipe(
 	}
 
 	companion object {
-		val TARDIGRADE_INGREDIENT: Ingredient = ModItems.APPLY_TARDIGRADE.asIngredient()
+		val TARDIGRADE_INGREDIENT: Ingredient = ModItems.TARDIGRADE.asIngredient()
 	}
 }
