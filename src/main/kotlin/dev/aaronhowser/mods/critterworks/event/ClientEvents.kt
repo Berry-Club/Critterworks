@@ -17,6 +17,7 @@ import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import dev.aaronhowser.mods.critterworks.registry.ModParticleTypes
+import net.minecraft.client.Minecraft
 import net.minecraft.core.registries.BuiltInRegistries
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
@@ -31,7 +32,17 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 object ClientEvents {
 
 	@SubscribeEvent
-	fun interactWithWebLine(event: InputEvent.InteractionKeyMappingTriggered) {
+	fun handleInteractionInput(event: InputEvent.InteractionKeyMappingTriggered) {
+		val player = Minecraft.getInstance().player
+		if (player != null
+			&& player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)
+			&& (event.isAttack || event.isUseItem)
+		) {
+			event.isCanceled = true
+			event.setSwingHand(false)
+			return
+		}
+
 		ClientWebLineInteractionHandler.handleInteraction(event)
 	}
 
