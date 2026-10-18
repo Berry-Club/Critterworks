@@ -221,6 +221,7 @@ class ModAdvancementSubProvider(
 			.save(ModAdvancements.WEB_PORT)
 
 		val sparkbugBush = advancement()
+			.parent(root)
 			.display(
 				ModBlocks.SPARKBUG_BUSH,
 				ModAdvancementLang.SPARKBUG_BUSH_TITLE.toComponent(),

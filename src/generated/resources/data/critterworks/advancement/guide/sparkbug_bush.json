@@ -1,4 +1,5 @@
 {
+  "parent": "critterworks:guide/root",
   "criteria": {
     "has_sparkbug_bush": {
       "conditions": {
