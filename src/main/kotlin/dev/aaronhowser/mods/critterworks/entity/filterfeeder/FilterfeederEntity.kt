@@ -42,6 +42,10 @@ import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.animation.AnimationController
+import software.bernie.geckolib.animation.AnimationState
+import software.bernie.geckolib.animation.PlayState
+import software.bernie.geckolib.animation.RawAnimation
 
 class FilterfeederEntity(
 	entityType: EntityType<out FilterfeederEntity>,
@@ -169,7 +173,16 @@ class FilterfeederEntity(
 		}
 	}
 
-	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) = Unit
+	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
+		controllers.add(AnimationController(this, "main", 0, ::selectAnimation))
+	}
+
+	private fun selectAnimation(animationState: AnimationState<FilterfeederEntity>): PlayState {
+		if (!animationState.isMoving) return PlayState.STOP
+
+		return animationState.setAndContinue(SWIM_ANIMATION)
+	}
+
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	companion object {
@@ -177,8 +190,13 @@ class FilterfeederEntity(
 		const val HEIGHT = 0.125f
 		const val MAXIMUM_FLOOR_DISTANCE = 10
 		private const val FLUID_SPAWN_CHANCE = 0.2f
+
 		private const val FILTER_TYPE_TAG = "FilterType"
 		private const val FILTER_STACK_TAG = "FilterStack"
+
+		private val SWIM_ANIMATION: RawAnimation? =
+			RawAnimation.begin()
+				.thenLoop("animation.clam.swim")
 
 		private val DATA_FILTER_TYPE: EntityDataAccessor<Int> =
 			SynchedEntityData.defineId(
