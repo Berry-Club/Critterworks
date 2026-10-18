@@ -15,6 +15,10 @@
 - The Lockbox can now take an Item Filterfeeder to limit what can go into it
 - Updated the Lockbox's screen texture
 
+### Fixed
+
+- Fixed the config for the Pollen Point radius not being respected
+
 ### Removed
 
 - Item Filter

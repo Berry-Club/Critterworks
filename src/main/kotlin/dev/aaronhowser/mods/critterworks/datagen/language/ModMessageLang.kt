@@ -10,6 +10,8 @@ object ModMessageLang {
 	const val OBSTRUCTED_MESSAGE = "item.critterworks.artificial_spinnerets.obstructed"
 	const val LINE_CREATED_MESSAGE = "item.critterworks.artificial_spinnerets.line_created"
 	const val LINE_REMOVED_MESSAGE = "item.critterworks.artificial_spinnerets.line_removed"
+	const val POLLEN_POINT_TOO_FAR_MESSAGE = "item.critterworks.sparkpollen_pouch.too_far"
+	const val POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE = "item.critterworks.sparkpollen_pouch.no_energy_connection"
 
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {
@@ -21,6 +23,8 @@ object ModMessageLang {
 			add(OBSTRUCTED_MESSAGE, "The selected faces do not have line of sight")
 			add(LINE_CREATED_MESSAGE, "Web line created")
 			add(LINE_REMOVED_MESSAGE, "Web line removed")
+			add(POLLEN_POINT_TOO_FAR_MESSAGE, "The Pollen Point is too far from the Sparkbug Bush")
+			add(POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE, "The selected face cannot transfer energy")
 		}
 	}
 

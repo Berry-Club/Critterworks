@@ -1,11 +1,14 @@
 package dev.aaronhowser.mods.critterworks.handler.sparkbug
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.neoforged.neoforge.energy.IEnergyStorage
@@ -22,26 +25,47 @@ class PollenPointHandler {
 	var displayPollenPoints: Set<DisplayPollenPoint> = setOf()
 		private set
 
-	fun addPollenPoint(
+	fun togglePollenPoint(
 		level: Level,
+		bushPos: BlockPos,
 		pos: BlockPos,
 		direction: Direction,
 		isInput: Boolean
-	): Boolean {
+	): PollenPointInteractionResult {
 		val pollenPoint = PollenPoint(pos, direction)
-		if (pollenPoint in inputPollenPoints || pollenPoint in outputPollenPoints) return false
-		if (pollenPoint.getEnergyHandler(level) == null) return false
+		val removedInput = inputPollenPoints.remove(pollenPoint)
+		val removedOutput = outputPollenPoints.remove(pollenPoint)
+		if (removedInput || removedOutput) return PollenPointInteractionResult.Removed
 
-		return if (isInput) {
+		val invalidMessage = getInvalidMessage(level, bushPos, pollenPoint)
+		if (invalidMessage != null) {
+			return PollenPointInteractionResult.Failed(invalidMessage)
+		}
+
+		if (isInput) {
 			inputPollenPoints.add(pollenPoint)
 		} else {
 			outputPollenPoints.add(pollenPoint)
 		}
+
+		return PollenPointInteractionResult.Added
 	}
 
-	fun removePollenPoint(pos: BlockPos, direction: Direction): Boolean {
-		val pollenPoint = PollenPoint(pos, direction)
-		return inputPollenPoints.remove(pollenPoint) || outputPollenPoints.remove(pollenPoint)
+	private fun getInvalidMessage(
+		level: Level,
+		bushPos: BlockPos,
+		pollenPoint: PollenPoint
+	): Component? {
+		val maximumRadius = ServerConfig.CONFIG.sparkbugBushPollenRadius.get()
+		if (bushPos.distSqr(pollenPoint.pos) > maximumRadius * maximumRadius) {
+			return ModMessageLang.POLLEN_POINT_TOO_FAR_MESSAGE.toComponent()
+		}
+
+		if (pollenPoint.getEnergyHandler(level) == null) {
+			return ModMessageLang.POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE.toComponent()
+		}
+
+		return null
 	}
 
 	fun serverTick(level: ServerLevel): Boolean {

@@ -4,9 +4,9 @@ import dev.aaronhowser.mods.aaron.block_entity.SyncingBlockEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.randomPos
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
-import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.handler.sparkbug.DisplayPollenPoint
 import dev.aaronhowser.mods.critterworks.handler.sparkbug.PollenPointHandler
+import dev.aaronhowser.mods.critterworks.handler.sparkbug.PollenPointInteractionResult
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModParticleTypes
 import net.minecraft.core.BlockPos
@@ -33,28 +33,22 @@ class SparkbugBushBlockEntity(
 	val displayPollenPoints: Set<DisplayPollenPoint>
 		get() = pollenPointHandler.displayPollenPoints
 
-	fun addPollenPoint(
+	fun togglePollenPoint(
+		level: Level,
 		pos: BlockPos,
 		direction: Direction,
 		isInput: Boolean
-	): Boolean {
-		val level = level ?: return false
-		val success = pollenPointHandler.addPollenPoint(level, pos, direction, isInput)
-		if (!success) return false
+	): PollenPointInteractionResult {
+		val result = pollenPointHandler.togglePollenPoint(level, blockPos, pos, direction, isInput)
 
-		setChanged()
-		return true
-	}
+		when (result) {
+			PollenPointInteractionResult.Added,
+			PollenPointInteractionResult.Removed -> setChanged()
 
-	fun removePollenPoint(
-		pos: BlockPos,
-		direction: Direction
-	): Boolean {
-		val success = pollenPointHandler.removePollenPoint(pos, direction)
-		if (!success) return false
+			is PollenPointInteractionResult.Failed -> Unit
+		}
 
-		setChanged()
-		return true
+		return result
 	}
 
 	private fun serverTick(level: ServerLevel) {

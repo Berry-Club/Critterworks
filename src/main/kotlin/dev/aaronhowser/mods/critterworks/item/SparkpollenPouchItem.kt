@@ -3,8 +3,8 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.status
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.tell
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toBlockPos
+import dev.aaronhowser.mods.critterworks.handler.sparkbug.PollenPointInteractionResult
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -64,23 +64,10 @@ class SparkpollenPouchItem(properties: Properties) : Item(properties) {
 			val isInput = stack.getOrDefault(ModDataComponents.IS_INPUT, true)
 
 			val player = context.player
+			val result = bushBe.togglePollenPoint(level, pos, clickedDirection, isInput)
 
-			val added = bushBe.addPollenPoint(pos, clickedDirection, isInput)
-			if (added) {
-				if (isInput) {
-					player?.tell("Added a Charging Sparkpollen Pinch")
-				} else {
-					player?.tell("Added a Grounding Sparkpollen Pinch")
-				}
-			} else {
-				val removed = bushBe.removePollenPoint(pos, clickedDirection)
-				if (removed) {
-					if (isInput) {
-						player?.tell("Removed a Charging Sparkpollen Pinch")
-					} else {
-						player?.tell("Removed a Grounding Sparkpollen Pinch")
-					}
-				}
+			if (result is PollenPointInteractionResult.Failed) {
+				player?.status(result.message)
 			}
 		}
 
