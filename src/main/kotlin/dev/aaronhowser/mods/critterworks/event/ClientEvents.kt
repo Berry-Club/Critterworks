@@ -4,19 +4,16 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.render.block_entity.SparkbugBushBlockRenderer
+import dev.aaronhowser.mods.critterworks.client.render.entity.FilterfeederRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormRenderer
-import dev.aaronhowser.mods.critterworks.client.render.entity.FilterfeederRenderer
+import dev.aaronhowser.mods.critterworks.client.render.entity.SnailShellRenderer
 import dev.aaronhowser.mods.critterworks.client.render.item.CritterCageItemRenderer
 import dev.aaronhowser.mods.critterworks.client.render.item.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
-import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
-import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
-import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
-import dev.aaronhowser.mods.critterworks.registry.ModItems
-import dev.aaronhowser.mods.critterworks.registry.ModParticleTypes
+import dev.aaronhowser.mods.critterworks.registry.*
 import net.minecraft.client.Minecraft
 import net.minecraft.core.registries.BuiltInRegistries
 import net.neoforged.api.distmarker.Dist
@@ -30,6 +27,23 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 	value = [Dist.CLIENT]
 )
 object ClientEvents {
+
+	@SubscribeEvent
+	fun renderShelledPlayer(event: RenderPlayerEvent.Pre) {
+		val player = event.entity
+		if (!player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) return
+		if (!SnailShellRenderer.render(event)) return
+
+		event.isCanceled = true
+	}
+
+	@SubscribeEvent
+	fun hideShelledPlayerHands(event: RenderHandEvent) {
+		val player = Minecraft.getInstance().player ?: return
+		if (!player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) return
+
+		event.isCanceled = true
+	}
 
 	@SubscribeEvent
 	fun handleInteractionInput(event: InputEvent.InteractionKeyMappingTriggered) {
@@ -62,6 +76,11 @@ object ClientEvents {
 		event.registerEntityRenderer(ModEntityTypes.FILTERFEEDER.get(), ::FilterfeederRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM.get(), ::ScoochwormRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM_PART.get(), ::ScoochwormPartRenderer)
+	}
+
+	@SubscribeEvent
+	fun addEntityRenderLayers(event: EntityRenderersEvent.AddLayers) {
+		SnailShellRenderer.initialize(event.context)
 	}
 
 	@SubscribeEvent
