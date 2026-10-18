@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
 import dev.aaronhowser.mods.critterworks.item.SnailShellItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
+import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModPotions
@@ -26,6 +27,7 @@ import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
+import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
@@ -136,6 +138,14 @@ object CommonEvents {
 	@SubscribeEvent
 	fun onIncomingDamage(event: LivingIncomingDamageEvent) {
 		SnailShellItem.handleIncomingDamage(event)
+	}
+
+	@SubscribeEvent
+	fun onLivingKnockback(event: LivingKnockBackEvent) {
+		val entity = event.entity
+		if (entity.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) {
+			event.isCanceled = true
+		}
 	}
 
 }
