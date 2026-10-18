@@ -25,6 +25,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
@@ -130,6 +131,11 @@ object CommonEvents {
 	@SubscribeEvent
 	fun afterPlayerTick(event: PlayerTickEvent.Post) {
 		SnailShellItem.handlePlayerTick(event)
+	}
+
+	@SubscribeEvent
+	fun onIncomingDamage(event: LivingIncomingDamageEvent) {
+		SnailShellItem.handleIncomingDamage(event)
 	}
 
 }
