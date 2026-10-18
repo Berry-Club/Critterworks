@@ -38,7 +38,7 @@ class LockboxMenu(
 			for (column in 0 until 9) {
 				val slotIndex = column + row * 9
 				val x = 8 + column * 18
-				val y =  28 + row * 18
+				val y = 28 + row * 18
 
 				addSlot(ContainerSlot(lockboxContainer, slotIndex, x, y))
 			}

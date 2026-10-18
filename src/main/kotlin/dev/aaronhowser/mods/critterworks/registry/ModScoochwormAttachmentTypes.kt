@@ -8,11 +8,7 @@ import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.Ch
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.LockboxAttachment
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.NoAttachment
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.SaddleAttachment
-import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.ChunkLoaderAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.LockboxAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.NoAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SaddleAttachmentData
-import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.*
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.ItemStack

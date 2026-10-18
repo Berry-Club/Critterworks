@@ -3,11 +3,7 @@ package dev.aaronhowser.mods.critterworks.registry
 import dev.aaronhowser.mods.aaron.registry.AaronDataComponentRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
-import dev.aaronhowser.mods.critterworks.item.component.FluidFilterComponent
-import dev.aaronhowser.mods.critterworks.item.component.HoppingSpiderAnimation
-import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
-import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
-import dev.aaronhowser.mods.critterworks.item.component.WebPortComponent
+import dev.aaronhowser.mods.critterworks.item.component.*
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.Registries
 import net.minecraft.util.Unit

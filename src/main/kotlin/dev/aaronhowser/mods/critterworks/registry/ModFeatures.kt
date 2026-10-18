@@ -2,8 +2,8 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.world.feature.HoppingSpiderNestFeature
-import dev.aaronhowser.mods.critterworks.world.feature.scoochstem_vine.ScoochstemVineFeature
 import dev.aaronhowser.mods.critterworks.world.feature.ScoochwormAppleFeature
+import dev.aaronhowser.mods.critterworks.world.feature.scoochstem_vine.ScoochstemVineFeature
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.neoforged.neoforge.registries.DeferredHolder

@@ -8,7 +8,6 @@ import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.recipe.crafting.ApplyTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.recipe.crafting.RemoveTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
-import dev.aaronhowser.mods.critterworks.registry.ModItems
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration
