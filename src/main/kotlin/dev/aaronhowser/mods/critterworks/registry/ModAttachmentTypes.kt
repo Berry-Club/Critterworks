@@ -13,6 +13,7 @@ object ModAttachmentTypes {
 	val ATTACHMENT_TYPE_REGISTRY: DeferredRegister<AttachmentType<*>> =
 		DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Critterworks.MOD_ID)
 
+	@JvmField
 	val IS_SHELL_ACTIVE: DeferredHolder<AttachmentType<*>, AttachmentType<Boolean>> =
 		register(
 			"is_shell_active",
