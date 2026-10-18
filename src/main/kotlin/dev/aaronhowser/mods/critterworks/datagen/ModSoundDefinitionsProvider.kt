@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.datagen.sound
+package dev.aaronhowser.mods.critterworks.datagen
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.language.ModSoundLang
