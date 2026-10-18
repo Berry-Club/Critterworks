@@ -15,6 +15,9 @@ object ModConfigLang {
 			addConfig(config.path.last(), value)
 		}
 
+		addConfig(ServerConfig.CONFIG.tardigradeDisablesExpiring, "Tardigrades Prevent Item Expiration")
+		addConfig(ServerConfig.CONFIG.filterfeederWaterFogRadius, "Filterfeeder Water Fog Radius")
+
 		addConfig("scoochworm_attachments", "Scoochworm Attachments")
 		addConfig(ServerConfig.CONFIG.lockboxDropIntervalTicks, "Lockbox Drop Interval (ticks)")
 		addConfig(ServerConfig.CONFIG.lockboxDropAmount, "Lockbox Drop Amount")
@@ -27,6 +30,7 @@ object ModConfigLang {
 
 		addConfig("sparkbug_bush", "Sparkbug Bush")
 		addConfig(ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput, "Maximum Energy Transfer per Input (FE/t)")
+		addConfig(ServerConfig.CONFIG.sparkbugBushPollenRadius, "Pollen Point Radius")
 
 		addConfig("rendering", "Rendering")
 		addConfig(ClientConfig.CONFIG.hoppingSpiderScale, "Hopping Spider Scale")
@@ -37,6 +41,7 @@ object ModConfigLang {
 		addConfig("debug", "Debug")
 		addConfig(ServerConfig.CONFIG.sendScoochwormAppleTeleportMessage, "Send Scoochworm Apple Teleport Message")
 		addConfig(ServerConfig.CONFIG.sendHoppingSpiderNestTeleportMessage, "Send Hopping Spider Nest Teleport Message")
+		addConfig(ServerConfig.CONFIG.sendScoochstemVineTeleportMessage, "Send Scoochstem Vine Teleport Message")
 		addConfig(ClientConfig.CONFIG.renderScoochwormAttachmentProbe, "Render Scoochworm Attachment Probe")
 		addConfig(ClientConfig.CONFIG.renderScoochwormPath, "Render Scoochworm Path")
 		addConfig(ClientConfig.CONFIG.renderWebLineDebugColors, "Render Web Line Debug Colors")
