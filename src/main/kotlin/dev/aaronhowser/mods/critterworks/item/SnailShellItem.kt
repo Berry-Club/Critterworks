@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.sounds.SoundEvents
@@ -23,6 +24,10 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 				&& !player.cooldowns.isOnCooldown(ModItems.SNAIL_SHELL.get())
 				&& player.inventory.contains { it.isItem(ModItems.SNAIL_SHELL) }
 
+			if (isShellProtecting && ServerConfig.CONFIG.snailShellDisablesAllMovement.get()) {
+				player.deltaMovement = Vec3.ZERO
+			}
+
 			if (player.isServerSide) {
 				val wasShellProtecting = player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)
 
@@ -38,10 +43,6 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 						if (isShellProtecting) 1f else 1.2f
 					)
 				}
-			}
-
-			if (isShellProtecting) {
-				player.deltaMovement = Vec3.ZERO
 			}
 		}
 
