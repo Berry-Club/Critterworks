@@ -18,7 +18,7 @@ class ItemFilterScreen(
 ) : CritterworksScreen<ItemFilterMenu>(menu, playerInventory, title) {
 
 	override val background: ScreenBackground = BACKGROUND
-	override val inventoryLabelOffsetY: Int = 73
+	override val inventoryLabelOffsetY: Int = -7
 
 	private lateinit var invertButton: Button
 	private lateinit var useTagsButton: Button

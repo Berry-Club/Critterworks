@@ -17,7 +17,7 @@ class FluidFilterScreen(
 ) : CritterworksScreen<FluidFilterMenu>(menu, playerInventory, title) {
 
 	override val background: ScreenBackground = BACKGROUND
-	override val inventoryLabelOffsetY: Int = 55
+	override val inventoryLabelOffsetY: Int = -6
 
 	override fun baseInit() {
 		super.baseInit()
@@ -91,6 +91,6 @@ class FluidFilterScreen(
 	}
 
 	companion object {
-		val BACKGROUND = ScreenBackground(Critterworks.modResource("textures/gui/fluid_filter.png"), 176, 223)
+		val BACKGROUND = ScreenBackground(Critterworks.modResource("textures/gui/fluid_filter.png"), 176, 241)
 	}
 }

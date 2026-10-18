@@ -44,7 +44,7 @@ class FluidFilterMenu(
 			filterItems.setStackInSlot(index, ghostStack)
 		}
 
-		addSlots(141)
+		addSlots(159)
 	}
 
 	private fun getFilterStack(): ItemStack = playerInventory.player.getItemInHand(hand)
