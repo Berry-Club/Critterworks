@@ -22,7 +22,8 @@ object ModRegistries {
 			ModFeatures.FEATURE_REGISTRY,
 			ModParticleTypes.PARTICLE_TYPE_REGISTRY,
 			ModRecipeSerializers.RECIPE_SERIALIZER_REGISTRY,
-			ModLootItemConditionTypes.LOOT_CONDITION_TYPE_REGISTRY
+			ModLootItemConditionTypes.LOOT_CONDITION_TYPE_REGISTRY,
+			ModAttachmentTypes.ATTACHMENT_TYPE_REGISTRY
 		)
 
 		for (registry in registries) {
