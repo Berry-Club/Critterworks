@@ -3,12 +3,15 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.DamageTypeTags
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.Item
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
@@ -17,6 +20,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent
 class SnailShellItem(properties: Properties) : Item(properties) {
 
 	companion object {
+		val SHELLED_SCALE_MODIFIER = Critterworks.modResource("shelled_scale")
+
 		fun handlePlayerTick(event: PlayerTickEvent.Post) {
 			val player = event.entity
 
@@ -42,6 +47,20 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 						1f,
 						if (isShellProtecting) 1f else 1.2f
 					)
+				}
+
+				//TODO: Also makes the snail model smaller
+				val scaleAttribute = player.getAttribute(Attributes.SCALE)
+				if (isShellProtecting) {
+					val modifier = AttributeModifier(
+						SHELLED_SCALE_MODIFIER,
+						-0.6,
+						AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+					)
+
+					scaleAttribute?.addOrUpdateTransientModifier(modifier)
+				} else {
+					scaleAttribute?.removeModifier(SHELLED_SCALE_MODIFIER)
 				}
 			}
 		}
