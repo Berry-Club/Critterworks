@@ -5,6 +5,8 @@
 - Snail Shell
 	- Makes you immortal when you sneak while it's in your inventory
 	- Cannot move during this
+		- By default this includes movement from outside sources like gravity
+		- Can be configured to instead only zero out the player's movement input
 
 # 1.4.0
 
