@@ -1,7 +1,7 @@
 {
   "advancement.critterworks.find_spider.desc": "Find a Hopping Spider Nest underground",
-  "advancements.critterworks.apply_tardigade.desc": "Find a Tardigrade and craft it with an item",
-  "advancements.critterworks.apply_tardigade.title": "Water Bear!",
+  "advancements.critterworks.apply_tardigade.desc": "Craft the Tardigrade with an item to protect it while dropped",
+  "advancements.critterworks.apply_tardigade.title": "Peak Performance",
   "advancements.critterworks.attach_to_scoochworm.desc": "Attach something to a Scoochworm",
   "advancements.critterworks.attach_to_scoochworm.title": "Dress to Impress",
   "advancements.critterworks.break_apple_slice.desc": "Find and break into a Big Apple, which spawns in Lush Caves",
@@ -15,6 +15,8 @@
   "advancements.critterworks.eat_dyeberry.desc": "Eat a dyeberry",
   "advancements.critterworks.eat_dyeberry.title": "Eat a Dyeberry",
   "advancements.critterworks.find_spider.title": "The Other Cave Spider",
+  "advancements.critterworks.find_tardigade.desc": "Find a Tardigrade",
+  "advancements.critterworks.find_tardigade.title": "Water Bear!",
   "advancements.critterworks.interact_with_scoochworm.desc": "Interact with a Scoochworm",
   "advancements.critterworks.interact_with_scoochworm.title": "The Hungry Hungry Scoochworm",
   "advancements.critterworks.root.desc": "I sure hope it does!",

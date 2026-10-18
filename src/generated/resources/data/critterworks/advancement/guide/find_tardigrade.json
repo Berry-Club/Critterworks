@@ -1,0 +1,33 @@
+{
+  "parent": "critterworks:guide/root",
+  "criteria": {
+    "has_tardigrade": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:tardigrade"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.find_tardigade.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:tardigrade"
+    },
+    "title": {
+      "translate": "advancements.critterworks.find_tardigade.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_tardigrade"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
