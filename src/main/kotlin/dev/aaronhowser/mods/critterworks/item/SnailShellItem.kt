@@ -71,8 +71,19 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			val source = event.source
 			if (source.isDamageSource(DamageTypeTags.NO_IMPACT)) return
 
-			if (!event.entity.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) return
+			val entity = event.entity
+			if (!entity.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) return
+
 			event.isCanceled = true
+
+			if (entity.isServerSide) {
+				entity.level().playSound(
+					null,
+					entity.blockPosition(),
+					SoundEvents.SHIELD_BLOCK,
+					SoundSource.PLAYERS
+				)
+			}
 		}
 	}
 
