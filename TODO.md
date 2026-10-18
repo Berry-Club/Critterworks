@@ -112,6 +112,24 @@
 	- Shoots potions maybe?
 - One of those shield-head ants
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
+- Snail Shell
+	- Makes you immortal and immovable while sneaking
+	- Can't attack or interact or anything during
+	- Maybe it would also shrink you down and cover you with the snail shell model
+	- Get it from the Immortal Snail?
+		- Maybe rare structures under ground that are like, ancient broken-down Snail Containment Units
+		- Getting close to it unleashes the snail
+		- It moves in a straight line towards you at all times, going through blocks because pathfinding is a pain
+		- Probably wouldn't actually be an entity to prevent compatibility shenanigans
+			- SavedData or something instead? LevelActor? Needs to be synced and rendered
+            - Could literally be an entity attachment or something lol
+		- How would you win this?
+			- Re-contain it?
+				- How does that get you its shell though?
+			- Kill it?
+				- Not exactly an IMMORTAL snail then though
+			- Remove its shell and turn it into a slug or something?
+            - It should probably not be super trivial
 
 # Guidebook
 
