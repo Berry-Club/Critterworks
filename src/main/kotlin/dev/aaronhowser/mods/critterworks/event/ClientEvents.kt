@@ -1,15 +1,15 @@
 package dev.aaronhowser.mods.critterworks.event
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.client.render.block_entity.CritterCageBlockRenderer
-import dev.aaronhowser.mods.critterworks.client.render.block_entity.HoppingSpiderNestBlockRenderer
-import dev.aaronhowser.mods.critterworks.client.render.block_entity.SparkbugBushBlockRenderer
-import dev.aaronhowser.mods.critterworks.client.render.entity.FilterfeederRenderer
-import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormPartRenderer
-import dev.aaronhowser.mods.critterworks.client.render.entity.ScoochwormRenderer
-import dev.aaronhowser.mods.critterworks.client.render.entity.SnailShellRenderer
-import dev.aaronhowser.mods.critterworks.client.render.item.CritterCageItemRenderer
-import dev.aaronhowser.mods.critterworks.client.render.item.TardigradeItemDecorator
+import dev.aaronhowser.mods.critterworks.client.block_entity.critter_cage.CritterCageBlockRenderer
+import dev.aaronhowser.mods.critterworks.client.block_entity.hopping_spider_nest.HoppingSpiderNestBlockRenderer
+import dev.aaronhowser.mods.critterworks.client.block_entity.sparkbug_bush.SparkbugBushBlockRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.filterfeeder.FilterfeederRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormPartRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.snail_shell.SnailShellRenderer
+import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageItemRenderer
+import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider

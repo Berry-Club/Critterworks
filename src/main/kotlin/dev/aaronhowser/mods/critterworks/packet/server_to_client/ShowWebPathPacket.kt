@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.packet.server_to_client
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.client.render.web.WebPathIndicatorRenderer
+import dev.aaronhowser.mods.critterworks.client.web.WebPathIndicatorRenderer
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec

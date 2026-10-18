@@ -1,9 +1,0 @@
-package dev.aaronhowser.mods.critterworks.client.model.item
-
-import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.item.HoppingSpiderItem
-import software.bernie.geckolib.model.DefaultedItemGeoModel
-
-class HoppingSpiderItemModel : DefaultedItemGeoModel<HoppingSpiderItem>(
-	Critterworks.modResource("hopping_spider")
-)

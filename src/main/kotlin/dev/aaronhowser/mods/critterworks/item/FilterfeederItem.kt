@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.item
 
-import dev.aaronhowser.mods.critterworks.client.render.item.FilterfeederItemRenderer
+import dev.aaronhowser.mods.critterworks.client.item.filterfeeder.FilterfeederItemRenderer
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer

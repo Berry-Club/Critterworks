@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
-import dev.aaronhowser.mods.critterworks.client.render.item.LockboxItemRenderer
+import dev.aaronhowser.mods.critterworks.client.item.lockbox.LockboxItemRenderer
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import net.minecraft.ChatFormatting
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
