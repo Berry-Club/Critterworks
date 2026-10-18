@@ -6,6 +6,8 @@ import dev.aaronhowser.mods.critterworks.menu.fluid_filter.FluidFilterMenu
 import dev.aaronhowser.mods.critterworks.menu.fluid_filter.FluidFilterScreen
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterMenu
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterScreen
+import dev.aaronhowser.mods.critterworks.menu.lockbox.LockboxMenu
+import dev.aaronhowser.mods.critterworks.menu.lockbox.LockboxScreen
 import dev.aaronhowser.mods.critterworks.menu.spider_nest.SpiderNestMenu
 import dev.aaronhowser.mods.critterworks.menu.spider_nest.SpiderNestScreen
 import dev.aaronhowser.mods.critterworks.menu.stem_comparator.StemComparatorMenu
@@ -39,6 +41,8 @@ object ModMenuTypes : AaronMenuTypesRegistry() {
 
 	val STEM_COMPARATOR: DeferredHolder<MenuType<*>, MenuType<StemComparatorMenu>> =
 		register("stem_comparator", ::StemComparatorMenu)
+	val LOCKBOX: DeferredHolder<MenuType<*>, MenuType<LockboxMenu>> =
+		register("lockbox", ::LockboxMenu)
 
 	override fun registerScreens(event: RegisterMenuScreensEvent) {
 		event.register(ITEM_FILTER.get(), ::ItemFilterScreen)
@@ -46,5 +50,6 @@ object ModMenuTypes : AaronMenuTypesRegistry() {
 		event.register(WEB_PORT.get(), ::WebPortScreen)
 		event.register(SPIDER_NEST.get(), ::SpiderNestScreen)
 		event.register(STEM_COMPARATOR.get(), ::StemComparatorScreen)
+		event.register(LOCKBOX.get(), ::LockboxScreen)
 	}
 }

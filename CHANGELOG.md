@@ -17,6 +17,8 @@
 
 - Tardigrades drop from 1% of Moss Blocks, increasing with Fortune
 - Schoochstem vines now generate along Lush Cave surfaces
+- The Lockbox can now take an Item Filterfeeder to limit what can go into it
+- Updated the Lockbox's screen texture
 
 # 1.3.0
 

@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.ItemStackScoochwormAttachment
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.LockboxAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
+import dev.aaronhowser.mods.critterworks.menu.lockbox.LockboxMenu
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponents
@@ -15,15 +16,13 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.SimpleContainer
 import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.inventory.ChestMenu
-import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemContainerContents
 import net.neoforged.neoforge.items.IItemHandler
+import net.neoforged.neoforge.items.ItemHandlerHelper
 import net.neoforged.neoforge.items.wrapper.InvWrapper
 
 class LockboxAttachment(
@@ -44,7 +43,7 @@ class LockboxAttachment(
 	var openProgress = 0f
 		private set
 
-	private val container = object : SimpleContainer(CONTAINER_SIZE) {
+	private val container = object : LockboxContainer() {
 		override fun startOpen(player: Player) {
 			super.startOpen(player)
 			openers++
@@ -77,13 +76,7 @@ class LockboxAttachment(
 	): InteractionResult {
 		val menuProvider = SimpleMenuProvider(
 			{ containerId, playerInventory, _ ->
-				ChestMenu(
-					MenuType.GENERIC_9x3,
-					containerId,
-					playerInventory,
-					container,
-					CONTAINER_ROWS
-				)
+				LockboxMenu(containerId, playerInventory, container)
 			},
 			itemStack.hoverName
 		)
@@ -156,7 +149,7 @@ class LockboxAttachment(
 	}
 
 	fun insert(itemStack: ItemStack): ItemStack {
-		return container.addItem(itemStack)
+		return ItemHandlerHelper.insertItemStacked(itemHandler, itemStack, false)
 	}
 
 	private fun updateItemContents() {
@@ -183,7 +176,7 @@ class LockboxAttachment(
 	private fun dropNextStack(bodyPart: ScoochwormPartEntity) {
 		val maximumDropAmount = ServerConfig.CONFIG.lockboxDropAmount.get()
 
-		for (slot in 0 until container.containerSize) {
+		for (slot in 0 until LockboxContainer.STORAGE_SLOT_COUNT) {
 			val itemStack = container.getItem(slot)
 			if (itemStack.isEmpty) continue
 
@@ -209,8 +202,6 @@ class LockboxAttachment(
 	}
 
 	companion object {
-		private const val CONTAINER_ROWS = 3
-		private const val CONTAINER_SIZE = 27
 		private const val OPEN_SPEED = 0.1f
 	}
 }
