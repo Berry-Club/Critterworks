@@ -72,4 +72,8 @@ object ModItems : AaronItemRegistry() {
 		) { DyeberryItem.getProperties(wormColor) }
 	}
 
+	init {
+		ITEM_REGISTRY.addAlias(Critterworks.modResource("item_filter"), ITEM_FILTERFEEDER.id)
+	}
+
 }
