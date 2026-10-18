@@ -1,0 +1,23 @@
+---
+title: Item Filterfeeder
+id: critterworks:item_filterfeeder
+related_items: [critterworks:item_filterfeeder]
+type: item
+---
+
+The **Item Filterfeeder** controls which items are accepted by certain things, such as [Web Ports](@critterworks:web_port).
+
+Use the item in your hand to open it. Place example items into its 16 ghost slots; configuring the filter does not consume those items.
+
+Throwing the Filterfeeder into water will convert it back into [its mob form](@critterworks:filterfeeders).
+
+## Options
+
+| Option | Result |
+| --- | --- |
+| Inverted | Allows everything except the listed items. |
+| Use Tags | Also matches items that share a tag with a listed item. |
+| Ignore Damage | Matches damaged and undamaged versions of the same item. |
+| Ignore All Components | Matches the item type without checking any extra item data. |
+
+Item Filterfeeders can be placed inside other Item Filterfeeders to nest them, if you need more than 16 filter entries.
