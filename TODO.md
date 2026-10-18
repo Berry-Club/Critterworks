@@ -89,9 +89,6 @@
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 - Bug lamp?
 	- Kinda like the firefly jar from twilight forest
-- Item Filterfeeder, like a clam or something
-	- Replaces the Item Filter
-	- It's also a block that disables water fog nearby
 
 # "Pet" critters
 
