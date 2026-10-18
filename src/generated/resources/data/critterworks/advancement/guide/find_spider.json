@@ -1,0 +1,44 @@
+{
+  "parent": "critterworks:guide/root",
+  "criteria": {
+    "has_hopping_spider": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:hopping_spider"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_hopping_spider_nest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:hopping_spider_nest"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.critterworks.find_spider.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:hopping_spider"
+    },
+    "title": {
+      "translate": "advancements.critterworks.find_spider.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_hopping_spider",
+      "has_hopping_spider_nest"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

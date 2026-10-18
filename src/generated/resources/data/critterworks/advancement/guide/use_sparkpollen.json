@@ -1,0 +1,40 @@
+{
+  "parent": "critterworks:guide/sparkbug_bush",
+  "criteria": {
+    "use_sparkpollen": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {}
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "critterworks:sparkpollen_pouch"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.use_sparkpollen.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:sparkpollen_pouch"
+    },
+    "title": {
+      "translate": "advancements.critterworks.use_sparkpollen.title"
+    }
+  },
+  "requirements": [
+    [
+      "use_sparkpollen"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

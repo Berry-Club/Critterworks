@@ -120,7 +120,7 @@ class ModItemModelProvider(
 		basicItem(ModItems.WEB_PORT.get())
 		basicItem(ModItems.SCOOCHWORM_GPS.get())
 		basicItem(ModItems.SPARKPOLLEN_POUCH.get())
-		basicItem(ModItems.TARDIGRADE.get())
+		basicItem(ModItems.APPLY_TARDIGRADE.get())
 	}
 
 	private fun filterfeederItems() {

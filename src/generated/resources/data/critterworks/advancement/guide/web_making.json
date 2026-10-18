@@ -1,0 +1,33 @@
+{
+  "parent": "critterworks:guide/find_spider",
+  "criteria": {
+    "has_artificial_spinnerets": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:artificial_spinnerets"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.web_making.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:artificial_spinnerets"
+    },
+    "title": {
+      "translate": "advancements.critterworks.web_making.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_artificial_spinnerets"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

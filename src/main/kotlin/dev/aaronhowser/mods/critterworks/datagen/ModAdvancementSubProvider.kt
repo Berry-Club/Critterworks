@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.datagen.language.ModAdvancementLang
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.advancements.Advancement
@@ -15,7 +16,9 @@ import net.minecraft.advancements.AdvancementType
 import net.minecraft.advancements.Criterion
 import net.minecraft.advancements.critereon.*
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.component.DataComponentPredicate
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Unit
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike
@@ -169,12 +172,23 @@ class ModAdvancementSubProvider(
 		advancement()
 			.parent(root)
 			.display(
-				ModItems.TARDIGRADE,
-				ModAdvancementLang.TARDIGRADE_TITLE.toComponent(),
-				ModAdvancementLang.TARDIGRADE_DESC.toComponent(),
+				ModItems.APPLY_TARDIGRADE,
+				ModAdvancementLang.APPLY_TARDIGRADE_TITLE.toComponent(),
+				ModAdvancementLang.APPLY_TARDIGRADE_DESC.toComponent(),
 			)
-			.has(ModItems.TARDIGRADE)
-			.save(ModAdvancements.TARDIGRADE)
+			.addCriterion(
+				"apply_tardigrade",
+				hasItems(
+					ItemPredicate.Builder
+						.item()
+						.hasComponents(
+							DataComponentPredicate.builder()
+								.expect(ModDataComponents.HAS_TARDIGRADE.get(), Unit.INSTANCE)
+								.build()
+						)
+				)
+			)
+			.save(ModAdvancements.APPLY_TARDIGRADE)
 
 		val spiderNest = advancement()
 			.parent(root)

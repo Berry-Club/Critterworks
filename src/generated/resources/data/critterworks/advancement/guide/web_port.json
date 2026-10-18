@@ -1,0 +1,33 @@
+{
+  "parent": "critterworks:guide/web_making",
+  "criteria": {
+    "has_web_port": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:web_port"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.web_port.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:artificial_spinnerets"
+    },
+    "title": {
+      "translate": "advancements.critterworks.web_port.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_web_port"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

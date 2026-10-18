@@ -23,7 +23,7 @@ class ModOtherLootTablesSubProvider(
 			TARDIGRADE_FROM_MOSS,
 			AaronLootTableDsl.table {
 				pool {
-					item(ModItems.TARDIGRADE.get())
+					item(ModItems.APPLY_TARDIGRADE.get())
 					condition(LootItemCondition.Builder(::createTardigradeChanceCondition))
 				}
 			}

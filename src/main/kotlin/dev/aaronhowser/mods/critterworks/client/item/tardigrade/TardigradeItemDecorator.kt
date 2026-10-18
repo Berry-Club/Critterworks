@@ -23,7 +23,7 @@ object TardigradeItemDecorator : IItemDecorator {
 		poseStack.withPose {
 			poseStack.translate(xOffset + OFFSET, yOffset + OFFSET, Z_OFFSET)
 			poseStack.scale(SCALE, SCALE, SCALE)
-			guiGraphics.renderItem(ModItems.TARDIGRADE.toStack(), 0, 0)
+			guiGraphics.renderItem(ModItems.APPLY_TARDIGRADE.toStack(), 0, 0)
 		}
 
 		return false

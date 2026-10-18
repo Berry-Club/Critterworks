@@ -1,0 +1,44 @@
+{
+  "parent": "critterworks:guide/root",
+  "criteria": {
+    "has_fluid_filterfeeder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:fluid_filterfeeder"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_filterfeeder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:item_filterfeeder"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.catch_filterfeeder.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:item_filterfeeder"
+    },
+    "title": {
+      "translate": "advancements.critterworks.catch_filterfeeder.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_item_filterfeeder",
+      "has_fluid_filterfeeder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

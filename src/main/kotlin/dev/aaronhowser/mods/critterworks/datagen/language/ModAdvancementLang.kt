@@ -36,8 +36,8 @@ object ModAdvancementLang {
 
 	const val CATCH_FILTERFEEDER_TITLE = "advancements.critterworks.catch_filterfeeder.title"
 	const val CATCH_FILTERFEEDER_DESC = "advancements.critterworks.catch_filterfeeder.desc"
-	const val TARDIGRADE_TITLE = "advancements.critterworks.tardigade.title"
-	const val TARDIGRADE_DESC = "advancements.critterworks.tardigade.desc"
+	const val APPLY_TARDIGRADE_TITLE = "advancements.critterworks.apply_tardigade.title"
+	const val APPLY_TARDIGRADE_DESC = "advancements.critterworks.apply_tardigade.desc"
 
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {
@@ -59,6 +59,16 @@ object ModAdvancementLang {
 			add(EAT_DYEBERRY_DESC, "Eat a dyeberry")
 			add(EAT_AARONBERRY_TITLE, "You're Eating My Flesh!")
 			add(EAT_AARONBERRY_DESC, "Eat an Aaronberry")
+			add(FIND_SPIDER_TITLE, "The Other Cave Spider")
+			add(FIND_SPIDER_DESC, "Find a Hopping Spider Nest underground")
+			add(WEB_MAKING_TITLE, "Thwip")
+			add(WEB_MAKING_DESC, "Make Artificial Spinnerets, which can connect two points with a Web Line")
+			add(WEB_PORT_TITLE, "25565")
+			add(WEB_PORT_DESC, "Make a Web Port, which lets Spiders interact with the connected inventory")
+			add(CATCH_FILTERFEEDER_TITLE, "It's OK They Like It")
+			add(CATCH_FILTERFEEDER_DESC, "Catch a Filterfeeder")
+			add(APPLY_TARDIGRADE_TITLE, "Water Bear!")
+			add(APPLY_TARDIGRADE_DESC, "Find a Tardigrade and craft it with an item")
 		}
 	}
 }

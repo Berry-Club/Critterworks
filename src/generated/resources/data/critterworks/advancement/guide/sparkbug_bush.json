@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "has_sparkbug_bush": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:sparkbug_bush"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.sparkbug_bush.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:sparkbug_bush"
+    },
+    "title": {
+      "translate": "advancements.critterworks.sparkbug_bush.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_sparkbug_bush"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
