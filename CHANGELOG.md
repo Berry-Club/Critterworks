@@ -1,3 +1,11 @@
+# 1.5.0
+
+### Added
+
+- Snail Shell
+	- Makes you immortal when you sneak while it's in your inventory
+	- Cannot move during this
+
 # 1.4.0
 
 ### Added
