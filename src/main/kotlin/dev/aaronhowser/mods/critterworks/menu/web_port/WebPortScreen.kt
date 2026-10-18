@@ -21,7 +21,7 @@ class WebPortScreen(menu: WebPortMenu, inventory: Inventory, title: Component) :
 	CritterworksScreen<WebPortMenu>(menu, inventory, title), ScreenWithStrings {
 
 	override val background: ScreenBackground = BACKGROUND
-	override val inventoryLabelOffsetY: Int = -2
+	override val inventoryLabelOffsetY: Int = -5
 
 	private lateinit var colorButton: ColorButton
 	private lateinit var directionButton: Button
