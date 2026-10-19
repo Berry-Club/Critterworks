@@ -10,6 +10,10 @@
     - Also cannot left or right click during this
 - Several advancements
 
+### Changed
+
+- Hopping Spiders can now be worn in your head slot
+
 ### Fixed
 
 - Lockbox items were opening when one attached to a Scoochworm was also open (#2)

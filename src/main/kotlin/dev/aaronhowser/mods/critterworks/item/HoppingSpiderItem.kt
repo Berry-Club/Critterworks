@@ -8,6 +8,8 @@ import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.core.component.DataComponents
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.item.Equipable
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import software.bernie.geckolib.animatable.GeoItem
@@ -19,12 +21,16 @@ import software.bernie.geckolib.constant.DataTickets
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.function.Consumer
 
-class HoppingSpiderItem(properties: Properties) : Item(properties), GeoItem {
+class HoppingSpiderItem(properties: Properties) : Item(properties), GeoItem, Equipable {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 
 	init {
 		SingletonGeoAnimatable.registerSyncedAnimatable(this)
+	}
+
+	override fun getEquipmentSlot(): EquipmentSlot {
+		return EquipmentSlot.HEAD
 	}
 
 	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
