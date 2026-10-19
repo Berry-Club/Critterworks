@@ -26,6 +26,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			val player = event.entity
 
 			val isShellProtecting = player.isDiscrete
+				&& !player.abilities.flying
 				&& !player.cooldowns.isOnCooldown(ModItems.SNAIL_SHELL.get())
 				&& player.inventory.contains { it.isItem(ModItems.SNAIL_SHELL) }
 
