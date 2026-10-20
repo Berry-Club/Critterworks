@@ -121,6 +121,7 @@ class ModItemModelProvider(
 		basicItem(ModItems.SCOOCHWORM_GPS.get())
 		basicItem(ModItems.SPARKPOLLEN_POUCH.get())
 		basicItem(ModItems.TARDIGRADE.get())
+		basicItem(ModItems.PEARL.get())
 	}
 
 	private fun filterfeederItems() {

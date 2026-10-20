@@ -27,6 +27,7 @@ object ModItemLang {
 			addItem(ModItems.SPARKPOLLEN_POUCH, "Sparkpollen Pouch")
 			addItem(ModItems.TARDIGRADE, "Tardigrade")
 			addItem(ModItems.SNAIL_SHELL, "Snail Shell")
+			addItem(ModItems.PEARL, "Pearl")
 		}
 	}
 }

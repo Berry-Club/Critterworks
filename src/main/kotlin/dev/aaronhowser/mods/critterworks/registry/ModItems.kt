@@ -42,6 +42,8 @@ object ModItems : AaronItemRegistry() {
 		basic("tardigrade")
 	val SNAIL_SHELL: DeferredItem<SnailShellItem> =
 		register("snail_shell", ::SnailShellItem)
+	val PEARL: DeferredItem<Item> =
+		basic("pearl")
 
 	val GREEN_DYEBERRY: DeferredItem<DyeberryItem> =
 		registerDyeberry(WormColor.GREEN)
