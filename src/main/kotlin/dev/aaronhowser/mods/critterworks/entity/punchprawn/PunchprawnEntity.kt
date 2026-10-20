@@ -12,6 +12,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
@@ -58,7 +59,10 @@ class PunchprawnEntity(
 		const val HEIGHT = 1f
 
 		fun createAttributes(): AttributeSupplier {
-			return createLivingAttributes().build()
+			return createMobAttributes()
+				.add(Attributes.ATTACK_DAMAGE, 5.0)
+				.add(Attributes.ATTACK_KNOCKBACK, 2.5)
+				.build()
 		}
 
 		fun checkSpawnRules(
