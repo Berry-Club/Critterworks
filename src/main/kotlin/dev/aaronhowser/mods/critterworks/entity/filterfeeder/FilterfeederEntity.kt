@@ -91,6 +91,7 @@ class FilterfeederEntity(
 	}
 
 	fun setFilterStack(stack: ItemStack) {
+		setPersistenceRequired()
 		filterStack = stack.copy()
 
 		val filterItem = stack.item
