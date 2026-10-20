@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
+import dev.aaronhowser.mods.critterworks.registry.ModSoundEvents
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.DamageTypeTags
@@ -43,10 +44,14 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 					player.level().playSound(
 						null,
 						player.blockPosition(),
-						SoundEvents.ARMOR_EQUIP_TURTLE.value(),
+						if (isShellProtecting) {
+							SoundEvents.SHULKER_CLOSE
+						} else {
+							SoundEvents.SHULKER_OPEN
+						},
 						SoundSource.PLAYERS,
 						1f,
-						if (isShellProtecting) 1f else 1.2f
+						1f
 					)
 				}
 
@@ -81,7 +86,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 				entity.level().playSound(
 					null,
 					entity.blockPosition(),
-					SoundEvents.SHIELD_BLOCK,
+					SoundEvents.SHULKER_HURT_CLOSED,
 					SoundSource.PLAYERS
 				)
 			}
