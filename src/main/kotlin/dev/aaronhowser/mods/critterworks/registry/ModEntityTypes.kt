@@ -2,9 +2,11 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
+import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
 import net.neoforged.neoforge.registries.DeferredHolder
@@ -17,25 +19,41 @@ object ModEntityTypes {
 		DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Critterworks.MOD_ID)
 
 	val FILTERFEEDER: DeferredHolder<EntityType<*>, EntityType<FilterfeederEntity>> =
-		ENTITY_TYPE_REGISTRY.register("filterfeeder", Supplier {
+		register(
+			"filterfeeder",
 			EntityType.Builder.of(::FilterfeederEntity, MobCategory.WATER_CREATURE)
 				.sized(FilterfeederEntity.WIDTH, FilterfeederEntity.HEIGHT)
-				.build("filterfeeder")
-		})
+		)
 
 	val SCOOCHWORM: DeferredHolder<EntityType<*>, EntityType<ScoochwormEntity>> =
-		ENTITY_TYPE_REGISTRY.register("scoochworm", Supplier {
+		register(
+			"scoochworm",
 			EntityType.Builder.of(::ScoochwormEntity, MobCategory.CREATURE)
 				.sized(ScoochwormEntity.SIZE, ScoochwormEntity.SIZE)
-				.build("scoochworm")
-		})
+		)
 
 	val SCOOCHWORM_PART: DeferredHolder<EntityType<*>, EntityType<ScoochwormPartEntity>> =
-		ENTITY_TYPE_REGISTRY.register("scoochworm_part", Supplier {
+		register(
+			"scoochworm_part",
 			EntityType.Builder.of(::ScoochwormPartEntity, MobCategory.MISC)
 				.sized(ScoochwormEntity.SIZE, ScoochwormEntity.SIZE)
 				.clientTrackingRange(10)
 				.updateInterval(3)
-				.build("scoochworm_part")
+		)
+
+	val PUNCHPRAWN: DeferredHolder<EntityType<*>, EntityType<PunchprawnEntity>> =
+		register(
+			"punchprawn",
+			EntityType.Builder.of(::PunchprawnEntity, MobCategory.WATER_CREATURE)
+				.sized(PunchprawnEntity.WIDTH, PunchprawnEntity.HEIGHT)
+		)
+
+	private fun <T : Entity> register(
+		name: String,
+		builder: EntityType.Builder<T>
+	): DeferredHolder<EntityType<*>, EntityType<T>> {
+		return ENTITY_TYPE_REGISTRY.register(name, Supplier {
+			builder.build(name)
 		})
+	}
 }
