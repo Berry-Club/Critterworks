@@ -2,8 +2,11 @@ package dev.aaronhowser.mods.critterworks.entity.filterfeeder
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDefaultInstance
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.tell
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
@@ -22,6 +25,7 @@ import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
+import net.minecraft.tags.ItemTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.InteractionHand
@@ -69,11 +73,14 @@ class FilterfeederEntity(
 	protected override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
 		if (level().isClientSide) return InteractionResult.SUCCESS
 
-		val returnedStack = getFilterStack().copy()
-		if (!player.addItem(returnedStack)) {
-			player.drop(returnedStack, false)
+		val handItem = player.getItemInHand(hand)
+		if (handItem.isItem(ItemTags.SAND)) {
+			player.tell("SAND!")
+			return InteractionResult.SUCCESS
 		}
 
+		val returnedStack = getFilterStack().copy()
+		player.giveOrDropStack(returnedStack)
 		discard()
 		return InteractionResult.CONSUME
 	}
