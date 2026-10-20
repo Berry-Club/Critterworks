@@ -96,7 +96,7 @@ class FilterfeederEntity(
 		}
 	}
 
-	protected override fun getFlopSound(): SoundEvent = SoundEvents.COD_FLOP
+	protected override fun getFlopSound(): SoundEvent = SoundEvents.SHULKER_AMBIENT
 
 	override fun registerGoals() {
 		super.registerGoals()
