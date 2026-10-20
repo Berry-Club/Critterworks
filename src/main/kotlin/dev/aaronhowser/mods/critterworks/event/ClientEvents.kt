@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.critterworks.client.block_entity.critter_cage.Critte
 import dev.aaronhowser.mods.critterworks.client.block_entity.hopping_spider_nest.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.block_entity.sparkbug_bush.SparkbugBushBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.filterfeeder.FilterfeederRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.PunchprawnRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.snail_shell.SnailShellRenderer
@@ -74,6 +75,7 @@ object ClientEvents {
 		)
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.SPARKBUG_BUSH.get(), ::SparkbugBushBlockRenderer)
 		event.registerEntityRenderer(ModEntityTypes.FILTERFEEDER.get(), ::FilterfeederRenderer)
+		event.registerEntityRenderer(ModEntityTypes.PUNCHPRAWN.get(), ::PunchprawnRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM.get(), ::ScoochwormRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM_PART.get(), ::ScoochwormPartRenderer)
 	}

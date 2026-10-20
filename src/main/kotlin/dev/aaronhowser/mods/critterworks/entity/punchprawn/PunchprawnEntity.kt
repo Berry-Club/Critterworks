@@ -11,11 +11,17 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.pathfinder.PathType
 import net.neoforged.neoforge.fluids.FluidType
+import software.bernie.geckolib.animatable.GeoEntity
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
+import software.bernie.geckolib.animation.AnimatableManager
 
 class PunchprawnEntity(
 	entityType: EntityType<out PunchprawnEntity>,
 	level: Level
-) : TamableAnimal(entityType, level) {
+) : TamableAnimal(entityType, level), GeoEntity {
+
+	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
 
 	init {
 		setPathfindingMalus(PathType.WATER, 0f)
@@ -36,6 +42,9 @@ class PunchprawnEntity(
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
 		return null
 	}
+
+	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {}
+	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	companion object {
 		const val WIDTH = 1f
