@@ -75,7 +75,12 @@ class FilterfeederEntity(
 
 		val handItem = player.getItemInHand(hand)
 		if (handItem.isItem(ItemTags.SAND)) {
-			player.tell("SAND!")
+			handItem.consume(1, player)
+
+			if (player.random.chance(0.1)) {
+				player.giveOrDropStack(ModItems.PEARL.getDefaultInstance())
+			}
+
 			return InteractionResult.SUCCESS
 		}
 
