@@ -102,7 +102,7 @@ class PunchprawnEntity(
 			return createMobAttributes()
 				.add(Attributes.MOVEMENT_SPEED, 1.2)
 				.add(Attributes.ATTACK_DAMAGE, 5.0)
-				.add(Attributes.ATTACK_KNOCKBACK, 2.5)
+				.add(Attributes.ATTACK_KNOCKBACK, 3.5)
 				.build()
 		}
 
