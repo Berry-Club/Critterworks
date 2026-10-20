@@ -7,8 +7,10 @@
 	- Cannot move during this
 		- By default this includes movement from outside sources like gravity
 		- Can be configured to instead only zero out the player's movement input
-    - Also cannot left or right click during this
+	- Also cannot left or right click during this
 - Several advancements
+- Pearl
+	- Small chance of being dropped when giving Sand to Filterfeeders
 
 ### Changed
 
