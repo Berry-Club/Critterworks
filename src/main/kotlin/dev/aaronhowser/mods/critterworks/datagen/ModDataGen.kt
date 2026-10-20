@@ -10,6 +10,7 @@ import dev.aaronhowser.mods.critterworks.datagen.tag.*
 import dev.aaronhowser.mods.critterworks.datagen.worldgen.ModBiomeModifiers
 import dev.aaronhowser.mods.critterworks.datagen.worldgen.ModConfiguredFeatures
 import dev.aaronhowser.mods.critterworks.datagen.worldgen.ModPlacedFeatures
+import dev.aaronhowser.mods.critterworks.datagen.worldgen.ModStructureModifiers
 import net.minecraft.core.RegistrySetBuilder
 import net.minecraft.core.registries.Registries
 import net.neoforged.bus.api.SubscribeEvent
@@ -38,7 +39,8 @@ object ModDataGen {
 				RegistrySetBuilder()
 					.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
 					.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
-					.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap),
+					.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap)
+					.add(NeoForgeRegistries.Keys.STRUCTURE_MODIFIERS, ModStructureModifiers::bootstrap),
 				setOf(Critterworks.MOD_ID)
 			)
 		)
@@ -106,6 +108,11 @@ object ModDataGen {
 		generator.addProvider(
 			event.includeServer(),
 			ModBiomeTagsProvider(output, lookupProvider, existingFileHelper)
+		)
+
+		generator.addProvider(
+			event.includeServer(),
+			ModStructureTagsProvider(output, lookupProvider, existingFileHelper)
 		)
 
 		generator.addProvider(

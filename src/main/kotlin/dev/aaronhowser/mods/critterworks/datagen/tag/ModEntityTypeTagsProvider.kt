@@ -14,6 +14,9 @@ class ModEntityTypeTagsProvider(
 ) : EntityTypeTagsProvider(output, provider) {
 
 	override fun addTags(provider: HolderLookup.Provider) {
+		tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
+			.add(ModEntityTypes.PUNCHPRAWN)
+
 		tag(EntityTypeTags.FALL_DAMAGE_IMMUNE)
 			.add(
 				ModEntityTypes.SCOOCHWORM,

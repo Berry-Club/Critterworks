@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModDamageTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
+import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
 import dev.aaronhowser.mods.critterworks.item.SnailShellItem
@@ -78,6 +79,7 @@ object CommonEvents {
 	@SubscribeEvent
 	fun registerEntityAttributes(event: EntityAttributeCreationEvent) {
 		event.put(ModEntityTypes.FILTERFEEDER.get(), FilterfeederEntity.createAttributes())
+		event.put(ModEntityTypes.PUNCHPRAWN.get(), PunchprawnEntity.createAttributes())
 		event.put(ModEntityTypes.SCOOCHWORM.get(), ScoochwormEntity.createAttributes())
 	}
 
@@ -88,6 +90,14 @@ object CommonEvents {
 			SpawnPlacementTypes.IN_WATER,
 			Heightmap.Types.OCEAN_FLOOR,
 			FilterfeederEntity::checkSpawnRules,
+			RegisterSpawnPlacementsEvent.Operation.REPLACE
+		)
+
+		event.register(
+			ModEntityTypes.PUNCHPRAWN.get(),
+			SpawnPlacementTypes.IN_WATER,
+			Heightmap.Types.OCEAN_FLOOR,
+			PunchprawnEntity::checkSpawnRules,
 			RegisterSpawnPlacementsEvent.Operation.REPLACE
 		)
 	}

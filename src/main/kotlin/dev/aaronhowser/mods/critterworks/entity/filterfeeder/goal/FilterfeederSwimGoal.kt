@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.FluidTags
@@ -47,7 +48,12 @@ class FilterfeederSwimGoal(
 
 		while (distance < CORRECTION_DISTANCE) {
 			searchPosition.move(0, -1, 0)
-			if (!filterfeeder.level().getFluidState(searchPosition).`is`(FluidTags.WATER)) break
+
+			if (!filterfeeder
+					.level()
+					.getFluidState(searchPosition)
+					.isFluid(FluidTags.WATER)
+			) break
 
 			lowerPosition = searchPosition.immutable()
 			distance++

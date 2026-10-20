@@ -1,14 +1,21 @@
 package dev.aaronhowser.mods.critterworks.entity.punchprawn
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.registry.ModItems
+import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.tags.FluidTags
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.TamableAnimal
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import net.neoforged.neoforge.fluids.FluidType
 import software.bernie.geckolib.animatable.GeoEntity
@@ -49,6 +56,20 @@ class PunchprawnEntity(
 	companion object {
 		const val WIDTH = 1f
 		const val HEIGHT = 1f
+
+		fun createAttributes(): AttributeSupplier {
+			return createLivingAttributes().build()
+		}
+
+		fun checkSpawnRules(
+			entityType: EntityType<PunchprawnEntity>,
+			level: ServerLevelAccessor,
+			spawnType: MobSpawnType,
+			position: BlockPos,
+			random: RandomSource
+		): Boolean {
+			return level.getFluidState(position).isFluid(FluidTags.WATER)
+		}
 	}
 
 }

@@ -1,9 +1,10 @@
-// 1.21.1	2026-10-17T15:36:22.0097675	Registries
+// 1.21.1	2026-10-20T17:26:03.8793071	Registries
 2838a075dc434fb90472436a7032d8dd0872eaa1 data/critterworks/neoforge/biome_modifier/add_filterfeeder.json
 6c69a4b3230591b9539ba32cbfd927b55c95fdea data/critterworks/neoforge/biome_modifier/add_hopping_spider_nest.json
 996e3139c50effb337d478ff62cd842fe02c762a data/critterworks/neoforge/biome_modifier/add_scoochstem_vine.json
 0b68b5328b1ac79429082fd551c90659a139a5c2 data/critterworks/neoforge/biome_modifier/add_scoochworm_apple.json
 9e84f4b3a10c02e212c1f28f0e6a215a0dde40ca data/critterworks/neoforge/biome_modifier/add_sparkbug_bush.json
+a87230fb83cdb980432a36936c64a942d7e5d3d3 data/critterworks/neoforge/structure_modifier/add_punchprawn.json
 5fc2e4ccae80d56f0e550fc7bb3f2fadab22d6b7 data/critterworks/worldgen/configured_feature/hopping_spider_nest.json
 66ef5d4e20a7efb2795374a84b4f9e3ae2659c33 data/critterworks/worldgen/configured_feature/scoochstem_vine.json
 7b778515dd3879e31191436ccb29ce7eecfc9714 data/critterworks/worldgen/configured_feature/scoochworm_apple.json
