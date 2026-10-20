@@ -8,11 +8,26 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.pathfinder.PathType
+import net.neoforged.neoforge.fluids.FluidType
 
 class PunchprawnEntity(
 	entityType: EntityType<out PunchprawnEntity>,
 	level: Level
 ) : TamableAnimal(entityType, level) {
+
+	init {
+		setPathfindingMalus(PathType.WATER, 0f)
+	}
+
+	override fun checkSpawnObstruction(level: LevelReader): Boolean {
+		return level.isUnobstructed(this)
+	}
+
+	override fun isPushedByFluid(type: FluidType): Boolean {
+		return false
+	}
 
 	override fun isFood(stack: ItemStack): Boolean {
 		return stack.isItem(ModItems.PEARL)
