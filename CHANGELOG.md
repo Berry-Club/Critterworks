@@ -8,6 +8,10 @@
 		- By default this includes movement from outside sources like gravity
 		- Can be configured to instead only zero out the player's movement input
 	- Also cannot left or right click during this
+- Punchprawns
+	- New mob that spawns around Ocean Monuments
+	- Defaults to being hostile but can be tamed into a pet and worn on your head
+		- When riding your head, bare-handed melee attacks become much stronger
 - Several advancements
 - Pearl
 	- Small chance of being dropped when giving Sand to Filterfeeders
