@@ -33,6 +33,26 @@ class ServerConfig(
 
 	init {
 		general()
+
+		builder.section("scoochworm_attachments") {
+			scoochwormAttachmentConfigs()
+		}
+
+		builder.section("sparkbug_bush") {
+			sparkbugBushConfigs()
+		}
+
+		builder.section("punchprawn") {
+			punchprawnConfigs()
+		}
+
+		builder.section("world_gen") {
+			worldGenConfigs()
+		}
+
+		builder.section("debug") {
+			debugConfigs()
+		}
 	}
 
 	private fun general() {
@@ -47,26 +67,6 @@ class ServerConfig(
 		snailShellDisablesAllMovement = builder
 			.comment("Whether or not the Snail Shell disables all movement, or only zeroes your input")
 			.define("snailShellDisablesAllMovement", true)
-
-		builder.section("scoochworm_attachments") {
-			scoochwormAttachmentConfigs()
-		}
-
-		builder.section("sparkbug_bush") {
-			sparkbugBushConfigs()
-		}
-
-		builder.section("worn_punchprawn") {
-			wornPunchprawnConfigs()
-		}
-
-		builder.section("world_gen") {
-			worldGenConfigs()
-		}
-
-		builder.section("debug") {
-			debugConfigs()
-		}
 	}
 
 	private fun scoochwormAttachmentConfigs() {
@@ -93,14 +93,14 @@ class ServerConfig(
 			.defineInRange("sparkbugBushPollenRadius", 16.0, 0.0, Double.MAX_VALUE)
 	}
 
-	private fun wornPunchprawnConfigs() {
+	private fun punchprawnConfigs() {
 		wornPunchprawnDamageBoost = builder
 			.comment("The additional attack damage of a bare-handed player wearing a Punchprawn")
 			.defineInRange("punchprawnDamageBoost", 14.0, 0.0, Double.MAX_VALUE)
 
 		wornPunchprawnKnockback = builder
 			.comment("The additional attack knockback of a bare-handed player wearing a Punchprawn")
-			.defineInRange("knockback", 3.0, 0.0, Double.MAX_VALUE)
+			.defineInRange("knockback", 6.0, 0.0, Double.MAX_VALUE)
 
 		wornPunchprawnCooldown = builder
 			.comment("How long the Punchprawn attack takes to fully charge, in ticks.")
