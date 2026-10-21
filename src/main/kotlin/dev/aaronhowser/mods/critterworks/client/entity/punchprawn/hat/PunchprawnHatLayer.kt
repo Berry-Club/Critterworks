@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.RenderLayer
 
+//TODO: Sync the prawn's claws with the player's hands,
+// so they both swing together, like it's controlling them
 class PunchprawnHatLayer(
 	parentRenderer: RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>
 ) : RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>(parentRenderer) {
