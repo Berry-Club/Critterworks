@@ -32,7 +32,13 @@ class CritterCageItemRenderer : BlockEntityWithoutLevelRenderer(
 		packedLight: Int,
 		packedOverlay: Int
 	) {
-		renderCage(poseStack, buffer, packedLight, packedOverlay)
+		Minecraft.getInstance().blockRenderer.renderSingleBlock(
+			ModBlocks.CRITTER_CAGE.get().defaultBlockState(),
+			poseStack,
+			buffer,
+			packedLight,
+			packedOverlay
+		)
 
 		val scoochworm = getScoochworm(stack) ?: return
 		scoochworm.yRot = 180f
@@ -56,23 +62,6 @@ class CritterCageItemRenderer : BlockEntityWithoutLevelRenderer(
 				packedLight
 			)
 		}
-	}
-
-	private fun renderCage(
-		poseStack: PoseStack,
-		buffer: MultiBufferSource,
-		packedLight: Int,
-		packedOverlay: Int
-	) {
-		poseStack.pushPose()
-		Minecraft.getInstance().blockRenderer.renderSingleBlock(
-			ModBlocks.CRITTER_CAGE.get().defaultBlockState(),
-			poseStack,
-			buffer,
-			packedLight,
-			packedOverlay
-		)
-		poseStack.popPose()
 	}
 
 	private fun getScoochworm(stack: ItemStack): ScoochwormEntity? {
