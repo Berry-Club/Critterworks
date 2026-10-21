@@ -29,7 +29,9 @@ object ModAttachmentTypes {
 			"worn_punchprawn",
 			AttachmentType
 				.builder(Supplier { Optional.empty<CompoundTag>() })
+				.serialize(CompoundTag.CODEC.optionalFieldOf("entity").codec(), Optional<CompoundTag>::isPresent)
 				.sync(ByteBufCodecs.OPTIONAL_COMPOUND_TAG)
+				.copyOnDeath()
 				.build()
 		)
 

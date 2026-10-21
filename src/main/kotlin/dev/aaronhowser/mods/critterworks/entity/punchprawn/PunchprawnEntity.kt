@@ -10,6 +10,7 @@ import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnFollow
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnSitGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnWanderGoal
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
+import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -36,12 +37,14 @@ import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.fluids.FluidType
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.abs
 
 class PunchprawnEntity(
@@ -200,7 +203,6 @@ class PunchprawnEntity(
 	companion object {
 		const val WIDTH = 1f
 		const val HEIGHT = 1f
-		private const val TAMING_SUCCESS_EVENT: Byte = 7
 
 		fun createAttributes(): AttributeSupplier {
 			return createMobAttributes()
@@ -218,6 +220,37 @@ class PunchprawnEntity(
 			random: RandomSource
 		): Boolean {
 			return level.getFluidState(position).isFluid(FluidTags.WATER)
+		}
+
+		fun tryPlacePunchprawn(event: PlayerInteractEvent.RightClickBlock) {
+			if (event.isCanceled) return
+
+			val player = event.entity
+			val level = event.level
+			val tag = player.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).getOrNull() ?: return
+			val clickedPos = event.pos
+			val clickedFace = event.face ?: return
+			val clickedState = level.getBlockState(clickedPos)
+
+			val spawnPosition = if (clickedState.getCollisionShape(level, clickedPos).isEmpty) {
+				clickedPos
+			} else {
+				clickedPos.relative(clickedFace)
+			}
+
+			val entity = PunchprawnEntity(ModEntityTypes.PUNCHPRAWN.get(), level)
+			entity.load(tag)
+			entity.setPos(spawnPosition.bottomCenter)
+			if (!level.noCollision(entity, entity.boundingBox)) return
+
+			if (!player.isClientSide) {
+				if (!level.addFreshEntity(entity)) return
+
+				player.setData(ModAttachmentTypes.WORN_PUNCHPRAWN, Optional.empty())
+			}
+
+			event.cancellationResult = InteractionResult.sidedSuccess(player.isClientSide)
+			event.isCanceled = true
 		}
 	}
 

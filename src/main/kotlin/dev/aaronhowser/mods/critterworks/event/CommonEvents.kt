@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.SpawnPlacementTypes
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.level.levelgen.Heightmap
+import net.neoforged.bus.api.EventPriority
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.capabilities.Capabilities
@@ -29,6 +30,7 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
@@ -156,6 +158,11 @@ object CommonEvents {
 		if (entity.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) {
 			event.isCanceled = true
 		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	fun onRightClickBlockLate(event: PlayerInteractEvent.RightClickBlock) {
+		PunchprawnEntity.tryPlacePunchprawn(event)
 	}
 
 }
