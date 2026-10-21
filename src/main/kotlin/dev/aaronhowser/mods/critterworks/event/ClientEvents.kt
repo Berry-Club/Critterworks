@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.critterworks.client.block_entity.critter_cage.Critte
 import dev.aaronhowser.mods.critterworks.client.block_entity.hopping_spider_nest.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.block_entity.sparkbug_bush.SparkbugBushBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.filterfeeder.FilterfeederRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.hat.PunchprawnHatLayer
 import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.PunchprawnRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormRenderer
@@ -16,6 +17,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.registry.*
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.entity.player.PlayerRenderer
 import net.minecraft.core.registries.BuiltInRegistries
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
@@ -83,6 +85,11 @@ object ClientEvents {
 	@SubscribeEvent
 	fun addEntityRenderLayers(event: EntityRenderersEvent.AddLayers) {
 		SnailShellRenderer.initialize(event.context)
+
+		for (skin in event.skins) {
+			val playerRenderer = event.getSkin<PlayerRenderer>(skin) ?: continue
+			playerRenderer.addLayer(PunchprawnHatLayer(playerRenderer))
+		}
 	}
 
 	@SubscribeEvent
