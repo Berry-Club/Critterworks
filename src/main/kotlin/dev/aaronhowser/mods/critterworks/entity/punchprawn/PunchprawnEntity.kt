@@ -16,7 +16,9 @@ import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
@@ -275,11 +277,10 @@ class PunchprawnEntity(
 		fun handleIncomingDamage(event: LivingIncomingDamageEvent) {
 			if (event.isCanceled) return
 
-			val attacker = event.source.entity as? Player ?: return
+			val attacker = event.source.entity as? ServerPlayer ?: return
 
 			if (
-				attacker.isClientSide
-				|| !event.source.isDirect
+				!event.source.isDirect
 				|| !attacker.mainHandItem.isEmpty
 				|| attacker.getData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN) > 0
 				|| attacker.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).isEmpty
@@ -291,6 +292,19 @@ class PunchprawnEntity(
 			val knockback = ServerConfig.CONFIG.wornPunchprawnKnockback.get() * 0.5
 			val lookAngle = attacker.lookAngle
 			event.entity.knockback(knockback, -lookAngle.x, -lookAngle.z)
+
+			val level = attacker.serverLevel()
+			level.sendParticles(
+				ParticleTypes.EXPLOSION,
+				event.entity.x,
+				event.entity.y + event.entity.bbHeight / 2.0,
+				event.entity.z,
+				3,
+				0.15,
+				0.15,
+				0.15,
+				0.0
+			)
 		}
 
 		fun handlePlayerTick(event: PlayerTickEvent.Post) {
