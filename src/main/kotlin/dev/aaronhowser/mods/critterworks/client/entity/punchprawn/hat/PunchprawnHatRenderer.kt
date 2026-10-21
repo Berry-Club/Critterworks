@@ -14,6 +14,7 @@ import software.bernie.geckolib.renderer.GeoObjectRenderer
 
 class PunchprawnHatRenderer : GeoObjectRenderer<PunchprawnHatRenderer.HatAnimatable>(PunchprawnHatModel()) {
 
+	@Suppress("UnstableApiUsage")
 	fun renderHat(
 		poseStack: PoseStack,
 		bufferSource: MultiBufferSource,
