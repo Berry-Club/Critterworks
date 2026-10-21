@@ -1,11 +1,13 @@
 package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.neoforged.neoforge.attachment.AttachmentType
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NeoForgeRegistries
+import java.util.*
 import java.util.function.Supplier
 
 object ModAttachmentTypes {
@@ -19,6 +21,15 @@ object ModAttachmentTypes {
 			AttachmentType
 				.builder(Supplier { false })
 				.sync(ByteBufCodecs.BOOL)
+				.build()
+		)
+
+	val WORN_PUNCHPRAWN: DeferredHolder<AttachmentType<*>, AttachmentType<Optional<CompoundTag>>> =
+		register(
+			"worn_punchprawn",
+			AttachmentType
+				.builder(Supplier { Optional.empty<CompoundTag>() })
+				.sync(ByteBufCodecs.OPTIONAL_COMPOUND_TAG)
 				.build()
 		)
 

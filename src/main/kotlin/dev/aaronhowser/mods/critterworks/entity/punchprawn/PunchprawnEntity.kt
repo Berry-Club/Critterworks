@@ -1,17 +1,19 @@
 package dev.aaronhowser.mods.critterworks.entity.punchprawn
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getMinimalTag
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.tell
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.control.PunchprawnMoveControl
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnFollowOwnerGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnSitGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnWanderGoal
+import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
@@ -39,6 +41,7 @@ import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
+import java.util.*
 import kotlin.math.abs
 
 class PunchprawnEntity(
@@ -172,8 +175,11 @@ class PunchprawnEntity(
 		}
 
 		if (isServerSide && player == owner) {
-			if (player.isShiftKeyDown) {
-				player.tell("sneaking!")
+			if (player.isShiftKeyDown && player.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).isEmpty) {
+				val tag = getMinimalTag(stripUniqueness = true)
+				player.setData(ModAttachmentTypes.WORN_PUNCHPRAWN, Optional.of(tag))
+				playSound(SoundEvents.ITEM_PICKUP)
+				discard()
 			} else {
 				isOrderedToSit = !isOrderedToSit
 				target = null
