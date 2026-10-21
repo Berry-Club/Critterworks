@@ -100,11 +100,11 @@ class ServerConfig(
 
 		wornPunchprawnKnockback = builder
 			.comment("The additional attack knockback of a bare-handed player wearing a Punchprawn")
-			.defineInRange("knockback", 6.0, 0.0, Double.MAX_VALUE)
+			.defineInRange("punchprawnKnockback", 6.0, 0.0, Double.MAX_VALUE)
 
 		wornPunchprawnCooldown = builder
 			.comment("How long the Punchprawn attack takes to fully charge, in ticks.")
-			.defineInRange("cooldown", 200, 0, Int.MAX_VALUE)
+			.defineInRange("punchprawnCooldown", 200, 0, Int.MAX_VALUE)
 	}
 
 	private fun worldGenConfigs() {

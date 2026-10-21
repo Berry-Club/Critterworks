@@ -17,6 +17,7 @@ object ModConfigLang {
 
 		addConfig(ServerConfig.CONFIG.tardigradeDisablesExpiring, "Tardigrades Prevent Item Expiration")
 		addConfig(ServerConfig.CONFIG.filterfeederWaterFogRadius, "Filterfeeder Water Fog Radius")
+		addConfig(ServerConfig.CONFIG.snailShellDisablesAllMovement, "Snail Shell Disables All Movement")
 
 		addConfig("scoochworm_attachments", "Scoochworm Attachments")
 		addConfig(ServerConfig.CONFIG.lockboxDropIntervalTicks, "Lockbox Drop Interval (ticks)")
@@ -31,6 +32,11 @@ object ModConfigLang {
 		addConfig("sparkbug_bush", "Sparkbug Bush")
 		addConfig(ServerConfig.CONFIG.sparkbugBushMaxEnergyTransferPerInput, "Maximum Energy Transfer per Input (FE/t)")
 		addConfig(ServerConfig.CONFIG.sparkbugBushPollenRadius, "Pollen Point Radius")
+
+		addConfig("punchprawn", "Punchprawn")
+		addConfig(ServerConfig.CONFIG.wornPunchprawnCooldown, "Worn Punchprawn Cooldown")
+		addConfig(ServerConfig.CONFIG.wornPunchprawnKnockback, "Worn Punchprawn Knockback")
+		addConfig(ServerConfig.CONFIG.wornPunchprawnDamageBoost, "Worn Punchprawn Damage Boost")
 
 		addConfig("rendering", "Rendering")
 		addConfig(ClientConfig.CONFIG.hoppingSpiderScale, "Hopping Spider Scale")
