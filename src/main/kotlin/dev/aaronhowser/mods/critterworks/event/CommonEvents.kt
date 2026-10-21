@@ -145,11 +145,13 @@ object CommonEvents {
 	@SubscribeEvent
 	fun afterPlayerTick(event: PlayerTickEvent.Post) {
 		SnailShellItem.handlePlayerTick(event)
+		PunchprawnEntity.handlePlayerTick(event)
 	}
 
 	@SubscribeEvent
 	fun onIncomingDamage(event: LivingIncomingDamageEvent) {
 		SnailShellItem.handleIncomingDamage(event)
+		PunchprawnEntity.handleIncomingDamage(event)
 	}
 
 	@SubscribeEvent

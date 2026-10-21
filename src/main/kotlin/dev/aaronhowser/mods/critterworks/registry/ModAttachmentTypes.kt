@@ -35,6 +35,15 @@ object ModAttachmentTypes {
 				.build()
 		)
 
+	val PUNCHPRAWN_COOLDOWN: DeferredHolder<AttachmentType<*>, AttachmentType<Int>> =
+		register(
+			"punchprawn_cooldown",
+			AttachmentType
+				.builder(Supplier { 0 })
+				.sync(ByteBufCodecs.VAR_INT)
+				.build()
+		)
+
 	private fun <T> register(name: String, type: AttachmentType<T>): DeferredHolder<AttachmentType<*>, AttachmentType<T>> {
 		return ATTACHMENT_TYPE_REGISTRY.register(name, Supplier { type })
 	}

@@ -6,6 +6,8 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
+import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.control.PunchprawnMoveControl
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnFollowOwnerGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnSitGoal
@@ -21,6 +23,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.*
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
@@ -39,7 +42,9 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.EventHooks
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
+import net.neoforged.neoforge.event.tick.PlayerTickEvent
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
@@ -265,6 +270,37 @@ class PunchprawnEntity(
 
 			event.cancellationResult = InteractionResult.sidedSuccess(player.isClientSide)
 			event.isCanceled = true
+		}
+
+		fun handleIncomingDamage(event: LivingIncomingDamageEvent) {
+			if (event.isCanceled) return
+
+			val attacker = event.source.entity as? Player ?: return
+
+			if (
+				attacker.isClientSide
+				|| !event.source.isDirect
+				|| !attacker.mainHandItem.isEmpty
+				|| attacker.getData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN) > 0
+				|| attacker.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).isEmpty
+			) return
+
+			event.amount += ServerConfig.CONFIG.wornPunchprawnDamageBoost.get().toFloat()
+			attacker.setData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN, ServerConfig.CONFIG.wornPunchprawnCooldown.get())
+
+			val knockback = ServerConfig.CONFIG.wornPunchprawnKnockback.get() * 0.5
+			val lookAngle = attacker.lookAngle
+			event.entity.knockback(knockback, -lookAngle.x, -lookAngle.z)
+		}
+
+		fun handlePlayerTick(event: PlayerTickEvent.Post) {
+			val player = event.entity
+			if (player.isClientSide) return
+
+			val currentCooldown = player.getData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN)
+			if (currentCooldown > 0) {
+				player.setData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN, currentCooldown - 1)
+			}
 		}
 	}
 

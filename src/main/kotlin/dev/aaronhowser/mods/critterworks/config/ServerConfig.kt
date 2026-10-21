@@ -19,6 +19,10 @@ class ServerConfig(
 	lateinit var sparkbugBushMaxEnergyTransferPerInput: ModConfigSpec.IntValue
 	lateinit var sparkbugBushPollenRadius: ModConfigSpec.DoubleValue
 
+	lateinit var wornPunchprawnDamageBoost: ModConfigSpec.DoubleValue
+	lateinit var wornPunchprawnKnockback: ModConfigSpec.DoubleValue
+	lateinit var wornPunchprawnCooldown: ModConfigSpec.IntValue
+
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
 	lateinit var hoppingSpiderNestRarity: ModConfigSpec.IntValue
@@ -52,6 +56,10 @@ class ServerConfig(
 			sparkbugBushConfigs()
 		}
 
+		builder.section("worn_punchprawn") {
+			wornPunchprawnConfigs()
+		}
+
 		builder.section("world_gen") {
 			worldGenConfigs()
 		}
@@ -83,6 +91,20 @@ class ServerConfig(
 		sparkbugBushPollenRadius = builder
 			.comment("The maximum distance a Pollen Point can be from the Sparkbug Bush")
 			.defineInRange("sparkbugBushPollenRadius", 16.0, 0.0, Double.MAX_VALUE)
+	}
+
+	private fun wornPunchprawnConfigs() {
+		wornPunchprawnDamageBoost = builder
+			.comment("The additional attack damage of a bare-handed player wearing a Punchprawn")
+			.defineInRange("punchprawnDamageBoost", 14.0, 0.0, Double.MAX_VALUE)
+
+		wornPunchprawnKnockback = builder
+			.comment("The additional attack knockback of a bare-handed player wearing a Punchprawn")
+			.defineInRange("knockback", 3.0, 0.0, Double.MAX_VALUE)
+
+		wornPunchprawnCooldown = builder
+			.comment("How long the Punchprawn attack takes to fully charge, in ticks.")
+			.defineInRange("cooldown", 200, 0, Int.MAX_VALUE)
 	}
 
 	private fun worldGenConfigs() {
