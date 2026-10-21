@@ -12,6 +12,7 @@ import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.control.FilterfeederMoveControl
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederSwimGoal
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederWaitForSandGoal
 import dev.aaronhowser.mods.critterworks.item.FilterfeederItem
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.multiplayer.ClientLevel
@@ -113,6 +114,7 @@ class FilterfeederEntity(
 
 	override fun registerGoals() {
 		super.registerGoals()
+		goalSelector.addGoal(1, FilterfeederWaitForSandGoal(this))
 		goalSelector.addGoal(4, FilterfeederSwimGoal(this))
 	}
 
