@@ -1,11 +1,13 @@
 package dev.aaronhowser.mods.critterworks.entity.punchprawn.goal
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal
+import net.minecraft.world.entity.ai.util.DefaultRandomPos
 import net.minecraft.world.phys.Vec3
 
 class PunchprawnWanderGoal(
@@ -33,6 +35,17 @@ class PunchprawnWanderGoal(
 	}
 
 	override fun getPosition(): Vec3? {
+		if (punchprawn.random.chance(WATER_DESTINATION_CHANCE)) {
+			return DefaultRandomPos.getPos(punchprawn, HORIZONTAL_DISTANCE, VERTICAL_DISTANCE)
+		}
+
+		val waterPosition = getWaterPosition()
+		if (waterPosition != null) return waterPosition
+
+		return DefaultRandomPos.getPos(punchprawn, HORIZONTAL_DISTANCE, VERTICAL_DISTANCE)
+	}
+
+	private fun getWaterPosition(): Vec3? {
 		var attempts = 0
 
 		while (attempts < MAXIMUM_POSITION_ATTEMPTS) {
@@ -120,6 +133,9 @@ class PunchprawnWanderGoal(
 	}
 
 	companion object {
+		private const val WATER_DESTINATION_CHANCE = 0.75f
+		private const val HORIZONTAL_DISTANCE = 10
+		private const val VERTICAL_DISTANCE = 7
 		private const val MAXIMUM_POSITION_ATTEMPTS = 10
 		private const val MAXIMUM_VERTICAL_DISTANCE = 5
 		private const val CORRECTION_DISTANCE = 7
