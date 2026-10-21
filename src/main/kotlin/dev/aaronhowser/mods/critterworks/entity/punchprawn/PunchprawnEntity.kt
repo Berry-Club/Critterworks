@@ -1,11 +1,11 @@
 package dev.aaronhowser.mods.critterworks.entity.punchprawn
 
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getMinimalTag
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.control.PunchprawnMoveControl
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnFollowOwnerGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnSitGoal
@@ -38,6 +38,7 @@ import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
+import net.neoforged.neoforge.event.EventHooks
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
@@ -103,9 +104,17 @@ class PunchprawnEntity(
 	}
 
 	override fun canAttack(target: LivingEntity): Boolean {
-		if (isTame && target is Player) return false
+		if (target is Player) {
+			if (isTame) return false
+			if (isHoldingPearl(target)) return false
+		}
 
 		return super.canAttack(target)
+	}
+
+	private fun isHoldingPearl(player: Player): Boolean {
+		return player.mainHandItem.isItem(ModItems.PEARL)
+			|| player.offhandItem.isItem(ModItems.PEARL)
 	}
 
 	override fun tryToTeleportToOwner() {
@@ -158,12 +167,9 @@ class PunchprawnEntity(
 		val heldStack = player.getItemInHand(hand)
 
 		if (!isTame && heldStack.isItem(ModItems.PEARL)) {
-			if (isServerSide && random.chance(0.1)) {
+			if (isServerSide) {
 				heldStack.consume(1, player)
-				tame(player)
-				target = null
-				navigation.stop()
-				level().broadcastEntityEvent(this, EntityEvent.TAMING_SUCCEEDED)
+				tryToTame(player)
 			}
 
 			return InteractionResult.sidedSuccess(isClientSide)
@@ -187,6 +193,17 @@ class PunchprawnEntity(
 		}
 
 		return InteractionResult.sidedSuccess(isClientSide)
+	}
+
+	private fun tryToTame(player: Player) {
+		if (random.oneIn(5) && !EventHooks.onAnimalTame(this, player)) {
+			tame(player)
+			navigation.stop()
+			target = null
+			level().broadcastEntityEvent(this, EntityEvent.TAMING_SUCCEEDED)
+		} else {
+			level().broadcastEntityEvent(this, EntityEvent.TAMING_FAILED)
+		}
 	}
 
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
