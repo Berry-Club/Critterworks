@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.entity.punchprawn
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getMinimalTag
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
@@ -157,7 +158,7 @@ class PunchprawnEntity(
 		val heldStack = player.getItemInHand(hand)
 
 		if (!isTame && heldStack.isItem(ModItems.PEARL)) {
-			if (isServerSide) {
+			if (isServerSide && random.chance(0.1)) {
 				heldStack.consume(1, player)
 				tame(player)
 				target = null
