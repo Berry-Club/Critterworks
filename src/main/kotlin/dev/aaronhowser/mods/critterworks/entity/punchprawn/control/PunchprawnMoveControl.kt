@@ -47,7 +47,10 @@ class PunchprawnMoveControl(
 	}
 
 	private fun tickSwimming() {
-		punchprawn.deltaMovement = punchprawn.deltaMovement.add(0.0, 0.005, 0.0)
+		if (!punchprawn.isOrderedToSit) {
+			punchprawn.deltaMovement = punchprawn.deltaMovement.add(0.0, 0.005, 0.0)
+		}
+
 		speedModifier = requestedSpeedModifier
 
 		if (operation == Operation.JUMPING) {

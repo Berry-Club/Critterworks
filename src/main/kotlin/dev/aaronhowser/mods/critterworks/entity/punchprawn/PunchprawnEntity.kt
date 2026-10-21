@@ -38,7 +38,6 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
-import net.neoforged.neoforge.fluids.FluidType
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
@@ -80,11 +79,6 @@ class PunchprawnEntity(
 			return
 		}
 
-		if (isOrderedToSit && isInWater) {
-			deltaMovement = Vec3.ZERO
-			return
-		}
-
 		if (!isInWater) {
 			super.travel(travelVector)
 			return
@@ -94,17 +88,13 @@ class PunchprawnEntity(
 		move(MoverType.SELF, deltaMovement)
 		deltaMovement = deltaMovement.scale(0.9)
 
-		if (target == null) {
+		if (!isOrderedToSit && target == null) {
 			deltaMovement = deltaMovement.add(0.0, -0.005, 0.0)
 		}
 	}
 
 	override fun checkSpawnObstruction(level: LevelReader): Boolean {
 		return level.isUnobstructed(this)
-	}
-
-	override fun isPushedByFluid(type: FluidType): Boolean {
-		return false
 	}
 
 	override fun isFood(stack: ItemStack): Boolean {
