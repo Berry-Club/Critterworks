@@ -75,6 +75,11 @@ class PunchprawnEntity(
 	}
 
 	override fun travel(travelVector: Vec3) {
+		if (!isControlledByLocalInstance) {
+			calculateEntityAnimation(false)
+			return
+		}
+
 		if (isOrderedToSit && isInWater) {
 			deltaMovement = Vec3.ZERO
 			return
