@@ -179,9 +179,9 @@ class PunchprawnEntity(
 
 		if (isServerSide && player == owner) {
 			if (player.isShiftKeyDown && player.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).isEmpty) {
-				val tag = getMinimalTag(stripUniqueness = true)
+				val tag = getMinimalTag(stripUniqueness = false)
 				player.setData(ModAttachmentTypes.WORN_PUNCHPRAWN, Optional.of(tag))
-				playSound(SoundEvents.ITEM_PICKUP)
+				playSound(SoundEvents.ITEM_FRAME_ADD_ITEM)
 				discard()
 			} else {
 				isOrderedToSit = !isOrderedToSit
@@ -243,10 +243,11 @@ class PunchprawnEntity(
 			entity.setPos(spawnPosition.bottomCenter)
 			if (!level.noCollision(entity, entity.boundingBox)) return
 
-			if (!player.isClientSide) {
+			if (player.isServerSide) {
 				if (!level.addFreshEntity(entity)) return
 
 				player.setData(ModAttachmentTypes.WORN_PUNCHPRAWN, Optional.empty())
+				entity.playSound(SoundEvents.ITEM_FRAME_REMOVE_ITEM)
 			}
 
 			event.cancellationResult = InteractionResult.sidedSuccess(player.isClientSide)
