@@ -33,8 +33,8 @@ class PunchprawnHatLayer(
 
 		poseStack.withPose {
 			parentModel.head.translateAndRotate(poseStack)
-			poseStack.translate(0.0, -0.5, 0.0)
-			poseStack.mulPose(Axis.YP.rotationDegrees(180f))
+			poseStack.translate(0.0, -0.45, 0.0)
+			poseStack.mulPose(Axis.ZP.rotationDegrees(180f))
 			punchprawnRenderer.renderHat(poseStack, bufferSource, packedLight, partialTick)
 
 		}
