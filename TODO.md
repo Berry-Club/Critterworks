@@ -125,6 +125,8 @@
 				- Not exactly an IMMORTAL snail then though
 			- Remove its shell and turn it into a slug or something?
 			- It should probably not be super trivial
+			- Maybe you capture it and it's revealed to be a Decoy Snail
+				- Spawns a new snail far away that's retconned to have always been the real snail, effectively restarting the chase
 
 # Guidebook
 
