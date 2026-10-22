@@ -1,7 +1,9 @@
 package dev.aaronhowser.mods.critterworks.item
 
+import dev.aaronhowser.mods.aaron.client.AaronClientUtil
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModEntityTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
@@ -20,11 +22,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
 
 class SnailShellItem(properties: Properties) : Item(properties) {
+
+	override fun isFoil(stack: ItemStack): Boolean {
+		return AaronClientUtil.localPlayer?.shellState?.isShelled.isTrue()
+	}
 
 	companion object {
 		private const val TICKS_TO_FULLY_SHELLED = 5 * 20
