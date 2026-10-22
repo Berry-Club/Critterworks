@@ -95,7 +95,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 				),
 				Attributes.MOVEMENT_SPEED to AttributeModifier(
 					SHELLED_MOVEMENT_SPEED_MODIFIER,
-					-0.7,
+					-0.3, // They're already slowed from sneaking
 					AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
 				),
 				Attributes.KNOCKBACK_RESISTANCE to AttributeModifier(
