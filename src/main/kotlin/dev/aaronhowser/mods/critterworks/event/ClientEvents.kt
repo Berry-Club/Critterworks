@@ -71,11 +71,9 @@ object ClientEvents {
 	@SubscribeEvent
 	fun registerEntityRenderers(event: EntityRenderersEvent.RegisterRenderers) {
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.CRITTER_CAGE.get(), ::CritterCageBlockRenderer)
-		event.registerBlockEntityRenderer(
-			ModBlockEntityTypes.HOPPING_SPIDER_NEST.get(),
-			::HoppingSpiderNestBlockRenderer
-		)
+		event.registerBlockEntityRenderer(ModBlockEntityTypes.HOPPING_SPIDER_NEST.get(), ::HoppingSpiderNestBlockRenderer)
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.SPARKBUG_BUSH.get(), ::SparkbugBushBlockRenderer)
+
 		event.registerEntityRenderer(ModEntityTypes.FILTERFEEDER.get(), ::FilterfeederRenderer)
 		event.registerEntityRenderer(ModEntityTypes.PUNCHPRAWN.get(), ::PunchprawnRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM.get(), ::ScoochwormRenderer)
