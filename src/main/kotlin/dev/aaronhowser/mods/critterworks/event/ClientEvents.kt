@@ -68,7 +68,6 @@ object ClientEvents {
 	@SubscribeEvent
 	fun onLoggingOut(event: ClientPlayerNetworkEvent.LoggingOut) {
 		ClientWebLines.clear()
-		SnailShellMovedPacket.clear()
 	}
 
 	@SubscribeEvent

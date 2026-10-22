@@ -7,14 +7,14 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.item.SnailShellItem
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import io.netty.buffer.ByteBuf
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
-class SnailShellMovedPacket private constructor(): AaronPacket() {
+class SnailShellMovedPacket private constructor() : AaronPacket() {
 
 	override fun handleOnServer(context: IPayloadContext) {
 		val player = context.player() as? ServerPlayer ?: return
@@ -32,30 +32,16 @@ class SnailShellMovedPacket private constructor(): AaronPacket() {
 		val STREAM_CODEC: StreamCodec<ByteBuf, SnailShellMovedPacket> =
 			StreamCodec.unit(INSTANCE)
 
-		// Local-only
-		private var previousSnailShellPosition: Vec3? = null
-
 		fun handleClientMovement(player: Player) {
 			if (player.isServerSide) return
 
 			val shellState = player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
-			if (!shellState.isShelled) {
-				previousSnailShellPosition = null
-				return
-			}
+			if (!shellState.isShelled) return
 
-			val currentPosition = player.position()
-			val previousPosition = previousSnailShellPosition
-			previousSnailShellPosition = currentPosition
-
-			if (previousPosition == null) return
-			if (currentPosition.distanceToSqr(previousPosition) <= Constants.EPSILON) return
+			val hasMovementInput = (player as LocalPlayer).input.moveVector.lengthSquared() > Constants.EPSILON
+			if (!hasMovementInput) return
 
 			INSTANCE.messageServer()
-		}
-
-		fun clear() {
-			previousSnailShellPosition = null
 		}
 	}
 
