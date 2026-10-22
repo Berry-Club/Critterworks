@@ -40,7 +40,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 				setData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS, value)
 			}
 
-		var LivingEntity.shellState: SnailShellState
+		private var LivingEntity.shellState: SnailShellState
 			get() = getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
 			set(value) {
 				setData(ModAttachmentTypes.SNAIL_SHELL_STATE, value)
