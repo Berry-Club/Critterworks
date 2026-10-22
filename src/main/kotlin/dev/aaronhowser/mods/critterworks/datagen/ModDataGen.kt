@@ -117,7 +117,7 @@ object ModDataGen {
 
 		generator.addProvider(
 			event.includeServer(),
-			ModEntityTypeTagsProvider(output, lookupProvider)
+			ModEntityTypeTagsProvider(output, lookupProvider, existingFileHelper)
 		)
 
 		generator.addProvider(

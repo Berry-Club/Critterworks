@@ -3,10 +3,10 @@
 ### Added
 
 - Snail Shell
-	- Makes you immortal when you sneak while it's in your inventory
-	- Cannot move during this
-		- By default this includes movement from outside sources like gravity
-		- Can be configured to instead only zero out the player's movement input
+	- Makes you immortal while active
+	- Activates while sneaking with it in either hand
+	- Reduces movement speed by 90% while active
+	- After standing still for 5 seconds, most mobs forget and cannot target you
 	- Also cannot left or right click during this
 - Punchprawns
 	- New mob that spawns around Ocean Monuments

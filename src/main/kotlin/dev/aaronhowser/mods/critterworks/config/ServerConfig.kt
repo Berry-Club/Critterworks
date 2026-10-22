@@ -10,7 +10,6 @@ class ServerConfig(
 
 	lateinit var tardigradeDisablesExpiring: ModConfigSpec.BooleanValue
 	lateinit var filterfeederWaterFogRadius: ModConfigSpec.DoubleValue
-	lateinit var snailShellDisablesAllMovement: ModConfigSpec.BooleanValue
 
 	lateinit var lockboxDropIntervalTicks: ModConfigSpec.IntValue
 	lateinit var lockboxDropAmount: ModConfigSpec.IntValue
@@ -63,10 +62,6 @@ class ServerConfig(
 		filterfeederWaterFogRadius = builder
 			.comment("The distance at which Filterfeeders begin clearing water fog. Set to 0 to disable")
 			.defineInRange("waterFogRadius", 64.0, 0.0, Double.MAX_VALUE)
-
-		snailShellDisablesAllMovement = builder
-			.comment("Whether or not the Snail Shell disables all movement, or only zeroes your input")
-			.define("snailShellDisablesAllMovement", true)
 	}
 
 	private fun scoochwormAttachmentConfigs() {

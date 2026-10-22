@@ -17,7 +17,6 @@ object ModConfigLang {
 
 		addConfig(ServerConfig.CONFIG.tardigradeDisablesExpiring, "Tardigrades Prevent Item Expiration")
 		addConfig(ServerConfig.CONFIG.filterfeederWaterFogRadius, "Filterfeeder Water Fog Radius")
-		addConfig(ServerConfig.CONFIG.snailShellDisablesAllMovement, "Snail Shell Disables All Movement")
 
 		addConfig("scoochworm_attachments", "Scoochworm Attachments")
 		addConfig(ServerConfig.CONFIG.lockboxDropIntervalTicks, "Lockbox Drop Interval (ticks)")

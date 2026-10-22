@@ -70,7 +70,6 @@
   "critterworks.configuration.sendHoppingSpiderNestTeleportMessage": "Send Hopping Spider Nest Teleport Message",
   "critterworks.configuration.sendScoochstemVineTeleportMessage": "Send Scoochstem Vine Teleport Message",
   "critterworks.configuration.sendScoochwormAppleTeleportMessage": "Send Scoochworm Apple Teleport Message",
-  "critterworks.configuration.snailShellDisablesAllMovement": "Snail Shell Disables All Movement",
   "critterworks.configuration.sparkbugBushMaxEnergyTransferPerInput": "Maximum Energy Transfer per Input (FE/t)",
   "critterworks.configuration.sparkbugBushPollenRadius": "Pollen Point Radius",
   "critterworks.configuration.sparkbug_bush": "Sparkbug Bush",

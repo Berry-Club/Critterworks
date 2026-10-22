@@ -1,12 +1,13 @@
 package dev.aaronhowser.mods.critterworks.event
 
+import dev.aaronhowser.mods.aaron.client.AaronClientUtil
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.client.block_entity.critter_cage.CritterCageBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.block_entity.hopping_spider_nest.HoppingSpiderNestBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.block_entity.sparkbug_bush.SparkbugBushBlockRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.filterfeeder.FilterfeederRenderer
-import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.hat.PunchprawnHatLayer
 import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.PunchprawnRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.hat.PunchprawnHatLayer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.snail_shell.SnailShellRenderer
@@ -14,6 +15,7 @@ import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageIte
 import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShellMovedPacket
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.registry.*
 import net.minecraft.client.Minecraft
@@ -34,7 +36,7 @@ object ClientEvents {
 	@SubscribeEvent
 	fun renderShelledPlayer(event: RenderPlayerEvent.Pre) {
 		val player = event.entity
-		if (!player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) return
+		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
 		if (!SnailShellRenderer.render(event)) return
 
 		event.isCanceled = true
@@ -43,7 +45,7 @@ object ClientEvents {
 	@SubscribeEvent
 	fun hideShelledPlayerHands(event: RenderHandEvent) {
 		val player = Minecraft.getInstance().player ?: return
-		if (!player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) return
+		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
 
 		event.isCanceled = true
 	}
@@ -52,7 +54,7 @@ object ClientEvents {
 	fun handleInteractionInput(event: InputEvent.InteractionKeyMappingTriggered) {
 		val player = Minecraft.getInstance().player
 		if (player != null
-			&& player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)
+			&& player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled
 			&& (event.isAttack || event.isUseItem)
 		) {
 			event.isCanceled = true
@@ -66,6 +68,13 @@ object ClientEvents {
 	@SubscribeEvent
 	fun onLoggingOut(event: ClientPlayerNetworkEvent.LoggingOut) {
 		ClientWebLines.clear()
+		SnailShellMovedPacket.clear()
+	}
+
+	@SubscribeEvent
+	fun afterClientTick(event: ClientTickEvent.Post) {
+		val player = AaronClientUtil.localPlayer ?: return
+		SnailShellMovedPacket.handleClientMovement(player)
 	}
 
 	@SubscribeEvent
@@ -108,21 +117,6 @@ object ClientEvents {
 			CritterCageItemRenderer.ClientItemExtensions,
 			ModItems.CRITTER_CAGE.get()
 		)
-	}
-
-	@SubscribeEvent
-	fun onUpdateInput(event: MovementInputUpdateEvent) {
-		val player = event.entity
-		if (player.getData(ModAttachmentTypes.IS_SHELL_ACTIVE)) {
-			val input = event.input
-			input.up = false
-			input.down = false
-			input.left = false
-			input.right = false
-			input.jumping = false
-			input.leftImpulse = 0f
-			input.forwardImpulse = 0f
-		}
 	}
 
 }
