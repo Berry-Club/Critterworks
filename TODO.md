@@ -127,6 +127,17 @@
 			- It should probably not be super trivial
 			- Maybe you capture it and it's revealed to be a Decoy Snail
 				- Spawns a new snail far away that's retconned to have always been the real snail, effectively restarting the chase
+		- Non-immortal snails spawn naturally
+			- If they're killed, they have a small percent chance to have actually been the Immortal Snail
+			- These snails need to perform some kind of function, surely
+				- Pocket dimension you can enter and build in?
+					- Use Immersive Portals tech to see into and out of the dimension?
+            - Passively drop slime balls while alive
+                - New Snail Slime item instead?
+                    - Place to make any block slippery/sticky?
+            - Drop shell fragments on death
+                - Use these to craft the Shell
+                - Gives a reason to kill them, which can start the chase
 
 # Guidebook
 
