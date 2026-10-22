@@ -136,10 +136,10 @@
 					- Hydrate farmland
 					- Bonemeal crops
 				- Hide in shell when there's monsters nearby?
-					- Add a new Entity Filterfeeder that
-					- Snail racing?
-						- Undertale reference
-                        - Put saddle on them and ride them but it's hilariously slow and useless
+					- Add a new Entity Filterfeeder that's used instead?
+                - Snail racing?
+                    - Undertale reference
+                    - Put saddle on them and ride them but it's hilariously slow and useless
 			- Passively drop slime balls while alive
 				- New Snail Slime item instead?
 					- Place to make any block slippery/sticky?
