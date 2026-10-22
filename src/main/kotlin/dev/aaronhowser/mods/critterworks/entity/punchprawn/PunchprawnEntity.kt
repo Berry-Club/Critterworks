@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
-import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.control.PunchprawnMoveControl
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnFollowOwnerGoal
@@ -17,6 +16,7 @@ import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
@@ -25,7 +25,6 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.*
-import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
@@ -187,9 +186,9 @@ class PunchprawnEntity(
 		}
 
 		if (isServerSide && player == owner) {
-			if (player.isShiftKeyDown && player.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).isEmpty) {
+			if (player.isShiftKeyDown && player.wornPunchprawn.isEmpty) {
 				val tag = getMinimalTag(stripUniqueness = false)
-				player.setData(ModAttachmentTypes.WORN_PUNCHPRAWN, Optional.of(tag))
+				player.wornPunchprawn = Optional.of(tag)
 				playSound(SoundEvents.ITEM_FRAME_ADD_ITEM)
 				discard()
 			} else {
@@ -224,6 +223,18 @@ class PunchprawnEntity(
 		const val WIDTH = 1f
 		const val HEIGHT = 1f
 
+		private var LivingEntity.wornPunchprawn: Optional<CompoundTag>
+			get() = getData(ModAttachmentTypes.WORN_PUNCHPRAWN)
+			set(value) {
+				setData(ModAttachmentTypes.WORN_PUNCHPRAWN, value)
+			}
+
+		private var LivingEntity.punchPrawnCooldown: Int
+			get() = getData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN)
+			set(value) {
+				setData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN, value)
+			}
+
 		fun createAttributes(): AttributeSupplier {
 			return createMobAttributes()
 				.add(Attributes.MOVEMENT_SPEED, 1.2)
@@ -247,7 +258,7 @@ class PunchprawnEntity(
 
 			val player = event.entity
 			val level = event.level
-			val tag = player.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).getOrNull() ?: return
+			val tag = player.wornPunchprawn.getOrNull() ?: return
 			val clickedPos = event.pos
 			val clickedFace = event.face ?: return
 			val clickedState = level.getBlockState(clickedPos)
@@ -266,7 +277,7 @@ class PunchprawnEntity(
 			if (player.isServerSide) {
 				if (!level.addFreshEntity(entity)) return
 
-				player.setData(ModAttachmentTypes.WORN_PUNCHPRAWN, Optional.empty())
+				player.wornPunchprawn = Optional.empty()
 				entity.playSound(SoundEvents.ITEM_FRAME_REMOVE_ITEM)
 			}
 
@@ -282,12 +293,12 @@ class PunchprawnEntity(
 			if (
 				!event.source.isDirect
 				|| !attacker.mainHandItem.isEmpty
-				|| attacker.getData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN) > 0
-				|| attacker.getData(ModAttachmentTypes.WORN_PUNCHPRAWN).isEmpty
+				|| attacker.punchPrawnCooldown > 0
+				|| attacker.wornPunchprawn.isEmpty
 			) return
 
 			event.amount += ServerConfig.CONFIG.wornPunchprawnDamageBoost.get().toFloat()
-			attacker.setData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN, ServerConfig.CONFIG.wornPunchprawnCooldown.get())
+			attacker.punchPrawnCooldown = ServerConfig.CONFIG.wornPunchprawnCooldown.get()
 
 			val knockback = ServerConfig.CONFIG.wornPunchprawnKnockback.get() * 0.5
 			val lookAngle = attacker.lookAngle
@@ -311,9 +322,9 @@ class PunchprawnEntity(
 			val player = event.entity
 			if (player.isClientSide) return
 
-			val currentCooldown = player.getData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN)
+			val currentCooldown = player.punchPrawnCooldown
 			if (currentCooldown > 0) {
-				player.setData(ModAttachmentTypes.PUNCHPRAWN_COOLDOWN, currentCooldown - 1)
+				player.punchPrawnCooldown = currentCooldown - 1
 			}
 		}
 	}

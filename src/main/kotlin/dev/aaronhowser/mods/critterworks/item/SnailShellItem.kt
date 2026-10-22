@@ -12,6 +12,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.NeutralMob
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
@@ -21,7 +22,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
-import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
 
 class SnailShellItem(properties: Properties) : Item(properties) {
@@ -34,18 +34,30 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		private val SHELLED_KNOCKBACK_RESISTANCE_MODIFIER = Critterworks.modResource("shelled_knockback_resistance")
 		private val SHELLED_EXPLOSION_KNOCKBACK_RESISTANCE_MODIFIER = Critterworks.modResource("shelled_explosion_knockback_resistance")
 
+		private var LivingEntity.shellStillTicks: Int
+			get() = getData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS)
+			set(value) {
+				setData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS, value)
+			}
+
+		var LivingEntity.shellState: SnailShellState
+			get() = getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
+			set(value) {
+				setData(ModAttachmentTypes.SNAIL_SHELL_STATE, value)
+			}
+
 		fun handlePlayerTick(event: PlayerTickEvent.Post) {
 			val player = event.entity
 			if (player !is ServerPlayer) return
 
 			val isActivatingShell = player.isDiscrete && player.isHolding(ModItems.SNAIL_SHELL.get())
 
-			val previousState = player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
+			val previousState = player.shellState
 			val newState = getNewShellState(player, isActivatingShell)
 
 			if (newState == previousState) return
 
-			player.setData(ModAttachmentTypes.SNAIL_SHELL_STATE, newState)
+			player.shellState = newState
 			updateAttributeModifiers(player, newState.isShelled)
 
 			if (previousState.isShelled != newState.isShelled) {
@@ -69,15 +81,12 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			isActivatingShell: Boolean
 		): SnailShellState {
 			if (!isActivatingShell) {
-				player.setData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS, 0)
+				player.shellStillTicks = 0
 				return SnailShellState.UNSHELLED
 			}
 
-			val stationaryTicks = minOf(
-				player.getData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS) + 1,
-				TICKS_TO_FULLY_SHELLED
-			)
-			player.setData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS, stationaryTicks)
+			val stationaryTicks = minOf(player.shellStillTicks + 1, TICKS_TO_FULLY_SHELLED)
+			player.shellStillTicks = stationaryTicks
 
 			return if (stationaryTicks >= TICKS_TO_FULLY_SHELLED) {
 				SnailShellState.FULLY_SHELLED
@@ -154,7 +163,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			if (event.isCanceled) return
 
 			val entity = event.entity
-			val shellState = entity.getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
+			val shellState = entity.shellState
 			if (!shellState.isShelled) return
 
 			event.isCanceled = true
@@ -171,7 +180,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 
 		fun handleTargetChange(event: LivingChangeTargetEvent) {
 			val target = event.newAboutToBeSetTarget ?: return
-			if (target.getData(ModAttachmentTypes.SNAIL_SHELL_STATE) != SnailShellState.FULLY_SHELLED) return
+			if (target.shellState != SnailShellState.FULLY_SHELLED) return
 			if (event.entity.type.isEntity(ModEntityTypeTagsProvider.CAN_TARGET_FULLY_SHELLED_PLAYERS)) return
 
 			event.newAboutToBeSetTarget = null
@@ -180,10 +189,10 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		fun handleClientMovement(player: ServerPlayer) {
 			if (!player.isDiscrete || !player.isHolding(ModItems.SNAIL_SHELL.get())) return
 
-			player.setData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS, 0)
+			player.shellStillTicks = 0
 
-			if (player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE) == SnailShellState.FULLY_SHELLED) {
-				player.setData(ModAttachmentTypes.SNAIL_SHELL_STATE, SnailShellState.PARTIALLY_SHELLED)
+			if (player.shellState == SnailShellState.FULLY_SHELLED) {
+				player.shellState = SnailShellState.PARTIALLY_SHELLED
 			}
 		}
 	}
