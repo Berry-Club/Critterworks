@@ -132,12 +132,20 @@
 			- These snails need to perform some kind of function, surely
 				- Pocket dimension you can enter and build in?
 					- Use Immersive Portals tech to see into and out of the dimension?
-            - Passively drop slime balls while alive
-                - New Snail Slime item instead?
-                    - Place to make any block slippery/sticky?
-            - Drop shell fragments on death
-                - Use these to craft the Shell
-                - Gives a reason to kill them, which can start the chase
+				- Help with farms?
+					- Hydrate farmland
+					- Bonemeal crops
+				- Hide in shell when there's monsters nearby?
+					- Add a new Entity Filterfeeder that
+					- Snail racing?
+						- Undertale reference
+                        - Put saddle on them and ride them but it's hilariously slow and useless
+			- Passively drop slime balls while alive
+				- New Snail Slime item instead?
+					- Place to make any block slippery/sticky?
+			- Drop shell fragments on death
+				- Use these to craft the Shell
+				- Gives a reason to kill them, which can start the chase
 
 # Guidebook
 
