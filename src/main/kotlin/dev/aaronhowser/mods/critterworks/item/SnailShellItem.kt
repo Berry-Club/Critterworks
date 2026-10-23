@@ -157,8 +157,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		fun handleEntitySize(event: EntityEvent.Size) {
 			val player = event.entity as? Player ?: return
 			val shellState = player
-				.getExistingData(ModAttachmentTypes.SNAIL_SHELL_STATE)
-				.orElse(SnailShellState.UNSHELLED)
+				.getExistingDataOrNull(ModAttachmentTypes.SNAIL_SHELL_STATE)
 
 			if (shellState?.isShelled.isNotTrue()) return
 
