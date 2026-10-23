@@ -51,14 +51,15 @@ class SproutsnailEntity(
 		}
 	}
 
-	private fun onChangedBlockPos(newPos: BlockPos) {
+	private fun tryApplyBonemeal(position: BlockPos) {
 		val level = level() as? ServerLevel ?: return
-		val state = level.getBlockState(newPos)
+		val state = level.getBlockState(position)
 		val block = state.block
 		if (block !is BonemealableBlock) return
 
-		if (block.isValidBonemealTarget(level, newPos, state)) {
-			block.performBonemeal(level, random, newPos, state)
+		if (block.isValidBonemealTarget(level, position, state)) {
+			block.performBonemeal(level, random, position, state)
+			level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, position, 0)
 		}
 	}
 
