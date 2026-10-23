@@ -35,6 +35,8 @@ import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.animal.AbstractFish
 import net.minecraft.world.entity.animal.AbstractSchoolingFish
 import net.minecraft.world.entity.player.Player
@@ -115,6 +117,8 @@ class FilterfeederEntity(
 		super.registerGoals()
 		goalSelector.addGoal(1, FilterfeederWaitForSandGoal(this))
 		goalSelector.addGoal(4, FilterfeederSwimGoal(this))
+		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
+		goalSelector.addGoal(6, RandomLookAroundGoal(this))
 	}
 
 	protected override fun canRandomSwim(): Boolean = false

@@ -28,7 +28,9 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation
@@ -72,6 +74,8 @@ class PunchprawnEntity(
 		goalSelector.addGoal(2, MeleeAttackGoal(this, 1.2, true))
 		goalSelector.addGoal(3, PunchprawnFollowOwnerGoal(this, 1.0, 8f, 2f))
 		goalSelector.addGoal(4, PunchprawnWanderGoal(this))
+		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
+		goalSelector.addGoal(6, RandomLookAroundGoal(this))
 
 		targetSelector.addGoal(1, HurtByTargetGoal(this))
 		targetSelector.addGoal(2, NearestAttackableTargetGoal(this, Player::class.java, true))
