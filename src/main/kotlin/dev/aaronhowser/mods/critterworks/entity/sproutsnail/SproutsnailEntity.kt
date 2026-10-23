@@ -12,6 +12,7 @@ import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BonemealableBlock
+import net.minecraft.world.level.block.LevelEvent
 import net.neoforged.neoforge.common.Tags
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
@@ -34,12 +35,19 @@ class SproutsnailEntity(
 	}
 
 	override fun tick() {
-		val blockBefore = blockPosition()
-		super.tick()
-		val blockAfter = blockPosition()
+		val previousBlockPositions = BlockPos.betweenClosedStream(boundingBox)
+			.toList().toSet()
 
-		if (blockBefore != blockAfter) {
-			onChangedBlockPos(blockAfter)
+		super.tick()
+
+		val newBlockPositions = BlockPos.betweenClosedStream(boundingBox)
+			.toList()
+			.toMutableList()
+
+		newBlockPositions.removeAll(previousBlockPositions)
+
+		for (newBlockPosition in newBlockPositions) {
+			tryApplyBonemeal(newBlockPosition)
 		}
 	}
 
