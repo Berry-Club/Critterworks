@@ -6,11 +6,11 @@ import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.item.CritterCageItem
 import dev.aaronhowser.mods.critterworks.registry.ModBlockEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
-import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponentMap
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
@@ -26,49 +26,49 @@ class CritterCageBlockEntity(
 
 	private var cachedEntityData: CustomData? = null
 	private var cachedEntityLevel: Level? = null
-	private var cachedScoochworm: ScoochwormEntity? = null
+	private var cachedEntity: LivingEntity? = null
 
 	var storedEntityData: CustomData? = null
 		set(value) {
 			field = value
 			cachedEntityData = null
 			cachedEntityLevel = null
-			cachedScoochworm = null
+			cachedEntity = null
 			setChanged()
 		}
 
 	val hasEntity: Boolean
 		get() = storedEntityData != null
 
-	fun getScoochworm(): ScoochwormEntity? {
+	fun getStoredEntity(): LivingEntity? {
 		val data = storedEntityData ?: return null
 		val level = level ?: return null
 
 		if (data == cachedEntityData && level === cachedEntityLevel) {
-			return cachedScoochworm
+			return cachedEntity
 		}
 
-		val scoochworm = ScoochwormEntity(ModEntityTypes.SCOOCHWORM.get(), level)
-		scoochworm.load(data.copyTag())
+		val entity = CritterCageItem.createEntity(data, level)
 
 		cachedEntityData = data
 		cachedEntityLevel = level
-		cachedScoochworm = scoochworm
+		cachedEntity = entity
 
-		return scoochworm
+		return entity
 	}
 
-	fun tryCapture(scoochworm: ScoochwormEntity): Boolean {
+	fun tryCapture(entity: LivingEntity): Boolean {
 		val level = level ?: return false
 		if (level.isClientSide || hasEntity || !blockState.getValue(CritterCageBlock.OPEN)) return false
+		if (!CritterCageItem.canCapture(entity)) return false
 
-		storedEntityData = CritterCageItem.createEntityData(scoochworm)
+		storedEntityData = CritterCageItem.createEntityData(entity)
 		level.setBlock(
 			blockPos,
 			blockState.setValue(CritterCageBlock.OPEN, false),
 			Block.UPDATE_CLIENTS
 		)
-		scoochworm.discard()
+		entity.discard()
 
 		return true
 	}
@@ -82,19 +82,22 @@ class CritterCageBlockEntity(
 		val stack = ItemStack(blockState.block)
 		stack.set(ModDataComponents.ENTITY_DATA, data)
 
-		val worm = CritterCageItem.placeScoochworm(
+		val entity = CritterCageItem.placeEntity(
 			stack,
 			level,
 			spawnPos,
 			forward
 		) ?: return false
 
-		if (!level.noCollision(worm)) {
-			worm.discard()
+		if (!level.noCollision(entity)) {
+			entity.discard()
 			return false
 		}
+		if (!level.addFreshEntity(entity)) return false
 
-		worm.isTryingToMove = true
+		if (entity is ScoochwormEntity) {
+			entity.isTryingToMove = true
+		}
 
 		storedEntityData = null
 

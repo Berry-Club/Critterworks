@@ -23,6 +23,7 @@
 
 - Hopping Spiders can now be worn in your head slot
 - Scoochworm parts have been given the `#c:capturing_not_supported` and `#c:teleporting_not_supported` tags
+- The Critter Cage can now capture any entity lacking the `#c:capturing_not_supported` tag
 
 ### Fixed
 

@@ -1,14 +1,16 @@
 package dev.aaronhowser.mods.critterworks.client.item.critter_cage
 
 import com.mojang.blaze3d.vertex.PoseStack
-import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
-import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.aaron.client.AaronClientUtil
+import dev.aaronhowser.mods.critterworks.client.critter_cage.CritterCageEntityRenderer
+import dev.aaronhowser.mods.critterworks.item.CritterCageItem
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
-import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.core.Direction
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -22,7 +24,7 @@ class CritterCageItemRenderer : BlockEntityWithoutLevelRenderer(
 
 	private var cachedData: CustomData? = null
 	private var cachedLevel: Level? = null
-	private var cachedScoochworm: ScoochwormEntity? = null
+	private var cachedEntity: LivingEntity? = null
 
 	override fun renderByItem(
 		stack: ItemStack,
@@ -40,46 +42,34 @@ class CritterCageItemRenderer : BlockEntityWithoutLevelRenderer(
 			packedOverlay
 		)
 
-		val scoochworm = getScoochworm(stack) ?: return
-		scoochworm.yRot = 180f
-		scoochworm.yRotO = 180f
-		scoochworm.yBodyRot = 180f
-		scoochworm.yBodyRotO = 180f
+		val entity = getEntity(stack) ?: return
 
-		poseStack.withPose {
-			poseStack.translate(0.5, 0.05, 0.5)
-
-			val entityRenderer = Minecraft.getInstance()
-				.entityRenderDispatcher
-				.getRenderer(scoochworm)
-
-			entityRenderer.render(
-				scoochworm,
-				scoochworm.yRot,
-				0f,
-				poseStack,
-				buffer,
-				packedLight
-			)
-		}
+		CritterCageEntityRenderer.render(
+			entity,
+			Direction.DOWN,
+			Direction.NORTH,
+			0f,
+			poseStack,
+			buffer,
+			packedLight
+		)
 	}
 
-	private fun getScoochworm(stack: ItemStack): ScoochwormEntity? {
+	private fun getEntity(stack: ItemStack): LivingEntity? {
 		val entityData = stack.get(ModDataComponents.ENTITY_DATA) ?: return null
-		val level = Minecraft.getInstance().level ?: return null
+		val level = AaronClientUtil.localLevel ?: return null
 
 		if (entityData == cachedData && level === cachedLevel) {
-			return cachedScoochworm
+			return cachedEntity
 		}
 
-		val scoochworm = ScoochwormEntity(ModEntityTypes.SCOOCHWORM.get(), level)
-		scoochworm.load(entityData.copyTag())
+		val entity = CritterCageItem.createEntity(entityData, level)
 
 		cachedData = entityData
 		cachedLevel = level
-		cachedScoochworm = scoochworm
+		cachedEntity = entity
 
-		return scoochworm
+		return entity
 	}
 
 	object ClientItemExtensions : IClientItemExtensions {

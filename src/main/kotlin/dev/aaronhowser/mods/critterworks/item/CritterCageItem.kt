@@ -1,18 +1,21 @@
 package dev.aaronhowser.mods.critterworks.item
 
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getMinimalTag
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
+import dev.aaronhowser.mods.aaron.misc.AaronUtil
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
@@ -20,6 +23,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
+import net.neoforged.neoforge.common.Tags
 
 class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE.get(), properties) {
 
@@ -41,17 +45,18 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 			clickedPosition.relative(context.clickedFace)
 		}
 
-		val worm = placeScoochworm(
+		val entity = placeEntity(
 			stack,
 			level,
 			spawnPosition,
 			context.horizontalDirection
 		) ?: return InteractionResult.FAIL
 
-		if (!level.noCollision(worm)) {
-			worm.discard()
+		if (!level.noCollision(entity)) {
+			entity.discard()
 			return InteractionResult.FAIL
 		}
+		if (!level.addFreshEntity(entity)) return InteractionResult.FAIL
 
 		stack.remove(ModDataComponents.ENTITY_DATA)
 		return InteractionResult.CONSUME
@@ -63,7 +68,8 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		interactionTarget: LivingEntity,
 		usedHand: InteractionHand
 	): InteractionResult {
-		if (interactionTarget !is ScoochwormEntity || stack.has(ModDataComponents.ENTITY_DATA)) return InteractionResult.PASS
+		if (stack.has(ModDataComponents.ENTITY_DATA)) return InteractionResult.PASS
+		if (!canCapture(interactionTarget)) return InteractionResult.PASS
 
 		if (player.isServerSide) {
 			val filledCage = stack.copyWithCount(1)
@@ -83,46 +89,89 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 	}
 
 	companion object {
-		fun createEntityData(scoochworm: ScoochwormEntity): CustomData {
-			val wormTag = scoochworm.getMinimalTag(stripUniqueness = true)
+		private const val ENTITY_TYPE_TAG = "id"
 
-			val removeTags = listOf(
-				"UUID",
-				"Pos",
-				"Motion",
-				"Rotation",
-				ScoochwormEntity.PATH_TAG,
-				ScoochwormEntity.TRYING_TO_MOVE_TAG,
-				ScoochwormEntity.SUPPORT_DIRECTION_TAG,
-				ScoochwormEntity.SUPPORT_POSITION_TAG,
-				ScoochwormEntity.MOVEMENT_DIRECTION_TAG
-			)
-
-			for (tagName in removeTags) {
-				wormTag.remove(tagName)
-			}
-
-			return CustomData.of(wormTag)
+		fun canCapture(entity: LivingEntity): Boolean {
+			return entity.type.canSerialize() && !entity.type.isEntity(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED)
 		}
 
-		fun placeScoochworm(
+		fun createEntityData(entity: LivingEntity): CustomData {
+			val entityTag = CompoundTag()
+			entity.saveAsPassenger(entityTag)
+			AaronUtil.cleanEntityNbt(entityTag, stripUniqueness = true)
+			entityTag.putString(ENTITY_TYPE_TAG, EntityType.getKey(entity.type).toString())
+
+			if (entity is ScoochwormEntity) {
+				val removeTags = listOf(
+					ScoochwormEntity.PATH_TAG,
+					ScoochwormEntity.TRYING_TO_MOVE_TAG,
+					ScoochwormEntity.SUPPORT_DIRECTION_TAG,
+					ScoochwormEntity.SUPPORT_POSITION_TAG,
+					ScoochwormEntity.MOVEMENT_DIRECTION_TAG
+				)
+
+				for (tagName in removeTags) {
+					entityTag.remove(tagName)
+				}
+			}
+
+			return CustomData.of(entityTag)
+		}
+
+		fun createEntity(entityData: CustomData, level: Level): LivingEntity? {
+			val tag = entityData.copyTag()
+			val entityType = EntityType.by(tag).orElse(null)
+
+			return try {
+				if (entityType == null) {
+					if (tag.contains(ENTITY_TYPE_TAG)) {
+						null
+					} else {
+						createScoochworm(entityData, level)
+					}
+				} else {
+					val entity = entityType.create(level)
+					if (entity is LivingEntity) {
+						entity.load(tag)
+						entity
+					} else {
+						null
+					}
+				}
+			} catch (_: Exception) {
+				null
+			}
+		}
+
+		fun placeEntity(
 			stack: ItemStack,
 			level: Level,
 			spawnPos: BlockPos,
 			facingDirection: Direction
-		): ScoochwormEntity? {
+		): LivingEntity? {
 			val entityData = stack.get(ModDataComponents.ENTITY_DATA) ?: return null
-			val entity = ScoochwormEntity(ModEntityTypes.SCOOCHWORM.get(), level)
-			entity.load(entityData.copyTag())
+			val entity = createEntity(entityData, level) ?: return null
 			entity.setPos(spawnPos.bottomCenter)
+
+			if (entity !is ScoochwormEntity) {
+				entity.yRot = facingDirection.toYRot()
+				entity.yRotO = entity.yRot
+				return entity
+			}
+
 			ScoochwormEntity.finishPlacement(
 				entity,
 				level,
 				spawnPos,
 				facingDirection
 			)
-			level.addFreshEntity(entity)
 			return entity
+		}
+
+		private fun createScoochworm(entityData: CustomData, level: Level): ScoochwormEntity {
+			val scoochworm = ScoochwormEntity(ModEntityTypes.SCOOCHWORM.get(), level)
+			scoochworm.load(entityData.copyTag())
+			return scoochworm
 		}
 	}
 
