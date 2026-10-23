@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.entity.scoochworm
 
+import com.mojang.math.Constants
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
@@ -20,6 +21,8 @@ import dev.aaronhowser.mods.critterworks.registry.ModSoundEvents
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.DoubleTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
@@ -406,12 +409,19 @@ class ScoochwormEntity(
 			null
 		}
 
-		if (tag.contains(MOVEMENT_DIRECTION_X_TAG)) {
-			rememberedMovementDirection = Vec3(
-				tag.getDouble(MOVEMENT_DIRECTION_X_TAG),
-				tag.getDouble(MOVEMENT_DIRECTION_Y_TAG),
-				tag.getDouble(MOVEMENT_DIRECTION_Z_TAG)
+		val movementDirection = tag.getList(
+			MOVEMENT_DIRECTION_TAG,
+			CompoundTag.TAG_DOUBLE.toInt()
+		)
+
+		rememberedMovementDirection = if (movementDirection.size == 3) {
+			Vec3(
+				movementDirection.getDouble(0),
+				movementDirection.getDouble(1),
+				movementDirection.getDouble(2)
 			)
+		} else {
+			null
 		}
 
 		if (!movementPath.isEmpty()) {
@@ -434,14 +444,16 @@ class ScoochwormEntity(
 
 		val movementDirection = getMovementDirectionForSave()
 		if (movementDirection != null) {
-			tag.putDouble(MOVEMENT_DIRECTION_X_TAG, movementDirection.x)
-			tag.putDouble(MOVEMENT_DIRECTION_Y_TAG, movementDirection.y)
-			tag.putDouble(MOVEMENT_DIRECTION_Z_TAG, movementDirection.z)
+			val movementDirectionTag = ListTag()
+			movementDirectionTag.add(DoubleTag.valueOf(movementDirection.x))
+			movementDirectionTag.add(DoubleTag.valueOf(movementDirection.y))
+			movementDirectionTag.add(DoubleTag.valueOf(movementDirection.z))
+			tag.put(MOVEMENT_DIRECTION_TAG, movementDirectionTag)
 		}
 	}
 
 	private fun getMovementDirectionForSave(): Vec3? {
-		if (deltaMovement.lengthSqr() > MINIMUM_MOVEMENT_LENGTH_SQUARED) {
+		if (deltaMovement.lengthSqr() > Constants.EPSILON) {
 			return deltaMovement.normalize()
 		}
 
@@ -460,7 +472,6 @@ class ScoochwormEntity(
 
 	companion object {
 		private const val HEAD_ON_ALIGNMENT_DOT = 0.8
-		private const val KISS_PROXIMITY = 0.3
 		private const val KISS_COOLDOWN_TICKS = 20 * 10
 		private const val COLLISION_WITNESS_DISTANCE_SQUARED = 16.0 * 16.0
 		const val SIZE = 14f / 16f
@@ -476,11 +487,8 @@ class ScoochwormEntity(
 		const val TRYING_TO_MOVE_TAG = "Moving"
 		const val SUPPORT_DIRECTION_TAG = "AttachmentBottom"
 		const val SUPPORT_POSITION_TAG = "AttachmentPosition"
+		const val MOVEMENT_DIRECTION_TAG = "MovementDirection"
 		private const val COLOR_TAG = "Color"
-		private const val MOVEMENT_DIRECTION_X_TAG = "MovementDirectionX"
-		private const val MOVEMENT_DIRECTION_Y_TAG = "MovementDirectionY"
-		private const val MOVEMENT_DIRECTION_Z_TAG = "MovementDirectionZ"
-		private const val MINIMUM_MOVEMENT_LENGTH_SQUARED = 0.000001
 
 		private val DATA_SUPPORT_DIRECTION: EntityDataAccessor<Direction> =
 			SynchedEntityData.defineId(
