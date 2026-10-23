@@ -135,6 +135,7 @@
 				- Help with farms?
 					- Hydrate farmland
 					- Bonemeal crops
+                    - **FLOWER POT SNAILS**
 				- Hide in shell when there's monsters nearby?
 					- Add a new Entity Filterfeeder that's used instead?
                 - Snail racing?
