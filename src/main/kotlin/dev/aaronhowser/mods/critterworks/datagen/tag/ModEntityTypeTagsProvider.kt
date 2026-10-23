@@ -10,6 +10,7 @@ import net.minecraft.data.tags.EntityTypeTagsProvider
 import net.minecraft.tags.EntityTypeTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
+import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 import java.util.concurrent.CompletableFuture
 
@@ -26,6 +27,16 @@ class ModEntityTypeTagsProvider(
 		tag(EntityTypeTags.FALL_DAMAGE_IMMUNE)
 			.add(
 				ModEntityTypes.SCOOCHWORM,
+				ModEntityTypes.SCOOCHWORM_PART
+			)
+
+		tag(Tags.EntityTypes.CAPTURING_NOT_SUPPORTED)
+			.add(
+				ModEntityTypes.SCOOCHWORM_PART
+			)
+
+		tag(Tags.EntityTypes.TELEPORTING_NOT_SUPPORTED)
+			.add(
 				ModEntityTypes.SCOOCHWORM_PART
 			)
 
