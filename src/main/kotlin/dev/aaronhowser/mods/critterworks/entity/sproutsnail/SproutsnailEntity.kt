@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.entity.sproutsnail
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BonemealableBlock
 import net.neoforged.neoforge.common.Tags
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
@@ -29,6 +31,27 @@ class SproutsnailEntity(
 
 	override fun isFood(stack: ItemStack): Boolean {
 		return stack.isItem(Tags.Items.MUSHROOMS)
+	}
+
+	override fun tick() {
+		val blockBefore = blockPosition()
+		super.tick()
+		val blockAfter = blockPosition()
+
+		if (blockBefore != blockAfter) {
+			onChangedBlockPos(blockAfter)
+		}
+	}
+
+	private fun onChangedBlockPos(newPos: BlockPos) {
+		val level = level() as? ServerLevel ?: return
+		val state = level.getBlockState(newPos)
+		val block = state.block
+		if (block !is BonemealableBlock) return
+
+		if (block.isValidBonemealTarget(level, newPos, state)) {
+			block.performBonemeal(level, random, newPos, state)
+		}
 	}
 
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
