@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.client.item.lockbox
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.item.LockboxItem
 import net.minecraft.resources.ResourceLocation
+import software.bernie.geckolib.animation.AnimationState
 import software.bernie.geckolib.model.DefaultedItemGeoModel
 
 class LockboxItemModel : DefaultedItemGeoModel<LockboxItem>(
@@ -14,5 +15,14 @@ class LockboxItemModel : DefaultedItemGeoModel<LockboxItem>(
 
 	override fun getTextureResource(animatable: LockboxItem): ResourceLocation =
 		Critterworks.modResource("textures/entity/scoochworm/lockbox.png")
+
+	override fun setCustomAnimations(
+		animatable: LockboxItem,
+		instanceId: Long,
+		animationState: AnimationState<LockboxItem>
+	) {
+		val top = animationProcessor.getBone("top")
+		top.rotX = 0f
+	}
 
 }
