@@ -4,11 +4,7 @@ import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
-import kotlin.math.abs
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class PunchprawnMoveControl(
 	private val punchprawn: PunchprawnEntity

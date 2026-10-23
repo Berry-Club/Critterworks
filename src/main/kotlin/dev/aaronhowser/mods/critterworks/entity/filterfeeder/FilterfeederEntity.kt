@@ -6,7 +6,6 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.tell
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang

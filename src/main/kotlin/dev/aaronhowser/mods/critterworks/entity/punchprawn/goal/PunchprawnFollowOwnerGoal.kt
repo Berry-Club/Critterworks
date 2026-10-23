@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.entity.punchprawn.goal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.Goal
-import java.util.EnumSet
+import java.util.*
 
 class PunchprawnFollowOwnerGoal(
 	private val punchprawn: PunchprawnEntity,
