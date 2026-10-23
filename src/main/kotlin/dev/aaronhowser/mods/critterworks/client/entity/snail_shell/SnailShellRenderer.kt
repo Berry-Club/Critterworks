@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.client.entity.snail_shell
 
+import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.player.Player
@@ -35,15 +36,19 @@ class SnailShellRenderer(
 		fun render(event: RenderPlayerEvent.Pre): Boolean {
 			val shellRenderer = renderer ?: return false
 			val player = event.entity
+			val poseStack = event.poseStack
 
-			shellRenderer.render(
-				player,
-				player.yBodyRot,
-				event.partialTick,
-				event.poseStack,
-				event.multiBufferSource,
-				event.packedLight
-			)
+			poseStack.withPose {
+				poseStack.translate(0f, 2f / 16f, 0f)
+				shellRenderer.render(
+					player,
+					player.yBodyRot,
+					event.partialTick,
+					poseStack,
+					event.multiBufferSource,
+					event.packedLight
+				)
+			}
 
 			return true
 		}

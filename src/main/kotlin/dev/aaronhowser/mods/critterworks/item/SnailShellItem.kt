@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isNotTrue
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModEntityTypeTagsProvider
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.neoforged.neoforge.event.entity.EntityEvent
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
@@ -48,8 +50,8 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		}
 
 		private const val TICKS_TO_FULLY_SHELLED = 5 * 20
+		private const val SHELLED_DIMENSIONS_SCALE = 0.4f
 
-		private val SHELLED_SCALE_MODIFIER = Critterworks.modResource("shelled_scale")
 		val SHELLED_MOVEMENT_SPEED_MODIFIER = Critterworks.modResource("shelled_movement_speed")
 		private val SHELLED_KNOCKBACK_RESISTANCE_MODIFIER = Critterworks.modResource("shelled_knockback_resistance")
 		private val SHELLED_EXPLOSION_KNOCKBACK_RESISTANCE_MODIFIER = Critterworks.modResource("shelled_explosion_knockback_resistance")
@@ -68,6 +70,11 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 
 		fun handlePlayerTick(event: PlayerTickEvent.Post) {
 			val player = event.entity
+			if (player.isClientSide) {
+				refreshClientDimensions(player)
+				return
+			}
+
 			if (player !is ServerPlayer) return
 
 			val isActivatingShell = player.isDiscrete && player.isHolding(ModItems.SNAIL_SHELL.get())
@@ -81,6 +88,8 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			updateAttributeModifiers(player, newState.isShelled)
 
 			if (previousState.isShelled != newState.isShelled) {
+				player.refreshDimensions()
+
 				player.level().playSound(
 					null,
 					player.blockPosition(),
@@ -117,11 +126,6 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 
 		private fun updateAttributeModifiers(player: Player, isShelled: Boolean) {
 			val modifiers = mapOf(
-				Attributes.SCALE to AttributeModifier(
-					SHELLED_SCALE_MODIFIER,
-					-0.6,
-					AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
-				),
 				Attributes.MOVEMENT_SPEED to AttributeModifier(
 					SHELLED_MOVEMENT_SPEED_MODIFIER,
 					-0.3, // They're already slowed from sneaking
@@ -148,6 +152,32 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 					attributeInstance.removeModifier(modifier.id)
 				}
 			}
+		}
+
+		fun handleEntitySize(event: EntityEvent.Size) {
+			val player = event.entity as? Player ?: return
+			val shellState = player
+				.getExistingData(ModAttachmentTypes.SNAIL_SHELL_STATE)
+				.orElse(SnailShellState.UNSHELLED)
+
+			if (shellState?.isShelled.isNotTrue()) return
+
+			event.newSize = event.newSize.scale(SHELLED_DIMENSIONS_SCALE)
+		}
+
+		private fun refreshClientDimensions(player: Player) {
+			val baseDimensions = player.getDimensions(player.pose)
+			val expectedDimensions = if (player.shellState.isShelled) {
+				baseDimensions.scale(SHELLED_DIMENSIONS_SCALE)
+			} else {
+				baseDimensions
+			}
+
+			if (player.bbWidth == expectedDimensions.width()
+				&& player.bbHeight == expectedDimensions.height()
+			) return
+
+			player.refreshDimensions()
 		}
 
 		private fun makeMobsForgetPlayer(player: ServerPlayer) {

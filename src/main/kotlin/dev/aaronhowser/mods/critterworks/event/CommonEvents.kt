@@ -24,6 +24,7 @@ import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
+import net.neoforged.neoforge.event.entity.EntityEvent
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
@@ -82,6 +83,11 @@ object CommonEvents {
 		event.put(ModEntityTypes.FILTERFEEDER.get(), FilterfeederEntity.createAttributes())
 		event.put(ModEntityTypes.PUNCHPRAWN.get(), PunchprawnEntity.createAttributes())
 		event.put(ModEntityTypes.SCOOCHWORM.get(), ScoochwormEntity.createAttributes())
+	}
+
+	@SubscribeEvent
+	fun onEntitySize(event: EntityEvent.Size) {
+		SnailShellItem.handleEntitySize(event)
 	}
 
 	@SubscribeEvent
