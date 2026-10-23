@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.client.entity.snail_shell
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
+import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.item.SnailShellItem.SnailShellState
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import net.minecraft.client.model.SkullModel
@@ -39,27 +40,28 @@ class SnailShellHeadLayer(
 		val shellState = player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
 		if (shellState != SnailShellState.PARTIALLY_SHELLED) return
 
-		poseStack.pushPose()
-		poseStack.translate(0f, 0f, HEAD_FORWARD_OFFSET)
-		poseStack.scale(-1f, -1f, 1f)
+		poseStack.withPose {
+			poseStack.translate(0f, 0f, HEAD_FORWARD_OFFSET)
+			poseStack.scale(-1f, -1f, 1f)
 
-		headModel.setupAnim(
-			0f,
-			getRelativeHeadYaw(player, partialTick),
-			player.getViewXRot(partialTick)
-		)
+			headModel.setupAnim(
+				0f,
+				getRelativeHeadYaw(player, partialTick),
+				player.getViewXRot(partialTick)
+			)
 
-		val headRenderType = RenderType.entityTranslucent(player.skin.texture())
-		val headBuffer = bufferSource.getBuffer(headRenderType)
-		headModel.renderToBuffer(
-			poseStack,
-			headBuffer,
-			packedLight,
-			OverlayTexture.NO_OVERLAY
-		)
-		bufferSource.getBuffer(renderType)
+			val headRenderType = RenderType.entityTranslucent(player.skin.texture())
+			val headBuffer = bufferSource.getBuffer(headRenderType)
 
-		poseStack.popPose()
+			headModel.renderToBuffer(
+				poseStack,
+				headBuffer,
+				packedLight,
+				OverlayTexture.NO_OVERLAY
+			)
+
+			bufferSource.getBuffer(renderType)
+		}
 	}
 
 	private fun getRelativeHeadYaw(player: AbstractClientPlayer, partialTick: Float): Float {
