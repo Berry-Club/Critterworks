@@ -187,24 +187,23 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			if (!shellState.isShelled) return
 
 			event.isCanceled = true
+			if (!player.isServerSide) return
 
-			if (player.isServerSide) {
-				player.level().playSound(
-					null,
-					player.blockPosition(),
-					SoundEvents.SHULKER_HURT_CLOSED,
-					SoundSource.PLAYERS
-				)
+			player.level().playSound(
+				null,
+				player.blockPosition(),
+				SoundEvents.SHULKER_HURT_CLOSED,
+				SoundSource.PLAYERS
+			)
 
-				val shellHand = when {
-					player.mainHandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.MAIN_HAND
-					player.offhandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.OFF_HAND
-					else -> return
-				}
-
-				val heldShell = player.getItemInHand(shellHand)
-				heldShell.hurtAndBreak(1, player, shellHand.getEquipmentSlot())
+			val shellHand = when {
+				player.mainHandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.MAIN_HAND
+				player.offhandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.OFF_HAND
+				else -> return
 			}
+
+			val heldShell = player.getItemInHand(shellHand)
+			heldShell.hurtAndBreak(1, player, shellHand.getEquipmentSlot())
 		}
 
 		fun handleTargetChange(event: LivingChangeTargetEvent) {
