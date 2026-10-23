@@ -11,6 +11,7 @@ import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.hat.Punchprawn
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.snail_shell.SnailShellRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.sproutsnail.SproutsnailRenderer
 import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageItemRenderer
 import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
@@ -118,6 +119,7 @@ object ClientEvents {
 		event.registerEntityRenderer(ModEntityTypes.PUNCHPRAWN.get(), ::PunchprawnRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM.get(), ::ScoochwormRenderer)
 		event.registerEntityRenderer(ModEntityTypes.SCOOCHWORM_PART.get(), ::ScoochwormPartRenderer)
+		event.registerEntityRenderer(ModEntityTypes.SPROUTSNAIL.get(), ::SproutsnailRenderer)
 	}
 
 	@SubscribeEvent

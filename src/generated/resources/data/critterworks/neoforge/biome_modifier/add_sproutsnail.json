@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#critterworks:has_sproutsnail",
+  "spawners": [
+    {
+      "type": "critterworks:sproutsnail",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 10
+    }
+  ]
+}

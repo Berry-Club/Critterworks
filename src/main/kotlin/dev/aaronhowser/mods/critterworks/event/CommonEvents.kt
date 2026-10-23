@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.critterworks.datagen.tag.ModDamageTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
 import dev.aaronhowser.mods.critterworks.item.SnailShellItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
@@ -15,6 +16,7 @@ import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModPotions
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.SpawnPlacementTypes
+import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.level.levelgen.Heightmap
 import net.neoforged.bus.api.EventPriority
@@ -83,6 +85,7 @@ object CommonEvents {
 		event.put(ModEntityTypes.FILTERFEEDER.get(), FilterfeederEntity.createAttributes())
 		event.put(ModEntityTypes.PUNCHPRAWN.get(), PunchprawnEntity.createAttributes())
 		event.put(ModEntityTypes.SCOOCHWORM.get(), ScoochwormEntity.createAttributes())
+		event.put(ModEntityTypes.SPROUTSNAIL.get(), SproutsnailEntity.createAttributes())
 	}
 
 	@SubscribeEvent
@@ -105,6 +108,14 @@ object CommonEvents {
 			SpawnPlacementTypes.IN_WATER,
 			Heightmap.Types.OCEAN_FLOOR,
 			PunchprawnEntity::checkSpawnRules,
+			RegisterSpawnPlacementsEvent.Operation.REPLACE
+		)
+
+		event.register(
+			ModEntityTypes.SPROUTSNAIL.get(),
+			SpawnPlacementTypes.ON_GROUND,
+			Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+			Animal::checkAnimalSpawnRules,
 			RegisterSpawnPlacementsEvent.Operation.REPLACE
 		)
 	}
