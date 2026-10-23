@@ -35,20 +35,22 @@ class SproutsnailEntity(
 	}
 
 	override fun tick() {
-		val previousBlockPositions = BlockPos.betweenClosedStream(boundingBox)
-			.toList().toSet()
+		val previousBlockPositions = getOccupiedBlockPositions().toSet()
 
 		super.tick()
 
-		val newBlockPositions = BlockPos.betweenClosedStream(boundingBox)
-			.toList()
-			.toMutableList()
-
+		val newBlockPositions = getOccupiedBlockPositions().toMutableList()
 		newBlockPositions.removeAll(previousBlockPositions)
 
 		for (newBlockPosition in newBlockPositions) {
 			tryApplyBonemeal(newBlockPosition)
 		}
+	}
+
+	private fun getOccupiedBlockPositions(): List<BlockPos> {
+		return BlockPos.betweenClosedStream(boundingBox)
+			.map(BlockPos::immutable)
+			.toList()
 	}
 
 	private fun tryApplyBonemeal(position: BlockPos) {
