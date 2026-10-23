@@ -94,7 +94,8 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 				ScoochwormEntity.PATH_TAG,
 				ScoochwormEntity.TRYING_TO_MOVE_TAG,
 				ScoochwormEntity.SUPPORT_DIRECTION_TAG,
-				ScoochwormEntity.SUPPORT_POSITION_TAG
+				ScoochwormEntity.SUPPORT_POSITION_TAG,
+				ScoochwormEntity.MOVEMENT_DIRECTION_TAG
 			)
 
 			for (tagName in removeTags) {
