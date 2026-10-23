@@ -50,7 +50,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		private const val TICKS_TO_FULLY_SHELLED = 5 * 20
 
 		private val SHELLED_SCALE_MODIFIER = Critterworks.modResource("shelled_scale")
-		private val SHELLED_MOVEMENT_SPEED_MODIFIER = Critterworks.modResource("shelled_movement_speed")
+		val SHELLED_MOVEMENT_SPEED_MODIFIER = Critterworks.modResource("shelled_movement_speed")
 		private val SHELLED_KNOCKBACK_RESISTANCE_MODIFIER = Critterworks.modResource("shelled_knockback_resistance")
 		private val SHELLED_EXPLOSION_KNOCKBACK_RESISTANCE_MODIFIER = Critterworks.modResource("shelled_explosion_knockback_resistance")
 

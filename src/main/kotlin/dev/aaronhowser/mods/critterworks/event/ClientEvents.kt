@@ -15,12 +15,15 @@ import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageIte
 import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.item.SnailShellItem
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShellMovedPacket
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.registry.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.player.PlayerRenderer
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.util.Mth
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
@@ -48,6 +51,35 @@ object ClientEvents {
 		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
 
 		event.isCanceled = true
+	}
+
+	@SubscribeEvent
+	fun preserveFovWhileShelled(event: ComputeFovModifierEvent) {
+		val player = event.player
+		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
+
+		val movementSpeedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED) ?: return
+		val shellModifier = movementSpeedAttribute.getModifier(SnailShellItem.SHELLED_MOVEMENT_SPEED_MODIFIER) ?: return
+		val shellSpeedMultiplier = 1.0 + shellModifier.amount
+		if (shellSpeedMultiplier == 0.0) return
+
+		val walkingSpeed = player.abilities.walkingSpeed
+		if (walkingSpeed == 0f) return
+
+		val movementSpeed = movementSpeedAttribute.value
+		val movementFovMultiplier = (movementSpeed / walkingSpeed + 1.0) / 2.0
+		if (movementFovMultiplier == 0.0) return
+
+		val unshelledMovementSpeed = movementSpeed / shellSpeedMultiplier
+		val unshelledMovementFovMultiplier = (unshelledMovementSpeed / walkingSpeed + 1.0) / 2.0
+		val correctedFovModifier = event.fovModifier * unshelledMovementFovMultiplier / movementFovMultiplier
+		val fovEffectScale = Minecraft.getInstance().options.fovEffectScale().get().toFloat()
+
+		event.newFovModifier = Mth.lerp(
+			fovEffectScale,
+			1f,
+			correctedFovModifier.toFloat()
+		)
 	}
 
 	@SubscribeEvent
