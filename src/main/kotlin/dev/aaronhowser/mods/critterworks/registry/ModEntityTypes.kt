@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
+import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -17,13 +18,6 @@ object ModEntityTypes {
 
 	val ENTITY_TYPE_REGISTRY: DeferredRegister<EntityType<*>> =
 		DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Critterworks.MOD_ID)
-
-	val FILTERFEEDER: DeferredHolder<EntityType<*>, EntityType<FilterfeederEntity>> =
-		register(
-			"filterfeeder",
-			EntityType.Builder.of(::FilterfeederEntity, MobCategory.WATER_CREATURE)
-				.sized(FilterfeederEntity.WIDTH, FilterfeederEntity.HEIGHT)
-		)
 
 	val SCOOCHWORM: DeferredHolder<EntityType<*>, EntityType<ScoochwormEntity>> =
 		register(
@@ -41,11 +35,25 @@ object ModEntityTypes {
 				.updateInterval(3)
 		)
 
+	val FILTERFEEDER: DeferredHolder<EntityType<*>, EntityType<FilterfeederEntity>> =
+		register(
+			"filterfeeder",
+			EntityType.Builder.of(::FilterfeederEntity, MobCategory.WATER_CREATURE)
+				.sized(FilterfeederEntity.WIDTH, FilterfeederEntity.HEIGHT)
+		)
+
 	val PUNCHPRAWN: DeferredHolder<EntityType<*>, EntityType<PunchprawnEntity>> =
 		register(
 			"punchprawn",
 			EntityType.Builder.of(::PunchprawnEntity, MobCategory.WATER_CREATURE)
 				.sized(PunchprawnEntity.WIDTH, PunchprawnEntity.HEIGHT)
+		)
+
+	val SPROUTSNAIL: DeferredHolder<EntityType<*>, EntityType<SproutsnailEntity>> =
+		register(
+			"sproutsnail",
+			EntityType.Builder.of(::SproutsnailEntity, MobCategory.CREATURE)
+				.sized(SproutsnailEntity.WIDTH, SproutsnailEntity.HEIGHT)
 		)
 
 	private fun <T : Entity> register(
