@@ -13,15 +13,15 @@ import net.minecraft.world.level.Level
 import net.neoforged.neoforge.common.Tags
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.util.GeckoLibUtil
 
 class SproutsnailEntity(
 	entityType: EntityType<out SproutsnailEntity>,
 	level: Level
 ) : Animal(entityType, level), GeoEntity {
 
-	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
+	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 
 	override fun registerGoals() {
 		goalSelector.addGoal(0, RandomStrollGoal(this, 1.0))

@@ -44,8 +44,8 @@ import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.phys.Vec3
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.*
+import software.bernie.geckolib.util.GeckoLibUtil
 
 class FilterfeederEntity(
 	entityType: EntityType<out FilterfeederEntity>,
@@ -62,7 +62,7 @@ class FilterfeederEntity(
 
 	private var filterStack = ItemStack.EMPTY
 
-	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
+	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 
 	protected override fun getTypeName(): Component {
 		return filterType.translationKey.toComponent()

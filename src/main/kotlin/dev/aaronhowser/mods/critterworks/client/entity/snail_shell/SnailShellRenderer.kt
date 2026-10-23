@@ -7,9 +7,9 @@ import net.minecraft.world.entity.player.Player
 import net.neoforged.neoforge.client.event.RenderPlayerEvent
 import software.bernie.geckolib.animatable.GeoReplacedEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
 import software.bernie.geckolib.renderer.GeoReplacedEntityRenderer
+import software.bernie.geckolib.util.GeckoLibUtil
 
 class SnailShellRenderer(
 	context: EntityRendererProvider.Context
@@ -23,7 +23,7 @@ class SnailShellRenderer(
 	}
 
 	object ShellAnimatable : GeoReplacedEntity {
-		private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
+		private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 		override fun getReplacingEntityType(): EntityType<*> = EntityType.PLAYER
 		override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {}
 		override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache

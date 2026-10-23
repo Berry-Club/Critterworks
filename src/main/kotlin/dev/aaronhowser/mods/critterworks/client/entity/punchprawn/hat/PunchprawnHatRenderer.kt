@@ -6,11 +6,11 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import net.minecraft.client.renderer.MultiBufferSource
 import software.bernie.geckolib.animatable.GeoAnimatable
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
 import software.bernie.geckolib.cache.`object`.BakedGeoModel
 import software.bernie.geckolib.model.DefaultedGeoModel
 import software.bernie.geckolib.renderer.GeoObjectRenderer
+import software.bernie.geckolib.util.GeckoLibUtil
 
 class PunchprawnHatRenderer : GeoObjectRenderer<PunchprawnHatRenderer.HatAnimatable>(PunchprawnHatModel()) {
 
@@ -49,7 +49,7 @@ class PunchprawnHatRenderer : GeoObjectRenderer<PunchprawnHatRenderer.HatAnimata
 	}
 
 	object HatAnimatable : GeoAnimatable {
-		private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
+		private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 
 		override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {}
 		override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache

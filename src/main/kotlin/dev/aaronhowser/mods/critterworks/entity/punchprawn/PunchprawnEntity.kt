@@ -48,8 +48,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 import kotlin.math.abs
@@ -59,7 +59,7 @@ class PunchprawnEntity(
 	level: Level
 ) : TamableAnimal(entityType, level), GeoEntity {
 
-	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
+	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 
 	init {
 		moveControl = PunchprawnMoveControl(this)

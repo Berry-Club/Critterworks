@@ -48,8 +48,8 @@ import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.fluids.FluidType
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
 
 class ScoochwormEntity(
@@ -57,7 +57,7 @@ class ScoochwormEntity(
 	level: Level
 ) : Mob(entityType, level), GeoEntity {
 
-	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
+	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 	val stemMoveControl = ScoochwormStemMoveControl(this)
 	private val movementPath = ScoochwormPath()
 	private val bodySegments = ScoochwormBody(this)

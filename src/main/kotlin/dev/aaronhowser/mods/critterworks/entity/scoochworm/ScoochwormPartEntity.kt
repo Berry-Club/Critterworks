@@ -25,15 +25,15 @@ import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.items.IItemHandler
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.util.GeckoLibUtil
 
 class ScoochwormPartEntity(
 	entityType: EntityType<ScoochwormPartEntity>,
 	level: Level
 ) : Entity(entityType, level), GeoEntity {
 
-	private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)
+	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 	private var lerpSteps = 0
 	private var lerpX = 0.0
 	private var lerpY = 0.0
