@@ -183,8 +183,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			if (event.isCanceled) return
 
 			val player = event.entity as? Player ?: return
-			val shellState = player.shellState
-			if (!shellState.isShelled) return
+			if (!player.shellState.isShelled) return
 
 			event.isCanceled = true
 			if (player.isClientSide) return
