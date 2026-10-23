@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.client.AaronClientUtil
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.critterworks.Critterworks
@@ -33,7 +34,17 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		return AaronClientUtil.localPlayer?.shellState?.isShelled.isTrue()
 	}
 
+	override fun isValidRepairItem(stack: ItemStack, repairCandidate: ItemStack): Boolean {
+		return repairCandidate.isItem(ModItems.SNAIL_SHELL_FRAGMENT)
+	}
+
 	companion object {
+
+		val DEFAULT_PROPERTIES = {
+			Properties()
+				.durability(256)
+		}
+
 		private const val TICKS_TO_FULLY_SHELLED = 5 * 20
 
 		private val SHELLED_SCALE_MODIFIER = Critterworks.modResource("shelled_scale")

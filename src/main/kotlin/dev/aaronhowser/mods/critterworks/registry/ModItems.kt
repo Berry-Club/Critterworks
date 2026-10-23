@@ -41,7 +41,10 @@ object ModItems : AaronItemRegistry() {
 	val TARDIGRADE: DeferredItem<Item> =
 		basic("tardigrade")
 	val SNAIL_SHELL: DeferredItem<SnailShellItem> =
-		register("snail_shell", ::SnailShellItem)
+		register("snail_shell", ::SnailShellItem, SnailShellItem.DEFAULT_PROPERTIES)
+
+	val SNAIL_SHELL_FRAGMENT: DeferredItem<Item> =
+		basic("snail_shell_fragment")
 	val PEARL: DeferredItem<Item> =
 		basic("pearl")
 
