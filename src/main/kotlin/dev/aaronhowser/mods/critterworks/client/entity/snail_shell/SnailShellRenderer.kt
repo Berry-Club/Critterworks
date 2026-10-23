@@ -18,6 +18,9 @@ class SnailShellRenderer(
 	SnailShellModel(),
 	ShellAnimatable
 ) {
+	init {
+		addRenderLayer(SnailShellHeadLayer(this, context))
+	}
 
 	object ShellAnimatable : GeoReplacedEntity {
 		private val animatableInstanceCache = SingletonAnimatableInstanceCache(this)

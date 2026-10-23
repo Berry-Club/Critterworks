@@ -1,0 +1,76 @@
+package dev.aaronhowser.mods.critterworks.client.entity.snail_shell
+
+import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
+import dev.aaronhowser.mods.critterworks.item.SnailShellItem.SnailShellState
+import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
+import net.minecraft.client.model.SkullModel
+import net.minecraft.client.model.geom.ModelLayers
+import net.minecraft.client.player.AbstractClientPlayer
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.util.Mth
+import software.bernie.geckolib.cache.`object`.GeoBone
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer
+
+class SnailShellHeadLayer(
+	private val shellRenderer: SnailShellRenderer,
+	context: EntityRendererProvider.Context
+) : GeoRenderLayer<SnailShellRenderer.ShellAnimatable>(shellRenderer) {
+
+	private val headModel = SkullModel(context.bakeLayer(ModelLayers.PLAYER_HEAD))
+
+	override fun renderForBone(
+		poseStack: PoseStack,
+		animatable: SnailShellRenderer.ShellAnimatable,
+		bone: GeoBone,
+		renderType: RenderType,
+		bufferSource: MultiBufferSource,
+		buffer: VertexConsumer,
+		partialTick: Float,
+		packedLight: Int,
+		packedOverlay: Int
+	) {
+		if (bone.name != SHELL_BONE_NAME) return
+
+		val player = shellRenderer.currentEntity as? AbstractClientPlayer ?: return
+		val shellState = player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
+		if (shellState != SnailShellState.PARTIALLY_SHELLED) return
+
+		poseStack.pushPose()
+		poseStack.translate(0f, 0f, HEAD_FORWARD_OFFSET)
+		poseStack.scale(-1f, -1f, 1f)
+
+		headModel.setupAnim(
+			0f,
+			getRelativeHeadYaw(player, partialTick),
+			player.getViewXRot(partialTick)
+		)
+
+		val headRenderType = RenderType.entityTranslucent(player.skin.texture())
+		val headBuffer = bufferSource.getBuffer(headRenderType)
+		headModel.renderToBuffer(
+			poseStack,
+			headBuffer,
+			packedLight,
+			OverlayTexture.NO_OVERLAY
+		)
+		bufferSource.getBuffer(renderType)
+
+		poseStack.popPose()
+	}
+
+	private fun getRelativeHeadYaw(player: AbstractClientPlayer, partialTick: Float): Float {
+		val bodyYaw = Mth.rotLerp(partialTick, player.yBodyRotO, player.yBodyRot)
+		val headYaw = Mth.rotLerp(partialTick, player.yHeadRotO, player.yHeadRot)
+
+		return Mth.wrapDegrees(headYaw - bodyYaw)
+	}
+
+	companion object {
+		private const val SHELL_BONE_NAME = "bb_main"
+		private const val HEAD_FORWARD_OFFSET = -6f / 16f
+	}
+}
