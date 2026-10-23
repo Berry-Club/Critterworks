@@ -79,30 +79,40 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 
 			val isActivatingShell = player.isDiscrete && player.isHolding(ModItems.SNAIL_SHELL.get())
 
-			val previousState = player.shellState
+			val oldState = player.shellState
 			val newState = getNewShellState(player, isActivatingShell)
 
-			if (newState == previousState) return
+			if (newState == oldState) return
 
 			player.shellState = newState
 			updateAttributeModifiers(player, newState.isShelled)
 
-			if (previousState.isShelled != newState.isShelled) {
-				player.refreshDimensions()
-
-				player.level().playSound(
-					null,
-					player.blockPosition(),
-					if (newState.isShelled) SoundEvents.SHULKER_CLOSE else SoundEvents.SHULKER_OPEN,
-					SoundSource.PLAYERS,
-					1f,
-					1f
-				)
-			}
+			playTransitionSound(player, oldState, newState)
 
 			if (newState == SnailShellState.FULLY_SHELLED) {
 				makeMobsForgetPlayer(player)
 			}
+		}
+
+		private fun playTransitionSound(
+			player: ServerPlayer,
+			oldState: SnailShellState,
+			newState: SnailShellState
+		) {
+			val sound = when {
+				oldState.isShelled && !newState.isShelled -> SoundEvents.SHULKER_OPEN    // Deactivate
+				!oldState.isShelled && newState.isShelled -> SoundEvents.SHULKER_CLOSE    // Activate
+				oldState == SnailShellState.PARTIALLY_SHELLED && newState == SnailShellState.FULLY_SHELLED -> SoundEvents.ITEM_FRAME_ADD_ITEM // Hide head
+				oldState == SnailShellState.FULLY_SHELLED && newState == SnailShellState.PARTIALLY_SHELLED -> SoundEvents.ITEM_FRAME_REMOVE_ITEM // Show head
+				else -> return
+			}
+
+			player.level().playSound(
+				null,
+				player.blockPosition(),
+				sound,
+				SoundSource.PLAYERS
+			)
 		}
 
 		private fun getNewShellState(
@@ -249,6 +259,15 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 
 			if (player.shellState == SnailShellState.FULLY_SHELLED) {
 				player.shellState = SnailShellState.PARTIALLY_SHELLED
+
+				player.level().playSound(
+					null,
+					player.blockPosition(),
+					SoundEvents.ITEM_FRAME_REMOVE_ITEM,
+					SoundSource.PLAYERS,
+					1f,
+					1f
+				)
 			}
 		}
 	}
