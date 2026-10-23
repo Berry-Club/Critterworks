@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.client.AaronClientUtil
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
@@ -15,6 +16,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.NeutralMob
@@ -180,19 +182,28 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		fun handleIncomingDamage(event: LivingIncomingDamageEvent) {
 			if (event.isCanceled) return
 
-			val entity = event.entity
-			val shellState = entity.shellState
+			val player = event.entity as? Player ?: return
+			val shellState = player.shellState
 			if (!shellState.isShelled) return
 
 			event.isCanceled = true
 
-			if (entity.isServerSide) {
-				entity.level().playSound(
+			if (player.isServerSide) {
+				player.level().playSound(
 					null,
-					entity.blockPosition(),
+					player.blockPosition(),
 					SoundEvents.SHULKER_HURT_CLOSED,
 					SoundSource.PLAYERS
 				)
+
+				val shellHand = when {
+					player.mainHandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.MAIN_HAND
+					player.offhandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.OFF_HAND
+					else -> return
+				}
+
+				val heldShell = player.getItemInHand(shellHand)
+				heldShell.hurtAndBreak(1, player, shellHand.getEquipmentSlot())
 			}
 		}
 
