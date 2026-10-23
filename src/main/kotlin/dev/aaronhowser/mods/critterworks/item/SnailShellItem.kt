@@ -2,9 +2,9 @@ package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.client.AaronClientUtil
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModEntityTypeTagsProvider
@@ -187,7 +187,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			if (!shellState.isShelled) return
 
 			event.isCanceled = true
-			if (!player.isServerSide) return
+			if (player.isClientSide) return
 
 			player.level().playSound(
 				null,
