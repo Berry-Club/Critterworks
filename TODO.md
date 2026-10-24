@@ -47,6 +47,7 @@
 		- Anthills?
 	- How do you lay out paths for them to take?
 		- Sugar water?
+		- Honey trails?
 
 # Dragginflies
 
@@ -65,6 +66,11 @@
 - Probably should be more than just multiple channels of wire
 - Logic gates? would that even make sense?
 - Clock Cuckoo
+- WEBSTONE
+	- Red spider webs
+	- Maybe spiders sit stationary on the web and that does the logic
+		- Make them look like circuit boards or something
+        - Their legs are the pins etc
 
 # Farm critters?
 
@@ -135,12 +141,12 @@
 				- Help with farms?
 					- Hydrate farmland
 					- Bonemeal crops
-                    - **FLOWER POT SNAILS**
+					- **FLOWER POT SNAILS**
 				- Hide in shell when there's monsters nearby?
 					- Add a new Entity Filterfeeder that's used instead?
-                - Snail racing?
-                    - Undertale reference
-                    - Put saddle on them and ride them but it's hilariously slow and useless
+				- Snail racing?
+					- Undertale reference
+					- Put saddle on them and ride them but it's hilariously slow and useless
 			- Passively drop slime balls while alive
 				- New Snail Slime item instead?
 					- Place to make any block slippery/sticky?
