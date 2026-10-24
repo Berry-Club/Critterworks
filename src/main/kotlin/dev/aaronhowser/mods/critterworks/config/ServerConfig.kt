@@ -24,6 +24,7 @@ class ServerConfig(
 
 	lateinit var sproutsnailBonemealChance: ModConfigSpec.DoubleValue
 	lateinit var sproutsnailEvilChance: ModConfigSpec.DoubleValue
+	lateinit var sproutsnailEvilSpeed: ModConfigSpec.DoubleValue
 
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
@@ -79,6 +80,10 @@ class ServerConfig(
 		sproutsnailEvilChance = builder
 			.comment("What chance that a Sproutsnail killed by a player will come back for revenge")
 			.defineInRange("sproutsnailEvilChance", 0.01, 0.0, 1.0)
+
+		sproutsnailEvilSpeed = builder
+			.comment("How fast the Immortal Snail moves towards the player it's hunting")
+			.defineInRange("sproutsnailEvilSpeed", 0.1, Double.MIN_VALUE, Double.MAX_VALUE)
 	}
 
 	private fun scoochwormAttachmentConfigs() {
