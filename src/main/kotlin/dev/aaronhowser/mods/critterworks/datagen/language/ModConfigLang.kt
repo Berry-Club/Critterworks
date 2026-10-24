@@ -37,6 +37,11 @@ object ModConfigLang {
 		addConfig(ServerConfig.CONFIG.wornPunchprawnKnockback, "Worn Punchprawn Knockback")
 		addConfig(ServerConfig.CONFIG.wornPunchprawnDamageBoost, "Worn Punchprawn Damage Boost")
 
+		addConfig("sproutsnail", "Sproutsnail")
+		addConfig(ServerConfig.CONFIG.sproutsnailBonemealChance, "Sproutsnail Bonemeal Chance")
+		addConfig(ServerConfig.CONFIG.sproutsnailEvilChance, "Evil Sproutsnail Chance")
+		addConfig(ServerConfig.CONFIG.sproutsnailEvilSpeed, "Evil Sproutsnail Speed")
+
 		addConfig("rendering", "Rendering")
 		addConfig(ClientConfig.CONFIG.hoppingSpiderScale, "Hopping Spider Scale")
 		addConfig(ClientConfig.CONFIG.rotateScoochwormPassengerCamera, "Rotate Scoochworm Passenger Camera")
