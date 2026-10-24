@@ -22,6 +22,8 @@ class ServerConfig(
 	lateinit var wornPunchprawnKnockback: ModConfigSpec.DoubleValue
 	lateinit var wornPunchprawnCooldown: ModConfigSpec.IntValue
 
+	lateinit var sproutsnailBonemealChance: ModConfigSpec.DoubleValue
+
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
 	lateinit var hoppingSpiderNestRarity: ModConfigSpec.IntValue
@@ -45,6 +47,10 @@ class ServerConfig(
 			punchprawnConfigs()
 		}
 
+		builder.section("sproutsnail") {
+			sproutsnailConfigs()
+		}
+
 		builder.section("world_gen") {
 			worldGenConfigs()
 		}
@@ -62,6 +68,12 @@ class ServerConfig(
 		filterfeederWaterFogRadius = builder
 			.comment("The distance at which Filterfeeders begin clearing water fog. Set to 0 to disable")
 			.defineInRange("waterFogRadius", 64.0, 0.0, Double.MAX_VALUE)
+	}
+
+	private fun sproutsnailConfigs() {
+		sproutsnailBonemealChance = builder
+			.comment("What chance the Sproutsnail has to successfully bonemeal the block it walks through")
+			.defineInRange("sproutsnailBonemealChance", 0.2, 0.0, 1.0)
 	}
 
 	private fun scoochwormAttachmentConfigs() {

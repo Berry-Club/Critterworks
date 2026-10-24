@@ -1,6 +1,9 @@
 package dev.aaronhowser.mods.critterworks.entity.sproutsnail
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal.SproutsnailMoveToBonemealableBlockGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -9,13 +12,12 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal
 import net.minecraft.world.entity.ai.goal.TemptGoal
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.LevelEvent
@@ -33,7 +35,7 @@ class SproutsnailEntity(
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 
 	override fun registerGoals() {
-		goalSelector.addGoal(1, TemptGoal(this, 1.0, Ingredient.of(Tags.Items.MUSHROOMS), false))
+		goalSelector.addGoal(1, TemptGoal(this, 1.0, Tags.Items.MUSHROOMS.asIngredient(), false))
 		goalSelector.addGoal(2, SproutsnailMoveToBonemealableBlockGoal(this))
 		goalSelector.addGoal(3, RandomStrollGoal(this, 1.0))
 		goalSelector.addGoal(4, LookAtPlayerGoal(this, Player::class.java, 6f))
@@ -67,9 +69,11 @@ class SproutsnailEntity(
 		val level = level() as? ServerLevel ?: return
 		val state = level.getBlockState(position)
 		val block = state.block
-		if (block !is BonemealableBlock) return
 
-		if (block.isValidBonemealTarget(level, position, state)) {
+		if (block is BonemealableBlock
+			&& block.isValidBonemealTarget(level, position, state)
+			&& random.chance(ServerConfig.CONFIG.sproutsnailBonemealChance.get())
+		) {
 			block.performBonemeal(level, random, position, state)
 			level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, position, 0)
 		}
