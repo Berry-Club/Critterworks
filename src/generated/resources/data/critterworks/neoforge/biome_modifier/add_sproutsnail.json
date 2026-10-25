@@ -3,7 +3,7 @@
   "biomes": "#critterworks:has_sproutsnail",
   "spawners": {
     "type": "critterworks:sproutsnail",
-    "maxCount": 3,
+    "maxCount": 2,
     "minCount": 1,
     "weight": 10
   }

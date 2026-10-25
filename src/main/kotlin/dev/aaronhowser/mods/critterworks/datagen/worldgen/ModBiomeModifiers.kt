@@ -43,7 +43,7 @@ object ModBiomeModifiers {
 			ADD_SPROUTSNAIL,
 			BiomeModifiers.AddSpawnsBiomeModifier(
 				biomes.getOrThrow(ModBiomeTagsProvider.HAS_SPROUTSNAIL),
-				listOf(MobSpawnSettings.SpawnerData(ModEntityTypes.SPROUTSNAIL.get(), 10, 1, 3))
+				listOf(MobSpawnSettings.SpawnerData(ModEntityTypes.SPROUTSNAIL.get(), 10, 1, 2))
 			)
 		)
 
