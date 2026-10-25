@@ -46,10 +46,9 @@ class SproutsnailEntity(
 		return stack.isItem(Tags.Items.MUSHROOMS)
 	}
 
-	override fun tick() {
+	override fun aiStep() {
 		val previousBlockPositions = getOccupiedBlockPositions().toSet()
-
-		super.tick()
+		super.aiStep()
 
 		val newBlockPositions = getOccupiedBlockPositions().toMutableList()
 		newBlockPositions.removeAll(previousBlockPositions)
