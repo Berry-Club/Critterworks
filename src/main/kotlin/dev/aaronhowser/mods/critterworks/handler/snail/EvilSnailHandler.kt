@@ -83,7 +83,8 @@ class EvilSnailHandler : SavedData() {
 		if (chasedPlayer == null) return 0f
 		if (snail.dimension != chasedPlayer.level().dimension()) return 0f
 
-		val offset = snail.pos.vectorTo(chasedPlayer.eyePosition)
+		val target = chasedPlayer.position().lerp(chasedPlayer.eyePosition, 0.5)
+		val offset = snail.pos.vectorTo(target)
 		return Mth.wrapDegrees(
 			Math.toDegrees(atan2(-offset.x, offset.z))
 		).toFloat()
