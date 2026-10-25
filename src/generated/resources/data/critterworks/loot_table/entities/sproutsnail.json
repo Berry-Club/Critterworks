@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 9000
+        },
+        {
+          "type": "minecraft:item",
+          "name": "critterworks:snail_shell_fragment",
+          "weight": 1000
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "critterworks:entities/sproutsnail"
+}

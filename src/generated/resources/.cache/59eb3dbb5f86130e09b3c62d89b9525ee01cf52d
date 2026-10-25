@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-17T16:16:18.2226259	Loot Tables
+// 1.21.1	2026-10-24T20:29:06.5172397	Loot Tables
 dfb6776539ef4f66eb99bc9590fc5419bed3967f data/critterworks/loot_table/blocks/apple_slice.json
 04a3171f4aa5322f422d727d4ed49fafe8774b9b data/critterworks/loot_table/blocks/blue_scoochstem.json
 bf05e11a4a6d0e85e4e9286cdf6fe57180795d2a data/critterworks/loot_table/blocks/critter_cage.json
@@ -16,3 +16,4 @@ db08354324e4b89a6423cc87c27078a07ac3b6af data/critterworks/loot_table/blocks/gre
 623242ec7e72869f4fdf82734c71ef63c381042c data/critterworks/loot_table/blocks/stem_encased_comparator.json
 82a5eee36c355472783efa29d711e192de2d7954 data/critterworks/loot_table/blocks/yellow_scoochstem.json
 1671eb66be80470b690342d1872ce542f850d48f data/critterworks/loot_table/block/tardigrade_from_moss.json
+230083dd0c2f1624fd2d2f7540e76d36bda6bb30 data/critterworks/loot_table/entities/sproutsnail.json
