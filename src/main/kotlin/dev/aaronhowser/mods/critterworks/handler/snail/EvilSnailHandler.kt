@@ -27,6 +27,11 @@ class EvilSnailHandler : SavedData() {
 		setDirty()
 	}
 
+	fun removeSnail(player: ServerPlayer) {
+		snails.remove(player.uuid)
+		setDirty()
+	}
+
 	fun tick(server: MinecraftServer) {
 		var changed = false
 		val removedSnails = mutableListOf<UUID>()
