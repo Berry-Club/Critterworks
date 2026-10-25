@@ -2,21 +2,28 @@
 
 ### Added
 
-- Snail Shell
-	- Makes you immortal while active
-	- Activates while sneaking with it in either hand
-	- Reduces movement speed by 90% while active
-	- After standing still for 5 seconds, most mobs forget and cannot target you
-	- Also cannot left or right click during this
 - Punchprawns
 	- New mob that spawns around Ocean Monuments
 	- Defaults to being hostile but can be tamed with Pearls
 		- Follow you around while tamed, in and out of water
 		- Sneak right-click your tamed Punchprawn to put them on your head
 			- When riding your head, bare-handed melee attacks become much stronger
-            - Sneak right-click the ground with an empty hand to place it back down again
+			- Sneak right-click the ground with an empty hand to place it back down again
+- Sproutsnail
+	- New mob found in swamps
+	- Bonemeals applicable blocks it travels through
+	- Tries to move to the farthest bonemealable block nearby
+	- Passively drops Snail Slime, and drops Snail Shell Fragments when killed
+- Shell Shield
+	- Makes you immortal while active
+	- Activates while sneaking with it in either hand
+	- Reduces movement speed by 90% while active
+	- Also cannot left or right click during this
+	- After standing still for 5 seconds, most mobs forget and cannot target you
 - Pearl
 	- Small chance of being dropped when giving Sand to Filterfeeders
+- Snail Slime
+- Snail Shell Fragment
 - Several advancements
 
 ### Changed
