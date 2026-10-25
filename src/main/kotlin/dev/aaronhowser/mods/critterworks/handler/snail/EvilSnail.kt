@@ -1,7 +1,10 @@
 package dev.aaronhowser.mods.critterworks.handler.snail
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.randomPos
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.ModDamageTypes
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceKey
@@ -31,9 +34,23 @@ class EvilSnail(
 		val target = player.position().lerp(player.eyePosition, 0.5)
 		moveTowards(target)
 
-		val isTouchingPlayer = player.boundingBox.intersects(boundingBox)
+		if (player.random.oneIn(20)) {
+			val particlePos = boundingBox.randomPos(player.random)
 
-		if (isTouchingPlayer) {
+			player.serverLevel().sendParticles(
+				ParticleTypes.SCULK_SOUL,
+				particlePos.x,
+				particlePos.y,
+				particlePos.z,
+				1,
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			)
+		}
+
+		if (player.boundingBox.intersects(boundingBox)) {
 			val damageSource = player.damageSources()
 				.source(ModDamageTypes.EVIL_SNAIL)
 
