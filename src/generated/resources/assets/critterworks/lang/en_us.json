@@ -87,6 +87,7 @@
   "effect.critterworks.dyed_magenta": "Dyed Magenta",
   "effect.critterworks.dyed_red": "Dyed Red",
   "effect.critterworks.dyed_yellow": "Dyed Yellow",
+  "entity.critterworks.evilsnail": "The Snail That Kills %s",
   "entity.critterworks.filterfeeder": "Filterfeeder",
   "entity.critterworks.filterfeeder.fluid": "Fluid Filterfeeder",
   "entity.critterworks.filterfeeder.item": "Item Filterfeeder",

@@ -1,9 +1,13 @@
 package dev.aaronhowser.mods.critterworks.handler.snail
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
+import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import net.minecraft.core.BlockPos
 import net.minecraft.core.GlobalPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
@@ -40,6 +44,10 @@ class EvilSnail(
 		private const val POSITION_TAG = "Position"
 		private const val DIMENSION_TAG = "Dimension"
 		private const val DESTINATION_TAG = "Destination"
+
+		fun getSnailName(playerName: Component): MutableComponent {
+			return ModEntityLang.EVIL_SNAIL.toComponent(playerName)
+		}
 
 		fun fromTag(tag: CompoundTag): EvilSnail {
 			val pos = Vec3(
