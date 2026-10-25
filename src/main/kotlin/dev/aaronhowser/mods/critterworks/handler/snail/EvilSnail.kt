@@ -29,7 +29,8 @@ class EvilSnail(
 		if (player == null) return TickResult.NO_CHANGE
 		if (dimension != player.level().dimension()) return TickResult.NO_CHANGE
 
-		val offset = pos.vectorTo(player.eyePosition)
+		val target = player.position().lerp(player.eyePosition, 0.5)
+		val offset = pos.vectorTo(target)
 		val distance = offset.length()
 		val speed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
 
