@@ -60,7 +60,17 @@ object SnailChaseCommands : AaronCommandHelper {
 			}
 
 			thenLiteral("info") {
+				executes {
+					val player = it.source.playerOrException
+					printInfo(it.source, player)
+				}
 
+				thenArgument(PLAYER, EntityArgument.player()) {
+					executes {
+						val player = EntityArgument.getPlayer(it, PLAYER)
+						printInfo(it.source, player)
+					}
+				}
 			}
 		}
 	}
