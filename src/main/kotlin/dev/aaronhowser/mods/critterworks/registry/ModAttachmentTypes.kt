@@ -16,18 +16,18 @@ object ModAttachmentTypes {
 	val ATTACHMENT_TYPE_REGISTRY: DeferredRegister<AttachmentType<*>> =
 		DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Critterworks.MOD_ID)
 
-	val SNAIL_SHELL_STATE: DeferredHolder<AttachmentType<*>, AttachmentType<SnailShieldItem.SnailShellState>> =
+	val SNAIL_SHIELD_STATE: DeferredHolder<AttachmentType<*>, AttachmentType<SnailShieldItem.SnailShieldState>> =
 		register(
-			"snail_shell_state",
+			"snail_shield_state",
 			AttachmentType
-				.builder(Supplier { SnailShieldItem.SnailShellState.UNSHELLED })
-				.sync(SnailShieldItem.SnailShellState.STREAM_CODEC)
+				.builder(Supplier { SnailShieldItem.SnailShieldState.UNSHELLED })
+				.sync(SnailShieldItem.SnailShieldState.STREAM_CODEC)
 				.build()
 		)
 
-	val SNAIL_SHELL_STATIONARY_TICKS: DeferredHolder<AttachmentType<*>, AttachmentType<Int>> =
+	val SNAIL_SHIELD_STATIONARY_TICKS: DeferredHolder<AttachmentType<*>, AttachmentType<Int>> =
 		register(
-			"snail_shell_stationary_ticks",
+			"snail_shield_stationary_ticks",
 			AttachmentType
 				.builder(Supplier { 0 })
 				.build()

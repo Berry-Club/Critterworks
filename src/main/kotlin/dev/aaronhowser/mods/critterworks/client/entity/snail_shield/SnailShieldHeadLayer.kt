@@ -1,9 +1,9 @@
-package dev.aaronhowser.mods.critterworks.client.entity.snail_shell
+package dev.aaronhowser.mods.critterworks.client.entity.snail_shield
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
-import dev.aaronhowser.mods.critterworks.item.SnailShieldItem.SnailShellState
+import dev.aaronhowser.mods.critterworks.item.SnailShieldItem.SnailShieldState
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import net.minecraft.client.model.SkullModel
 import net.minecraft.client.model.geom.ModelLayers
@@ -16,16 +16,16 @@ import net.minecraft.util.Mth
 import software.bernie.geckolib.cache.`object`.GeoBone
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer
 
-class SnailShellHeadLayer(
-	private val shellRenderer: SnailShellRenderer,
+class SnailShieldHeadLayer(
+	private val shellRenderer: SnailShieldRenderer,
 	context: EntityRendererProvider.Context
-) : GeoRenderLayer<SnailShellRenderer.ShellAnimatable>(shellRenderer) {
+) : GeoRenderLayer<SnailShieldRenderer.ShellAnimatable>(shellRenderer) {
 
 	private val headModel = SkullModel(context.bakeLayer(ModelLayers.PLAYER_HEAD))
 
 	override fun renderForBone(
 		poseStack: PoseStack,
-		animatable: SnailShellRenderer.ShellAnimatable,
+		animatable: SnailShieldRenderer.ShellAnimatable,
 		bone: GeoBone,
 		renderType: RenderType,
 		bufferSource: MultiBufferSource,
@@ -37,8 +37,8 @@ class SnailShellHeadLayer(
 		if (bone.name != SHELL_BONE_NAME) return
 
 		val player = shellRenderer.currentEntity as? AbstractClientPlayer ?: return
-		val shellState = player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
-		if (shellState != SnailShellState.PARTIALLY_SHELLED) return
+		val shellState = player.getData(ModAttachmentTypes.SNAIL_SHIELD_STATE)
+		if (shellState != SnailShieldState.PARTIALLY_SHELLED) return
 
 		poseStack.withPose {
 			poseStack.translate(0f, 0f, HEAD_FORWARD_OFFSET)

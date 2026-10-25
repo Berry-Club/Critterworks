@@ -10,14 +10,14 @@ import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.PunchprawnRend
 import dev.aaronhowser.mods.critterworks.client.entity.punchprawn.hat.PunchprawnHatLayer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormPartRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.scoochworm.ScoochwormRenderer
-import dev.aaronhowser.mods.critterworks.client.entity.snail_shell.SnailShellRenderer
+import dev.aaronhowser.mods.critterworks.client.entity.snail_shield.SnailShieldRenderer
 import dev.aaronhowser.mods.critterworks.client.entity.sproutsnail.SproutsnailRenderer
 import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageItemRenderer
 import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
-import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShellMovedPacket
+import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShieldMovedPacket
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.registry.*
 import net.minecraft.client.Minecraft
@@ -40,8 +40,8 @@ object ClientEvents {
 	@SubscribeEvent
 	fun renderShelledPlayer(event: RenderPlayerEvent.Pre) {
 		val player = event.entity
-		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
-		if (!SnailShellRenderer.render(event)) return
+		if (!player.getData(ModAttachmentTypes.SNAIL_SHIELD_STATE).isShelled) return
+		if (!SnailShieldRenderer.render(event)) return
 
 		event.isCanceled = true
 	}
@@ -49,7 +49,7 @@ object ClientEvents {
 	@SubscribeEvent
 	fun hideShelledPlayerHands(event: RenderHandEvent) {
 		val player = Minecraft.getInstance().player ?: return
-		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
+		if (!player.getData(ModAttachmentTypes.SNAIL_SHIELD_STATE).isShelled) return
 
 		event.isCanceled = true
 	}
@@ -57,7 +57,7 @@ object ClientEvents {
 	@SubscribeEvent
 	fun preserveFovWhileShelled(event: ComputeFovModifierEvent) {
 		val player = event.player
-		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
+		if (!player.getData(ModAttachmentTypes.SNAIL_SHIELD_STATE).isShelled) return
 
 		val movementSpeedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED) ?: return
 		val shellModifier = movementSpeedAttribute.getModifier(SnailShieldItem.SHELLED_MOVEMENT_SPEED_MODIFIER) ?: return
@@ -87,7 +87,7 @@ object ClientEvents {
 	fun handleInteractionInput(event: InputEvent.InteractionKeyMappingTriggered) {
 		val player = Minecraft.getInstance().player
 		if (player != null
-			&& player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled
+			&& player.getData(ModAttachmentTypes.SNAIL_SHIELD_STATE).isShelled
 			&& (event.isAttack || event.isUseItem)
 		) {
 			event.isCanceled = true
@@ -106,7 +106,7 @@ object ClientEvents {
 	@SubscribeEvent
 	fun afterClientTick(event: ClientTickEvent.Post) {
 		val player = AaronClientUtil.localPlayer ?: return
-		SnailShellMovedPacket.handleClientMovement(player)
+		SnailShieldMovedPacket.handleClientMovement(player)
 	}
 
 	@SubscribeEvent
@@ -124,7 +124,7 @@ object ClientEvents {
 
 	@SubscribeEvent
 	fun addEntityRenderLayers(event: EntityRenderersEvent.AddLayers) {
-		SnailShellRenderer.initialize(event.context)
+		SnailShieldRenderer.initialize(event.context)
 
 		for (skin in event.skins) {
 			val playerRenderer = event.getSkin<PlayerRenderer>(skin) ?: continue

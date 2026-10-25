@@ -14,7 +14,7 @@
 	- Bonemeals applicable blocks it travels through
 	- Tries to move to the farthest bonemealable block nearby
 	- Passively drops Snail Slime, and drops Snail Shell Fragments when killed
-- Shell Shield
+- Snail Shield
 	- Makes you immortal while active
 	- Activates while sneaking with it in either hand
 	- Reduces movement speed by 90% while active

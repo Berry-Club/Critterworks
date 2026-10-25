@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.client.entity.snail_shell
+package dev.aaronhowser.mods.critterworks.client.entity.snail_shield
 
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import net.minecraft.client.renderer.entity.EntityRendererProvider
@@ -11,15 +11,15 @@ import software.bernie.geckolib.animation.AnimatableManager
 import software.bernie.geckolib.renderer.GeoReplacedEntityRenderer
 import software.bernie.geckolib.util.GeckoLibUtil
 
-class SnailShellRenderer(
+class SnailShieldRenderer(
 	context: EntityRendererProvider.Context
-) : GeoReplacedEntityRenderer<Player, SnailShellRenderer.ShellAnimatable>(
+) : GeoReplacedEntityRenderer<Player, SnailShieldRenderer.ShellAnimatable>(
 	context,
-	SnailShellModel(),
+	SnailShieldModel(),
 	ShellAnimatable
 ) {
 	init {
-		addRenderLayer(SnailShellHeadLayer(this, context))
+		addRenderLayer(SnailShieldHeadLayer(this, context))
 	}
 
 	object ShellAnimatable : GeoReplacedEntity {
@@ -30,10 +30,10 @@ class SnailShellRenderer(
 	}
 
 	companion object {
-		private var renderer: SnailShellRenderer? = null
+		private var renderer: SnailShieldRenderer? = null
 
 		fun initialize(context: EntityRendererProvider.Context) {
-			renderer = SnailShellRenderer(context)
+			renderer = SnailShieldRenderer(context)
 		}
 
 		fun render(event: RenderPlayerEvent.Pre): Boolean {

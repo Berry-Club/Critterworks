@@ -57,15 +57,15 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 		private val SHELLED_EXPLOSION_KNOCKBACK_RESISTANCE_MODIFIER = Critterworks.modResource("shelled_explosion_knockback_resistance")
 
 		private var LivingEntity.shellStillTicks: Int
-			get() = getData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS)
+			get() = getData(ModAttachmentTypes.SNAIL_SHIELD_STATIONARY_TICKS)
 			set(value) {
-				setData(ModAttachmentTypes.SNAIL_SHELL_STATIONARY_TICKS, value)
+				setData(ModAttachmentTypes.SNAIL_SHIELD_STATIONARY_TICKS, value)
 			}
 
-		private var LivingEntity.shellState: SnailShellState
-			get() = getData(ModAttachmentTypes.SNAIL_SHELL_STATE)
+		private var LivingEntity.shellState: SnailShieldState
+			get() = getData(ModAttachmentTypes.SNAIL_SHIELD_STATE)
 			set(value) {
-				setData(ModAttachmentTypes.SNAIL_SHELL_STATE, value)
+				setData(ModAttachmentTypes.SNAIL_SHIELD_STATE, value)
 			}
 
 		fun handlePlayerTick(event: PlayerTickEvent.Post) {
@@ -89,21 +89,21 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 
 			playTransitionSound(player, oldState, newState)
 
-			if (newState == SnailShellState.FULLY_SHELLED) {
+			if (newState == SnailShieldState.FULLY_SHELLED) {
 				makeMobsForgetPlayer(player)
 			}
 		}
 
 		private fun playTransitionSound(
 			player: ServerPlayer,
-			oldState: SnailShellState,
-			newState: SnailShellState
+			oldState: SnailShieldState,
+			newState: SnailShieldState
 		) {
 			val sound = when {
 				oldState.isShelled && !newState.isShelled -> SoundEvents.SHULKER_OPEN    // Deactivate
 				!oldState.isShelled && newState.isShelled -> SoundEvents.SHULKER_CLOSE    // Activate
-				oldState == SnailShellState.PARTIALLY_SHELLED && newState == SnailShellState.FULLY_SHELLED -> SoundEvents.ITEM_FRAME_ADD_ITEM // Hide head
-				oldState == SnailShellState.FULLY_SHELLED && newState == SnailShellState.PARTIALLY_SHELLED -> SoundEvents.ITEM_FRAME_REMOVE_ITEM // Show head
+				oldState == SnailShieldState.PARTIALLY_SHELLED && newState == SnailShieldState.FULLY_SHELLED -> SoundEvents.ITEM_FRAME_ADD_ITEM // Hide head
+				oldState == SnailShieldState.FULLY_SHELLED && newState == SnailShieldState.PARTIALLY_SHELLED -> SoundEvents.ITEM_FRAME_REMOVE_ITEM // Show head
 				else -> return
 			}
 
@@ -118,19 +118,19 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 		private fun getNewShellState(
 			player: ServerPlayer,
 			isActivatingShell: Boolean
-		): SnailShellState {
+		): SnailShieldState {
 			if (!isActivatingShell) {
 				player.shellStillTicks = 0
-				return SnailShellState.UNSHELLED
+				return SnailShieldState.UNSHELLED
 			}
 
 			val stationaryTicks = minOf(player.shellStillTicks + 1, TICKS_TO_FULLY_SHELLED)
 			player.shellStillTicks = stationaryTicks
 
 			return if (stationaryTicks >= TICKS_TO_FULLY_SHELLED) {
-				SnailShellState.FULLY_SHELLED
+				SnailShieldState.FULLY_SHELLED
 			} else {
-				SnailShellState.PARTIALLY_SHELLED
+				SnailShieldState.PARTIALLY_SHELLED
 			}
 		}
 
@@ -167,7 +167,7 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 		fun handleEntitySize(event: EntityEvent.Size) {
 			val player = event.entity as? Player ?: return
 			val shellState = player
-				.getExistingDataOrNull(ModAttachmentTypes.SNAIL_SHELL_STATE)
+				.getExistingDataOrNull(ModAttachmentTypes.SNAIL_SHIELD_STATE)
 
 			if (shellState?.isShelled.isNotTrue()) return
 
@@ -246,7 +246,7 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 
 		fun handleTargetChange(event: LivingChangeTargetEvent) {
 			val target = event.newAboutToBeSetTarget ?: return
-			if (target.shellState != SnailShellState.FULLY_SHELLED) return
+			if (target.shellState != SnailShieldState.FULLY_SHELLED) return
 			if (event.entity.type.isEntity(ModEntityTypeTagsProvider.CAN_TARGET_FULLY_SHELLED_PLAYERS)) return
 
 			event.newAboutToBeSetTarget = null
@@ -257,8 +257,8 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 
 			player.shellStillTicks = 0
 
-			if (player.shellState == SnailShellState.FULLY_SHELLED) {
-				player.shellState = SnailShellState.PARTIALLY_SHELLED
+			if (player.shellState == SnailShieldState.FULLY_SHELLED) {
+				player.shellState = SnailShieldState.PARTIALLY_SHELLED
 
 				player.level().playSound(
 					null,
@@ -272,7 +272,7 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 		}
 	}
 
-	enum class SnailShellState {
+	enum class SnailShieldState {
 		UNSHELLED,
 		PARTIALLY_SHELLED,
 		FULLY_SHELLED;
@@ -281,13 +281,13 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 			get() = this != UNSHELLED
 
 		companion object {
-			val STREAM_CODEC: StreamCodec<ByteBuf, SnailShellState> =
+			val STREAM_CODEC: StreamCodec<ByteBuf, SnailShieldState> =
 				ByteBufCodecs.idMapper(
-					SnailShellState::fromOrdinal,
-					SnailShellState::ordinal
+					SnailShieldState::fromOrdinal,
+					SnailShieldState::ordinal
 				)
 
-			private fun fromOrdinal(ordinal: Int): SnailShellState {
+			private fun fromOrdinal(ordinal: Int): SnailShieldState {
 				return entries.getOrElse(ordinal) { UNSHELLED }
 			}
 		}
