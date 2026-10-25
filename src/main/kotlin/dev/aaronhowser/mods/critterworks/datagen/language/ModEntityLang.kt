@@ -19,6 +19,6 @@ object ModEntityLang {
 		provider.add(ITEM_FILTERFEEDER, "Item Filterfeeder")
 		provider.add(FLUID_FILTERFEEDER, "Fluid Filterfeeder")
 		provider.add(EVIL_SNAIL, "The Snail That Kills %s")
-		provider.add(EVIL_SNAIL_DEATH, "%1\$s was killed by the Snail That Kills %1\$s")
+		provider.add(EVIL_SNAIL_DEATH, $$"%1$s was killed by the Snail That Kills %1$s")
 	}
 }
