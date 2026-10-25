@@ -140,6 +140,8 @@
 	- Shoots potions maybe?
 - One of those shield-head ants
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
+- Boxing Glove drop from Punchprawns?
+  - All critters should probably drop something
 
 # Guidebook
 
