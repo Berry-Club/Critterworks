@@ -112,9 +112,7 @@ class SproutsnailEntity(
 	override fun readAdditionalSaveData(compound: CompoundTag) {
 		super.readAdditionalSaveData(compound)
 
-		if (compound.contains(SLIME_DROP_TIME_TAG)) {
-			slimeDropTime = compound.getInt(SLIME_DROP_TIME_TAG)
-		}
+		slimeDropTime = compound.getInt(SLIME_DROP_TIME_TAG)
 	}
 
 	override fun addAdditionalSaveData(compound: CompoundTag) {
