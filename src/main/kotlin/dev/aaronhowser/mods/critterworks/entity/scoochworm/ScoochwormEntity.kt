@@ -66,7 +66,7 @@ class ScoochwormEntity(
 		get() = movementPath.getPoints()
 
 	private var footstepPartIndex = HEAD_FOOTSTEP_INDEX
-	private var nextFootstepTick = random.nextInt(FOOTSTEP_CYCLE_PAUSE_TICKS + 1)
+	private var nextFootstepTick = random.nextRange(0, FOOTSTEP_CYCLE_PAUSE_TICKS + 1)
 	private var nextKissTick = 0
 
 	var rememberedMovementDirection: Vec3? = null

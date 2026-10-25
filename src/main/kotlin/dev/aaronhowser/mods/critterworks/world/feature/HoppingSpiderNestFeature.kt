@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.world.feature
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.random
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.withClickToRunCommand
 import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEntity
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
@@ -82,8 +83,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 		for (rayIndex in 0 until configuration.rayAttempts) {
 			if (rayHits.size >= configuration.webCount.maxInclusive || availableFaces.isEmpty()) break
 
-			val faceIndex = random.nextRange(0, availableFaces.size)
-			val face = availableFaces[faceIndex]
+			val face = availableFaces.random(random)
 
 			val pointOnFace = randomPointOnFace(
 				nestPosition,
@@ -116,7 +116,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 			) continue
 
 			rayHits.add(nestAnchor to hitResult)
-			availableFaces.removeAt(faceIndex)
+			availableFaces.remove(face)
 		}
 
 		return rayHits
@@ -225,9 +225,9 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 		configuration: HoppingSpiderNestConfiguration
 	) {
 		val nest = level.getBlockEntity(position) as? HoppingSpiderNestBlockEntity ?: return
-		val spiderCount = random.nextIntBetweenInclusive(
+		val spiderCount = random.nextRange(
 			configuration.spiders.minInclusive,
-			configuration.spiders.maxInclusive
+			configuration.spiders.maxInclusive + 1
 		).coerceAtMost(webLineCount)
 
 		for (spiderIndex in 0 until spiderCount) {

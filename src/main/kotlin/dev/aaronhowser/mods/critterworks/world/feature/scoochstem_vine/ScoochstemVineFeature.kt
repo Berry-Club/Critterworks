@@ -65,7 +65,8 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		val requiredBiome = biomeManager.getBiome(origin)
 
 		while (cavePositions.isNotEmpty()) {
-			val cavePosition = cavePositions.removeAt(random.nextInt(cavePositions.size))
+			val cavePosition = cavePositions.random(random)
+			cavePositions.remove(cavePosition)
 			val surfaces = findSurfaces(
 				level,
 				cavePosition,

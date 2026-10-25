@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.critterworks.registry.ModLootItemConditionTypes
 import net.minecraft.core.Holder
 import net.minecraft.world.item.enchantment.Enchantment
@@ -38,7 +39,7 @@ data class ToolEnchantmentChanceCondition(
 			unenchantedChance
 		}
 
-		return context.random.nextFloat() < chance
+		return context.random.chance(chance)
 	}
 
 	companion object {

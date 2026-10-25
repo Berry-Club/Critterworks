@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.block
 
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.roll
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.world.DyeberryVineReplacement
@@ -8,7 +9,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
-import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
@@ -70,7 +70,7 @@ class DyeberryVinesBlock : CaveVinesBlock(Properties.ofFullCopy(Blocks.CAVE_VINE
 		val vanillaState = Blocks.CAVE_VINES
 			.defaultBlockState()
 			.setValue(AGE, state.getValue(AGE) + 1)
-			.setValue(BERRIES, random.roll(BERRY_GROWTH_CHANCE))
+			.setValue(BERRIES, random.chance(BERRY_GROWTH_CHANCE))
 
 		return DyeberryVineReplacement.replace(vanillaState, random)
 	}
@@ -114,7 +114,7 @@ class DyeberryVinesBlock : CaveVinesBlock(Properties.ofFullCopy(Blocks.CAVE_VINE
 			val color = state.getValue(COLOR)
 			popResource(level, position, color.getDyeberryStack())
 
-			val pitch = Mth.randomBetween(level.random, 0.8f, 1.2f)
+			val pitch = level.random.nextRange(0.8f, 1.2f)
 			level.playSound(
 				null,
 				position,

@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.control.PunchprawnMoveControl
@@ -133,11 +134,11 @@ class PunchprawnEntity(
 		var attempt = 0
 
 		while (attempt < 10) {
-			val horizontalOffsetX = random.nextIntBetweenInclusive(-3, 3)
-			val horizontalOffsetZ = random.nextIntBetweenInclusive(-3, 3)
+			val horizontalOffsetX = random.nextRange(-3, 4)
+			val horizontalOffsetZ = random.nextRange(-3, 4)
 
 			if (abs(horizontalOffsetX) >= 2 || abs(horizontalOffsetZ) >= 2) {
-				val verticalOffset = random.nextIntBetweenInclusive(-1, 1)
+				val verticalOffset = random.nextRange(-1, 2)
 				val destination = ownerPosition.offset(
 					horizontalOffsetX,
 					verticalOffset,

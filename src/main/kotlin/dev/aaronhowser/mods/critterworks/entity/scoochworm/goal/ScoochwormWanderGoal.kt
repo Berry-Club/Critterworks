@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.entity.scoochworm.goal
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toDegrees
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toRadians
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toVec3
@@ -115,8 +116,10 @@ class ScoochwormWanderGoal(
 	}
 
 	private fun turn(supportDirection: Direction) {
-		val turnRange = MAXIMUM_ARC_TURN_RADIANS - MINIMUM_ARC_TURN_RADIANS
-		val angle = MINIMUM_ARC_TURN_RADIANS + scoochworm.random.nextDouble() * turnRange
+		val angle = scoochworm.random.nextRange(
+			MINIMUM_ARC_TURN_RADIANS,
+			MAXIMUM_ARC_TURN_RADIANS
+		)
 		val surfaceNormal = supportDirection.normal.toVec3()
 
 		movementDirection = rotateAroundAxis(
@@ -173,8 +176,10 @@ class ScoochwormWanderGoal(
 		if (homePosition != null && scoochworm.tickCount < nextHomeTick) return
 
 		homePosition = scoochworm.position()
-		nextHomeTick = scoochworm.tickCount + HOME_DURATION_MINIMUM_TICKS +
-			scoochworm.random.nextInt(HOME_DURATION_RANGE_TICKS + 1)
+		nextHomeTick = scoochworm.tickCount + scoochworm.random.nextRange(
+			HOME_DURATION_MINIMUM_TICKS,
+			HOME_DURATION_MINIMUM_TICKS + HOME_DURATION_RANGE_TICKS + 1
+		)
 	}
 
 	private fun updateTurnSign() {
@@ -186,8 +191,10 @@ class ScoochwormWanderGoal(
 			-turnSign
 		}
 
-		nextTurnSignChangeTick = scoochworm.tickCount + TURN_SIGN_DURATION_MINIMUM_TICKS +
-			scoochworm.random.nextInt(TURN_SIGN_DURATION_RANGE_TICKS + 1)
+		nextTurnSignChangeTick = scoochworm.tickCount + scoochworm.random.nextRange(
+			TURN_SIGN_DURATION_MINIMUM_TICKS,
+			TURN_SIGN_DURATION_MINIMUM_TICKS + TURN_SIGN_DURATION_RANGE_TICKS + 1
+		)
 	}
 
 	private fun tryTurningUpwards(

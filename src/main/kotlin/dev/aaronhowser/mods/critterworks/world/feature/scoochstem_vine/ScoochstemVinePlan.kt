@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.world.feature.scoochstem_vine
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -56,7 +57,7 @@ class ScoochstemVinePlan private constructor(
 		turnChance: Float,
 		random: RandomSource
 	): VineStep? {
-		if (random.nextFloat() < turnChance) {
+		if (random.chance(turnChance)) {
 			val firstTurnIsClockwise = random.nextBoolean()
 			val firstTurn = turnAlongSurface(current, firstTurnIsClockwise)
 			val firstTurnStep = moveForward(firstTurn)

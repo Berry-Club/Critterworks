@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.critterworks.world
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.random
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.roll
 import dev.aaronhowser.mods.critterworks.block.DyeberryVinesBlock
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
@@ -24,9 +24,9 @@ object DyeberryVineReplacement {
 
 		if (!isHead && !isPlant) return state
 		if (!state.getValue(CaveVines.BERRIES)) return state
-		if (!random.roll(ServerConfig.CONFIG.dyeberryVineReplacementChance.get())) return state
+		if (!random.chance(ServerConfig.CONFIG.dyeberryVineReplacementChance.get())) return state
 
-		val color = if (random.roll(AARON_CHANCE)) {
+		val color = if (random.chance(AARON_CHANCE)) {
 			WormColor.AARON
 		} else {
 			colors.random(random)

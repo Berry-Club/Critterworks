@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.world.feature
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.withClickToRunCommand
 import dev.aaronhowser.mods.critterworks.block.ScoochstemBlock
@@ -114,7 +115,10 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 			.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)
 			.setValue(
 				ScoochstemBlock.GROWTH_REMAINING,
-				level.random.nextIntBetweenInclusive(ScoochstemBlock.MIN_INITIAL_GROWTH, ScoochstemBlock.MAX_INITIAL_GROWTH)
+				level.random.nextRange(
+					ScoochstemBlock.MIN_INITIAL_GROWTH,
+					ScoochstemBlock.MAX_INITIAL_GROWTH + 1
+				)
 			)
 
 		level.setBlock(stemPos, stemState, Block.UPDATE_CLIENTS)

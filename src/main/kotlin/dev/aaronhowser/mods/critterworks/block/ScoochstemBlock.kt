@@ -2,7 +2,8 @@ package dev.aaronhowser.mods.critterworks.block
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.roll
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormTravelBlock
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModBlockTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
@@ -113,10 +114,10 @@ open class ScoochstemBlock : RotatedPillarBlock(Properties.ofFullCopy(Blocks.OAK
 		if (level is ServerLevel) {
 			stack.consume(1, player)
 
-			if (level.random.roll(INITIAL_GROWTH_CHANCE)) {
-				val growthRemaining = level.random.nextIntBetweenInclusive(
+			if (level.random.chance(INITIAL_GROWTH_CHANCE)) {
+				val growthRemaining = level.random.nextRange(
 					MIN_INITIAL_GROWTH,
-					MAX_INITIAL_GROWTH
+					MAX_INITIAL_GROWTH + 1
 				)
 
 				grow(level, position, growthDirection, growthRemaining)
@@ -137,18 +138,18 @@ open class ScoochstemBlock : RotatedPillarBlock(Properties.ofFullCopy(Blocks.OAK
 
 		level.setBlockAndUpdate(position, state.setValue(GROWTH_REMAINING, 0))
 
-		val growthCost = random.nextIntBetweenInclusive(MIN_GROWTH_COST, MAX_GROWTH_COST)
+		val growthCost = random.nextRange(MIN_GROWTH_COST, MAX_GROWTH_COST + 1)
 		val nextGrowthRemaining = growthRemaining - growthCost
 		if (nextGrowthRemaining <= 0) return
 
 		val growthDirection = getGrowthDirection(state, level, position, random)
-		if (random.roll(PARALLEL_GROWTH_CHANCE)) {
+		if (random.chance(PARALLEL_GROWTH_CHANCE)) {
 			grow(level, position, growthDirection, nextGrowthRemaining)
 			return
 		}
 
 		val forkDirection = getPerpendicularDirection(growthDirection, random)
-		val firstGrowthRemaining = random.nextIntBetweenInclusive(MIN_BRANCH_GROWTH, nextGrowthRemaining)
+		val firstGrowthRemaining = random.nextRange(MIN_BRANCH_GROWTH, nextGrowthRemaining + 1)
 
 		grow(level, position, forkDirection, firstGrowthRemaining)
 		grow(level, position, forkDirection.opposite, nextGrowthRemaining - firstGrowthRemaining)

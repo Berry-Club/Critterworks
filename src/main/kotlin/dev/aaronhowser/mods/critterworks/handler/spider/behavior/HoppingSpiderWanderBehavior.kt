@@ -1,5 +1,9 @@
 package dev.aaronhowser.mods.critterworks.handler.spider.behavior
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.random
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
@@ -32,9 +36,9 @@ class HoppingSpiderWanderBehavior(
 			spider.position = currentNode.position
 			if (level.gameTime < pauseUntil) return false
 			if (level.isNight && currentNodeUuid == homeNodeUuid) {
-				pauseUntil = level.gameTime + level.random.nextIntBetweenInclusive(
+				pauseUntil = level.gameTime + level.random.nextRange(
 					MIN_NIGHT_PAUSE_TICKS,
-					MAX_NIGHT_PAUSE_TICKS
+					MAX_NIGHT_PAUSE_TICKS + 1
 				)
 				return true
 			}
@@ -72,9 +76,9 @@ class HoppingSpiderWanderBehavior(
 		val network = currentNode.lines.firstNotNullOfOrNull { line -> line.network } ?: return null
 		val random = level.random
 
-		if (random.nextInt(DISTANT_TARGET_CHANCE) == 0) {
+		if (random.oneIn(DISTANT_TARGET_CHANCE)) {
 			val distantNodes = network.getNodes().filter { node -> node.uuid != currentNode.uuid }
-			if (distantNodes.isNotEmpty()) return distantNodes[random.nextInt(distantNodes.size)]
+			if (distantNodes.isNotEmpty()) return distantNodes.random(random)
 		}
 
 		val adjacentNodes = mutableListOf<WebNode>()
@@ -90,12 +94,12 @@ class HoppingSpiderWanderBehavior(
 		}
 
 		if (adjacentNodes.isEmpty()) return null
-		return adjacentNodes[random.nextInt(adjacentNodes.size)]
+		return adjacentNodes.random(random)
 	}
 
 	private fun getNextPause(level: ServerLevel): Long {
-		if (level.random.nextFloat() >= PAUSE_CHANCE) return level.gameTime
-		return level.gameTime + level.random.nextIntBetweenInclusive(MIN_PAUSE_TICKS, MAX_PAUSE_TICKS)
+		if (!level.random.chance(PAUSE_CHANCE)) return level.gameTime
+		return level.gameTime + level.random.nextRange(MIN_PAUSE_TICKS, MAX_PAUSE_TICKS + 1)
 	}
 
 	override fun save(): CompoundTag {

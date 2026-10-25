@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.particle
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.ParticleRenderType
@@ -58,7 +59,7 @@ class FireflyParticle(
 		)
 		setAlpha(fadeAmount)
 
-		if (Math.random() > 0.95 || age == 1) {
+		if (random.chance(0.05) || age == 1) {
 			setParticleSpeed(
 				random.nextRange(-0.05, 0.05),
 				random.nextRange(-0.05, 0.05),
