@@ -1,8 +1,12 @@
 {
 	"scoochworm": "Scoochworm",
 	"spider": "Spider",
-	"sparkpollen_pouch.mdx": "Sparkpollen Pouch",
-	"tardigrade.mdx": "Tardigrade",
 	"item_filterfeeder.mdx": "Item Filterfeeder",
-	"fluid_filterfeeder.mdx": "Fluid Filterfeeder"
+	"fluid_filterfeeder.mdx": "Fluid Filterfeeder",
+	"pearl.mdx": "Pearl",
+	"snail_slime.mdx": "Snail Slime",
+	"snail_shell_fragment.mdx": "Snail Shell Fragment",
+	"snail_shield.mdx": "Snail Shield",
+	"sparkpollen_pouch.mdx": "Sparkpollen Pouch",
+	"tardigrade.mdx": "Tardigrade"
 }

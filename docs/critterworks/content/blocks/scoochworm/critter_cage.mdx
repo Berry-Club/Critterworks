@@ -5,12 +5,12 @@ related_items: [critterworks:critter_cage]
 type: block
 ---
 
-The **Critter Cage** can be used on a [Scoochworm](@critterworks:scoochworm) to trap it, containing it in item form. This includes its length, color, attachments, and everything else that can be expected.
+The **Critter Cage** can trap most living entities and contain them in item form. An entity cannot be captured if its type is in the `#c:capturing_not_supported` entity type tag. Captured entities keep their data, such as a [Scoochworm's](@critterworks:scoochworm) length, color, and attachments.
 
-Use the filled cage on a block to release the Scoochworm directly; sneak while placing it to place the filled cage as a block instead.
+Use the filled cage on a block to release its entity directly; sneak while placing it to place the filled cage as a block instead.
 
 ## Automatic Capture and Release
 
-Place an open cage facing the end of a Scoochworm's route. When the Scoochworm reaches the cage and cannot continue forward, it enters the cage.
+Place an open cage facing the end of a Scoochworm's route. When the Scoochworm reaches the cage and cannot continue forward, it enters the cage. Other entities must be captured by using the cage on them.
 
-Interact with a filled cage to release its Scoochworm. A Redstone signal also releases it when the cage changes from unpowered to powered. The space in front of the cage must be clear.
+Interact with a filled cage to release its entity. A Redstone signal also releases it when the cage changes from unpowered to powered. The space in front of the cage must be clear.

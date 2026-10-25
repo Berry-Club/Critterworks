@@ -1,0 +1,23 @@
+---
+title: The Snail That Kills You
+id: critterworks:evil_snail
+type: entity
+---
+
+**The Snail That Kills You** may begin pursuing a player after they kill a [Sproutsnail](@critterworks:sproutsnail). Only one can pursue a player at a time.
+
+The snail moves directly toward its target, passing through blocks and accelerating to its full speed over ten seconds. It stops moving while its target is offline or in another dimension, but the pursuit persists across server restarts. Touching the snail normally kills its target and ends the pursuit. An active [Snail Shield](@critterworks:snail_shield) blocks the damage, but the pursuit still ends.
+
+By default, each player-killed Sproutsnail has a 1% chance to begin a pursuit and the snail's full speed is 0.05 blocks per tick. Both values can be configured.
+
+## Commands
+
+Operators can manage a pursuit with `/critterworks snail-chase`:
+
+| Command | Result |
+| --- | --- |
+| `/critterworks snail-chase info [player]` | Reports the snail's position, dimension, and distance. |
+| `/critterworks snail-chase start [player] [position]` | Starts a pursuit, optionally at a chosen position. |
+| `/critterworks snail-chase end [player]` | Ends the pursuit. |
+
+When omitted, the player argument defaults to the operator running the command. A default starting position is ten blocks east of the target player.

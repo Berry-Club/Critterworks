@@ -5,7 +5,7 @@ id: critterworks:web_networks
 
 A **Web Network** uses Hopping Spiders to move items between inventories. It consists of three parts:
 
-- [Web Lines](@critterworks:web_lines) that form the routes
+- [Web Lines](@critterworks:artificial_spinnerets) that form the routes
 - At least one [Hopping Spider Nest](@critterworks:hopping_spider_nest) connected to those routes
 - [Web Ports](@critterworks:web_port) attached to the inventories you want to use
 
@@ -21,7 +21,7 @@ Every connected group of Web Lines is one network. Lines can branch, so one netw
 
 A nest can connect to several separate networks and its spiders can take jobs from any of them. Multiple nests can also share one network; their spiders coordinate to avoid choosing the same pickup or delivery.
 
-Use different Web Port colors to create independent item routes within the same network. [Item Filters](@critterworks:item_filter) provide more control over what each port accepts.
+Use different Web Port colors to create independent item routes within the same network. [Item Filterfeeders](@critterworks:item_filterfeeder) provide more control over what each port accepts.
 
 ## Choosing Jobs
 

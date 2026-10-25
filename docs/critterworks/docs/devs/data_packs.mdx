@@ -1,6 +1,6 @@
 # Data Packs
 
-Critterworks exposes tags that allow data packs and other mods to extend basic Scoochworm behavior.
+Critterworks exposes tags that allow data packs and other mods to extend its gameplay, world generation, and spawning.
 
 ## Travel Surfaces
 
@@ -13,3 +13,24 @@ Add blocks to `critterworks:prevents_scoochworm_wandering` to stop freely wander
 ## Saddles
 
 Add items to `critterworks:scoochworm_saddles` to let players equip them as saddle attachments. Vanilla [Saddles](@minecraft:saddle) are included by default.
+
+## Critter Cages and Snail Shields
+
+Add entity types to `c:capturing_not_supported` to prevent [Critter Cages](@critterworks:critter_cage) from capturing them. Scoochworm parts are included by default.
+
+Add entity types to `critterworks:can_target_fully_shelled_players` if they should continue targeting players who have been motionless inside a [Snail Shield](@critterworks:snail_shield) for five seconds.
+
+## World Generation and Spawning
+
+The following tags control where Critterworks content generates or spawns:
+
+| Tag | Content |
+| --- | --- |
+| `critterworks:has_filterfeeder` | Filterfeeders |
+| `critterworks:has_sproutsnail` | Sproutsnails |
+| `critterworks:has_scoochworm_apple` | Scoochworm Apples |
+| `critterworks:has_hopping_spider_nest` | Hopping Spider Nests |
+| `critterworks:has_sparkbug_bush` | Sparkbug Bushes |
+| `critterworks:has_scoochstem_vine` | Scoochstem vines |
+
+These are biome tags. `critterworks:has_punchprawn` is a structure tag that controls where Punchprawns spawn.
