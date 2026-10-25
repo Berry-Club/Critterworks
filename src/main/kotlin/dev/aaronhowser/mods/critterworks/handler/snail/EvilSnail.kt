@@ -28,7 +28,7 @@ class EvilSnail(
 		if (player == null) return false
 		if (dimension != player.level().dimension()) return false
 
-		val offset = pos.vectorTo(player.position())
+		val offset = pos.vectorTo(player.eyePosition)
 		val distance = offset.length()
 		if (distance == 0.0) return false
 
