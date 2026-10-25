@@ -1,2 +1,13 @@
-// 1.21.1	2026-10-14T06:58:20.3967771	Tags for minecraft:damage_type mod id critterworks
+// 1.21.1	2026-10-24T22:05:57.8658046	Tags for minecraft:damage_type mod id critterworks
 5ebf5b0777a54875d9c636862045a4e6e2e9d6bc data/critterworks/tags/damage_type/tardigrade_protects_from.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_armor.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_cooldown.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_effects.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_enchantments.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_invulnerability.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_resistance.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_shield.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/bypasses_wolf_armor.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/no_anger.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/no_impact.json
+9c6158730be3af726a4d2d87297f045fd998e915 data/minecraft/tags/damage_type/no_knockback.json

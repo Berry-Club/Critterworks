@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.handler.snail
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.datagen.ModDamageTypes
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
@@ -33,7 +34,10 @@ class EvilSnail(
 		val speed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
 
 		if (distance <= speed * 1.25) {
-			player.kill()
+			val damageSource = player.damageSources()
+				.source(ModDamageTypes.EVIL_SNAIL)
+
+			player.hurt(damageSource, Float.MAX_VALUE)
 			return true
 		}
 

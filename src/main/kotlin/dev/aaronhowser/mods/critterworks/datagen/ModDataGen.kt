@@ -31,12 +31,13 @@ object ModDataGen {
 		val lookupProvider = event.lookupProvider
 		val existingFileHelper = event.existingFileHelper
 
-		generator.addProvider(
+		val datapackRegistrySets = generator.addProvider(
 			event.includeServer(),
 			DatapackBuiltinEntriesProvider(
 				output,
 				lookupProvider,
 				RegistrySetBuilder()
+					.add(Registries.DAMAGE_TYPE, ModDamageTypes::bootstrap)
 					.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
 					.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
 					.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap)
@@ -44,6 +45,7 @@ object ModDataGen {
 				setOf(Critterworks.MOD_ID)
 			)
 		)
+		val lookupWithDatapack = datapackRegistrySets.registryProvider
 
 		generator.addProvider(
 			event.includeServer(),
@@ -122,7 +124,7 @@ object ModDataGen {
 
 		generator.addProvider(
 			event.includeServer(),
-			ModDamageTypeTagsProvider(output, lookupProvider, existingFileHelper)
+			ModDamageTypeTagsProvider(output, lookupWithDatapack, existingFileHelper)
 		)
 
 		generator.addProvider(

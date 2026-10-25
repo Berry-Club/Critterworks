@@ -80,6 +80,7 @@
   "critterworks.configuration.tardigradeDisablesExpiring": "Tardigrades Prevent Item Expiration",
   "critterworks.configuration.waterFogRadius": "Filterfeeder Water Fog Radius",
   "critterworks.configuration.world_gen": "World Generation",
+  "death.attack.evilSnail": "%1$s was killed by the Snail That Kills %1$s",
   "effect.critterworks.aaron": "Aaron.",
   "effect.critterworks.dyed_blue": "Dyed Blue",
   "effect.critterworks.dyed_cyan": "Dyed Cyan",
