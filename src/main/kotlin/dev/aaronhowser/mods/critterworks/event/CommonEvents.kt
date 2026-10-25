@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.event
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.command.ModCommands
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModDamageTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
@@ -25,6 +26,7 @@ import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
+import net.neoforged.neoforge.event.RegisterCommandsEvent
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.EntityEvent
@@ -186,6 +188,11 @@ object CommonEvents {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	fun onRightClickBlockLate(event: PlayerInteractEvent.RightClickBlock) {
 		PunchprawnEntity.tryPlacePunchprawn(event)
+	}
+
+	@SubscribeEvent
+	fun onRegisterCommandsEvent(event: RegisterCommandsEvent) {
+		ModCommands.register(event.dispatcher, event.buildContext)
 	}
 
 }
