@@ -15,11 +15,22 @@
 	- Tries to move to the farthest bonemealable block nearby
 	- Passively drops Snail Slime, and drops Snail Shell Fragments when killed
 - Snail Shield
+	- Crafted and repaired with Snail Shell Fragments
 	- Makes you immortal while active
 	- Activates while sneaking with it in either hand
 	- Reduces movement speed by 90% while active
 	- Also cannot left or right click during this
 	- After standing still for 5 seconds, most mobs forget and cannot target you
+- The Snail That Kills You
+	- Has a 5% chance of spawning when a Sproutsnail is killed by the player
+		- Chance is configurable
+		- Does not spawn if you already have one chasing you
+	- Constantly moves in a straight line towards you
+		- Goes through blocks
+		- Moves 0.05 blocks per tick by default (configurable)
+		- Only moves while the player is online and in the same dimension
+	- Can probably be caught in the Critter Cage
+	- When the Snail That Kills You reaches you, it kills you
 - Pearl
 	- Small chance of being dropped when giving Sand to Filterfeeders
 - Snail Slime
