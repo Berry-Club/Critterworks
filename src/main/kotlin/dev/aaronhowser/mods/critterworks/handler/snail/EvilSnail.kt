@@ -1,23 +1,42 @@
 package dev.aaronhowser.mods.critterworks.handler.snail
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
-import net.minecraft.core.BlockPos
-import net.minecraft.core.GlobalPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 
 class EvilSnail(
 	var pos: Vec3,
 	var dimension: ResourceKey<Level>,
-	var destination: GlobalPos? = null
+	var stationaryTicks: Int = STATIONARY_DURATION_TICKS
 ) {
+
+	fun tick(player: ServerPlayer?): Boolean {
+		if (stationaryTicks > 0) {
+			stationaryTicks--
+			return true
+		}
+
+		if (player == null) return false
+		if (dimension != player.level().dimension()) return false
+
+		val offset = pos.vectorTo(player.position())
+		val distance = offset.length()
+		if (distance == 0.0) return false
+
+		val speed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
+		val movement = offset.scale(minOf(speed, distance) / distance)
+		pos = pos.add(movement)
+		return true
+	}
 
 	fun toTag(): CompoundTag {
 		val tag = CompoundTag()
@@ -25,14 +44,7 @@ class EvilSnail(
 		tag.putDouble(POSITION_Y_TAG, pos.y)
 		tag.putDouble(POSITION_Z_TAG, pos.z)
 		tag.putString(DIMENSION_TAG, dimension.location().toString())
-
-		val destination = destination
-		if (destination != null) {
-			val destinationTag = CompoundTag()
-			destinationTag.putLong(POSITION_TAG, destination.pos.asLong())
-			destinationTag.putString(DIMENSION_TAG, destination.dimension.location().toString())
-			tag.put(DESTINATION_TAG, destinationTag)
-		}
+		tag.putInt(STATIONARY_TICKS_TAG, stationaryTicks)
 
 		return tag
 	}
@@ -41,9 +53,9 @@ class EvilSnail(
 		private const val POSITION_X_TAG = "PositionX"
 		private const val POSITION_Y_TAG = "PositionY"
 		private const val POSITION_Z_TAG = "PositionZ"
-		private const val POSITION_TAG = "Position"
 		private const val DIMENSION_TAG = "Dimension"
-		private const val DESTINATION_TAG = "Destination"
+		private const val STATIONARY_TICKS_TAG = "StationaryTicks"
+		private const val STATIONARY_DURATION_TICKS = 5 * 20
 
 		fun getSnailName(playerName: Component): MutableComponent {
 			return ModEntityLang.EVIL_SNAIL.toComponent(playerName)
@@ -56,18 +68,9 @@ class EvilSnail(
 				tag.getDouble(POSITION_Z_TAG)
 			)
 			val dimension = getDimension(tag)
-			val destination = getDestination(tag)
+			val stationaryTicks = tag.getInt(STATIONARY_TICKS_TAG)
 
-			return EvilSnail(pos, dimension, destination)
-		}
-
-		private fun getDestination(tag: CompoundTag): GlobalPos? {
-			if (!tag.contains(DESTINATION_TAG)) return null
-
-			val destinationTag = tag.getCompound(DESTINATION_TAG)
-			val dimension = getDimension(destinationTag)
-			val position = BlockPos.of(destinationTag.getLong(POSITION_TAG))
-			return GlobalPos.of(dimension, position)
+			return EvilSnail(pos, dimension, stationaryTicks)
 		}
 
 		private fun getDimension(tag: CompoundTag): ResourceKey<Level> {

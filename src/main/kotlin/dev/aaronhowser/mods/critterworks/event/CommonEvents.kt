@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
+import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
 import dev.aaronhowser.mods.critterworks.handler.web.WebHandler
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
@@ -31,6 +32,7 @@ import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
@@ -78,6 +80,12 @@ object CommonEvents {
 	fun onServerTick(event: ServerTickEvent.Post) {
 		val level = event.server.overworld()
 		WebHandler.get(level).validateChangedChunks(level)
+		EvilSnailHandler.get(level).tick(event.server)
+	}
+
+	@SubscribeEvent
+	fun onLivingDeath(event: LivingDeathEvent) {
+		SproutsnailEntity.handleDeath(event)
 	}
 
 	@SubscribeEvent

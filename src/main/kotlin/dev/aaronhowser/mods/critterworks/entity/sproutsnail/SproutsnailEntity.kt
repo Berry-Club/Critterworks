@@ -7,10 +7,12 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal.SproutsnailMoveToBonemealableBlockGoal
+import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
@@ -28,6 +30,7 @@ import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.LevelEvent
 import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.Tags
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animation.AnimatableManager
@@ -132,6 +135,17 @@ class SproutsnailEntity(
 				.add(Attributes.MAX_HEALTH, 10.0)
 				.add(Attributes.MOVEMENT_SPEED, 0.15)
 				.build()
+		}
+
+		fun handleDeath(event: LivingDeathEvent) {
+			val sproutsnail = event.entity as? SproutsnailEntity ?: return
+			val player = event.source.entity as? ServerPlayer ?: return
+			val handler = EvilSnailHandler.get(player.serverLevel())
+
+			if (handler.hasSnail(player)) return
+			if (!sproutsnail.random.chance(ServerConfig.CONFIG.sproutsnailEvilChance.get())) return
+
+			handler.addSnail(player, sproutsnail.position())
 		}
 	}
 
