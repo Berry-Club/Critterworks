@@ -17,6 +17,9 @@ class EvilSnail(
 	var accelerationTicksRemaining: Int = ACCELERATION_DURATION_TICKS
 ) {
 
+	var boundingBox: AABB = AABB.ofSize(pos, 1.0, 1.0, 1.0)
+		private set
+
 	fun tick(player: ServerPlayer?): TickResult {
 		if (accelerationTicksRemaining > 0) {
 			accelerationTicksRemaining--
@@ -26,19 +29,9 @@ class EvilSnail(
 		if (dimension != player.level().dimension()) return TickResult.NO_CHANGE
 
 		val target = player.position().lerp(player.eyePosition, 0.5)
-		val offset = pos.vectorTo(target)
-		val distance = offset.length()
+		moveTowards(target)
 
-		val normalSpeed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
-		val elapsedAccelerationTicks = ACCELERATION_DURATION_TICKS - accelerationTicksRemaining
-		val accelerationProgress = (elapsedAccelerationTicks.toDouble() / ACCELERATION_DURATION_TICKS)
-			.coerceIn(0.0, 1.0)
-		val speed = normalSpeed * accelerationProgress * accelerationProgress
-
-		val isTouchingPlayer = player.boundingBox
-			.intersects(
-				AABB.ofSize(pos, 1.0, 1.0, 1.0)
-			)
+		val isTouchingPlayer = player.boundingBox.intersects(boundingBox)
 
 		if (isTouchingPlayer) {
 			val damageSource = player.damageSources()
@@ -48,9 +41,23 @@ class EvilSnail(
 			return TickResult.REMOVE
 		}
 
+		return TickResult.CHANGED
+	}
+
+	private fun moveTowards(target: Vec3) {
+		val offset = pos.vectorTo(target)
+		val distance = offset.length()
+
+		val normalSpeed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
+		val elapsedAccelerationTicks = ACCELERATION_DURATION_TICKS - accelerationTicksRemaining
+		val accelerationProgress = (elapsedAccelerationTicks.toDouble() / ACCELERATION_DURATION_TICKS)
+			.coerceIn(0.0, 1.0)
+		val speed = normalSpeed * accelerationProgress * accelerationProgress
+
 		val movement = offset.scale(minOf(speed, distance) / distance)
 		pos = pos.add(movement)
-		return TickResult.CHANGED
+
+		boundingBox = AABB.ofSize(pos, 1.0, 1.0, 1.0)
 	}
 
 	fun toTag(): CompoundTag {
