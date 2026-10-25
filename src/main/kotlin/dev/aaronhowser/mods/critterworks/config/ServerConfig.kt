@@ -82,8 +82,8 @@ class ServerConfig(
 			.defineInRange("sproutsnailEvilChance", 0.01, 0.0, 1.0)
 
 		sproutsnailEvilSpeed = builder
-			.comment("How fast the Immortal Snail moves towards the player it's hunting")
-			.defineInRange("sproutsnailEvilSpeed", 0.1, Double.MIN_VALUE, Double.MAX_VALUE)
+			.comment("How fast the Immortal Snail moves towards the player it's hunting, in meters per tick")
+			.defineInRange("sproutsnailEvilSpeed", 0.05, Double.MIN_VALUE, Double.MAX_VALUE)
 	}
 
 	private fun scoochwormAttachmentConfigs() {
