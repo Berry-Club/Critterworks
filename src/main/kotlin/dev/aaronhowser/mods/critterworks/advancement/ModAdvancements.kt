@@ -31,6 +31,7 @@ object ModAdvancements {
 
 	val CATCH_FILTERFEEDER = guide("catch_filterfeeder")
 	val APPLY_TARDIGRADE = guide("apply_tardigade")
+	val USE_CRITTER_CAGE = guide("use_critter_cage")
 
 	fun trigger(player: Player, action: ResourceLocation) {
 		if (player !is ServerPlayer) return
