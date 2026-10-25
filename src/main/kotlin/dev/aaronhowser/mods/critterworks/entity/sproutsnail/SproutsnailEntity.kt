@@ -3,10 +3,15 @@ package dev.aaronhowser.mods.critterworks.entity.sproutsnail
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal.SproutsnailMoveToBonemealableBlockGoal
+import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -21,6 +26,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.LevelEvent
+import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.Tags
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
@@ -33,6 +39,7 @@ class SproutsnailEntity(
 ) : Animal(entityType, level), GeoEntity {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
+	private var slimeDropTime = random.nextRange(6000, 12001)
 
 	override fun registerGoals() {
 		goalSelector.addGoal(1, TemptGoal(this, 1.0, Tags.Items.MUSHROOMS.asIngredient(), false))
@@ -56,6 +63,26 @@ class SproutsnailEntity(
 		for (newBlockPosition in newBlockPositions) {
 			tryApplyBonemeal(newBlockPosition)
 		}
+
+		if (isServerSide && isAlive && !isBaby) {
+			tryDropSlime()
+		}
+	}
+
+	private fun tryDropSlime() {
+		slimeDropTime--
+		if (slimeDropTime > 0) return
+
+		playSound(
+			SoundEvents.CHICKEN_EGG,
+			1f,
+			random.nextRange(0.8f, 1.2f)
+		)
+
+		spawnAtLocation(ModItems.SNAIL_SLIME.get())
+		gameEvent(GameEvent.ENTITY_PLACE)
+
+		slimeDropTime = random.nextRange(6000, 12001)
 	}
 
 	private fun getOccupiedBlockPositions(): List<BlockPos> {
@@ -82,12 +109,26 @@ class SproutsnailEntity(
 		return null
 	}
 
+	override fun readAdditionalSaveData(compound: CompoundTag) {
+		super.readAdditionalSaveData(compound)
+
+		if (compound.contains(SLIME_DROP_TIME_TAG)) {
+			slimeDropTime = compound.getInt(SLIME_DROP_TIME_TAG)
+		}
+	}
+
+	override fun addAdditionalSaveData(compound: CompoundTag) {
+		super.addAdditionalSaveData(compound)
+		compound.putInt(SLIME_DROP_TIME_TAG, slimeDropTime)
+	}
+
 	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {}
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	companion object {
 		const val WIDTH = 0.6f
 		const val HEIGHT = 0.7f
+		private const val SLIME_DROP_TIME_TAG = "SlimeDropTime"
 
 		fun createAttributes(): AttributeSupplier {
 			return createMobAttributes()
