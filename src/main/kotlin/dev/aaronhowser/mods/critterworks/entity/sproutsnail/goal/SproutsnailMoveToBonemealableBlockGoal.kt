@@ -44,7 +44,7 @@ class SproutsnailMoveToBonemealableBlockGoal(
 
 	private fun findPathToBonemealableBlock(): Path? {
 		val origin = sproutsnail.blockPosition()
-		val candidates = getBonemealableBlockPositions(origin)
+		val candidates = getWeightedBonemealableBlockPositions(origin)
 
 		while (candidates.isNotEmpty()) {
 			val position = removeWeightedPosition(candidates)
@@ -55,14 +55,18 @@ class SproutsnailMoveToBonemealableBlockGoal(
 		return null
 	}
 
-	private fun getBonemealableBlockPositions(origin: BlockPos): MutableList<BlockPos> {
-		val candidates = mutableListOf<BlockPos>()
+	private fun getWeightedBonemealableBlockPositions(origin: BlockPos): MutableMap<BlockPos, Int> {
+		val candidates = mutableMapOf<BlockPos, Int>()
 		val minimumPosition = origin.offset(-SEARCH_RADIUS, -VERTICAL_SEARCH_RADIUS, -SEARCH_RADIUS)
 		val maximumPosition = origin.offset(SEARCH_RADIUS, VERTICAL_SEARCH_RADIUS, SEARCH_RADIUS)
 
 		for (position in BlockPos.betweenClosed(minimumPosition, maximumPosition)) {
 			if (!isValidDestination(position)) continue
-			candidates.add(position.immutable())
+
+			val distance = origin.distManhattan(position)
+			if (distance == 0) continue
+
+			candidates[position.immutable()] = distance
 		}
 
 		return candidates
@@ -80,31 +84,28 @@ class SproutsnailMoveToBonemealableBlockGoal(
 		return level.noCollision(sproutsnail, sproutsnail.boundingBox.move(offset))
 	}
 
-	private fun removeWeightedPosition(positions: MutableList<BlockPos>): BlockPos {
-		var totalWeight = 0.0
+	private fun removeWeightedPosition(positions: MutableMap<BlockPos, Int>): BlockPos {
+		var totalWeight = 0
 
-		for (position in positions) {
-			totalWeight += getPositionWeight(position)
+		for (weight in positions.values) {
+			totalWeight += weight
 		}
 
-		var remainingWeight = sproutsnail.random.nextDouble() * totalWeight
-		var index = 0
+		var remainingWeight = sproutsnail.random.nextInt(totalWeight)
+		var selectedPosition: BlockPos? = null
 
-		while (index < positions.size) {
-			val position = positions[index]
-			remainingWeight -= getPositionWeight(position)
+		for (entry in positions) {
+			remainingWeight -= entry.value
 
-			if (remainingWeight <= 0.0) return positions.removeAt(index)
-
-			index++
+			if (remainingWeight < 0) {
+				selectedPosition = entry.key
+				break
+			}
 		}
 
-		return positions.removeAt(positions.lastIndex)
-	}
-
-	private fun getPositionWeight(position: BlockPos): Double {
-		return sproutsnail.position()
-			.distanceTo(Vec3.atBottomCenterOf(position))
+		val position = selectedPosition ?: positions.keys.first()
+		positions.remove(position)
+		return position
 	}
 
 	companion object {
