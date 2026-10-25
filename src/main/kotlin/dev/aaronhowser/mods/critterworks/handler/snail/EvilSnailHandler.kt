@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.handler.snail
 
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
@@ -29,6 +30,19 @@ class EvilSnailHandler : SavedData() {
 		for ((playerUuid, snail) in snails) {
 			val player = server.playerList.getPlayer(playerUuid)
 			if (snail.tick(player)) changed = true
+
+			val level = server.getLevel(snail.dimension) ?: continue
+			level.sendParticles(
+				ParticleTypes.END_ROD,
+				snail.pos.x,
+				snail.pos.y,
+				snail.pos.z,
+				1,
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			)
 		}
 
 		if (changed) setDirty()
