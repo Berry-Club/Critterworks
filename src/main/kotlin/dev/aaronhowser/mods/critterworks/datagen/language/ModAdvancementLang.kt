@@ -45,6 +45,8 @@ object ModAdvancementLang {
 	const val CATCH_FILTERFEEDER_DESC = "advancements.critterworks.catch_filterfeeder.desc"
 	const val APPLY_TARDIGRADE_TITLE = "advancements.critterworks.apply_tardigade.title"
 	const val APPLY_TARDIGRADE_DESC = "advancements.critterworks.apply_tardigade.desc"
+	const val USE_CRITTER_CAGE_TITLE = "advancements.critterworks.use_critter_cage.title"
+	const val USE_CRITTER_CAGE_DESC = "advancements.critterworks.use_critter_cage.desc"
 
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {

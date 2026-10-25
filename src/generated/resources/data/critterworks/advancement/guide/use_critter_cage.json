@@ -1,0 +1,29 @@
+{
+  "parent": "critterworks:guide/root",
+  "criteria": {
+    "use_critter_cage": {
+      "conditions": {
+        "action": "critterworks:guide/use_critter_cage"
+      },
+      "trigger": "aaron:player_action"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.use_critter_cage.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:critter_cage"
+    },
+    "title": {
+      "translate": "advancements.critterworks.use_critter_cage.title"
+    }
+  },
+  "requirements": [
+    [
+      "use_critter_cage"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

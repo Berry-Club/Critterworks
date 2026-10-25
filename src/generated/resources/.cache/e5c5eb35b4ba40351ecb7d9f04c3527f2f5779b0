@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-24T23:47:01.389199	Advancements
+// 1.21.1	2026-10-24T23:49:20.6890432	Advancements
 c6b6d4f96894c2796632fd1239417b8e4cfea3eb data/critterworks/advancement/guide/apply_tardigade.json
 a4d2769ff6331f4d768edab3ddfad34b2f4658ce data/critterworks/advancement/guide/attach_to_scoochworm.json
 ca8657d16512d0326391a2f5a8995eeb0fb72884 data/critterworks/advancement/guide/break_apple_slice.json
@@ -13,6 +13,7 @@ ca8657d16512d0326391a2f5a8995eeb0fb72884 data/critterworks/advancement/guide/bre
 f6f951c57ffce3251ca784d53018b4d8e516f7c3 data/critterworks/advancement/guide/root.json
 0555718d0f13f6995ed9466e9cbad9f375de7d51 data/critterworks/advancement/guide/sparkbug_bush.json
 fd1f0136a0b56fe214cd89ddfc280370bc14ff53 data/critterworks/advancement/guide/split_scoochworm.json
+ffc95608b09087c08076eb210d178b13a527a416 data/critterworks/advancement/guide/use_critter_cage.json
 489b9eaf87d85e677ce9bef8baf0783af999fab8 data/critterworks/advancement/guide/use_sparkpollen.json
 ec6aa8ed4195f20c5a808e0dde07c76629d78194 data/critterworks/advancement/guide/use_sproutsnail.json
 ab8dbc6c0c76b1e87c9fc6def666d47f4b0fd744 data/critterworks/advancement/guide/web_making.json

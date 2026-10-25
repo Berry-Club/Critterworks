@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.aaron.misc.AaronUtil
+import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -83,6 +84,8 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 			}
 
 			interactionTarget.discard()
+
+			ModAdvancements.trigger(player, ModAdvancements.USE_CRITTER_CAGE)
 		}
 
 		return InteractionResult.sidedSuccess(player.isClientSide)

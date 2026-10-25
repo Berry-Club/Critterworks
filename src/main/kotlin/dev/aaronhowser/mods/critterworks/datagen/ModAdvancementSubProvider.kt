@@ -190,6 +190,19 @@ class ModAdvancementSubProvider(
 			)
 			.save(ModAdvancements.APPLY_TARDIGRADE)
 
+		advancement()
+			.parent(root)
+			.display(
+				ModItems.CRITTER_CAGE,
+				ModAdvancementLang.USE_CRITTER_CAGE_TITLE.toComponent(),
+				ModAdvancementLang.USE_CRITTER_CAGE_DESC.toComponent(),
+			)
+			.addCriterion(
+				"use_critter_cage",
+				playerAction(ModAdvancements.USE_CRITTER_CAGE)
+			)
+			.save(ModAdvancements.USE_CRITTER_CAGE)
+
 		val spiderNest = advancement()
 			.parent(root)
 			.display(
