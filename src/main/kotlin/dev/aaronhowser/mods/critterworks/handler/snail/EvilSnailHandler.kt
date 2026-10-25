@@ -26,10 +26,19 @@ class EvilSnailHandler : SavedData() {
 
 	fun tick(server: MinecraftServer) {
 		var changed = false
+		val removedSnails = mutableListOf<UUID>()
 
 		for ((playerUuid, snail) in snails) {
 			val player = server.playerList.getPlayer(playerUuid)
-			if (snail.tick(player)) changed = true
+
+			val tickResult = snail.tick(player)
+			if (tickResult == EvilSnail.TickResult.CHANGED) {
+				changed = true
+			} else if (tickResult == EvilSnail.TickResult.REMOVE) {
+				removedSnails.add(playerUuid)
+				changed = true
+				continue
+			}
 
 			val level = server.getLevel(snail.dimension) ?: continue
 			level.sendParticles(
@@ -43,6 +52,10 @@ class EvilSnailHandler : SavedData() {
 				0.0,
 				0.0
 			)
+		}
+
+		for (playerUuid in removedSnails) {
+			snails.remove(playerUuid)
 		}
 
 		if (changed) setDirty()

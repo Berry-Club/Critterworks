@@ -20,14 +20,14 @@ class EvilSnail(
 	var stationaryTicks: Int = STATIONARY_DURATION_TICKS
 ) {
 
-	fun tick(player: ServerPlayer?): Boolean {
+	fun tick(player: ServerPlayer?): TickResult {
 		if (stationaryTicks > 0) {
 			stationaryTicks--
-			return true
+			return TickResult.CHANGED
 		}
 
-		if (player == null) return false
-		if (dimension != player.level().dimension()) return false
+		if (player == null) return TickResult.NO_CHANGE
+		if (dimension != player.level().dimension()) return TickResult.NO_CHANGE
 
 		val offset = pos.vectorTo(player.eyePosition)
 		val distance = offset.length()
@@ -38,12 +38,17 @@ class EvilSnail(
 				.source(ModDamageTypes.EVIL_SNAIL)
 
 			player.hurt(damageSource, Float.MAX_VALUE)
-			return true
+
+			return if (player.isDeadOrDying) {
+				TickResult.REMOVE
+			} else {
+				TickResult.NO_CHANGE
+			}
 		}
 
 		val movement = offset.scale(minOf(speed, distance) / distance)
 		pos = pos.add(movement)
-		return true
+		return TickResult.CHANGED
 	}
 
 	fun toTag(): CompoundTag {
@@ -85,6 +90,12 @@ class EvilSnail(
 			val location = ResourceLocation.parse(tag.getString(DIMENSION_TAG))
 			return ResourceKey.create(Registries.DIMENSION, location)
 		}
+	}
+
+	enum class TickResult {
+		NO_CHANGE,
+		CHANGED,
+		REMOVE
 	}
 
 }
