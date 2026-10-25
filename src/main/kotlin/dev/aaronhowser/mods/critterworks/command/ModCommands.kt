@@ -13,7 +13,7 @@ object ModCommands {
 	) {
 		dispatcher.register(
 			Commands.literal("critterworks")
-				.then(SnailCommands.register())
+				.then(SnailChaseCommands.register())
 		)
 	}
 
