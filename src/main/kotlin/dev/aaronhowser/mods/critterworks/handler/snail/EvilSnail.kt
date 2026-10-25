@@ -15,10 +15,17 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 class EvilSnail(
-	var pos: Vec3,
-	var dimension: ResourceKey<Level>,
-	var accelerationTicksRemaining: Int = ACCELERATION_DURATION_TICKS
+	pos: Vec3,
+	dimension: ResourceKey<Level>,
+	accelerationTicksRemaining: Int = ACCELERATION_DURATION_TICKS
 ) {
+
+	var pos = pos
+		private set
+	var dimension = dimension
+		private set
+	var accelerationTicksRemaining = accelerationTicksRemaining
+		private set
 
 	var boundingBox: AABB = AABB.ofSize(pos, 1.0, 1.0, 1.0)
 		private set

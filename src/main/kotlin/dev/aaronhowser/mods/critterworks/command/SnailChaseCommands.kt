@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.coordinates.Vec3Argument
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
@@ -57,6 +58,10 @@ object SnailChaseCommands : AaronCommandHelper {
 					}
 				}
 			}
+
+			thenLiteral("info") {
+
+			}
 		}
 	}
 
@@ -91,6 +96,33 @@ object SnailChaseCommands : AaronCommandHelper {
 
 		handler.addSnail(player, position)
 		source.sendSuccess({ Component.literal("Added player's snail!") }, true)
+
+		return 1
+	}
+
+	@Suppress("SameReturnValue")
+	private fun printInfo(
+		source: CommandSourceStack,
+		player: ServerPlayer
+	): Int {
+		val handler = EvilSnailHandler.get(player.serverLevel())
+		val snail = handler.getSnail(player)
+
+		if (snail == null) {
+			source.sendSuccess({ Component.literal("Player does not have a snail chasing them") }, false)
+			return 1
+		}
+
+		val bPos = BlockPos.containing(snail.pos)
+
+		val component = if (snail.dimension == player.level().dimension()) {
+			val distance = snail.pos.distanceTo(player.position()).toInt()
+			Component.literal("Snail is at ${bPos.x}, ${bPos.y}, ${bPos.z}, $distance blocks away")
+		} else {
+			Component.literal("Snail is at ${bPos.x}, ${bPos.y}, ${bPos.z} in ${snail.dimension.location()}")
+		}
+
+		source.sendSuccess({ component }, true)
 
 		return 1
 	}

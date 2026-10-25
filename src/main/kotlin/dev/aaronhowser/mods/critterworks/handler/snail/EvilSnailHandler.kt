@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.saveddata.SavedData
 import net.minecraft.world.phys.Vec3
 import java.util.*
@@ -18,18 +19,22 @@ class EvilSnailHandler : SavedData() {
 	val snails: Map<UUID, EvilSnail>
 		field = mutableMapOf()
 
-	fun hasSnail(player: ServerPlayer): Boolean {
-		return snails.containsKey(player.uuid)
+	fun hasSnail(entity: Entity): Boolean {
+		return snails.containsKey(entity.uuid)
 	}
 
-	fun addSnail(player: ServerPlayer, position: Vec3) {
-		snails[player.uuid] = EvilSnail(position, player.level().dimension())
+	fun addSnail(entity: Entity, position: Vec3) {
+		snails[entity.uuid] = EvilSnail(position, entity.level().dimension())
 		setDirty()
 	}
 
-	fun removeSnail(player: ServerPlayer) {
-		snails.remove(player.uuid)
+	fun removeSnail(entity: Entity) {
+		snails.remove(entity.uuid)
 		setDirty()
+	}
+
+	fun getSnail(entity: Entity): EvilSnail? {
+		return snails[entity.uuid]
 	}
 
 	fun tick(server: MinecraftServer) {
