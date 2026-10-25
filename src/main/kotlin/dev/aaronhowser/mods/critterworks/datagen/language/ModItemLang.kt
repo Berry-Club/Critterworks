@@ -23,13 +23,17 @@ object ModItemLang {
 			addItem(ModItems.MAGENTA_DYEBERRY, "Magenta Dyeberry")
 			addItem(ModItems.CYAN_DYEBERRY, "Cyan Dyeberry")
 			addItem(ModItems.AARONBERRY, "Aaronberry")
-			addItem(ModItems.SCOOCHWORM_SPAWN_EGG, "Scoochworm Spawn Egg")
 			addItem(ModItems.SPARKPOLLEN_POUCH, "Sparkpollen Pouch")
 			addItem(ModItems.TARDIGRADE, "Tardigrade")
 			addItem(ModItems.SNAIL_SHIELD, "Snail Shield")
 			addItem(ModItems.SNAIL_SHELL_FRAGMENT, "Snail Shell Fragment")
 			addItem(ModItems.SNAIL_SLIME, "Snail Slime")
 			addItem(ModItems.PEARL, "Pearl")
+			addItem(ModItems.SCOOCHWORM_SPAWN_EGG, "Scoochworm Spawn Egg")
+			addItem(ModItems.ITEM_FILTERFEEDER_SPAWN_EGG, "Item Filterfeeder Spawn Egg")
+			addItem(ModItems.FLUID_FILTERFEEDER_SPAWN_EGG, "Fluid Filterfeeder Spawn Egg")
+			addItem(ModItems.PUNCHPRAWN_SPAWN_EGG, "Punchprawn Spawn Egg")
+			addItem(ModItems.SPROUTSNAIL_SPAWN_EGG, "Sproutsnail Spawn Egg")
 		}
 	}
 }

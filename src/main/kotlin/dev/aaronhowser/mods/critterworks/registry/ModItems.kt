@@ -2,9 +2,14 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.aaron.registry.AaronItemRegistry
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.item.*
+import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.SpawnEggItem
+import net.minecraft.world.item.component.CustomData
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
 
@@ -19,8 +24,6 @@ object ModItems : AaronItemRegistry() {
 		register("scoochworm_gps", ::Item, PROPERTIES_SINGLE_STACK)
 	val CRITTER_CAGE: DeferredItem<CritterCageItem> =
 		register("critter_cage", ::CritterCageItem)
-	val SCOOCHWORM_SPAWN_EGG: DeferredItem<ScoochwormSpawnEggItem> =
-		register("scoochworm_spawn_egg", ::ScoochwormSpawnEggItem)
 
 	val HOPPING_SPIDER: DeferredItem<HoppingSpiderItem> =
 		register("hopping_spider", ::HoppingSpiderItem)
@@ -64,6 +67,30 @@ object ModItems : AaronItemRegistry() {
 		registerDyeberry(WormColor.CYAN)
 	val AARONBERRY: DeferredItem<DyeberryItem> =
 		registerDyeberry(WormColor.AARON, "aaronberry")
+
+	val SCOOCHWORM_SPAWN_EGG: DeferredItem<ScoochwormSpawnEggItem> =
+		register("scoochworm_spawn_egg", ::ScoochwormSpawnEggItem)
+	val PUNCHPRAWN_SPAWN_EGG: DeferredItem<SpawnEggItem> =
+		registerSpawnEgg("punchprawn_spawn_egg", ModEntityTypes.PUNCHPRAWN::get, 0x0E88BB, 0xFE0901)
+	val SPROUTSNAIL_SPAWN_EGG: DeferredItem<SpawnEggItem> =
+		registerSpawnEgg("sproutsnail_spawn_egg", ModEntityTypes.SPROUTSNAIL::get, 0x7BFFA3, 0xFFA7A4)
+	val ITEM_FILTERFEEDER_SPAWN_EGG: DeferredItem<SpawnEggItem> =
+		registerSpawnEgg("item_filterfeeder_spawn_egg", ModEntityTypes.FILTERFEEDER::get, 0xF0C3D2, 0x522635) {
+			filterfeederSpawnEggProperties(FilterfeederEntity.FilterType.ITEM)
+		}
+	val FLUID_FILTERFEEDER_SPAWN_EGG: DeferredItem<SpawnEggItem> =
+		registerSpawnEgg("fluid_filterfeeder_spawn_egg", ModEntityTypes.FILTERFEEDER::get, 0xC4E7EF, 0x264851) {
+			filterfeederSpawnEggProperties(FilterfeederEntity.FilterType.FLUID)
+		}
+
+	private fun filterfeederSpawnEggProperties(filterType: FilterfeederEntity.FilterType): Item.Properties {
+		val entityData = CompoundTag()
+		entityData.putString("id", ModEntityTypes.FILTERFEEDER.id.toString())
+		entityData.putInt("FilterType", filterType.ordinal)
+
+		return Item.Properties()
+			.component(DataComponents.ENTITY_DATA, CustomData.of(entityData))
+	}
 
 	private fun registerDyeberry(
 		wormColor: WormColor,

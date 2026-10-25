@@ -25,6 +25,10 @@ class ModItemModelProvider(
 		lockbox()
 
 		spawnEggItem(ModItems.SCOOCHWORM_SPAWN_EGG.get())
+		spawnEggItem(ModItems.ITEM_FILTERFEEDER_SPAWN_EGG.get())
+		spawnEggItem(ModItems.FLUID_FILTERFEEDER_SPAWN_EGG.get())
+		spawnEggItem(ModItems.PUNCHPRAWN_SPAWN_EGG.get())
+		spawnEggItem(ModItems.SPROUTSNAIL_SPAWN_EGG.get())
 	}
 
 	private fun lockbox() {
