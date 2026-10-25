@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteract
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.ShowWebPathPacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncEvilSnailsPacket
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 
 object ModPacketHandler : AaronPacketRegistrar {
@@ -16,6 +17,7 @@ object ModPacketHandler : AaronPacketRegistrar {
 		toClient(registrar, AddWebLinesPacket.TYPE, AddWebLinesPacket.STREAM_CODEC)
 		toClient(registrar, RemoveWebLinePacket.TYPE, RemoveWebLinePacket.STREAM_CODEC)
 		toClient(registrar, ShowWebPathPacket.TYPE, ShowWebPathPacket.STREAM_CODEC)
+		toClient(registrar, SyncEvilSnailsPacket.TYPE, SyncEvilSnailsPacket.STREAM_CODEC)
 		toServer(registrar, SnailShieldMovedPacket.TYPE, SnailShieldMovedPacket.STREAM_CODEC)
 		toServer(registrar, WebLineInteractPacket.TYPE, WebLineInteractPacket.STREAM_CODEC)
 	}

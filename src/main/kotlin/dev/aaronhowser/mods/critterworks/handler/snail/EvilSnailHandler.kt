@@ -1,14 +1,17 @@
 package dev.aaronhowser.mods.critterworks.handler.snail
 
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncEvilSnailsPacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncEvilSnailsPacket.SnailData
 import net.minecraft.core.HolderLookup
-import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.Mth
 import net.minecraft.world.level.saveddata.SavedData
 import net.minecraft.world.phys.Vec3
 import java.util.*
+import kotlin.math.atan2
 
 class EvilSnailHandler : SavedData() {
 
@@ -39,19 +42,6 @@ class EvilSnailHandler : SavedData() {
 				changed = true
 				continue
 			}
-
-			val level = server.getLevel(snail.dimension) ?: continue
-			level.sendParticles(
-				ParticleTypes.END_ROD,
-				snail.pos.x,
-				snail.pos.y,
-				snail.pos.z,
-				1,
-				0.0,
-				0.0,
-				0.0,
-				0.0
-			)
 		}
 
 		for (playerUuid in removedSnails) {
@@ -59,6 +49,44 @@ class EvilSnailHandler : SavedData() {
 		}
 
 		if (changed) setDirty()
+
+		syncSnails(server)
+	}
+
+	private fun syncSnails(server: MinecraftServer) {
+		for (player in server.playerList.players) {
+			val nearbySnails = mutableListOf<SnailData>()
+
+			for ((snailUuid, snail) in snails) {
+				if (snail.dimension != player.level().dimension()) continue
+				if (snail.pos.distanceToSqr(player.position()) > SYNC_DISTANCE_SQUARED) continue
+
+				val chasedPlayer = server.playerList.getPlayer(snailUuid)
+				val yRot = getYRot(snail, chasedPlayer)
+
+				nearbySnails.add(
+					SnailData(
+						snailUuid,
+						snail.pos,
+						yRot
+					)
+				)
+
+				if (nearbySnails.size >= SyncEvilSnailsPacket.MAX_SNAILS) break
+			}
+
+			SyncEvilSnailsPacket(nearbySnails).messagePlayer(player)
+		}
+	}
+
+	private fun getYRot(snail: EvilSnail, chasedPlayer: ServerPlayer?): Float {
+		if (chasedPlayer == null) return 0f
+		if (snail.dimension != chasedPlayer.level().dimension()) return 0f
+
+		val offset = snail.pos.vectorTo(chasedPlayer.eyePosition)
+		return Mth.wrapDegrees(
+			Math.toDegrees(atan2(-offset.x, offset.z))
+		).toFloat()
 	}
 
 	override fun save(tag: CompoundTag, registries: HolderLookup.Provider): CompoundTag {
@@ -75,6 +103,8 @@ class EvilSnailHandler : SavedData() {
 	companion object {
 		const val SAVED_DATA_NAME = "critterworks_evil_snail"
 		private const val SNAILS_TAG = "Snails"
+		private const val SYNC_DISTANCE = 128.0
+		private const val SYNC_DISTANCE_SQUARED = SYNC_DISTANCE * SYNC_DISTANCE
 
 		fun get(level: ServerLevel): EvilSnailHandler {
 			if (level != level.server.overworld()) {
