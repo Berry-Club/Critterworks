@@ -31,6 +31,7 @@
 		- Only moves while the player is online and in the same dimension
 	- Can probably be caught in the Critter Cage
 	- When the Snail That Kills You reaches you, it kills you
+    - Has some commands under `/critterworks snail-chase`
 - Pearl
 	- Small chance of being dropped when giving Sand to Filterfeeders
 - Snail Slime
