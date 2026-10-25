@@ -4,7 +4,7 @@ import com.mojang.math.Constants
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.item.SnailShellItem
+import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.player.LocalPlayer
@@ -18,7 +18,7 @@ class SnailShellMovedPacket private constructor() : AaronPacket() {
 
 	override fun handleOnServer(context: IPayloadContext) {
 		val player = context.player() as? ServerPlayer ?: return
-		SnailShellItem.handleClientMovement(player)
+		SnailShieldItem.handleClientMovement(player)
 	}
 
 	override fun type(): CustomPacketPayload.Type<SnailShellMovedPacket> = TYPE

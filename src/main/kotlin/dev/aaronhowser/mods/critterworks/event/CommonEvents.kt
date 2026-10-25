@@ -9,7 +9,7 @@ import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
-import dev.aaronhowser.mods.critterworks.item.SnailShellItem
+import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
@@ -90,7 +90,7 @@ object CommonEvents {
 
 	@SubscribeEvent
 	fun onEntitySize(event: EntityEvent.Size) {
-		SnailShellItem.handleEntitySize(event)
+		SnailShieldItem.handleEntitySize(event)
 	}
 
 	@SubscribeEvent
@@ -160,19 +160,19 @@ object CommonEvents {
 
 	@SubscribeEvent
 	fun afterPlayerTick(event: PlayerTickEvent.Post) {
-		SnailShellItem.handlePlayerTick(event)
+		SnailShieldItem.handlePlayerTick(event)
 		PunchprawnEntity.handlePlayerTick(event)
 	}
 
 	@SubscribeEvent
 	fun onIncomingDamage(event: LivingIncomingDamageEvent) {
-		SnailShellItem.handleIncomingDamage(event)
+		SnailShieldItem.handleIncomingDamage(event)
 		PunchprawnEntity.handleIncomingDamage(event)
 	}
 
 	@SubscribeEvent
 	fun onLivingChangeTarget(event: LivingChangeTargetEvent) {
-		SnailShellItem.handleTargetChange(event)
+		SnailShieldItem.handleTargetChange(event)
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)

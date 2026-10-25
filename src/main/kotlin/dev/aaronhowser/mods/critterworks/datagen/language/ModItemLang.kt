@@ -26,7 +26,7 @@ object ModItemLang {
 			addItem(ModItems.SCOOCHWORM_SPAWN_EGG, "Scoochworm Spawn Egg")
 			addItem(ModItems.SPARKPOLLEN_POUCH, "Sparkpollen Pouch")
 			addItem(ModItems.TARDIGRADE, "Tardigrade")
-			addItem(ModItems.SNAIL_SHELL, "Snail Shell")
+			addItem(ModItems.SNAIL_SHIELD, "Snail Shield")
 			addItem(ModItems.SNAIL_SHELL_FRAGMENT, "Snail Shell Fragment")
 			addItem(ModItems.PEARL, "Pearl")
 		}

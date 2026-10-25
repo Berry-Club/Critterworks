@@ -32,7 +32,7 @@ import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
 
-class SnailShellItem(properties: Properties) : Item(properties) {
+class SnailShieldItem(properties: Properties) : Item(properties) {
 
 	override fun isFoil(stack: ItemStack): Boolean {
 		return AaronClientUtil.localPlayer?.shellState?.isShelled.isTrue()
@@ -77,7 +77,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 
 			if (player !is ServerPlayer) return
 
-			val isActivatingShell = player.isDiscrete && player.isHolding(ModItems.SNAIL_SHELL.get())
+			val isActivatingShell = player.isDiscrete && player.isHolding(ModItems.SNAIL_SHIELD.get())
 
 			val oldState = player.shellState
 			val newState = getNewShellState(player, isActivatingShell)
@@ -235,8 +235,8 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 			)
 
 			val shellHand = when {
-				player.mainHandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.MAIN_HAND
-				player.offhandItem.isItem(ModItems.SNAIL_SHELL) -> InteractionHand.OFF_HAND
+				player.mainHandItem.isItem(ModItems.SNAIL_SHIELD) -> InteractionHand.MAIN_HAND
+				player.offhandItem.isItem(ModItems.SNAIL_SHIELD) -> InteractionHand.OFF_HAND
 				else -> return
 			}
 
@@ -253,7 +253,7 @@ class SnailShellItem(properties: Properties) : Item(properties) {
 		}
 
 		fun handleClientMovement(player: ServerPlayer) {
-			if (!player.isDiscrete || !player.isHolding(ModItems.SNAIL_SHELL.get())) return
+			if (!player.isDiscrete || !player.isHolding(ModItems.SNAIL_SHIELD.get())) return
 
 			player.shellStillTicks = 0
 

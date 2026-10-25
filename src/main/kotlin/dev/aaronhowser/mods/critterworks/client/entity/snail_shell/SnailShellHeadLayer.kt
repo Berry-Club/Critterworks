@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.client.entity.snail_shell
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
-import dev.aaronhowser.mods.critterworks.item.SnailShellItem.SnailShellState
+import dev.aaronhowser.mods.critterworks.item.SnailShieldItem.SnailShellState
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import net.minecraft.client.model.SkullModel
 import net.minecraft.client.model.geom.ModelLayers

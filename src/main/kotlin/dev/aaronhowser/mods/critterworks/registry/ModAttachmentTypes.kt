@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.item.SnailShellItem
+import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.neoforged.neoforge.attachment.AttachmentType
@@ -16,12 +16,12 @@ object ModAttachmentTypes {
 	val ATTACHMENT_TYPE_REGISTRY: DeferredRegister<AttachmentType<*>> =
 		DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Critterworks.MOD_ID)
 
-	val SNAIL_SHELL_STATE: DeferredHolder<AttachmentType<*>, AttachmentType<SnailShellItem.SnailShellState>> =
+	val SNAIL_SHELL_STATE: DeferredHolder<AttachmentType<*>, AttachmentType<SnailShieldItem.SnailShellState>> =
 		register(
 			"snail_shell_state",
 			AttachmentType
-				.builder(Supplier { SnailShellItem.SnailShellState.UNSHELLED })
-				.sync(SnailShellItem.SnailShellState.STREAM_CODEC)
+				.builder(Supplier { SnailShieldItem.SnailShellState.UNSHELLED })
+				.sync(SnailShieldItem.SnailShellState.STREAM_CODEC)
 				.build()
 		)
 

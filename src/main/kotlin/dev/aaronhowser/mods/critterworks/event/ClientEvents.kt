@@ -16,7 +16,7 @@ import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageIte
 import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
-import dev.aaronhowser.mods.critterworks.item.SnailShellItem
+import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShellMovedPacket
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
 import dev.aaronhowser.mods.critterworks.registry.*
@@ -60,7 +60,7 @@ object ClientEvents {
 		if (!player.getData(ModAttachmentTypes.SNAIL_SHELL_STATE).isShelled) return
 
 		val movementSpeedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED) ?: return
-		val shellModifier = movementSpeedAttribute.getModifier(SnailShellItem.SHELLED_MOVEMENT_SPEED_MODIFIER) ?: return
+		val shellModifier = movementSpeedAttribute.getModifier(SnailShieldItem.SHELLED_MOVEMENT_SPEED_MODIFIER) ?: return
 		val shellSpeedMultiplier = 1.0 + shellModifier.amount
 		if (shellSpeedMultiplier == 0.0) return
 
