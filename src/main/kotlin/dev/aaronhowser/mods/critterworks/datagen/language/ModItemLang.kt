@@ -28,6 +28,7 @@ object ModItemLang {
 			addItem(ModItems.TARDIGRADE, "Tardigrade")
 			addItem(ModItems.SNAIL_SHIELD, "Snail Shield")
 			addItem(ModItems.SNAIL_SHELL_FRAGMENT, "Snail Shell Fragment")
+			addItem(ModItems.SNAIL_SLIME, "Snail Slime")
 			addItem(ModItems.PEARL, "Pearl")
 		}
 	}
