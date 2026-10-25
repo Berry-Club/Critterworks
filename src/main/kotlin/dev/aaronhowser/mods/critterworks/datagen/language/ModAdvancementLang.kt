@@ -82,6 +82,14 @@ object ModAdvancementLang {
 			add(SPARKBUG_BUSH_DESC, "Find a Sparkbug Bush, which transfers FE")
 			add(USE_SPARKPOLLEN_TITLE, "Smells like Energy")
 			add(USE_SPARKPOLLEN_DESC, "Link the Sparkbug Bush to machines with Sparkpollen")
+			add(USE_CRITTER_CAGE_TITLE, "Zoochosis")
+			add(USE_CRITTER_CAGE_DESC, "Use a Critter Cage to capture a mob")
+			add(FIND_SPROUTSNAIL_TITLE, "Potted Plodder")
+			add(FIND_SPROUTSNAIL_DESC, "Find a Sproutsnail in the world")
+			add(USE_SPROUTSNAIL_TITLE, "Like Real Snails Only The Exact Opposite")
+			add(USE_SPROUTSNAIL_DESC, "Sproutsnails will try to grow nearby crops!")
+			add(EVIL_SPROUTSNAIL_TITLE, "That Evil Snail That I Hate")
+			add(EVIL_SPROUTSNAIL_DESC, "You might want to give it some space")
 		}
 	}
 }
