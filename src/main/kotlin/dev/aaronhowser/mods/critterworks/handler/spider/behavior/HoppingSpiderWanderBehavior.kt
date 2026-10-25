@@ -5,7 +5,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.random
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
-import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
+import dev.aaronhowser.mods.critterworks.handler.web.WebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
@@ -25,7 +25,7 @@ class HoppingSpiderWanderBehavior(
 		get() = targetNodeUuid == null
 
 	override fun tick(level: ServerLevel, spider: HoppingSpider, nestPosition: Vec3): Boolean {
-		val savedData = WebSavedData.get(level)
+		val savedData = WebHandler.get(level)
 		val currentNode = savedData.getNode(currentNodeUuid)
 		if (currentNode == null) {
 			spider.stopBehavior(this)
@@ -70,7 +70,7 @@ class HoppingSpiderWanderBehavior(
 
 	private fun chooseTarget(level: ServerLevel, currentNode: WebNode): WebNode? {
 		if (level.isNight && currentNode.uuid != homeNodeUuid) {
-			return WebSavedData.get(level).getNode(homeNodeUuid)
+			return WebHandler.get(level).getNode(homeNodeUuid)
 		}
 
 		val network = currentNode.lines.firstNotNullOfOrNull { line -> line.network } ?: return null

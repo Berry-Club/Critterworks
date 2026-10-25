@@ -28,7 +28,7 @@ import net.minecraft.world.level.saveddata.SavedData
 import java.util.UUID
 import kotlin.collections.ArrayDeque
 
-class WebSavedData : SavedData() {
+class WebHandler : SavedData() {
 
 	private val nodes: MutableMap<UUID, WebNode> = mutableMapOf()
 	private val lines: MutableMap<UUID, WebLine> = mutableMapOf()
@@ -514,8 +514,8 @@ class WebSavedData : SavedData() {
 		private const val NODES_TAG = "Nodes"
 		private const val LINES_TAG = "Lines"
 
-		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): WebSavedData {
-			val savedData = WebSavedData()
+		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): WebHandler {
+			val savedData = WebHandler()
 			val nodesTag = tag.get(NODES_TAG) ?: return savedData
 			val linesTag = tag.get(LINES_TAG) ?: return savedData
 			val ops: DynamicOps<Tag> = registries.createSerializationContext(NbtOps.INSTANCE)
@@ -545,7 +545,7 @@ class WebSavedData : SavedData() {
 			return savedData
 		}
 
-		fun get(level: ServerLevel): WebSavedData {
+		fun get(level: ServerLevel): WebHandler {
 			if (level != level.server.overworld()) {
 				return get(level.server.overworld())
 			}
@@ -553,6 +553,6 @@ class WebSavedData : SavedData() {
 			return level.dataStorage.computeIfAbsent(FACTORY, SAVED_DATA_NAME)
 		}
 
-		private val FACTORY = Factory(::WebSavedData, ::load)
+		private val FACTORY = Factory(::WebHandler, ::load)
 	}
 }

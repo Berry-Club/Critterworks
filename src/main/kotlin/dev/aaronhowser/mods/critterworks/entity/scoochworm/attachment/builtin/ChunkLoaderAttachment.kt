@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.Scoochworm
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.ChunkLoaderAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.data.SyncedAttachmentData
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.ScoochwormSegment
-import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderSavedData
+import dev.aaronhowser.mods.critterworks.handler.chunkloader.ChunkLoaderHandler
 import dev.aaronhowser.mods.critterworks.registry.ModScoochwormAttachmentTypes
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -38,7 +38,7 @@ class ChunkLoaderAttachment : ScoochwormAttachment() {
 
 		val level = player.level() as? ServerLevel ?: return false
 
-		val loaderCount = ChunkLoaderSavedData
+		val loaderCount = ChunkLoaderHandler
 			.getAllRecords(level.server, player.uuid)
 			.size
 
@@ -95,7 +95,7 @@ class ChunkLoaderAttachment : ScoochwormAttachment() {
 		loadedChunk = newChunk
 		loadedLevel = level
 
-		ChunkLoaderSavedData.get(level)
+		ChunkLoaderHandler.get(level)
 			.updateRecord(
 				data.uuid,
 				data.placerUuid,
@@ -108,7 +108,7 @@ class ChunkLoaderAttachment : ScoochwormAttachment() {
 		val data = syncedData as? ChunkLoaderAttachmentData ?: return
 		val level = bodyPart.level() as? ServerLevel ?: return
 		removeTickets(loadedLevel ?: level, loadedChunk, data.uuid)
-		ChunkLoaderSavedData.get(level).removeRecord(data.uuid)
+		ChunkLoaderHandler.get(level).removeRecord(data.uuid)
 	}
 
 	companion object {

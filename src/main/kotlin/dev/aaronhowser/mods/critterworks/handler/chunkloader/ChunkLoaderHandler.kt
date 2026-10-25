@@ -8,7 +8,7 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
 
-class ChunkLoaderSavedData : SavedData() {
+class ChunkLoaderHandler : SavedData() {
 
 	private val recordsByAttachment: MutableMap<UUID, ChunkLoaderRecord> = mutableMapOf()
 
@@ -60,8 +60,8 @@ class ChunkLoaderSavedData : SavedData() {
 		private const val PLACER_UUID_TAG = "PlacerUuid"
 		private const val HEAD_UUID_TAG = "HeadUuid"
 
-		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): ChunkLoaderSavedData {
-			val savedData = ChunkLoaderSavedData()
+		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): ChunkLoaderHandler {
+			val savedData = ChunkLoaderHandler()
 			val attachmentsTag = tag.getCompound(ATTACHMENTS_TAG)
 
 			for (attachmentUuidString in attachmentsTag.allKeys) {
@@ -88,11 +88,11 @@ class ChunkLoaderSavedData : SavedData() {
 			return savedData
 		}
 
-		fun get(level: ServerLevel): ChunkLoaderSavedData {
+		fun get(level: ServerLevel): ChunkLoaderHandler {
 			return level.dataStorage
 				.computeIfAbsent(
 					Factory(
-						::ChunkLoaderSavedData,
+						::ChunkLoaderHandler,
 						::load
 					),
 					SAVED_DATA_NAME

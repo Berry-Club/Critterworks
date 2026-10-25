@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
-import dev.aaronhowser.mods.critterworks.handler.web.WebSavedData
+import dev.aaronhowser.mods.critterworks.handler.web.WebHandler
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -49,12 +49,12 @@ object CommonEvents {
 
 	@SubscribeEvent
 	fun onChunkWatch(event: ChunkWatchEvent.Watch) {
-		WebSavedData.get(event.player.serverLevel()).syncChunk(event.player, event.pos)
+		WebHandler.get(event.player.serverLevel()).syncChunk(event.player, event.pos)
 	}
 
 	@SubscribeEvent
 	fun onChunkUnwatch(event: ChunkWatchEvent.UnWatch) {
-		WebSavedData.get(event.player.serverLevel()).forgetChunk(event.player, event.pos)
+		WebHandler.get(event.player.serverLevel()).forgetChunk(event.player, event.pos)
 	}
 
 	@SubscribeEvent
@@ -71,13 +71,13 @@ object CommonEvents {
 		val level = event.level
 		if (level !is ServerLevel) return
 
-		WebSavedData.get(level).markForValidation(event.pos)
+		WebHandler.get(level).markForValidation(event.pos)
 	}
 
 	@SubscribeEvent
 	fun onServerTick(event: ServerTickEvent.Post) {
 		val level = event.server.overworld()
-		WebSavedData.get(level).validateChangedChunks(level)
+		WebHandler.get(level).validateChangedChunks(level)
 	}
 
 	@SubscribeEvent
