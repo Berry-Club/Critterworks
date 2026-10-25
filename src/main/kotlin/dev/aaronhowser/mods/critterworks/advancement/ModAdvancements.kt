@@ -26,6 +26,9 @@ object ModAdvancements {
 	val SPARKBUG_BUSH = guide("sparkbug_bush")
 	val USE_SPARKPOLLEN = guide("use_sparkpollen")
 
+	val FIND_SPROUTSNAIL = guide("find_sproutsnail")
+	val USE_SPROUTSNAIL = guide("use_sproutsnail")
+
 	val CATCH_FILTERFEEDER = guide("catch_filterfeeder")
 	val APPLY_TARDIGRADE = guide("apply_tardigade")
 

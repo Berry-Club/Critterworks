@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
+import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal.SproutsnailMoveToBonemealableBlockGoal
 import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal
 import net.minecraft.world.entity.ai.goal.TemptGoal
+import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -54,6 +56,17 @@ class SproutsnailEntity(
 
 	override fun isFood(stack: ItemStack): Boolean {
 		return stack.isItem(Tags.Items.MUSHROOMS)
+	}
+
+	override fun tick() {
+		super.tick()
+
+		if (isServerSide && tickCount % 200 == 0) {
+			val nearbyPlayers = level().getNearbyPlayers(TargetingConditions.forNonCombat(), this, boundingBox.inflate(20.0))
+			for (player in nearbyPlayers) {
+				ModAdvancements.trigger(player, ModAdvancements.FIND_SPROUTSNAIL)
+			}
+		}
 	}
 
 	override fun aiStep() {
@@ -105,6 +118,11 @@ class SproutsnailEntity(
 		) {
 			block.performBonemeal(level, random, position, state)
 			level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, position, 0)
+
+			val nearbyPlayers = level.getNearbyPlayers(TargetingConditions.forNonCombat(), this, boundingBox.inflate(20.0))
+			for (player in nearbyPlayers) {
+				ModAdvancements.trigger(player, ModAdvancements.USE_SPROUTSNAIL)
+			}
 		}
 	}
 
