@@ -1,0 +1,29 @@
+{
+  "parent": "critterworks:guide/find_sproutsnail",
+  "criteria": {
+    "evil_sproutsnail": {
+      "conditions": {
+        "action": "critterworks:guide/evil_sproutsnail"
+      },
+      "trigger": "aaron:player_action"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.evil_sproutsnail.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:skeleton_skull"
+    },
+    "title": {
+      "translate": "advancements.critterworks.evil_sproutsnail.title"
+    }
+  },
+  "requirements": [
+    [
+      "evil_sproutsnail"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

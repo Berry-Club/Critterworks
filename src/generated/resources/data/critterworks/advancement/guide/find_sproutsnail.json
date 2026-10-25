@@ -1,0 +1,29 @@
+{
+  "parent": "critterworks:guide/root",
+  "criteria": {
+    "find_sproutsnail": {
+      "conditions": {
+        "action": "critterworks:guide/find_sproutsnail"
+      },
+      "trigger": "aaron:player_action"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.find_sproutsnail.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "critterworks:snail_slime"
+    },
+    "title": {
+      "translate": "advancements.critterworks.find_sproutsnail.title"
+    }
+  },
+  "requirements": [
+    [
+      "find_sproutsnail"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

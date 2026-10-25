@@ -245,6 +245,45 @@ class ModAdvancementSubProvider(
 				)
 			)
 			.save(ModAdvancements.USE_SPARKPOLLEN)
+
+		val findSproutsnail = advancement()
+			.display(
+				ModItems.SNAIL_SLIME,
+				ModAdvancementLang.FIND_SPROUTSNAIL_TITLE.toComponent(),
+				ModAdvancementLang.FIND_SPROUTSNAIL_DESC.toComponent(),
+			)
+			.parent(root)
+			.addCriterion(
+				"find_sproutsnail",
+				playerAction(ModAdvancements.FIND_SPROUTSNAIL)
+			)
+			.save(ModAdvancements.FIND_SPROUTSNAIL)
+
+		advancement()
+			.display(
+				Items.BONE_MEAL,
+				ModAdvancementLang.USE_SPROUTSNAIL_TITLE.toComponent(),
+				ModAdvancementLang.USE_SPROUTSNAIL_DESC.toComponent(),
+			)
+			.parent(findSproutsnail)
+			.addCriterion(
+				"use_sproutsnail",
+				playerAction(ModAdvancements.USE_SPROUTSNAIL)
+			)
+			.save(ModAdvancements.USE_SPROUTSNAIL)
+
+		advancement()
+			.display(
+				Items.SKELETON_SKULL,
+				ModAdvancementLang.EVIL_SPROUTSNAIL_TITLE.toComponent(),
+				ModAdvancementLang.EVIL_SPROUTSNAIL_DESC.toComponent()
+			)
+			.parent(findSproutsnail)
+			.addCriterion(
+				"evil_sproutsnail",
+				playerAction(ModAdvancements.EVIL_SPROUTSNAIL)
+			)
+			.save(ModAdvancements.EVIL_SPROUTSNAIL)
 	}
 
 	private fun interactedWith(entityType: EntityType<*>): Criterion<PlayerInteractTrigger.TriggerInstance> {

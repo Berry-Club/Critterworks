@@ -1,0 +1,29 @@
+{
+  "parent": "critterworks:guide/find_sproutsnail",
+  "criteria": {
+    "use_sproutsnail": {
+      "conditions": {
+        "action": "critterworks:guide/use_sproutsnail"
+      },
+      "trigger": "aaron:player_action"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.use_sproutsnail.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:bone_meal"
+    },
+    "title": {
+      "translate": "advancements.critterworks.use_sproutsnail.title"
+    }
+  },
+  "requirements": [
+    [
+      "use_sproutsnail"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

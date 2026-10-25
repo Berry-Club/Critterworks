@@ -34,6 +34,13 @@ object ModAdvancementLang {
 	const val USE_SPARKPOLLEN_TITLE = "advancements.critterworks.use_sparkpollen.title"
 	const val USE_SPARKPOLLEN_DESC = "advancements.critterworks.use_sparkpollen.desc"
 
+	const val FIND_SPROUTSNAIL_TITLE = "advancements.critterworks.find_sproutsnail.title"
+	const val FIND_SPROUTSNAIL_DESC = "advancements.critterworks.find_sproutsnail.desc"
+	const val USE_SPROUTSNAIL_TITLE = "advancements.critterworks.use_sproutsnail.title"
+	const val USE_SPROUTSNAIL_DESC = "advancements.critterworks.use_sproutsnail.desc"
+	const val EVIL_SPROUTSNAIL_TITLE = "advancements.critterworks.evil_sproutsnail.title"
+	const val EVIL_SPROUTSNAIL_DESC = "advancements.critterworks.evil_sproutsnail.desc"
+
 	const val CATCH_FILTERFEEDER_TITLE = "advancements.critterworks.catch_filterfeeder.title"
 	const val CATCH_FILTERFEEDER_DESC = "advancements.critterworks.catch_filterfeeder.desc"
 	const val APPLY_TARDIGRADE_TITLE = "advancements.critterworks.apply_tardigade.title"
