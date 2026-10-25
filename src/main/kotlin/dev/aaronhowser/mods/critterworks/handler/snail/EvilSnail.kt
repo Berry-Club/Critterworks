@@ -1,13 +1,9 @@
 package dev.aaronhowser.mods.critterworks.handler.snail
 
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.ModDamageTypes
-import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -18,13 +14,12 @@ import net.minecraft.world.phys.Vec3
 class EvilSnail(
 	var pos: Vec3,
 	var dimension: ResourceKey<Level>,
-	var stationaryTicks: Int = STATIONARY_DURATION_TICKS
+	var accelerationTicksRemaining: Int = ACCELERATION_DURATION_TICKS
 ) {
 
 	fun tick(player: ServerPlayer?): TickResult {
-		if (stationaryTicks > 0) {
-			stationaryTicks--
-			return TickResult.CHANGED
+		if (accelerationTicksRemaining > 0) {
+			accelerationTicksRemaining--
 		}
 
 		if (player == null) return TickResult.NO_CHANGE
@@ -33,7 +28,12 @@ class EvilSnail(
 		val target = player.position().lerp(player.eyePosition, 0.5)
 		val offset = pos.vectorTo(target)
 		val distance = offset.length()
-		val speed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
+
+		val normalSpeed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
+		val elapsedAccelerationTicks = ACCELERATION_DURATION_TICKS - accelerationTicksRemaining
+		val accelerationProgress = (elapsedAccelerationTicks.toDouble() / ACCELERATION_DURATION_TICKS)
+			.coerceIn(0.0, 1.0)
+		val speed = normalSpeed * accelerationProgress * accelerationProgress
 
 		val isTouchingPlayer = player.boundingBox
 			.intersects(
@@ -45,12 +45,7 @@ class EvilSnail(
 				.source(ModDamageTypes.EVIL_SNAIL)
 
 			player.hurt(damageSource, Float.MAX_VALUE)
-
-			return if (player.isDeadOrDying) {
-				TickResult.REMOVE
-			} else {
-				TickResult.NO_CHANGE
-			}
+			return TickResult.REMOVE
 		}
 
 		val movement = offset.scale(minOf(speed, distance) / distance)
@@ -64,7 +59,10 @@ class EvilSnail(
 		tag.putDouble(POSITION_Y_TAG, pos.y)
 		tag.putDouble(POSITION_Z_TAG, pos.z)
 		tag.putString(DIMENSION_TAG, dimension.location().toString())
-		tag.putInt(STATIONARY_TICKS_TAG, stationaryTicks)
+
+		if (accelerationTicksRemaining > 0) {
+			tag.putInt(ACCELERATION_TICKS_TAG, accelerationTicksRemaining)
+		}
 
 		return tag
 	}
@@ -74,12 +72,8 @@ class EvilSnail(
 		private const val POSITION_Y_TAG = "PositionY"
 		private const val POSITION_Z_TAG = "PositionZ"
 		private const val DIMENSION_TAG = "Dimension"
-		private const val STATIONARY_TICKS_TAG = "StationaryTicks"
-		private const val STATIONARY_DURATION_TICKS = 5 * 20
-
-		fun getSnailName(playerName: Component): MutableComponent {
-			return ModEntityLang.EVIL_SNAIL.toComponent(playerName)
-		}
+		private const val ACCELERATION_TICKS_TAG = "AccelerationTicks"
+		private const val ACCELERATION_DURATION_TICKS = 10 * 20
 
 		fun fromTag(tag: CompoundTag): EvilSnail {
 			val pos = Vec3(
@@ -87,10 +81,11 @@ class EvilSnail(
 				tag.getDouble(POSITION_Y_TAG),
 				tag.getDouble(POSITION_Z_TAG)
 			)
-			val dimension = getDimension(tag)
-			val stationaryTicks = tag.getInt(STATIONARY_TICKS_TAG)
 
-			return EvilSnail(pos, dimension, stationaryTicks)
+			val dimension = getDimension(tag)
+			val accelerationTicksRemaining = tag.getInt(ACCELERATION_TICKS_TAG)
+
+			return EvilSnail(pos, dimension, accelerationTicksRemaining)
 		}
 
 		private fun getDimension(tag: CompoundTag): ResourceKey<Level> {
