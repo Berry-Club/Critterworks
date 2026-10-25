@@ -52,7 +52,7 @@ class PunchprawnWanderGoal(
 			val randomPosition = super.getPosition()
 			if (randomPosition != null) {
 				val floorPosition = findFloorPosition(BlockPos.containing(randomPosition))
-				if (floorPosition != null) return Vec3.atBottomCenterOf(floorPosition)
+				if (floorPosition != null) return floorPosition.bottomCenter
 			}
 
 			attempts++
@@ -128,8 +128,7 @@ class PunchprawnWanderGoal(
 		}
 
 		if (lowerPosition == null) return null
-
-		return Vec3.atCenterOf(lowerPosition)
+		return lowerPosition.center
 	}
 
 	companion object {

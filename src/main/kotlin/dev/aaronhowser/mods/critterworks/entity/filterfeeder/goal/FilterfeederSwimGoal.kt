@@ -60,8 +60,7 @@ class FilterfeederSwimGoal(
 		}
 
 		if (lowerPosition == null) return null
-
-		return Vec3.atCenterOf(lowerPosition)
+		return lowerPosition.center
 	}
 
 	companion object {

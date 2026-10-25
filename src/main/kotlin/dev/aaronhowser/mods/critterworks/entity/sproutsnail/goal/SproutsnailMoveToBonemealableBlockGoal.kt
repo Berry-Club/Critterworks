@@ -79,7 +79,7 @@ class SproutsnailMoveToBonemealableBlockGoal(
 		if (block !is BonemealableBlock) return false
 		if (!block.isValidBonemealTarget(level, position, state)) return false
 
-		val destination = Vec3.atBottomCenterOf(position)
+		val destination = position.bottomCenter
 		val offset = destination.subtract(sproutsnail.position())
 		return level.noCollision(sproutsnail, sproutsnail.boundingBox.move(offset))
 	}
