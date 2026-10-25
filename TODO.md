@@ -70,7 +70,10 @@
 	- Red spider webs
 	- Maybe spiders sit stationary on the web and that does the logic
 		- Make them look like circuit boards or something
-        - Their legs are the pins etc
+		- Their legs are the pins etc
+			- NE555
+	- Webstone Weaver
+		- Item that places lines
 
 # Farm critters?
 
@@ -78,6 +81,30 @@
 - Monster farming?
 - Crops and trees?
 	- Leaf Cutter Ants lol
+
+# Snails
+
+- Sproutsnail
+	- Spawns in swamps
+	- Bonemeals any block it's inside of
+		- Paths to nearby bonemealable blocks (like crops, not grass)
+	- Flower pot for a shell
+	- Occasionally drop Snail Slime
+		- Use as fertilizer
+	- Drop Shell Fragments on death
+		- Craft into the Snail Shield
+		- Has a small chance of spawning the evil snail
+- Evil Snail
+	- Goes in a straight line directly to you at all times
+	- You can only have a single snail chasing you at once
+	- Kills you instantly if it touches you
+	- Capture it in the Critter Cage to reveal it was actually a Decoy Snail
+		- Keep that one as a pet?
+		- Restarts the chase from far away
+		- Would there be a way to "win" so it actually stops chasing you?
+	- Probably wouldn't actually be an entity to prevent compatibility shenanigans
+		- SavedData or something instead? LevelActor? Needs to be synced and rendered
+		- Could literally be an entity attachment or something lol
 
 # Autocrafting?
 
@@ -113,46 +140,6 @@
 	- Shoots potions maybe?
 - One of those shield-head ants
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
-- Snail Shell
-	- Makes you immortal and immovable while sneaking
-	- Can't attack or interact or anything during
-	- Maybe it would also shrink you down and cover you with the snail shell model
-	- Get it from the Immortal Snail?
-		- Maybe rare structures under ground that are like, ancient broken-down Snail Containment Units
-		- Getting close to it unleashes the snail
-		- It moves in a straight line towards you at all times, going through blocks because pathfinding is a pain
-		- Probably wouldn't actually be an entity to prevent compatibility shenanigans
-			- SavedData or something instead? LevelActor? Needs to be synced and rendered
-			- Could literally be an entity attachment or something lol
-		- How would you win this?
-			- Re-contain it?
-				- How does that get you its shell though?
-			- Kill it?
-				- Not exactly an IMMORTAL snail then though
-			- Remove its shell and turn it into a slug or something?
-			- It should probably not be super trivial
-			- Maybe you capture it and it's revealed to be a Decoy Snail
-				- Spawns a new snail far away that's retconned to have always been the real snail, effectively restarting the chase
-		- Non-immortal snails spawn naturally
-			- If they're killed, they have a small percent chance to have actually been the Immortal Snail
-			- These snails need to perform some kind of function, surely
-				- Pocket dimension you can enter and build in?
-					- Use Immersive Portals tech to see into and out of the dimension?
-				- Help with farms?
-					- Hydrate farmland
-					- Bonemeal crops
-					- **FLOWER POT SNAILS**
-				- Hide in shell when there's monsters nearby?
-					- Add a new Entity Filterfeeder that's used instead?
-				- Snail racing?
-					- Undertale reference
-					- Put saddle on them and ride them but it's hilariously slow and useless
-			- Passively drop slime balls while alive
-				- New Snail Slime item instead?
-					- Place to make any block slippery/sticky?
-			- Drop shell fragments on death
-				- Use these to craft the Shell
-				- Gives a reason to kill them, which can start the chase
 
 # Guidebook
 
