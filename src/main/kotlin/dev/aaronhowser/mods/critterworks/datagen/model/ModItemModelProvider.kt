@@ -122,6 +122,7 @@ class ModItemModelProvider(
 		basicItem(ModItems.SPARKPOLLEN_POUCH.get())
 		basicItem(ModItems.TARDIGRADE.get())
 		basicItem(ModItems.PEARL.get())
+		basicItem(ModItems.SNAIL_SLIME.get())
 	}
 
 	private fun filterfeederItems() {
