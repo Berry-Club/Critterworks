@@ -105,6 +105,7 @@
 	- Probably wouldn't actually be an entity to prevent compatibility shenanigans
 		- SavedData or something instead? LevelActor? Needs to be synced and rendered
 		- Could literally be an entity attachment or something lol
+	- Compass that points to it
 
 # Autocrafting?
 
