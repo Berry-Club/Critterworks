@@ -123,6 +123,7 @@ class ModItemModelProvider(
 		basicItem(ModItems.TARDIGRADE.get())
 		basicItem(ModItems.PEARL.get())
 		basicItem(ModItems.SNAIL_SLIME.get())
+		basicItem(ModItems.SNAIL_SHELL_FRAGMENT.get())
 	}
 
 	private fun filterfeederItems() {
