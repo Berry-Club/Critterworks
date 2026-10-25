@@ -71,17 +71,29 @@ object ModItems : AaronItemRegistry() {
 	val SCOOCHWORM_SPAWN_EGG: DeferredItem<ScoochwormSpawnEggItem> =
 		register("scoochworm_spawn_egg", ::ScoochwormSpawnEggItem)
 	val PUNCHPRAWN_SPAWN_EGG: DeferredItem<SpawnEggItem> =
-		registerSpawnEgg("punchprawn_spawn_egg", ModEntityTypes.PUNCHPRAWN::get, 0x0E88BB, 0xFE0901)
+		registerSpawnEgg(
+			"punchprawn_spawn_egg",
+			ModEntityTypes.PUNCHPRAWN,
+			0x0E88BB, 0xFE0901
+		)
 	val SPROUTSNAIL_SPAWN_EGG: DeferredItem<SpawnEggItem> =
-		registerSpawnEgg("sproutsnail_spawn_egg", ModEntityTypes.SPROUTSNAIL::get, 0x7BFFA3, 0xFFA7A4)
+		registerSpawnEgg(
+			"sproutsnail_spawn_egg",
+			ModEntityTypes.SPROUTSNAIL,
+			0x7BFFA3, 0xFFA7A4
+		)
 	val ITEM_FILTERFEEDER_SPAWN_EGG: DeferredItem<SpawnEggItem> =
-		registerSpawnEgg("item_filterfeeder_spawn_egg", ModEntityTypes.FILTERFEEDER::get, 0xF0C3D2, 0x522635) {
-			filterfeederSpawnEggProperties(FilterfeederEntity.FilterType.ITEM)
-		}
+		registerSpawnEgg(
+			"item_filterfeeder_spawn_egg",
+			ModEntityTypes.FILTERFEEDER,
+			0xF0C3D2, 0x522635
+		) { filterfeederSpawnEggProperties(FilterfeederEntity.FilterType.ITEM) }
 	val FLUID_FILTERFEEDER_SPAWN_EGG: DeferredItem<SpawnEggItem> =
-		registerSpawnEgg("fluid_filterfeeder_spawn_egg", ModEntityTypes.FILTERFEEDER::get, 0xC4E7EF, 0x264851) {
-			filterfeederSpawnEggProperties(FilterfeederEntity.FilterType.FLUID)
-		}
+		registerSpawnEgg(
+			"fluid_filterfeeder_spawn_egg",
+			ModEntityTypes.FILTERFEEDER,
+			0xC4E7EF, 0x264851
+		) { filterfeederSpawnEggProperties(FilterfeederEntity.FilterType.FLUID) }
 
 	private fun filterfeederSpawnEggProperties(filterType: FilterfeederEntity.FilterType): Item.Properties {
 		val entityData = CompoundTag()
