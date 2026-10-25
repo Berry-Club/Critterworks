@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 class EvilSnail(
@@ -34,7 +35,12 @@ class EvilSnail(
 		val distance = offset.length()
 		val speed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
 
-		if (distance <= speed * 1.25) {
+		val isTouchingPlayer = player.boundingBox
+			.intersects(
+				AABB.ofSize(pos, 1.0, 1.0, 1.0)
+			)
+
+		if (isTouchingPlayer) {
 			val damageSource = player.damageSources()
 				.source(ModDamageTypes.EVIL_SNAIL)
 
