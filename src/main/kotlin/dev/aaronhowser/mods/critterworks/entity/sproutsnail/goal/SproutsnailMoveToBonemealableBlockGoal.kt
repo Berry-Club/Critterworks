@@ -23,7 +23,7 @@ class SproutsnailMoveToBonemealableBlockGoal(
 		if (sproutsnail.tickCount < nextSearchTick) return false
 
 		nextSearchTick = sproutsnail.tickCount + SEARCH_INTERVAL_TICKS
-		path = findPathToFarthestBonemealableBlock()
+		path = findPathToBonemealableBlock()
 
 		return path != null
 	}
@@ -42,13 +42,13 @@ class SproutsnailMoveToBonemealableBlockGoal(
 		sproutsnail.navigation.stop()
 	}
 
-	private fun findPathToFarthestBonemealableBlock(): Path? {
+	private fun findPathToBonemealableBlock(): Path? {
 		val origin = sproutsnail.blockPosition()
 		val candidates = getBonemealableBlockPositions(origin)
 
 		while (candidates.isNotEmpty()) {
-			val farthestPosition = removeFarthestPosition(candidates, origin)
-			val path = sproutsnail.navigation.createPath(farthestPosition, 0) ?: continue
+			val position = removeWeightedPosition(candidates)
+			val path = sproutsnail.navigation.createPath(position, 0) ?: continue
 			if (path.canReach()) return path
 		}
 
@@ -80,27 +80,31 @@ class SproutsnailMoveToBonemealableBlockGoal(
 		return level.noCollision(sproutsnail, sproutsnail.boundingBox.move(offset))
 	}
 
-	private fun removeFarthestPosition(
-		positions: MutableList<BlockPos>,
-		origin: BlockPos
-	): BlockPos {
-		var farthestIndex = 0
-		var farthestDistance = Double.NEGATIVE_INFINITY
+	private fun removeWeightedPosition(positions: MutableList<BlockPos>): BlockPos {
+		var totalWeight = 0.0
+
+		for (position in positions) {
+			totalWeight += getPositionWeight(position)
+		}
+
+		var remainingWeight = sproutsnail.random.nextDouble() * totalWeight
 		var index = 0
 
 		while (index < positions.size) {
 			val position = positions[index]
-			val distance = position.distSqr(origin)
+			remainingWeight -= getPositionWeight(position)
 
-			if (distance > farthestDistance) {
-				farthestIndex = index
-				farthestDistance = distance
-			}
+			if (remainingWeight <= 0.0) return positions.removeAt(index)
 
 			index++
 		}
 
-		return positions.removeAt(farthestIndex)
+		return positions.removeAt(positions.lastIndex)
+	}
+
+	private fun getPositionWeight(position: BlockPos): Double {
+		return sproutsnail.position()
+			.distanceTo(Vec3.atBottomCenterOf(position))
 	}
 
 	companion object {
