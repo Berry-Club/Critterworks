@@ -30,9 +30,13 @@ class EvilSnail(
 
 		val offset = pos.vectorTo(player.eyePosition)
 		val distance = offset.length()
-		if (distance == 0.0) return false
-
 		val speed = ServerConfig.CONFIG.sproutsnailEvilSpeed.get()
+
+		if (distance <= speed * 1.25) {
+			player.kill()
+			return true
+		}
+
 		val movement = offset.scale(minOf(speed, distance) / distance)
 		pos = pos.add(movement)
 		return true
