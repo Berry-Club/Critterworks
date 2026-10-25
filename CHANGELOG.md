@@ -8,32 +8,34 @@
 		- Follow you around while tamed, in and out of water
 		- Sneak right-click your tamed Punchprawn to put them on your head
 			- When riding your head, bare-handed melee attacks become much stronger
-			- Sneak right-click the ground with an empty hand to place it back down again
+			- Right-click a block to place it back down again
 - Sproutsnail
 	- New mob found in swamps
-	- Bonemeals applicable blocks it travels through
-	- Tries to move to the farthest bonemealable block nearby
-	- Passively drops Snail Slime, and drops Snail Shell Fragments when killed
+	- Has a configurable 20% chance to Bone Meal applicable blocks it travels through
+	- Prefers moving toward farther bonemealable blocks nearby
+	- Adults passively drop Snail Slime every 5–10 minutes
+	- Has a 10% chance to drop a Snail Shell Fragment when killed by a player
 - Snail Shield
-	- Crafted and repaired with Snail Shell Fragments
+	- Repaired with Snail Shell Fragments
 	- Makes you immortal while active
 	- Activates while sneaking with it in either hand
-	- Reduces movement speed by 90% while active
+	- Greatly reduces movement speed while active
 	- Also cannot left or right click during this
 	- After standing still for 5 seconds, most mobs forget and cannot target you
 - The Snail That Kills You
-	- Has a 5% chance of spawning when a Sproutsnail is killed by the player
+	- Has a 1% chance of appearing when a Sproutsnail is killed by the player
 		- Chance is configurable
 		- Does not spawn if you already have one chasing you
 	- Constantly moves in a straight line towards you
 		- Goes through blocks
 		- Moves 0.05 blocks per tick by default (configurable)
 		- Only moves while the player is online and in the same dimension
-	- Can probably be caught in the Critter Cage
-	- When the Snail That Kills You reaches you, it kills you
-    - Has some commands under `/critterworks snail-chase`
+	- Is not a conventional entity and cannot be caught in a Critter Cage
+	- When it reaches you, it kills you and ends the chase
+		- An active Snail Shield prevents the damage, but the chase still ends
+	- Has commands under `/critterworks snail-chase`
 - Pearl
-	- Small chance of being dropped when giving Sand to Filterfeeders
+	- Has a 10% chance of being produced when giving Sand to Filterfeeders
 - Snail Slime
 - Snail Shell Fragment
 - Several advancements
@@ -42,7 +44,7 @@
 
 - Hopping Spiders can now be worn in your head slot
 - Scoochworm parts have been given the `#c:capturing_not_supported` and `#c:teleporting_not_supported` tags
-- The Critter Cage can now capture any entity lacking the `#c:capturing_not_supported` tag
+- The Critter Cage can now capture most serializable living entities lacking the `#c:capturing_not_supported` tag
 
 ### Fixed
 
@@ -86,9 +88,9 @@
 		- Inputs spread their FE equally across all outputs that accept
 		- Firefly particles spawn near Pollen Points that are doing work
 - Tardigrade
-	- Craft with any arbitrary itemstack to make it unkillable while dropped
+	- Craft with almost any item stack to protect it while dropped
 		- Technically only applies to damage sources that use the tag `#critterworks:tardigrade_protects_from`
-			- Only includes `#c:is_environment` by default
+			- Only includes `#neoforge:is_environment` by default
 		- Config that makes it also disable expiring after 5 minutes
 	- Craft a Tardigraded item with a Potion of Poison to remove it
 
