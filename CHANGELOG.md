@@ -37,6 +37,7 @@
 - Pearl
 	- Has a 10% chance of being produced when giving Sand to Filterfeeders
 - Snail Slime
+	- Acts like Bone Meal
 - Snail Shell Fragment
 - Several advancements
 
