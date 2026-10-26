@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.util.Mth
 import software.bernie.geckolib.cache.`object`.GeoBone
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer
+import software.bernie.geckolib.util.RenderUtil
 
 class SnailShieldHeadLayer(
 	private val shellRenderer: SnailShieldRenderer,
@@ -41,7 +42,7 @@ class SnailShieldHeadLayer(
 		if (shellState != SnailShieldState.PARTIALLY_SHELLED) return
 
 		poseStack.withPose {
-			poseStack.translate(0f, 0f, HEAD_FORWARD_OFFSET)
+			RenderUtil.translateToPivotPoint(poseStack, bone)
 			poseStack.scale(-1f, -1f, 1f)
 
 			headModel.setupAnim(
@@ -73,6 +74,5 @@ class SnailShieldHeadLayer(
 
 	companion object {
 		private const val SHELL_BONE_NAME = "head_pos"
-		private const val HEAD_FORWARD_OFFSET = -6f / 16f
 	}
 }

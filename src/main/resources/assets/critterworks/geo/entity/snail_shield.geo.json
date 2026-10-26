@@ -79,7 +79,7 @@
 				{
 					"name": "head_pos",
 					"parent": "head_tunnel",
-					"pivot": [0, 0, -9]
+					"pivot": [0, 0, -12]
 				}
 			]
 		}
