@@ -6,4 +6,10 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer
 
 class SproutsnailRenderer(
 	context: EntityRendererProvider.Context
-) : GeoEntityRenderer<SproutsnailEntity>(context, SproutsnailModel())
+) : GeoEntityRenderer<SproutsnailEntity>(context, SproutsnailModel()) {
+
+	init {
+		addRenderLayer(SproutsnailFlowerLayer(this))
+	}
+
+}

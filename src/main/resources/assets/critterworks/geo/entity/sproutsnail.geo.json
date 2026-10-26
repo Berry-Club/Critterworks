@@ -32,6 +32,11 @@
 					]
 				},
 				{
+					"name": "flower_pos",
+					"parent": "shell",
+					"pivot": [0, 13, 1.5]
+				},
+				{
 					"name": "head",
 					"parent": "root",
 					"pivot": [0, 0.5, -2],

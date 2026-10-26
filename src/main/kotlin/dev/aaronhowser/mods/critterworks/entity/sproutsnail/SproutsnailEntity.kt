@@ -2,19 +2,28 @@ package dev.aaronhowser.mods.critterworks.entity.sproutsnail
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isSameItemSameComponents
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal.SproutsnailMoveToBonemealableBlockGoal
 import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -46,6 +55,13 @@ class SproutsnailEntity(
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 	private var slimeDropTime = random.nextRange(6000, 12001)
 
+	var flower: ItemStack
+		get() = entityData.get(DATA_FLOWER)
+		private set(value) {
+			val storedFlower = if (value.isEmpty) ItemStack.EMPTY else value.copyWithCount(1)
+			entityData.set(DATA_FLOWER, storedFlower)
+		}
+
 	override fun registerGoals() {
 		goalSelector.addGoal(1, TemptGoal(this, 1.0, Tags.Items.MUSHROOMS.asIngredient(), false))
 		goalSelector.addGoal(2, SproutsnailMoveToBonemealableBlockGoal(this))
@@ -56,6 +72,39 @@ class SproutsnailEntity(
 
 	override fun isFood(stack: ItemStack): Boolean {
 		return stack.isItem(Tags.Items.MUSHROOMS)
+	}
+
+	override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+		val heldStack = player.getItemInHand(hand)
+
+		if (heldStack.isItem(ModItemTagsProvider.SPROUTSNAIL_FLOWERS)) {
+			if (flower.isSameItemSameComponents(heldStack)) return InteractionResult.PASS
+
+			if (isServerSide) {
+				val previousFlower = flower.copy()
+				flower = heldStack
+				heldStack.consume(1, player)
+				player.giveOrDropStack(previousFlower)
+
+				setPersistenceRequired()
+				playSound(SoundEvents.GRASS_PLACE, 1f, 1f)
+				gameEvent(GameEvent.BLOCK_CHANGE, player)
+			}
+
+			return InteractionResult.sidedSuccess(isClientSide)
+		} else if (heldStack.isEmpty && !flower.isEmpty) {
+			if (isServerSide) {
+				player.giveOrDropStack(flower.copy())
+				flower = ItemStack.EMPTY
+
+				playSound(SoundEvents.ITEM_FRAME_REMOVE_ITEM, 1f, 1f)
+				gameEvent(GameEvent.BLOCK_CHANGE, player)
+			}
+
+			return InteractionResult.sidedSuccess(isClientSide)
+		}
+
+		return super.mobInteract(player, hand)
 	}
 
 	override fun tick() {
@@ -126,6 +175,15 @@ class SproutsnailEntity(
 		}
 	}
 
+	override fun dropEquipment() {
+		super.dropEquipment()
+
+		if (flower.isEmpty) return
+
+		spawnAtLocation(flower.copy())
+		flower = ItemStack.EMPTY
+	}
+
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
 		return null
 	}
@@ -136,11 +194,30 @@ class SproutsnailEntity(
 		if (compound.contains(SLIME_DROP_TIME_TAG)) {
 			slimeDropTime = compound.getInt(SLIME_DROP_TIME_TAG)
 		}
+
+		if (compound.contains(FLOWER_TAG)) {
+			flower = ItemStack.parseOptional(
+				registryAccess(),
+				compound.getCompound(FLOWER_TAG)
+			)
+		}
 	}
 
 	override fun addAdditionalSaveData(compound: CompoundTag) {
 		super.addAdditionalSaveData(compound)
 		compound.putInt(SLIME_DROP_TIME_TAG, slimeDropTime)
+
+		if (!flower.isEmpty) {
+			compound.put(
+				FLOWER_TAG,
+				flower.save(registryAccess())
+			)
+		}
+	}
+
+	override fun defineSynchedData(builder: SynchedEntityData.Builder) {
+		super.defineSynchedData(builder)
+		builder.define(DATA_FLOWER, ItemStack.EMPTY)
 	}
 
 	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {}
@@ -150,6 +227,13 @@ class SproutsnailEntity(
 		const val WIDTH = 0.6f
 		const val HEIGHT = 0.7f
 		private const val SLIME_DROP_TIME_TAG = "SlimeDropTime"
+		private const val FLOWER_TAG = "Flower"
+
+		private val DATA_FLOWER: EntityDataAccessor<ItemStack> =
+			SynchedEntityData.defineId(
+				SproutsnailEntity::class.java,
+				EntityDataSerializers.ITEM_STACK
+			)
 
 		fun createAttributes(): AttributeSupplier {
 			return createMobAttributes()

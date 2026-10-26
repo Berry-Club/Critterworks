@@ -24,6 +24,24 @@ class ModItemTagsProvider(
 ) : ItemTagsProvider(output, lookupProvider, blockTags, Critterworks.MOD_ID, existingFileHelper) {
 
 	override fun addTags(provider: HolderLookup.Provider) {
+		tag(SPROUTSNAIL_FLOWERS)
+			.add(
+				Items.DANDELION,
+				Items.POPPY,
+				Items.BLUE_ORCHID,
+				Items.ALLIUM,
+				Items.AZURE_BLUET,
+				Items.RED_TULIP,
+				Items.ORANGE_TULIP,
+				Items.WHITE_TULIP,
+				Items.PINK_TULIP,
+				Items.OXEYE_DAISY,
+				Items.CORNFLOWER,
+				Items.LILY_OF_THE_VALLEY,
+				Items.WITHER_ROSE,
+				Items.TORCHFLOWER
+			)
+
 		tag(DYEBERRIES)
 			.add(
 				ModItems.RED_DYEBERRY,
@@ -80,6 +98,7 @@ class ModItemTagsProvider(
 			ItemTags.create(Critterworks.modResource(id))
 
 		val DYEBERRIES = tk("dyeberries")
+		val SPROUTSNAIL_FLOWERS = tk("sproutsnail_flowers")
 		val SCOOCHWORM_LOOK_AT = tk("scoochworm_look_at")
 		val SCOOCHWORM_SADDLES = tk("scoochworm_saddles")
 		val WEB_LINE_INTERACTABLE = tk("web_line_interactable")
