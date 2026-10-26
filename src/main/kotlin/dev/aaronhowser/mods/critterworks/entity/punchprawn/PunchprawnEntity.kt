@@ -34,6 +34,8 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation
 import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.player.Player
@@ -78,8 +80,10 @@ class PunchprawnEntity(
 		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
 		goalSelector.addGoal(6, RandomLookAroundGoal(this))
 
-		targetSelector.addGoal(1, HurtByTargetGoal(this))
-		targetSelector.addGoal(2, NearestAttackableTargetGoal(this, Player::class.java, true))
+		targetSelector.addGoal(1, OwnerHurtByTargetGoal(this))
+		targetSelector.addGoal(2, OwnerHurtTargetGoal(this))
+		targetSelector.addGoal(3, HurtByTargetGoal(this))
+		targetSelector.addGoal(4, NearestAttackableTargetGoal(this, Player::class.java, true))
 	}
 
 	override fun createNavigation(level: Level): PathNavigation {
