@@ -3,17 +3,27 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.aaron.misc.AaronUtil
 import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
+import dev.aaronhowser.mods.critterworks.handler.snail.ClientEvilSnails
+import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
+import dev.aaronhowser.mods.critterworks.packet.client_to_server.UseCageOnEvilSnailPacket
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
+import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
@@ -23,8 +33,13 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.item.context.UseOnContext
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.HitResult
 import net.neoforged.neoforge.common.Tags
+import kotlin.math.cos
+import kotlin.math.sin
 
 class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE.get(), properties) {
 
@@ -175,6 +190,62 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 			val scoochworm = ScoochwormEntity(ModEntityTypes.SCOOCHWORM.get(), level)
 			scoochworm.load(entityData.copyTag())
 			return scoochworm
+		}
+
+		fun tryClickSnail(player: Player, hand: InteractionHand): Boolean {
+			val cage = player.getItemInHand(hand)
+			if (!cage.isItem(ModItems.CRITTER_CAGE) || cage.has(ModDataComponents.ENTITY_DATA)) return false
+
+			if (player is ServerPlayer) {
+				return tryClickSnailOnServer(player)
+			}
+
+			val snail = ClientEvilSnails.getSnail(player.uuid) ?: return false
+			val snailPosition = snail.getPosition(System.nanoTime())
+			val snailBounds = AABB.ofSize(snailPosition, 1.0, 1.0, 1.0)
+			if (!isLookingAtSnail(player, snailBounds)) return false
+
+			UseCageOnEvilSnailPacket(hand).messageServer()
+			return true
+		}
+
+		private fun tryClickSnailOnServer(player: ServerPlayer): Boolean {
+			val snailHandler = EvilSnailHandler.get(player.serverLevel())
+			val snail = snailHandler.getSnail(player) ?: return false
+			if (snail.dimension != player.level().dimension()) return false
+			if (!isLookingAtSnail(player, snail.boundingBox)) return false
+
+			val restartDistance = ServerConfig.CONFIG.sproutsnailEvilCageRestartDistance.get()
+			val angle = player.random.nextDouble() * Mth.TWO_PI.toDouble()
+			val restartPosition = player.position()
+				.add(
+					cos(angle) * restartDistance,
+					0.0,
+					sin(angle) * restartDistance
+				)
+
+			snailHandler.addSnail(player, restartPosition)
+			player.sendSystemMessage(Component.translatable(ModMessageLang.EVIL_SNAIL_CAGE_MESSAGE))
+			return true
+		}
+
+		private fun isLookingAtSnail(player: Player, snailBounds: AABB): Boolean {
+			val eyePosition = player.eyePosition
+			val lookEnd = eyePosition.add(player.lookAngle.scale(player.entityInteractionRange()))
+			val snailHit = snailBounds.clip(eyePosition, lookEnd).orElse(null) ?: return false
+			val blockHit = player.level().clip(
+				ClipContext(
+					eyePosition,
+					lookEnd,
+					ClipContext.Block.COLLIDER,
+					ClipContext.Fluid.NONE,
+					player
+				)
+			)
+
+			if (blockHit.type == HitResult.Type.MISS) return true
+
+			return eyePosition.distanceToSqr(snailHit) <= eyePosition.distanceToSqr(blockHit.location)
 		}
 	}
 

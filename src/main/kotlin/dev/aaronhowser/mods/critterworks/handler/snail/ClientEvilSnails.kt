@@ -13,6 +13,10 @@ object ClientEvilSnails {
 		return snails.values
 	}
 
+	fun getSnail(uuid: UUID): ClientEvilSnail? {
+		return snails[uuid]
+	}
+
 	fun replaceWith(syncedSnails: List<SnailData>) {
 		val retainedSnailUuids = mutableSetOf<UUID>()
 		val updateTimeNanos = System.nanoTime()

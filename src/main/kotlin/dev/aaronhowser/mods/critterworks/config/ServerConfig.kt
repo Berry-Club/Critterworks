@@ -25,6 +25,7 @@ class ServerConfig(
 	lateinit var sproutsnailBonemealChance: ModConfigSpec.DoubleValue
 	lateinit var sproutsnailEvilChance: ModConfigSpec.DoubleValue
 	lateinit var sproutsnailEvilSpeed: ModConfigSpec.DoubleValue
+	lateinit var sproutsnailEvilCageRestartDistance: ModConfigSpec.DoubleValue
 
 	lateinit var dyeberryVineReplacementChance: ModConfigSpec.DoubleValue
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
@@ -84,6 +85,10 @@ class ServerConfig(
 		sproutsnailEvilSpeed = builder
 			.comment("How fast the Immortal Snail moves towards the player it's hunting, in meters per tick")
 			.defineInRange("sproutsnailEvilSpeed", 0.05, Double.MIN_VALUE, Double.MAX_VALUE)
+
+		sproutsnailEvilCageRestartDistance = builder
+			.comment("How far away the Immortal Snail restarts when caught with a Critter Cage")
+			.defineInRange("sproutsnailEvilCageRestartDistance", 10_000.0, 0.0, Double.MAX_VALUE)
 	}
 
 	private fun scoochwormAttachmentConfigs() {

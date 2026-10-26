@@ -12,6 +12,7 @@ object ModMessageLang {
 	const val LINE_REMOVED_MESSAGE = "item.critterworks.artificial_spinnerets.line_removed"
 	const val POLLEN_POINT_TOO_FAR_MESSAGE = "item.critterworks.sparkpollen_pouch.too_far"
 	const val POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE = "item.critterworks.sparkpollen_pouch.no_energy_connection"
+	const val EVIL_SNAIL_CAGE_MESSAGE = "message.critterworks.evil_snail_cage"
 
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {
@@ -25,6 +26,7 @@ object ModMessageLang {
 			add(LINE_REMOVED_MESSAGE, "Web line removed")
 			add(POLLEN_POINT_TOO_FAR_MESSAGE, "The Pollen Point is too far from the Sparkbug Bush")
 			add(POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE, "The selected face cannot transfer energy")
+			add(EVIL_SNAIL_CAGE_MESSAGE, "You thought you caught it, but it was only a decoy snail...")
 		}
 	}
 

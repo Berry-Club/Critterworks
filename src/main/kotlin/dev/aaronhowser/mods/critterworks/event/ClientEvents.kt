@@ -17,6 +17,7 @@ import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDe
 import dev.aaronhowser.mods.critterworks.handler.snail.ClientEvilSnails
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.item.CritterCageItem
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShieldMovedPacket
 import dev.aaronhowser.mods.critterworks.particle.FireflyParticleProvider
@@ -93,6 +94,11 @@ object ClientEvents {
 		) {
 			event.isCanceled = true
 			event.setSwingHand(false)
+			return
+		}
+
+		if (player != null && CritterCageItem.tryClickSnail(player, event.hand)) {
+			event.isCanceled = true
 			return
 		}
 

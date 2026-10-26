@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.packet
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacketRegistrar
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShieldMovedPacket
+import dev.aaronhowser.mods.critterworks.packet.client_to_server.UseCageOnEvilSnailPacket
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
@@ -19,6 +20,7 @@ object ModPacketHandler : AaronPacketRegistrar {
 		toClient(registrar, ShowWebPathPacket.TYPE, ShowWebPathPacket.STREAM_CODEC)
 		toClient(registrar, SyncEvilSnailsPacket.TYPE, SyncEvilSnailsPacket.STREAM_CODEC)
 		toServer(registrar, SnailShieldMovedPacket.TYPE, SnailShieldMovedPacket.STREAM_CODEC)
+		toServer(registrar, UseCageOnEvilSnailPacket.TYPE, UseCageOnEvilSnailPacket.STREAM_CODEC)
 		toServer(registrar, WebLineInteractPacket.TYPE, WebLineInteractPacket.STREAM_CODEC)
 	}
 }
