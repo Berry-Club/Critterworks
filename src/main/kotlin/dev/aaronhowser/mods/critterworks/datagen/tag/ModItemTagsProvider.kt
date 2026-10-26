@@ -25,16 +25,78 @@ class ModItemTagsProvider(
 
 	override fun addTags(provider: HolderLookup.Provider) {
 		tag(SPROUTSNAIL_FLOWERS)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_SWAMP)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_JUNGLE)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_ARID)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_SAVANNA)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_TAIGA)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_MUSHROOM)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_LUSH_CAVES)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_FLORAL)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_FOREST)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_PLAINS)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_NETHER)
+			.addTag(SPROUTSNAIL_SPAWN_PLANTS_DEFAULT)
 			.add(
-				Items.OAK_SAPLING,
-				Items.SPRUCE_SAPLING,
-				Items.BIRCH_SAPLING,
-				Items.JUNGLE_SAPLING,
-				Items.ACACIA_SAPLING,
-				Items.CHERRY_SAPLING,
-				Items.DARK_OAK_SAPLING,
+				Items.WITHER_ROSE,
+				Items.TORCHFLOWER
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_SWAMP)
+			.add(
 				Items.MANGROVE_PROPAGULE,
+				Items.BLUE_ORCHID,
 				Items.FERN,
+				Items.RED_MUSHROOM,
+				Items.BROWN_MUSHROOM
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_JUNGLE)
+			.add(
+				Items.JUNGLE_SAPLING,
+				Items.BAMBOO,
+				Items.FERN,
+				Items.RED_MUSHROOM,
+				Items.BROWN_MUSHROOM
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_ARID)
+			.add(
+				Items.CACTUS,
+				Items.DEAD_BUSH
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_SAVANNA)
+			.add(
+				Items.ACACIA_SAPLING,
+				Items.DANDELION,
+				Items.POPPY,
+				Items.DEAD_BUSH
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_TAIGA)
+			.add(
+				Items.SPRUCE_SAPLING,
+				Items.FERN,
+				Items.RED_MUSHROOM,
+				Items.BROWN_MUSHROOM
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_MUSHROOM)
+			.add(
+				Items.RED_MUSHROOM,
+				Items.BROWN_MUSHROOM
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_LUSH_CAVES)
+			.add(
+				Items.AZALEA,
+				Items.FLOWERING_AZALEA,
+				Items.FERN
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_FLORAL)
+			.add(
 				Items.DANDELION,
 				Items.POPPY,
 				Items.BLUE_ORCHID,
@@ -46,20 +108,55 @@ class ModItemTagsProvider(
 				Items.PINK_TULIP,
 				Items.OXEYE_DAISY,
 				Items.CORNFLOWER,
+				Items.LILY_OF_THE_VALLEY
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_FOREST)
+			.add(
+				Items.OAK_SAPLING,
+				Items.BIRCH_SAPLING,
+				Items.CHERRY_SAPLING,
+				Items.DARK_OAK_SAPLING,
+				Items.FERN,
+				Items.DANDELION,
+				Items.POPPY,
 				Items.LILY_OF_THE_VALLEY,
-				Items.WITHER_ROSE,
-				Items.TORCHFLOWER,
 				Items.RED_MUSHROOM,
 				Items.BROWN_MUSHROOM,
-				Items.DEAD_BUSH,
-				Items.CACTUS,
-				Items.BAMBOO,
+				Items.AZALEA,
+				Items.FLOWERING_AZALEA
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_PLAINS)
+			.add(
+				Items.OAK_SAPLING,
+				Items.DANDELION,
+				Items.POPPY,
+				Items.AZURE_BLUET,
+				Items.RED_TULIP,
+				Items.ORANGE_TULIP,
+				Items.WHITE_TULIP,
+				Items.PINK_TULIP,
+				Items.OXEYE_DAISY,
+				Items.CORNFLOWER
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_NETHER)
+			.add(
 				Items.CRIMSON_FUNGUS,
 				Items.WARPED_FUNGUS,
 				Items.CRIMSON_ROOTS,
-				Items.WARPED_ROOTS,
-				Items.AZALEA,
-				Items.FLOWERING_AZALEA
+				Items.WARPED_ROOTS
+			)
+
+		tag(SPROUTSNAIL_SPAWN_PLANTS_DEFAULT)
+			.add(
+				Items.OAK_SAPLING,
+				Items.DANDELION,
+				Items.POPPY,
+				Items.AZURE_BLUET,
+				Items.OXEYE_DAISY,
+				Items.CORNFLOWER
 			)
 
 		tag(DYEBERRIES)
@@ -119,6 +216,18 @@ class ModItemTagsProvider(
 
 		val DYEBERRIES = tk("dyeberries")
 		val SPROUTSNAIL_FLOWERS = tk("sproutsnail_flowers")
+		val SPROUTSNAIL_SPAWN_PLANTS_SWAMP = tk("sproutsnail_spawn_plants/swamp")
+		val SPROUTSNAIL_SPAWN_PLANTS_JUNGLE = tk("sproutsnail_spawn_plants/jungle")
+		val SPROUTSNAIL_SPAWN_PLANTS_ARID = tk("sproutsnail_spawn_plants/arid")
+		val SPROUTSNAIL_SPAWN_PLANTS_SAVANNA = tk("sproutsnail_spawn_plants/savanna")
+		val SPROUTSNAIL_SPAWN_PLANTS_TAIGA = tk("sproutsnail_spawn_plants/taiga")
+		val SPROUTSNAIL_SPAWN_PLANTS_MUSHROOM = tk("sproutsnail_spawn_plants/mushroom")
+		val SPROUTSNAIL_SPAWN_PLANTS_LUSH_CAVES = tk("sproutsnail_spawn_plants/lush_caves")
+		val SPROUTSNAIL_SPAWN_PLANTS_FLORAL = tk("sproutsnail_spawn_plants/floral")
+		val SPROUTSNAIL_SPAWN_PLANTS_FOREST = tk("sproutsnail_spawn_plants/forest")
+		val SPROUTSNAIL_SPAWN_PLANTS_PLAINS = tk("sproutsnail_spawn_plants/plains")
+		val SPROUTSNAIL_SPAWN_PLANTS_NETHER = tk("sproutsnail_spawn_plants/nether")
+		val SPROUTSNAIL_SPAWN_PLANTS_DEFAULT = tk("sproutsnail_spawn_plants/default")
 		val SCOOCHWORM_LOOK_AT = tk("scoochworm_look_at")
 		val SCOOCHWORM_SADDLES = tk("scoochworm_saddles")
 		val WEB_LINE_INTERACTABLE = tk("web_line_interactable")

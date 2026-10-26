@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isHolder
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isSameItemSameComponents
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
@@ -15,6 +16,7 @@ import dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal.SproutsnailMove
 import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
@@ -24,8 +26,11 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
@@ -37,8 +42,10 @@ import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.LevelEvent
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.Tags
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
@@ -72,6 +79,72 @@ class SproutsnailEntity(
 
 	override fun isFood(stack: ItemStack): Boolean {
 		return stack.isItem(Tags.Items.MUSHROOMS)
+	}
+
+	override fun finalizeSpawn(
+		level: ServerLevelAccessor,
+		difficulty: DifficultyInstance,
+		spawnType: MobSpawnType,
+		spawnGroupData: SpawnGroupData?
+	): SpawnGroupData? {
+		val finalizedSpawnGroupData = super.finalizeSpawn(
+			level,
+			difficulty,
+			spawnType,
+			spawnGroupData
+		)
+
+		val currentBiome = level.getBiome(blockPosition())
+		val spawnPlants = when {
+			currentBiome.isHolder(Tags.Biomes.IS_NETHER) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_NETHER
+
+			currentBiome.isHolder(Tags.Biomes.IS_MUSHROOM) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_MUSHROOM
+
+			currentBiome.isHolder(Biomes.LUSH_CAVES) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_LUSH_CAVES
+
+			currentBiome.isHolder(Tags.Biomes.IS_FLORAL) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_FLORAL
+
+			currentBiome.isHolder(Tags.Biomes.IS_SWAMP) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_SWAMP
+
+			currentBiome.isHolder(Tags.Biomes.IS_JUNGLE) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_JUNGLE
+
+			currentBiome.isHolder(Tags.Biomes.IS_DESERT)
+				|| currentBiome.isHolder(Tags.Biomes.IS_BADLANDS) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_ARID
+
+			currentBiome.isHolder(Tags.Biomes.IS_SAVANNA) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_SAVANNA
+
+			currentBiome.isHolder(Tags.Biomes.IS_TAIGA) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_TAIGA
+
+			currentBiome.isHolder(Tags.Biomes.IS_FOREST) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_FOREST
+
+			currentBiome.isHolder(Tags.Biomes.IS_PLAINS) ->
+				ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_PLAINS
+
+			else -> ModItemTagsProvider.SPROUTSNAIL_SPAWN_PLANTS_DEFAULT
+		}
+
+		val itemRegistry = level.registryAccess()
+			.registryOrThrow(Registries.ITEM)
+
+		val randomPlant = itemRegistry
+			.getRandomElementOf(spawnPlants, random)
+			.orElse(null)
+
+		if (randomPlant != null) {
+			flower = ItemStack(randomPlant.value())
+		}
+
+		return finalizedSpawnGroupData
 	}
 
 	override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
