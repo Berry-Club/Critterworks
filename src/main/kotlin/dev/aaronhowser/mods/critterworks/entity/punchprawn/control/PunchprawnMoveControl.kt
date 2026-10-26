@@ -93,8 +93,8 @@ class PunchprawnMoveControl(
 
 	companion object {
 		private const val WATER_SPEED_MULTIPLIER = 0.02f
-		private const val UNTAMED_LAND_SPEED_MULTIPLIER = 0.03
-		private const val TAMED_LAND_SPEED_MULTIPLIER = 0.25
+		private const val UNTAMED_LAND_SPEED_MULTIPLIER = 0.8
+		private const val TAMED_LAND_SPEED_MULTIPLIER = 1.0
 		private const val MAXIMUM_YAW_CHANGE = 10f
 		private const val MAXIMUM_PITCH = 85f
 		private const val PITCH_ROTATION_FACTOR = 0.1f
