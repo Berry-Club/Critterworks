@@ -67,11 +67,8 @@ class ModItemModelProvider(
 
 			transform(ItemDisplayContext.GUI) {
 				rotation(30f, 225f, 0f)
-					.scale(0.625f)
-			}
-
-			transform(ItemDisplayContext.HEAD) {
-				scale(1f)
+					.translation(1.5f, -4f, 0f)
+					.scale(0.4f)
 			}
 
 			transform(ItemDisplayContext.FIXED) {
@@ -111,10 +108,6 @@ class ModItemModelProvider(
 				rotation(30f, 225f, 0f)
 				translation(0f, -4f, 0f)
 				scale(1.4f)
-			}
-
-			transform(ItemDisplayContext.FIXED) {
-				scale(1f)
 			}
 		}
 	}
@@ -219,10 +212,6 @@ class ModItemModelProvider(
 			transform(ItemDisplayContext.GUI) {
 				rotation(30f, 225f, 0f)
 					.scale(0.625f)
-			}
-
-			transform(ItemDisplayContext.HEAD) {
-				scale(1f)
 			}
 
 			transform(ItemDisplayContext.FIXED) {
