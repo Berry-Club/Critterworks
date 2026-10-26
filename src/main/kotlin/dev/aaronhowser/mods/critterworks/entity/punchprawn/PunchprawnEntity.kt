@@ -72,7 +72,7 @@ class PunchprawnEntity(
 
 	override fun registerGoals() {
 		goalSelector.addGoal(1, PunchprawnSitGoal(this))
-		goalSelector.addGoal(2, MeleeAttackGoal(this, 1.2, true))
+		goalSelector.addGoal(2, MeleeAttackGoal(this, 1.0, true))
 		goalSelector.addGoal(3, PunchprawnFollowOwnerGoal(this, 1.0, 8f, 2f))
 		goalSelector.addGoal(4, PunchprawnWanderGoal(this))
 		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
@@ -242,7 +242,7 @@ class PunchprawnEntity(
 
 		fun createAttributes(): AttributeSupplier {
 			return createMobAttributes()
-				.add(Attributes.MOVEMENT_SPEED, 1.2)
+				.add(Attributes.MOVEMENT_SPEED, 1.0)
 				.add(Attributes.ATTACK_DAMAGE, 5.0)
 				.add(Attributes.ATTACK_KNOCKBACK, 3.5)
 				.build()
