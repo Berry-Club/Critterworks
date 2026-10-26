@@ -15,7 +15,7 @@ class SnailShieldRenderer(
 	context: EntityRendererProvider.Context
 ) : GeoReplacedEntityRenderer<Player, SnailShieldRenderer.ShellAnimatable>(
 	context,
-	SnailShieldModel(),
+	SnailShieldModel<ShellAnimatable>(),
 	ShellAnimatable
 ) {
 	init {

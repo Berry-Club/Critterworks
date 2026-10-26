@@ -23,12 +23,61 @@ class ModItemModelProvider(
 		filterfeederItems()
 		hoppingSpider()
 		lockbox()
+		snailShield()
 
 		spawnEggItem(ModItems.SCOOCHWORM_SPAWN_EGG.get())
 		spawnEggItem(ModItems.ITEM_FILTERFEEDER_SPAWN_EGG.get())
 		spawnEggItem(ModItems.FLUID_FILTERFEEDER_SPAWN_EGG.get())
 		spawnEggItem(ModItems.PUNCHPRAWN_SPAWN_EGG.get())
 		spawnEggItem(ModItems.SPROUTSNAIL_SPAWN_EGG.get())
+	}
+
+	private fun snailShield() {
+		val snailShieldModel = getBuilder("snail_shield")
+			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
+			.texture("particle", modLoc("entity/snail_shield"))
+
+		snailShieldModel.transforms {
+			transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+				rotation(75f, 45f, 0f)
+					.translation(0f, 2.5f, 0f)
+					.scale(0.375f)
+			}
+
+			transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+				rotation(75f, 225f, 0f)
+					.translation(0f, 2.5f, 0f)
+					.scale(0.375f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
+				rotation(0f, 45f, 0f)
+					.scale(0.4f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
+				rotation(0f, 225f, 0f)
+					.scale(0.4f)
+			}
+
+			transform(ItemDisplayContext.GROUND) {
+				translation(0f, 3f, 0f)
+					.scale(0.25f)
+			}
+
+			transform(ItemDisplayContext.GUI) {
+				rotation(30f, 225f, 0f)
+					.scale(0.625f)
+			}
+
+			transform(ItemDisplayContext.HEAD) {
+				scale(1f)
+			}
+
+			transform(ItemDisplayContext.FIXED) {
+				scale(0.5f)
+			}
+		}
 	}
 
 	private fun lockbox() {

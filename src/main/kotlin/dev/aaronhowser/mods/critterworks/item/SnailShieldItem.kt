@@ -8,10 +8,12 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isNotTrue
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.client.item.snail_shield.SnailShieldItemRenderer
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModEntityTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import io.netty.buffer.ByteBuf
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
@@ -32,8 +34,37 @@ import net.neoforged.neoforge.event.entity.EntityEvent
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
+import software.bernie.geckolib.animatable.GeoItem
+import software.bernie.geckolib.animatable.client.GeoRenderProvider
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.util.GeckoLibUtil
+import java.util.function.Consumer
 
-class SnailShieldItem(properties: Properties) : Item(properties) {
+class SnailShieldItem(properties: Properties) : Item(properties), GeoItem {
+
+	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
+
+	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
+		consumer.accept(object : GeoRenderProvider {
+			private var renderer: SnailShieldItemRenderer? = null
+
+			override fun getGeoItemRenderer(): BlockEntityWithoutLevelRenderer {
+				var currentRenderer = renderer
+
+				if (currentRenderer == null) {
+					currentRenderer = SnailShieldItemRenderer()
+					renderer = currentRenderer
+				}
+
+				return currentRenderer
+			}
+		})
+	}
+
+	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) = Unit
+
+	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	override fun isFoil(stack: ItemStack): Boolean {
 		return AaronClientUtil.localPlayer?.shellState?.isShelled.isTrue()
