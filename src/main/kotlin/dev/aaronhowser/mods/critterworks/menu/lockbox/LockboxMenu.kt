@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.menu.lockbox
 
 import dev.aaronhowser.mods.aaron.menu.MenuWithInventory
 import dev.aaronhowser.mods.aaron.menu.components.ContainerSlot
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isSameItemSameComponents
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.attachment.builtin.LockboxContainer
 import dev.aaronhowser.mods.critterworks.registry.ModMenuTypes
 import net.minecraft.world.Container
@@ -81,7 +82,7 @@ class LockboxMenu(
 			val slot = slots[slotIndex]
 			val stackInSlot = slot.item
 
-			if (ItemStack.isSameItemSameComponents(stack, stackInSlot)) {
+			if (stack.isSameItemSameComponents(stackInSlot)) {
 				val previousCount = stack.count
 				slot.safeInsert(stack)
 

@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.item.component
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isSameItemSameComponents
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
@@ -88,7 +89,7 @@ data class ItemFilterComponent(
 				return isSameComponentsWithoutDamage(stackInFilter, checkedStack) != isInverted
 			}
 
-			return ItemStack.isSameItemSameComponents(stackInFilter, checkedStack) != isInverted
+			return stackInFilter.isSameItemSameComponents(checkedStack) != isInverted
 		}
 
 		return isInverted
