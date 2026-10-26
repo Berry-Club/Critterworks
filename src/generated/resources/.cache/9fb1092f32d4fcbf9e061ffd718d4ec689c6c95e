@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-17T17:06:27.1484551	Recipes
+// 1.21.1	2026-10-25T19:18:29.2653362	Recipes
 9f3c0fefc687fcb9593729bd3905bd9cae8298a0 data/critterworks/advancement/recipes/misc/apples_from_apple_slice.json
 217406fda284ac1b4e6db15a28c4d8388296eabf data/critterworks/advancement/recipes/misc/artificial_spinnerets.json
 f02a9a737972ffa462613e4f3b9996d01cd9623c data/critterworks/advancement/recipes/misc/blue_dye_from_dyeberry.json
@@ -17,6 +17,7 @@ fede1fb7298a7b1783361b1a096eb9de3c62a756 data/critterworks/advancement/recipes/m
 18b5a2780c5cffe64718eb956082826614ed4de4 data/critterworks/advancement/recipes/misc/scoochstem_wood.json
 4dce2ea95197b9bf18b795f0a1223a6bbb501307 data/critterworks/advancement/recipes/misc/scoochworm_depot.json
 c82d43d0363964161210a6055bbf544371b61bdf data/critterworks/advancement/recipes/misc/scoochworm_gps.json
+4176dfeeb0f0d7b0a2a10e52a3df2c2e381ff9f0 data/critterworks/advancement/recipes/misc/snail_shield.json
 dfaabb8e564aed97afd3ac0e8c26f5d254f73a1f data/critterworks/advancement/recipes/misc/sparkpollen_pouch.json
 8771696e008bcc0bb17da7dbc0589235f2784733 data/critterworks/advancement/recipes/misc/stem_encased_comparator.json
 3942ac3b5cdca45d08de3db67dc7b9a18d44695e data/critterworks/advancement/recipes/misc/web_pathfinder.json
@@ -43,6 +44,7 @@ d288bc9e9e62db4edd9619e825dd248a5f4cd48b data/critterworks/recipe/rotten_flesh_f
 146714183dcbf757e1091d270f5efce1913b6721 data/critterworks/recipe/scoochstem_wood.json
 f62e18eda68590729c57d9a0df39309fa8359cf0 data/critterworks/recipe/scoochworm_depot.json
 7e273d7ec4a9d4040c8fd9fa19f93cdcbc880565 data/critterworks/recipe/scoochworm_gps.json
+f8dd6319412aef39f443779e7cd6ed243097a73e data/critterworks/recipe/snail_shield.json
 c7e3d15110045b1aeb11cc3eaae694cd8a36601f data/critterworks/recipe/sparkpollen_pouch.json
 2f2f64ee9cf8c914167afdba196d37e9f35a47b3 data/critterworks/recipe/stem_encased_comparator.json
 4e78d6c5e5dc1e0198c08fbe85e66e0ffcb8bb38 data/critterworks/recipe/web_pathfinder.json

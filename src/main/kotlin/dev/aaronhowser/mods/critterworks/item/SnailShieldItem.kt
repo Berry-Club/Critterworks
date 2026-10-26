@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Rarity
 import net.neoforged.neoforge.event.entity.EntityEvent
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
@@ -46,7 +47,8 @@ class SnailShieldItem(properties: Properties) : Item(properties) {
 
 		val DEFAULT_PROPERTIES = {
 			Properties()
-				.durability(256)
+				.durability(512)
+				.rarity(Rarity.UNCOMMON)
 		}
 
 		private const val TICKS_TO_FULLY_SHELLED = 5 * 20

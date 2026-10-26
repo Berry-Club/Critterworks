@@ -96,6 +96,15 @@ class ModRecipeProvider(
 		).save(recipeOutput)
 
 		shapedRecipe(
+			ModItems.SNAIL_SHIELD,
+			"FFF,FSF,FFF",
+			mapOf(
+				'F' to ModItems.SNAIL_SHELL_FRAGMENT.asIngredient(),
+				'S' to Items.SHIELD.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
 			ModItems.LOCKBOX.toStack(),
 			"WWW,WIW,WWW",
 			mapOf(
