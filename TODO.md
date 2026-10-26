@@ -82,31 +82,6 @@
 - Crops and trees?
 	- Leaf Cutter Ants lol
 
-# Snails
-
-- Sproutsnail
-	- Spawns in swamps
-	- Bonemeals any block it's inside of
-		- Paths to nearby bonemealable blocks (like crops, not grass)
-	- Flower pot for a shell
-	- Occasionally drop Snail Slime
-		- Use as fertilizer
-	- Drop Shell Fragments on death
-		- Craft into the Snail Shield
-		- Has a small chance of spawning the evil snail
-- Evil Snail
-	- Goes in a straight line directly to you at all times
-	- You can only have a single snail chasing you at once
-	- Kills you instantly if it touches you
-	- Capture it in the Critter Cage to reveal it was actually a Decoy Snail
-		- Keep that one as a pet?
-		- Restarts the chase from far away
-		- Would there be a way to "win" so it actually stops chasing you?
-	- Probably wouldn't actually be an entity to prevent compatibility shenanigans
-		- SavedData or something instead? LevelActor? Needs to be synced and rendered
-		- Could literally be an entity attachment or something lol
-	- Compass that points to it
-
 # Autocrafting?
 
 - Something should probably be able to autocraft
@@ -120,6 +95,8 @@
 - Dripleaf Launchpad
 	- Basically the thing from Portal
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
+- Compass that points to the Evil Snail
+- Some way to permanently banish the Evil Snail
 
 # "Pet" critters
 
