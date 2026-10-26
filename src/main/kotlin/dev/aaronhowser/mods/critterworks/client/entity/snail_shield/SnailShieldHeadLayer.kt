@@ -72,7 +72,7 @@ class SnailShieldHeadLayer(
 	}
 
 	companion object {
-		private const val SHELL_BONE_NAME = "bb_main"
+		private const val SHELL_BONE_NAME = "head_pos"
 		private const val HEAD_FORWARD_OFFSET = -6f / 16f
 	}
 }
