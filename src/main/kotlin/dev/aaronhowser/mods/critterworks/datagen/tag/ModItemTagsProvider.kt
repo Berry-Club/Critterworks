@@ -26,6 +26,15 @@ class ModItemTagsProvider(
 	override fun addTags(provider: HolderLookup.Provider) {
 		tag(SPROUTSNAIL_FLOWERS)
 			.add(
+				Items.OAK_SAPLING,
+				Items.SPRUCE_SAPLING,
+				Items.BIRCH_SAPLING,
+				Items.JUNGLE_SAPLING,
+				Items.ACACIA_SAPLING,
+				Items.CHERRY_SAPLING,
+				Items.DARK_OAK_SAPLING,
+				Items.MANGROVE_PROPAGULE,
+				Items.FERN,
 				Items.DANDELION,
 				Items.POPPY,
 				Items.BLUE_ORCHID,
@@ -39,7 +48,18 @@ class ModItemTagsProvider(
 				Items.CORNFLOWER,
 				Items.LILY_OF_THE_VALLEY,
 				Items.WITHER_ROSE,
-				Items.TORCHFLOWER
+				Items.TORCHFLOWER,
+				Items.RED_MUSHROOM,
+				Items.BROWN_MUSHROOM,
+				Items.DEAD_BUSH,
+				Items.CACTUS,
+				Items.BAMBOO,
+				Items.CRIMSON_FUNGUS,
+				Items.WARPED_FUNGUS,
+				Items.CRIMSON_ROOTS,
+				Items.WARPED_ROOTS,
+				Items.AZALEA,
+				Items.FLOWERING_AZALEA
 			)
 
 		tag(DYEBERRIES)

@@ -1,11 +1,11 @@
-// 1.21.1	2026-10-25T20:37:44.0415384	Tags for minecraft:item mod id critterworks
+// 1.21.1	2026-10-25T20:49:10.5689348	Tags for minecraft:item mod id critterworks
 1e65bdb682a7782e8211da82359233d034083e8c data/critterworks/tags/item/dyeberries.json
 f9e5031f5cee0a41e0092256ded8959118549fb7 data/critterworks/tags/item/requires_existing_node.json
 17bfc4b9c051ec105edb950a9d204196ff617b23 data/critterworks/tags/item/scoochstem_logs.json
 d03518e8ce9cc41bee42f2a279d292d83c55693d data/critterworks/tags/item/scoochworm_look_at.json
 471061c3ad8a5e7467f471173c341089fd2df4b3 data/critterworks/tags/item/scoochworm_saddles.json
 64cfb81c1e3e3231da8081be85a46b8c9f3fa0c2 data/critterworks/tags/item/snap_to_node.json
-d795677dfa226e3d5f7f602fd7e9d9e7a55ee61b data/critterworks/tags/item/sproutsnail_flowers.json
+40dd11bca13b36be58f55feb5a550bf4cb0c33d1 data/critterworks/tags/item/sproutsnail_flowers.json
 8f04724d80f9ca7327ce2407167962418f857741 data/critterworks/tags/item/tardigrade_blacklist.json
 ef50cdde91052f3b5b2a2d0a6328400d856d2b3b data/critterworks/tags/item/web_line_interactable.json
 17bfc4b9c051ec105edb950a9d204196ff617b23 data/minecraft/tags/item/logs.json
