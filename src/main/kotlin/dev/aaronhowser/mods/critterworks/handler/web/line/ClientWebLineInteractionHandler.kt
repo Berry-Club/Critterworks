@@ -142,8 +142,8 @@ object ClientWebLineInteractionHandler {
 			lines,
 			eyePosition,
 			lookEnd,
-			shouldSnapToExistingNode(heldStack),
-			requiresExistingNode(heldStack)
+			heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
+			heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
 		)
 	}
 
@@ -161,16 +161,6 @@ object ClientWebLineInteractionHandler {
 		val hitDistanceSquared = eyePosition.distanceToSqr(hitResult.location)
 		val webPortDistanceSquared = eyePosition.distanceToSqr(targetedNode.node.position)
 		return hitDistanceSquared < webPortDistanceSquared
-	}
-
-	private fun shouldSnapToExistingNode(itemStack: ItemStack): Boolean {
-		return itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
-			|| requiresExistingNode(itemStack)
-	}
-
-	private fun requiresExistingNode(itemStack: ItemStack): Boolean {
-		return itemStack.isItem(ModItems.WEB_PORT)
-			|| !itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)
 	}
 
 }

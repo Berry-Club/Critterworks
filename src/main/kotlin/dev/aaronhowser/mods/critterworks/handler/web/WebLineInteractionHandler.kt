@@ -118,8 +118,10 @@ object WebLineInteractionHandler {
 		if (!isTargetingNode(player, selectedNode)) return
 		if (!isWithinPositionTolerance(selectedNode.position, event.node.position)) return
 
+		val stack = event.itemStack
+
 		if (selectedNode is WebBlockAnchor && selectedNode.hasWebPort) {
-			if (event.itemStack.isEmpty && player.isSecondaryUseActive) {
+			if (stack.isEmpty && player.isSecondaryUseActive) {
 				val removedStack = savedData.removeWebPort(level, selectedNode)
 				player.drop(removedStack, false)
 			} else {
@@ -129,19 +131,19 @@ object WebLineInteractionHandler {
 			return
 		}
 
-		if (!event.itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+		if (!stack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
 
 		when {
-			event.itemStack.isItem(ModItems.WEB_PORT) -> {
+			stack.isItem(ModItems.WEB_PORT) -> {
 				val blockAnchor = selectedNode as? WebBlockAnchor ?: return
 				if (blockAnchor.hasWebPort) return
 
-				savedData.installWebPort(level, blockAnchor, event.itemStack)
-				event.itemStack.consume(1, player)
+				savedData.installWebPort(level, blockAnchor, stack)
+				stack.consume(1, player)
 			}
 
 			else ->
-				handleNodeSelection(level, player, event.itemStack, selectedNode)
+				handleNodeSelection(level, player, stack, selectedNode)
 		}
 	}
 
@@ -150,7 +152,8 @@ object WebLineInteractionHandler {
 		val level = player.serverLevel()
 		val savedData = WebHandler.get(level)
 
-		if (!event.itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+		val stack = event.itemStack
+		if (!stack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
 
 		val line = savedData.getLine(event.lineUuid) ?: return
 
@@ -159,8 +162,8 @@ object WebLineInteractionHandler {
 		val lookOffset = player.lookAngle.scale(interactionRange)
 		val lookEnd = eyePosition.add(lookOffset)
 
-		val snapToExistingNode = event.itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
-		val requireExistingNode = event.itemStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
+		val snapToExistingNode = stack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+		val requireExistingNode = stack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
 
 		val targetedNode = getTargetedNode(
 			listOf(line),
@@ -175,11 +178,11 @@ object WebLineInteractionHandler {
 		if (!isWithinPositionTolerance(selectedNode.position, event.target.position)) return
 
 		when {
-			event.itemStack.isItem(Tags.Items.TOOLS_SHEAR) && selectedNode is WebLineAnchor ->
-				shearLine(level, player, event.itemStack, event.lineUuid, selectedNode, event.hand)
+			stack.isItem(Tags.Items.TOOLS_SHEAR) && selectedNode is WebLineAnchor ->
+				shearLine(level, player, stack, event.lineUuid, selectedNode, event.hand)
 
-			event.itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS) ->
-				handleNodeSelection(level, player, event.itemStack, selectedNode)
+			stack.isItem(ModItems.ARTIFICIAL_SPINNERETS) ->
+				handleNodeSelection(level, player, stack, selectedNode)
 		}
 	}
 
