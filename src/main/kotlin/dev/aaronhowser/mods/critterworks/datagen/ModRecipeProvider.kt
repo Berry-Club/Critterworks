@@ -155,17 +155,6 @@ class ModRecipeProvider(
 		).save(recipeOutput)
 
 		shapedRecipe(
-			ModItems.WEB_PATHFINDER.toStack(),
-			" A ,SCS, R ",
-			mapOf(
-				'A' to Items.AMETHYST_SHARD.asIngredient(),
-				'S' to Tags.Items.STRINGS.asIngredient(),
-				'C' to Items.COMPASS.asIngredient(),
-				'R' to Tags.Items.DUSTS_REDSTONE.asIngredient()
-			)
-		).save(recipeOutput)
-
-		shapedRecipe(
 			ModItems.SPARKPOLLEN_POUCH.toStack(),
 			"SGS,RRR",
 			mapOf(

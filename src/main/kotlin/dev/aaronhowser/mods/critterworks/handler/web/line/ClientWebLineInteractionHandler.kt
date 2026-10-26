@@ -169,8 +169,7 @@ object ClientWebLineInteractionHandler {
 	}
 
 	private fun requiresExistingNode(itemStack: ItemStack): Boolean {
-		return itemStack.isItem(ModItems.WEB_PATHFINDER)
-			|| itemStack.isItem(ModItems.WEB_PORT)
+		return itemStack.isItem(ModItems.WEB_PORT)
 			|| !itemStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)
 	}
 

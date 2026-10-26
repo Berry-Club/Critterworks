@@ -51,6 +51,11 @@
 
 - Lockbox items were opening when one attached to a Scoochworm was also open (#2)
 
+### Removed
+
+- Web Pathfinder
+	- This was a debug item that serves no purpose any more
+
 # 1.4.0
 
 ### Added

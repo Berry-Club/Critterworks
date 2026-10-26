@@ -140,9 +140,6 @@ object WebLineInteractionHandler {
 				event.itemStack.consume(1, player)
 			}
 
-			event.itemStack.isItem(ModItems.WEB_PATHFINDER) ->
-				handlePathSelection(level, player, event.itemStack, selectedNode)
-
 			else ->
 				handleNodeSelection(level, player, event.itemStack, selectedNode)
 		}
@@ -183,9 +180,6 @@ object WebLineInteractionHandler {
 
 			event.itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS) ->
 				handleNodeSelection(level, player, event.itemStack, selectedNode)
-
-			event.itemStack.isItem(ModItems.WEB_PATHFINDER) ->
-				handlePathSelection(level, player, event.itemStack, selectedNode)
 		}
 	}
 

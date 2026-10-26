@@ -43,7 +43,6 @@ class ModItemTagsProvider(
 
 		tag(WEB_LINE_INTERACTABLE)
 			.add(ModItems.ARTIFICIAL_SPINNERETS)
-			.add(ModItems.WEB_PATHFINDER)
 			.add(ModItems.WEB_PORT)
 			.addTag(Tags.Items.TOOLS_SHEAR)
 
@@ -62,13 +61,11 @@ class ModItemTagsProvider(
 		tag(SNAP_TO_NODE)
 			.add(
 				ModItems.ARTIFICIAL_SPINNERETS,
-				ModItems.WEB_PATHFINDER,
 				ModItems.WEB_PORT
 			)
 
 		tag(REQUIRES_EXISTING_NODE)
 			.add(
-				ModItems.WEB_PATHFINDER,
 				ModItems.WEB_PORT
 			)
 

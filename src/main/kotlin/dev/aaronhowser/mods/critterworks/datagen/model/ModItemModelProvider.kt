@@ -120,7 +120,6 @@ class ModItemModelProvider(
 
 	private fun basicItems() {
 		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
-		basicItem(ModItems.WEB_PATHFINDER.get())
 		basicItem(ModItems.WEB_PORT.get())
 		basicItem(ModItems.SCOOCHWORM_GPS.get())
 		basicItem(ModItems.SPARKPOLLEN_POUCH.get())

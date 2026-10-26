@@ -31,8 +31,6 @@ object ModItems : AaronItemRegistry() {
 		register("web_port", ::WebPortItem, PROPERTIES_SINGLE_STACK)
 	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
 		register("artificial_spinnerets", ::ArtificialSpinneretsItem, ArtificialSpinneretsItem.DEFAULT_PROPERTIES)
-	val WEB_PATHFINDER: DeferredItem<WebPathfinderItem> =
-		register("web_pathfinder", ::WebPathfinderItem, PROPERTIES_SINGLE_STACK)
 
 	val SPARKPOLLEN_POUCH: DeferredItem<SparkpollenPouchItem> =
 		register("sparkpollen_pouch", ::SparkpollenPouchItem, SparkpollenPouchItem.DEFAULT_PROPERTIES)
