@@ -289,7 +289,8 @@ class ModAdvancementSubProvider(
 			.display(
 				Items.SKELETON_SKULL,
 				ModAdvancementLang.EVIL_SPROUTSNAIL_TITLE.toComponent(),
-				ModAdvancementLang.EVIL_SPROUTSNAIL_DESC.toComponent()
+				ModAdvancementLang.EVIL_SPROUTSNAIL_DESC.toComponent(),
+				AdvancementType.CHALLENGE
 			)
 			.parent(findSproutsnail)
 			.addCriterion(
@@ -297,6 +298,17 @@ class ModAdvancementSubProvider(
 				playerAction(ModAdvancements.EVIL_SPROUTSNAIL)
 			)
 			.save(ModAdvancements.EVIL_SPROUTSNAIL)
+
+		advancement()
+			.display(
+				ModItems.SNAIL_SHIELD,
+				ModAdvancementLang.SNAIL_SHIELD_TITLE.toComponent(),
+				ModAdvancementLang.SNAIL_SHIELD_DESC.toComponent(),
+				AdvancementType.CHALLENGE
+			)
+			.parent(findSproutsnail)
+			.has(ModItems.SNAIL_SHIELD)
+			.save(ModAdvancements.SNAIL_SHIELD)
 	}
 
 	private fun interactedWith(entityType: EntityType<*>): Criterion<PlayerInteractTrigger.TriggerInstance> {

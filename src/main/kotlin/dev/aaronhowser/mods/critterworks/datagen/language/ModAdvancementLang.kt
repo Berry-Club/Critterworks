@@ -40,6 +40,8 @@ object ModAdvancementLang {
 	const val USE_SPROUTSNAIL_DESC = "advancements.critterworks.use_sproutsnail.desc"
 	const val EVIL_SPROUTSNAIL_TITLE = "advancements.critterworks.evil_sproutsnail.title"
 	const val EVIL_SPROUTSNAIL_DESC = "advancements.critterworks.evil_sproutsnail.desc"
+	const val SNAIL_SHIELD_TITLE = "advancements.critterworks.snail_shield.title"
+	const val SNAIL_SHIELD_DESC = "advancements.critterworks.snail_shield.desc"
 
 	const val CATCH_FILTERFEEDER_TITLE = "advancements.critterworks.catch_filterfeeder.title"
 	const val CATCH_FILTERFEEDER_DESC = "advancements.critterworks.catch_filterfeeder.desc"
@@ -90,6 +92,8 @@ object ModAdvancementLang {
 			add(USE_SPROUTSNAIL_DESC, "Sproutsnails will try to grow nearby crops!")
 			add(EVIL_SPROUTSNAIL_TITLE, "That Evil Snail That I Hate")
 			add(EVIL_SPROUTSNAIL_DESC, "You might want to give it some space")
+			add(SNAIL_SHIELD_TITLE, "Home Away From Home")
+			add(SNAIL_SHIELD_DESC, "Sneak to protect, stay still to hide")
 		}
 	}
 }

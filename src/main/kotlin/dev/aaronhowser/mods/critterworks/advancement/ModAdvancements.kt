@@ -29,6 +29,7 @@ object ModAdvancements {
 	val FIND_SPROUTSNAIL = guide("find_sproutsnail")
 	val USE_SPROUTSNAIL = guide("use_sproutsnail")
 	val EVIL_SPROUTSNAIL = guide("evil_sproutsnail")
+	val SNAIL_SHIELD = guide("snail_shield")
 
 	val CATCH_FILTERFEEDER = guide("catch_filterfeeder")
 	val APPLY_TARDIGRADE = guide("apply_tardigade")

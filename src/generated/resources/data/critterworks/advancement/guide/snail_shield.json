@@ -1,0 +1,34 @@
+{
+  "parent": "critterworks:guide/find_sproutsnail",
+  "criteria": {
+    "has_snail_shield": {
+      "conditions": {
+        "items": [
+          {
+            "items": "critterworks:snail_shield"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.critterworks.snail_shield.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "critterworks:snail_shield"
+    },
+    "title": {
+      "translate": "advancements.critterworks.snail_shield.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_snail_shield"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

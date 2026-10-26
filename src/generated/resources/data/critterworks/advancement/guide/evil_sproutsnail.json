@@ -12,6 +12,7 @@
     "description": {
       "translate": "advancements.critterworks.evil_sproutsnail.desc"
     },
+    "frame": "challenge",
     "icon": {
       "count": 1,
       "id": "minecraft:skeleton_skull"
