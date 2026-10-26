@@ -44,7 +44,7 @@ import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
-import net.minecraft.world.phys.Vec3
+import net.neoforged.neoforge.common.NeoForgeMod
 import net.neoforged.neoforge.event.EventHooks
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
@@ -84,26 +84,6 @@ class PunchprawnEntity(
 
 	override fun createNavigation(level: Level): PathNavigation {
 		return AmphibiousPathNavigation(this, level)
-	}
-
-	override fun travel(travelVector: Vec3) {
-		if (!isControlledByLocalInstance) {
-			calculateEntityAnimation(false)
-			return
-		}
-
-		if (!isInWater) {
-			super.travel(travelVector)
-			return
-		}
-
-		moveRelative(speed, travelVector)
-		move(MoverType.SELF, deltaMovement)
-		deltaMovement = deltaMovement.scale(0.9)
-
-		if (!isOrderedToSit && target == null) {
-			deltaMovement = deltaMovement.add(0.0, -0.005, 0.0)
-		}
 	}
 
 	override fun checkSpawnObstruction(level: LevelReader): Boolean {
@@ -242,7 +222,8 @@ class PunchprawnEntity(
 
 		fun createAttributes(): AttributeSupplier {
 			return createMobAttributes()
-				.add(Attributes.MOVEMENT_SPEED, 1.0)
+				.add(Attributes.MOVEMENT_SPEED, 0.27)
+				.add(NeoForgeMod.SWIM_SPEED, 1.5)
 				.add(Attributes.ATTACK_DAMAGE, 5.0)
 				.add(Attributes.ATTACK_KNOCKBACK, 3.5)
 				.build()
