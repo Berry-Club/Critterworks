@@ -6,7 +6,7 @@
 				"identifier": "geometry.unknown",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 2,
+				"visible_bounds_width": 3,
 				"visible_bounds_height": 2.5,
 				"visible_bounds_offset": [0, 0.75, 0]
 			},
@@ -24,8 +24,8 @@
 					"name": "tail",
 					"pivot": [0, 2.75, 3.025],
 					"cubes": [
-						{"origin": [-3, 1, 5], "size": [6, 5, 2], "uv": [18, 13]},
-						{"origin": [-3, 0, 6.95], "size": [6, 4, 0], "pivot": [0, 4, 6.95], "rotation": [5, 0, 0], "uv": [28, 7]}
+						{"origin": [-3, 1, 5], "size": [6, 5, 5], "uv": [18, 13]},
+						{"origin": [-3, 0, 9.95], "size": [6, 4, 0], "pivot": [0, 4, 9.95], "rotation": [5, 0, 0], "uv": [28, 7]}
 					]
 				},
 				{
@@ -49,7 +49,7 @@
 					"parent": "front",
 					"pivot": [0, 0, 0.5],
 					"cubes": [
-						{"origin": [-3, 8, -4.5], "size": [2, 2, 2], "pivot": [-2, 8, -3.5], "rotation": [0, 7.5, 0], "uv": [30, 20]}
+						{"origin": [-3, 8, -4.5], "size": [2, 2, 2], "pivot": [-2, 8, -3.5], "rotation": [0, 7.5, 0], "uv": [22, 33]}
 					]
 				},
 				{
