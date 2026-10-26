@@ -33,7 +33,9 @@ import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.goal.FloatGoal
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
+import net.minecraft.world.entity.ai.goal.PanicGoal
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal
 import net.minecraft.world.entity.ai.goal.TemptGoal
@@ -70,11 +72,13 @@ class SproutsnailEntity(
 		}
 
 	override fun registerGoals() {
-		goalSelector.addGoal(1, TemptGoal(this, 1.0, Tags.Items.MUSHROOMS.asIngredient(), false))
-		goalSelector.addGoal(2, SproutsnailMoveToBonemealableBlockGoal(this))
-		goalSelector.addGoal(3, RandomStrollGoal(this, 1.0))
-		goalSelector.addGoal(4, LookAtPlayerGoal(this, Player::class.java, 6f))
-		goalSelector.addGoal(5, RandomLookAroundGoal(this))
+		goalSelector.addGoal(0, FloatGoal(this))
+		goalSelector.addGoal(1, PanicGoal(this, 1.25))
+		goalSelector.addGoal(2, TemptGoal(this, 1.0, Tags.Items.MUSHROOMS.asIngredient(), false))
+		goalSelector.addGoal(3, SproutsnailMoveToBonemealableBlockGoal(this))
+		goalSelector.addGoal(4, RandomStrollGoal(this, 1.0))
+		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
+		goalSelector.addGoal(6, RandomLookAroundGoal(this))
 	}
 
 	override fun isFood(stack: ItemStack): Boolean {
