@@ -10,7 +10,9 @@
 			- When riding your head, bare-handed melee attacks become much stronger
 			- Right-click a block to place it back down again
 - Sproutsnail
-	- New mob found in swamps
+	- New mob
+	- Acts as a flower pot - you can plant certain plant items in their shell
+		- This isn't AI I just like em-dashes and couldn't figure out a different punctuation :(
 	- Has a configurable 20% chance to Bone Meal applicable blocks it travels through
 	- Prefers moving toward farther bonemealable blocks nearby
 	- Adults passively drop Snail Slime every 5–10 minutes
@@ -19,9 +21,9 @@
 	- Repaired with Snail Shell Fragments
 	- Makes you immortal while active
 	- Activates while sneaking with it in either hand
-	- Greatly reduces movement speed while active
-	- Also cannot left or right click during this
-	- After standing still for 5 seconds, most mobs forget and cannot target you
+		- Greatly reduces movement speed
+		- Also cannot left or right click
+		- After standing still for 5 seconds, most mobs forget and cannot target you
 - The Snail That Kills You
 	- Has a 1% chance of appearing when a Sproutsnail is killed by the player
 		- Chance is configurable
@@ -30,7 +32,7 @@
 		- Goes through blocks
 		- Moves 0.05 blocks per tick by default (configurable)
 		- Only moves while the player is online and in the same dimension
-	- Is not a conventional entity and cannot be caught in a Critter Cage
+	- Can be caught in a Critter Cage maybe possibly 👉👈
 	- When it reaches you, it kills you and ends the chase
 		- An active Snail Shield prevents the damage, but the chase still ends
 	- Has commands under `/critterworks snail-chase`
