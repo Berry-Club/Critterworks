@@ -17,6 +17,9 @@ object ModBiomeModifiers {
 
 	val ADD_FILTERFEEDER: ResourceKey<BiomeModifier> = key("add_filterfeeder")
 	val ADD_SPROUTSNAIL: ResourceKey<BiomeModifier> = key("add_sproutsnail")
+	val ADD_SPROUTSNAIL_POPULATED_OVERWORLD: ResourceKey<BiomeModifier> = key("add_sproutsnail_populated_overworld")
+	val ADD_SPROUTSNAIL_SPARSE_OVERWORLD: ResourceKey<BiomeModifier> = key("add_sproutsnail_sparse_overworld")
+	val ADD_NETHER_SPROUTSNAIL: ResourceKey<BiomeModifier> = key("add_nether_sproutsnail")
 	val ADD_SCOOCHWORM_APPLE: ResourceKey<BiomeModifier> = key("add_scoochworm_apple")
 	val ADD_HOPPING_SPIDER_NEST: ResourceKey<BiomeModifier> = key("add_hopping_spider_nest")
 	val ADD_SPARKBUG_BUSH: ResourceKey<BiomeModifier> = key("add_sparkbug_bush")
@@ -44,6 +47,30 @@ object ModBiomeModifiers {
 			BiomeModifiers.AddSpawnsBiomeModifier(
 				biomes.getOrThrow(ModBiomeTagsProvider.HAS_SPROUTSNAIL),
 				listOf(MobSpawnSettings.SpawnerData(ModEntityTypes.SPROUTSNAIL.get(), 10, 1, 2))
+			)
+		)
+
+		context.register(
+			ADD_SPROUTSNAIL_POPULATED_OVERWORLD,
+			BiomeModifiers.AddSpawnsBiomeModifier(
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_SPROUTSNAIL_POPULATED_OVERWORLD),
+				listOf(MobSpawnSettings.SpawnerData(ModEntityTypes.SPROUTSNAIL.get(), 2, 1, 1))
+			)
+		)
+
+		context.register(
+			ADD_SPROUTSNAIL_SPARSE_OVERWORLD,
+			BiomeModifiers.AddSpawnsBiomeModifier(
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_SPROUTSNAIL_SPARSE_OVERWORLD),
+				listOf(MobSpawnSettings.SpawnerData(ModEntityTypes.SPROUTSNAIL.get(), 1, 1, 1))
+			)
+		)
+
+		context.register(
+			ADD_NETHER_SPROUTSNAIL,
+			BiomeModifiers.AddSpawnsBiomeModifier(
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_NETHER_SPROUTSNAIL),
+				listOf(MobSpawnSettings.SpawnerData(ModEntityTypes.SPROUTSNAIL.get(), 1, 1, 1))
 			)
 		)
 

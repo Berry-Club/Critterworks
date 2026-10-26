@@ -34,6 +34,29 @@ class ModBiomeTagsProvider(
 		tag(HAS_SPROUTSNAIL)
 			.addTag(Tags.Biomes.IS_SWAMP)
 
+		tag(HAS_SPROUTSNAIL_POPULATED_OVERWORLD)
+			.addTags(
+				Tags.Biomes.IS_FLORAL,
+				Tags.Biomes.IS_JUNGLE,
+				Tags.Biomes.IS_SAVANNA,
+				Tags.Biomes.IS_TAIGA,
+				Tags.Biomes.IS_FOREST,
+				Tags.Biomes.IS_PLAINS
+			)
+			.remove(Tags.Biomes.IS_SWAMP)
+
+		tag(HAS_SPROUTSNAIL_SPARSE_OVERWORLD)
+			.addTags(
+				Tags.Biomes.IS_MUSHROOM,
+				Tags.Biomes.IS_DESERT,
+				Tags.Biomes.IS_BADLANDS
+			)
+			.add(Biomes.LUSH_CAVES)
+			.remove(Tags.Biomes.IS_SWAMP)
+
+		tag(HAS_NETHER_SPROUTSNAIL)
+			.addTag(Tags.Biomes.IS_NETHER)
+
 		tag(HAS_SCOOCHWORM_APPLE)
 			.add(Biomes.LUSH_CAVES)
 
@@ -56,6 +79,9 @@ class ModBiomeTagsProvider(
 
 		val HAS_FILTERFEEDER: TagKey<Biome> = key("has_filterfeeder")
 		val HAS_SPROUTSNAIL: TagKey<Biome> = key("has_sproutsnail")
+		val HAS_SPROUTSNAIL_POPULATED_OVERWORLD: TagKey<Biome> = key("has_sproutsnail_populated_overworld")
+		val HAS_SPROUTSNAIL_SPARSE_OVERWORLD: TagKey<Biome> = key("has_sproutsnail_sparse_overworld")
+		val HAS_NETHER_SPROUTSNAIL: TagKey<Biome> = key("has_nether_sproutsnail")
 		val HAS_SCOOCHWORM_APPLE: TagKey<Biome> = key("has_scoochworm_apple")
 		val HAS_HOPPING_SPIDER_NEST: TagKey<Biome> = key("has_hopping_spider_nest")
 		val HAS_SPARKBUG_BUSH: TagKey<Biome> = key("has_sparkbug_bush")
