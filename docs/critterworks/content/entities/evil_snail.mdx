@@ -4,11 +4,11 @@ id: critterworks:evil_snail
 type: entity
 ---
 
-**The Snail That Kills You** may begin pursuing a player after they kill a [Sproutsnail](@critterworks:sproutsnail). Only one can pursue a player at a time.
+**The Snail That Kills You** is the ghost of a [Sproutsnail](@critterworks:sproutsnail), endlessly chasing down the player that slew it. This has a 1% chance of happening by default. Only one can pursue a player at a time.
 
-The snail moves directly toward its target, passing through blocks and accelerating to its full speed over ten seconds. It stops moving while its target is offline or in another dimension, but the pursuit persists across server restarts. Touching the snail normally kills its target and ends the pursuit. An active [Snail Shield](@critterworks:snail_shield) blocks the damage, but the pursuit still ends.
+The Snail moves directly towards its target, passing through blocks. It stops moving only when the target is offline or in another dimension. The Snail That Kills You kills you if it reaches you.
 
-By default, each player-killed Sproutsnail has a 1% chance to begin a pursuit and the snail's full speed is 0.05 blocks per tick. Both values can be configured.
+A [Critter Cage](@critterworks:critter_cage) may be used to buy yourself time, but only a [Snail Shield](@critterworks:snail_shield) will end the chase permanently. Letting it reach you while protected by a Snail Shield will teleport the Snail away. Repeating this process 5 times will instead banish the Snail, ending the chase forever.
 
 ## Commands
 

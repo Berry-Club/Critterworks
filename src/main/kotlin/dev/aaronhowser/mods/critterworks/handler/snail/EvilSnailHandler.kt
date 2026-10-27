@@ -33,6 +33,12 @@ class EvilSnailHandler : SavedData() {
 		setDirty()
 	}
 
+	fun restartSnail(entity: Entity, position: Vec3) {
+		val snail = snails[entity.uuid] ?: return
+		snail.restartAt(position, entity.level().dimension())
+		setDirty()
+	}
+
 	fun getSnail(entity: Entity): EvilSnail? {
 		return snails[entity.uuid]
 	}

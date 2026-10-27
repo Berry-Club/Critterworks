@@ -34,7 +34,7 @@
 		- Only moves while the player is online and in the same dimension
 	- Can be caught in a Critter Cage maybe possibly 👉👈
 	- When The Snail That Kills You reaches you, it kills you and ends the chase
-		- You can permanently end the chase by tanking the hit 5 times with an active Snail Shield
+		- You can permanently end the chase by tanking the hit 5 times with an active Snail Shield (configurable)
 	- Has commands under `/critterworks snail-chase`
 - Pearl
 	- Has a 10% chance of being produced when giving Sand to Filterfeeders

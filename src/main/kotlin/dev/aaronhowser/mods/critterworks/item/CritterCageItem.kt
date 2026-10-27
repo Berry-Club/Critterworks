@@ -224,7 +224,7 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 					sin(angle) * restartDistance
 				)
 
-			snailHandler.addSnail(player, restartPosition)
+			snailHandler.restartSnail(player, restartPosition)
 			player.sendSystemMessage(Component.translatable(ModMessageLang.EVIL_SNAIL_CAGE_MESSAGE))
 			return true
 		}

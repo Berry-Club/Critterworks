@@ -41,6 +41,7 @@ object ModConfigLang {
 		addConfig(ServerConfig.CONFIG.sproutsnailBonemealChance, "Sproutsnail Bonemeal Chance")
 		addConfig(ServerConfig.CONFIG.sproutsnailEvilChance, "Evil Sproutsnail Chance")
 		addConfig(ServerConfig.CONFIG.sproutsnailEvilCageRestartDistance, "Evil Sproutsnail Cage Restart Distance")
+		addConfig(ServerConfig.CONFIG.sproutsnailEvilShieldHits, "Evil Sproutsnail Shield Hits")
 		addConfig(ServerConfig.CONFIG.sproutsnailEvilSpeed, "Evil Sproutsnail Speed")
 
 		addConfig("rendering", "Rendering")
