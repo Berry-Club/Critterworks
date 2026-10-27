@@ -12,6 +12,7 @@ import software.bernie.geckolib.cache.`object`.GeoBone
 import software.bernie.geckolib.renderer.GeoRenderer
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer
 
+//TODO: Figure out why lighting is weird
 class SproutsnailFlowerLayer(
 	renderer: GeoRenderer<SproutsnailEntity>
 ) : BlockAndItemGeoLayer<SproutsnailEntity>(renderer) {
