@@ -1,0 +1,13 @@
+{
+  "remove": [
+    "#c:is_swamp"
+  ],
+  "values": [
+    "#c:is_floral",
+    "#c:is_jungle",
+    "#c:is_savanna",
+    "#c:is_taiga",
+    "#c:is_forest",
+    "#c:is_plains"
+  ]
+}

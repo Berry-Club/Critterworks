@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "critterworks:cyan_dyeberry"
+    },
+    {
+      "item": "critterworks:scoochstem"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:cyan_scoochstem"
+  }
+}

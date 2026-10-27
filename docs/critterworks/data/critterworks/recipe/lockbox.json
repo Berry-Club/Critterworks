@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:nuggets/iron"
+    },
+    "W": {
+      "tag": "critterworks:scoochstem_logs"
+    }
+  },
+  "pattern": [
+    "WWW",
+    "WIW",
+    "WWW"
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:lockbox"
+  }
+}

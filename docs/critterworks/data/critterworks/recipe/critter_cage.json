@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_bars"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "W": {
+      "tag": "critterworks:scoochstem_logs"
+    }
+  },
+  "pattern": [
+    "III",
+    "IRI",
+    "WWW"
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:critter_cage"
+  }
+}

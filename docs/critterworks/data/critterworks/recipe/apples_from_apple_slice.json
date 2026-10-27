@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "critterworks:apple_slice"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:apple"
+  }
+}

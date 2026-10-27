@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "critterworks:snail_shell_fragment"
+    },
+    "S": {
+      "item": "minecraft:shield"
+    }
+  },
+  "pattern": [
+    "FFF",
+    "FSF",
+    "FFF"
+  ],
+  "result": {
+    "count": 1,
+    "id": "critterworks:snail_shield"
+  }
+}
