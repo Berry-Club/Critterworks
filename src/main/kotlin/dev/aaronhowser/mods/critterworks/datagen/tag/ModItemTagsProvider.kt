@@ -208,6 +208,9 @@ class ModItemTagsProvider(
 
 		tag(TARDIGRADE_BLACKLIST)
 			.add(ModItems.TARDIGRADE)
+
+		tag(Tags.Items.SLIME_BALLS)
+			.add(ModItems.SNAIL_SLIME)
 	}
 
 	companion object {
