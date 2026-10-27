@@ -1,5 +1,10 @@
 # 1.5.1
 
+### Changed
+
+- Added a new `#critterworks:sproutsnail_blacklist` block tag
+	- Mostly just contains blocks like Grass and Sweet Berry Bushes
+
 ### Fixed
 
 - Fixed Critter Cages taking too long to mine with a pickaxe

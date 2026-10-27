@@ -95,6 +95,34 @@ class ModBlockTagsProvider(
 				ModBlocks.SCOOCHSTEM,
 				ModBlocks.SCOOCHSTEM_WOOD
 			)
+
+		tag(SPROUTSNAIL_BLACKLIST)
+			.addTag(BlockTags.FLOWERS)
+			.addTag(BlockTags.SAPLINGS)
+			.add(
+				Blocks.AZALEA,
+				Blocks.BROWN_MUSHROOM,
+				Blocks.CRIMSON_FUNGUS,
+				Blocks.CRIMSON_NYLIUM,
+				Blocks.FERN,
+				Blocks.FLOWERING_AZALEA,
+				Blocks.GLOW_LICHEN,
+				Blocks.GRASS_BLOCK,
+				Blocks.KELP,
+				Blocks.LARGE_FERN,
+				Blocks.MOSS_BLOCK,
+				Blocks.NETHERRACK,
+				Blocks.RED_MUSHROOM,
+				Blocks.ROOTED_DIRT,
+				Blocks.SEAGRASS,
+				Blocks.SEA_PICKLE,
+				Blocks.SHORT_GRASS,
+				Blocks.SMALL_DRIPLEAF,
+				Blocks.SWEET_BERRY_BUSH,
+				Blocks.TALL_GRASS,
+				Blocks.WARPED_FUNGUS,
+				Blocks.WARPED_NYLIUM
+			)
 	}
 
 	companion object {
@@ -105,6 +133,7 @@ class ModBlockTagsProvider(
 		val PREVENTS_SCOOCHWORM_WANDERING = tk("prevents_scoochworm_wandering")
 		val SCOOCHSTEM_REPLACEABLE = tk("scooch_replaceable")
 		val SCOOCHSTEM_LOGS = tk("scoochstem_logs")
+		val SPROUTSNAIL_BLACKLIST = tk("sproutsnail_blacklist")
 	}
 
 }

@@ -1,0 +1,28 @@
+{
+  "values": [
+    "#minecraft:flowers",
+    "#minecraft:saplings",
+    "minecraft:azalea",
+    "minecraft:brown_mushroom",
+    "minecraft:crimson_fungus",
+    "minecraft:crimson_nylium",
+    "minecraft:fern",
+    "minecraft:flowering_azalea",
+    "minecraft:glow_lichen",
+    "minecraft:grass_block",
+    "minecraft:kelp",
+    "minecraft:large_fern",
+    "minecraft:moss_block",
+    "minecraft:netherrack",
+    "minecraft:red_mushroom",
+    "minecraft:rooted_dirt",
+    "minecraft:seagrass",
+    "minecraft:sea_pickle",
+    "minecraft:short_grass",
+    "minecraft:small_dripleaf",
+    "minecraft:sweet_berry_bush",
+    "minecraft:tall_grass",
+    "minecraft:warped_fungus",
+    "minecraft:warped_nylium"
+  ]
+}

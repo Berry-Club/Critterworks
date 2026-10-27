@@ -1,12 +1,13 @@
 package dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModBlockTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.pathfinder.Path
-import net.minecraft.world.phys.Vec3
-import java.util.EnumSet
+import java.util.*
 
 class SproutsnailMoveToBonemealableBlockGoal(
 	private val sproutsnail: SproutsnailEntity
@@ -76,7 +77,7 @@ class SproutsnailMoveToBonemealableBlockGoal(
 		val level = sproutsnail.level()
 		val state = level.getBlockState(position)
 		val block = state.block
-		if (block !is BonemealableBlock) return false
+		if (block !is BonemealableBlock || state.isBlock(ModBlockTagsProvider.SPROUTSNAIL_BLACKLIST)) return false
 		if (!block.isValidBonemealTarget(level, position, state)) return false
 
 		val destination = position.bottomCenter
