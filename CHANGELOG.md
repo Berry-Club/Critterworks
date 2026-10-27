@@ -8,6 +8,7 @@
 ### Fixed
 
 - Fixed Critter Cages taking too long to mine with a pickaxe
+- Fixed a typo
 
 # 1.5.0
 

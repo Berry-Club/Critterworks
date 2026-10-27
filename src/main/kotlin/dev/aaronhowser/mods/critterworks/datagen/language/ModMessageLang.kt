@@ -30,7 +30,7 @@ object ModMessageLang {
 			add(POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE, "The selected face cannot transfer energy")
 			add(EVIL_SNAIL_CAGE_MESSAGE, "You thought you caught it, but it was only a decoy snail...")
 			add(EVIL_SNAIL_SHIELD_MESSAGE, "The snail was temporarily banished, but not forever...")
-			add(EVIL_SNAIL_BANISHED_MESSAGE, "The snail struck your shield one last time and banished for good.")
+			add(EVIL_SNAIL_BANISHED_MESSAGE, "The snail struck your shield one last time and was banished for good.")
 		}
 	}
 
