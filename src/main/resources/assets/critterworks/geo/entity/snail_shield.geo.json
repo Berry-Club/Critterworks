@@ -4,35 +4,35 @@
 		{
 			"description": {
 				"identifier": "geometry.Snail Shield",
-				"texture_width": 64,
-				"texture_height": 64,
-				"visible_bounds_width": 2,
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
 				"visible_bounds_height": 2.5,
 				"visible_bounds_offset": [0, 0.75, 0]
 			},
 			"bones": [
 				{
 					"name": "octagon",
-					"pivot": [0, 8, 0],
+					"pivot": [0, 16, 0],
 					"cubes": [
-						{"origin": [-2.999, 2.92893, -4], "size": [5.998, 4.14214, 10], "pivot": [-0.001, 5, 1], "rotation": [-45, 0, 0], "uv": [0, 14]},
-						{"origin": [-3.00095, 2.92893, -4], "size": [6.001, 4.14214, 10], "uv": [0, 0]},
-						{"origin": [-2.9999, 0, -1.07107], "size": [5.9998, 10, 4.14214], "pivot": [-0.0001, 5, 1], "rotation": [-45, 0, 0], "uv": [20, 28]},
-						{"origin": [-3, 0, -1.07107], "size": [6, 10, 4.14214], "uv": [0, 28]}
+						{"origin": [-5.998, 5.85786, -8], "size": [11.996, 8.28428, 20], "pivot": [-0.002, 10, 2], "rotation": [-45, 0, 0], "uv": [0, 28]},
+						{"origin": [-6.0019, 5.85786, -8], "size": [12.002, 8.28428, 20], "uv": [0, 0]},
+						{"origin": [-5.9998, 0, -2.14214], "size": [11.9996, 20, 8.28428], "pivot": [-0.0002, 10, 2], "rotation": [-45, 0, 0], "uv": [40, 56]},
+						{"origin": [-6, 0, -2.14214], "size": [12, 20, 8.28428], "uv": [0, 56]}
 					]
 				},
 				{
 					"name": "head_tube",
-					"pivot": [8, 0, -8],
+					"pivot": [16, 0, -16],
 					"cubes": [
-						{"origin": [1.5, 0, -6], "size": [1, 4, 7], "uv": [32, 0]},
-						{"origin": [-2.5, 0, -6], "size": [1, 4, 7], "uv": [38, 22]},
-						{"origin": [-2.5, 4, -6], "size": [5, 1, 7], "uv": [30, 14]}
+						{"origin": [3, 0, -12], "size": [2, 8, 14], "uv": [64, 0]},
+						{"origin": [-5, 0, -12], "size": [2, 8, 14], "uv": [78, 44]},
+						{"origin": [-5, 8, -12], "size": [10, 2, 14], "uv": [62, 28]}
 					]
 				},
 				{
 					"name": "head_pos",
-					"pivot": [0, 0, -8]
+					"pivot": [0, 0, -16]
 				}
 			]
 		}
