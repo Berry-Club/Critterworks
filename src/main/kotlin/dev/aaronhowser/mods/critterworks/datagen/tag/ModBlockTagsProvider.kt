@@ -63,6 +63,9 @@ class ModBlockTagsProvider(
 				ModBlocks.CYAN_SCOOCHSTEM
 			)
 
+		tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.add(ModBlocks.CRITTER_CAGE)
+
 		tag(BlockTags.LOGS)
 			.add(
 				ModBlocks.SCOOCHSTEM,

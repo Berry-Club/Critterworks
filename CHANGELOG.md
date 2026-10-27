@@ -1,3 +1,9 @@
+# 1.5.1
+
+### Fixed
+
+- Fixed Critter Cages taking too long to mine with a pickaxe
+
 # 1.5.0
 
 ### Added

@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-14T09:23:23.8019486	Tags for minecraft:block mod id critterworks
+// 1.21.1	2026-10-27T06:45:44.4752926	Tags for minecraft:block mod id critterworks
 a845bb8b2b0c9c2fa1e4ba77eec0a2cb9682fd65 data/critterworks/tags/block/prevents_scoochworm_wandering.json
 17bfc4b9c051ec105edb950a9d204196ff617b23 data/critterworks/tags/block/scoochstem_logs.json
 20e060680b2c13956f96b989e04c1166be68c7ce data/critterworks/tags/block/scooch_replaceable.json
@@ -7,3 +7,4 @@ a845bb8b2b0c9c2fa1e4ba77eec0a2cb9682fd65 data/critterworks/tags/block/prevents_s
 342d9fec71592b520ae3c11c0801c2e419bd7090 data/minecraft/tags/block/logs.json
 342d9fec71592b520ae3c11c0801c2e419bd7090 data/minecraft/tags/block/logs_that_burn.json
 03c972a8eb163b3f5521cbaf022403a0020fc4cc data/minecraft/tags/block/mineable/axe.json
+fecd76d08e91c971e1f74c0f37ace5345e8689c4 data/minecraft/tags/block/mineable/pickaxe.json
