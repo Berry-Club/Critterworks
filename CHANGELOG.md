@@ -33,8 +33,8 @@
 		- Moves 0.05 blocks per tick by default (configurable)
 		- Only moves while the player is online and in the same dimension
 	- Can be caught in a Critter Cage maybe possibly 👉👈
-	- When it reaches you, it kills you and ends the chase
-		- An active Snail Shield prevents the damage, but the chase still ends
+	- When The Snail That Kills You reaches you, it kills you and ends the chase
+		- You can permanently end the chase by tanking the hit 5 times with an active Snail Shield
 	- Has commands under `/critterworks snail-chase`
 - Pearl
 	- Has a 10% chance of being produced when giving Sand to Filterfeeders
@@ -48,6 +48,8 @@
 - Hopping Spiders can now be worn in your head slot
 - Scoochworm parts have been given the `#c:capturing_not_supported` and `#c:teleporting_not_supported` tags
 - The Critter Cage can now capture most serializable living entities lacking the `#c:capturing_not_supported` tag
+- Configured Filterfeeders are set as persistent
+- Holding Sand will make a Filterfeeder stop moving, so you can more easily feed it
 
 ### Fixed
 
