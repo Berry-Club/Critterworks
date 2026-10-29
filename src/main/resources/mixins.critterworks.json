@@ -8,7 +8,8 @@
 		"GrowingPlantBlockMixin",
 		"GrowingPlantBodyBlockMixin",
 		"GrowingPlantHeadBlockMixin",
-		"ItemUtilsMixin"
+		"ItemUtilsMixin",
+		"SignalGetterMixin"
 	],
 	"client": [
 		"AbstractClientPlayerMixin",
