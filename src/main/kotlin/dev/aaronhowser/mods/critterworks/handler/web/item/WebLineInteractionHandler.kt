@@ -333,7 +333,7 @@ object WebLineInteractionHandler {
 
 		if (firstNode is WebLineAnchor
 			&& secondNode is WebLineAnchor
-			&& firstNode.lineUuid == secondNode.lineUuid
+			&& firstNode.parentLineUuid == secondNode.parentLineUuid
 		) return ModMessageLang.SAME_LINE_MESSAGE
 
 		if (firstNode is WebBlockAnchor

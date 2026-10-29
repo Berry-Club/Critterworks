@@ -253,20 +253,20 @@ class WebHandler : SavedData() {
 	private fun addLineReferences(line: WebLine) {
 		line.firstNode.addLine(line)
 		line.secondNode.addLine(line)
-		addAnchorToReferencedLine(line.firstNode)
-		addAnchorToReferencedLine(line.secondNode)
+		addAnchorToParentLine(line.firstNode)
+		addAnchorToParentLine(line.secondNode)
 
 		for (node in nodes.values) {
-			if (node !is WebLineAnchor || node.lineUuid != line.uuid) continue
+			if (node !is WebLineAnchor || node.parentLineUuid != line.uuid) continue
 			line.addAttachedAnchor(node)
 		}
 	}
 
-	private fun addAnchorToReferencedLine(node: WebNode) {
+	private fun addAnchorToParentLine(node: WebNode) {
 		if (node !is WebLineAnchor) return
 
-		val referencedLine = lines[node.lineUuid] ?: return
-		referencedLine.addAttachedAnchor(node)
+		val parentLine = lines[node.parentLineUuid] ?: return
+		parentLine.addAttachedAnchor(node)
 	}
 
 	private fun addLineToNetwork(line: WebLine) {
@@ -314,8 +314,8 @@ class WebHandler : SavedData() {
 		connectedLines.addAll(node.lines)
 		if (node !is WebLineAnchor) return
 
-		val referencedLine = lines[node.lineUuid] ?: return
-		connectedLines.add(referencedLine)
+		val parentLine = lines[node.parentLineUuid] ?: return
+		connectedLines.add(parentLine)
 	}
 
 	private fun removeLineFromNetwork(line: WebLine) {
@@ -382,19 +382,19 @@ class WebHandler : SavedData() {
 	}
 
 	private fun referencesLine(line: WebLine, referencedLineUuid: UUID): Boolean {
-		val firstLineUuid = (line.firstNode as? WebLineAnchor)?.lineUuid
-		if (firstLineUuid == referencedLineUuid) return true
+		val firstParentLineUuid = (line.firstNode as? WebLineAnchor)?.parentLineUuid
+		if (firstParentLineUuid == referencedLineUuid) return true
 
-		val secondLineUuid = (line.secondNode as? WebLineAnchor)?.lineUuid
-		return secondLineUuid == referencedLineUuid
+		val secondParentLineUuid = (line.secondNode as? WebLineAnchor)?.parentLineUuid
+		return secondParentLineUuid == referencedLineUuid
 	}
 
 	private fun scheduleDependentLines(level: ServerLevel, removedLineUuid: UUID) {
 		val dependentLineUuids: MutableList<UUID> = mutableListOf()
 		for (line in lines.values) {
-			val firstParentUuid = (line.firstNode as? WebLineAnchor)?.lineUuid
-			val secondParentUuid = (line.secondNode as? WebLineAnchor)?.lineUuid
-			if (firstParentUuid != removedLineUuid && secondParentUuid != removedLineUuid) continue
+			val firstParentLineUuid = (line.firstNode as? WebLineAnchor)?.parentLineUuid
+			val secondParentLineUuid = (line.secondNode as? WebLineAnchor)?.parentLineUuid
+			if (firstParentLineUuid != removedLineUuid && secondParentLineUuid != removedLineUuid) continue
 
 			dependentLineUuids.add(line.uuid)
 		}
@@ -460,7 +460,7 @@ class WebHandler : SavedData() {
 		if (node.lines.isNotEmpty()) return
 
 		if (node is WebLineAnchor) {
-			lines[node.lineUuid]?.removeAttachedAnchor(node.uuid)
+			lines[node.parentLineUuid]?.removeAttachedAnchor(node.uuid)
 		}
 		if (node is WebBlockAnchor && node.hasWebPort) {
 			Containers.dropItemStack(

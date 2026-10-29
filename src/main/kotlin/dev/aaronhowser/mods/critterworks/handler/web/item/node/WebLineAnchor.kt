@@ -17,7 +17,7 @@ import java.util.*
 
 data class WebLineAnchor(
 	override val uuid: UUID,
-	val lineUuid: UUID,
+	val parentLineUuid: UUID,
 	override val position: Vec3
 ) : WebNode() {
 
@@ -31,7 +31,7 @@ data class WebLineAnchor(
 		lines: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>
 	): WebLineInvalidation? {
-		val line = lines[lineUuid]
+		val line = lines[parentLineUuid]
 			?: return WebLineInvalidation(
 				WebLineInvalidationReason.MISSING_LINE,
 				dependencyDepth = 1
@@ -54,7 +54,7 @@ data class WebLineAnchor(
 						.forGetter(WebLineAnchor::uuid),
 					UUIDUtil.CODEC
 						.fieldOf("line_uuid")
-						.forGetter(WebLineAnchor::lineUuid),
+						.forGetter(WebLineAnchor::parentLineUuid),
 					Vec3.CODEC
 						.fieldOf("position")
 						.forGetter(WebLineAnchor::position)
@@ -63,7 +63,7 @@ data class WebLineAnchor(
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, WebLineAnchor> = StreamCodec.composite(
 			UUIDUtil.STREAM_CODEC, WebLineAnchor::uuid,
-			UUIDUtil.STREAM_CODEC, WebLineAnchor::lineUuid,
+			UUIDUtil.STREAM_CODEC, WebLineAnchor::parentLineUuid,
 			AaronExtraStreamCodecs.VEC3, WebLineAnchor::position,
 			::WebLineAnchor
 		)
