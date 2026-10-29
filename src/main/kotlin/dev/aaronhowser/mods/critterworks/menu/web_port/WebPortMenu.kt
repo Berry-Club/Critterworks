@@ -6,7 +6,7 @@ import dev.aaronhowser.mods.aaron.menu.MenuWithStrings
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextEnum
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.prevEnum
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.item.WebPortItem
 import dev.aaronhowser.mods.critterworks.item.component.WebPortComponent
@@ -80,7 +80,7 @@ class WebPortMenu private constructor(
 
 	private fun getAnchor(level: ServerLevel): WebBlockAnchor? {
 		val uuid = anchorUuid ?: return null
-		return WebHandler.get(level).getNode(uuid) as? WebBlockAnchor
+		return ItemWebHandler.get(level).getNode(uuid) as? WebBlockAnchor
 	}
 
 	private fun getComponent(): WebPortComponent {
@@ -91,7 +91,7 @@ class WebPortMenu private constructor(
 		val level = playerInventory.player.level()
 		if (level !is ServerLevel) return
 		val anchor = getAnchor(level) ?: return
-		WebHandler.get(level).syncAnchor(level, anchor)
+		ItemWebHandler.get(level).syncAnchor(level, anchor)
 	}
 
 	fun getColor(): DyeColor = getComponent().color

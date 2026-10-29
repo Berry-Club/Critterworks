@@ -10,7 +10,7 @@ import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -53,12 +53,12 @@ object CommonEvents {
 
 	@SubscribeEvent
 	fun onChunkWatch(event: ChunkWatchEvent.Watch) {
-		WebHandler.get(event.player.serverLevel()).syncChunk(event.player, event.pos)
+		ItemWebHandler.get(event.player.serverLevel()).syncChunk(event.player, event.pos)
 	}
 
 	@SubscribeEvent
 	fun onChunkUnwatch(event: ChunkWatchEvent.UnWatch) {
-		WebHandler.get(event.player.serverLevel()).forgetChunk(event.player, event.pos)
+		ItemWebHandler.get(event.player.serverLevel()).forgetChunk(event.player, event.pos)
 	}
 
 	@SubscribeEvent
@@ -75,13 +75,13 @@ object CommonEvents {
 		val level = event.level
 		if (level !is ServerLevel) return
 
-		WebHandler.get(level).markForValidation(event.pos)
+		ItemWebHandler.get(level).markForValidation(event.pos)
 	}
 
 	@SubscribeEvent
 	fun onServerTick(event: ServerTickEvent.Post) {
 		val level = event.server.overworld()
-		WebHandler.get(level).validateChangedChunks(level)
+		ItemWebHandler.get(level).validateChangedChunks(level)
 		EvilSnailHandler.get(level).tick(event.server)
 	}
 

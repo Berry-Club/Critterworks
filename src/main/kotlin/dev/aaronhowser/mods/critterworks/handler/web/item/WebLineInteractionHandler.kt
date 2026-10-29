@@ -72,7 +72,7 @@ object WebLineInteractionHandler {
 		itemStack: ItemStack,
 		hand: InteractionHand
 	) {
-		val target = WebHandler.get(player.serverLevel()).getNode(targetUuid) ?: return
+		val target = ItemWebHandler.get(player.serverLevel()).getNode(targetUuid) ?: return
 		if (!isTargetingNode(player, target)) return
 
 		if (!isWithinPositionTolerance(target.position, requestedPosition)) return
@@ -87,7 +87,7 @@ object WebLineInteractionHandler {
 		itemStack: ItemStack,
 		hand: InteractionHand
 	) {
-		val line = WebHandler.get(player.serverLevel()).getLine(lineUuid) ?: return
+		val line = ItemWebHandler.get(player.serverLevel()).getLine(lineUuid) ?: return
 
 		val eyePosition = player.eyePosition
 		val lookEnd = eyePosition.add(player.lookAngle.scale(player.blockInteractionRange()))
@@ -113,7 +113,7 @@ object WebLineInteractionHandler {
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
 
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 		val selectedNode = savedData.getNode(event.node.uuid) ?: return
 
 		if (!isTargetingNode(player, selectedNode)) return
@@ -151,7 +151,7 @@ object WebLineInteractionHandler {
 	fun handleLineInteraction(event: WebLineInteractionEvent) {
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 
 		val stack = event.itemStack
 		if (!stack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
@@ -212,7 +212,7 @@ object WebLineInteractionHandler {
 			return
 		}
 
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 		val canonicalFirstNode = savedData.getCanonicalNode(firstNode)
 		val canonicalSelectedNode = savedData.getCanonicalNode(selectedNode)
 		val network = canonicalFirstNode.lines.firstOrNull()?.network
@@ -251,7 +251,7 @@ object WebLineInteractionHandler {
 		firstNode: WebNode,
 		selectedNode: WebNode
 	) {
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 		val canonicalFirstNode = savedData.getCanonicalNode(firstNode)
 		val canonicalSelectedNode = savedData.getCanonicalNode(selectedNode)
 		val invalidMessage = getInvalidMessage(
@@ -288,7 +288,7 @@ object WebLineInteractionHandler {
 		selectedNode: WebLineAnchor,
 		hand: InteractionHand
 	) {
-		WebHandler.get(level).removeLine(level, lineUuid)
+		ItemWebHandler.get(level).removeLine(level, lineUuid)
 		itemStack.hurtAndBreak(1, player, hand.getEquipmentSlot())
 
 		player.status(ModMessageLang.LINE_REMOVED_MESSAGE.toComponent())

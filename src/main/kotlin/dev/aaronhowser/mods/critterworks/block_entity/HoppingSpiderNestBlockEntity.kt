@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.Hoppi
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.HoppingSpiderTransportCandidate
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.HoppingSpiderTransportReservations
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebNetwork
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.item.HoppingSpiderItem
@@ -108,7 +108,7 @@ class HoppingSpiderNestBlockEntity(
 	private fun returnDisconnectedSpiders(level: ServerLevel): Boolean {
 		if (level.gameTime % NETWORK_CHECK_INTERVAL != 0L) return false
 
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 		val nestNetworks = savedData.getNetworksAt(blockPos)
 		var returnedSpider = false
 
@@ -126,7 +126,7 @@ class HoppingSpiderNestBlockEntity(
 	}
 
 	private fun isConnectedToNest(
-		savedData: WebHandler,
+		savedData: ItemWebHandler,
 		nestNetworks: Set<WebNetwork>,
 		node: WebNode
 	): Boolean {
@@ -142,7 +142,7 @@ class HoppingSpiderNestBlockEntity(
 		if (level.gameTime % 20 != 0L) return
 		var bounds = AABB(blockPos)
 
-		for (network in WebHandler.get(level).getNetworksAt(blockPos)) {
+		for (network in ItemWebHandler.get(level).getNetworksAt(blockPos)) {
 			for (line in network.lines) {
 				bounds = bounds.minmax(AABB(line.firstNode.position, line.firstNode.position))
 				bounds = bounds.minmax(AABB(line.secondNode.position, line.secondNode.position))
@@ -193,7 +193,7 @@ class HoppingSpiderNestBlockEntity(
 	private fun getTransportReservations(level: ServerLevel): HoppingSpiderTransportReservations {
 		val reservations = HoppingSpiderTransportReservations()
 		val nestPositions = mutableSetOf(blockPos)
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 
 		for (network in savedData.getNetworksAt(blockPos)) {
 			for (node in network.getNodes()) {
@@ -224,7 +224,7 @@ class HoppingSpiderNestBlockEntity(
 	}
 
 	private fun startWandering(level: ServerLevel, spider: HoppingSpider) {
-		for (network in WebHandler.get(level).getNetworksAt(blockPos)) {
+		for (network in ItemWebHandler.get(level).getNetworksAt(blockPos)) {
 			val homeNode = getAnchors(network, blockPos).firstOrNull() ?: continue
 			spider.tryStartBehavior(HoppingSpiderWanderBehavior(homeNode.uuid))
 			spider.position = homeNode.position
@@ -240,7 +240,7 @@ class HoppingSpiderNestBlockEntity(
 		if (transportBehavior != null) return null
 
 		val currentNodeUuid = activeBehavior?.currentNodeUuid ?: return null
-		return WebHandler.get(level).getNode(currentNodeUuid)
+		return ItemWebHandler.get(level).getNode(currentNodeUuid)
 	}
 
 	private fun findTransportCandidate(
@@ -252,7 +252,7 @@ class HoppingSpiderNestBlockEntity(
 		if (activeBehavior != null && !activeBehavior.canBeInterrupted) return null
 		if (spider.transportBehavior != null) return null
 
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 		val currentNode = getCurrentNode(level, spider)
 		var bestCandidate: HoppingSpiderTransportCandidate? = null
 

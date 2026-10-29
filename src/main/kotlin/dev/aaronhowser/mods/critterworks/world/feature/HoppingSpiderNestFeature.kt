@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.critterworks.block_entity.HoppingSpiderNestBlockEnti
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
@@ -244,7 +244,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 		configuration: HoppingSpiderNestConfiguration
 	) {
 		val serverLevel = level.level
-		val savedData = WebHandler.get(serverLevel)
+		val savedData = ItemWebHandler.get(serverLevel)
 		val generatedLines: MutableList<Pair<WebLine, WebBlockAnchor>> = mutableListOf()
 
 		for ((nestAnchor, rayHit) in rayHits) {
@@ -272,7 +272,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 
 	private fun connectLines(
 		level: WorldGenLevel,
-		savedData: WebHandler,
+		savedData: ItemWebHandler,
 		first: Pair<WebLine, WebBlockAnchor>,
 		second: Pair<WebLine, WebBlockAnchor>,
 		random: RandomSource,

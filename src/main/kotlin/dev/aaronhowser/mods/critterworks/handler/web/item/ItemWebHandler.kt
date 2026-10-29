@@ -28,7 +28,7 @@ import net.minecraft.world.level.saveddata.SavedData
 import java.util.UUID
 import kotlin.collections.ArrayDeque
 
-class WebHandler : SavedData() {
+class ItemWebHandler : SavedData() {
 
 	private val nodes: MutableMap<UUID, WebNode> = mutableMapOf()
 	private val lines: MutableMap<UUID, WebLine> = mutableMapOf()
@@ -510,19 +510,23 @@ class WebHandler : SavedData() {
 
 	companion object {
 		private const val CASCADE_DELAY_TICKS = 2
-		private const val SAVED_DATA_NAME = "critterworks_webs"
+		private const val SAVED_DATA_NAME = "critterworks_item_webs"
+		private const val LEGACY_SAVED_DATA_NAME = "critterworks_webs"
 		private const val NODES_TAG = "Nodes"
 		private const val LINES_TAG = "Lines"
 
-		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): WebHandler {
-			val savedData = WebHandler()
+		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): ItemWebHandler {
+			val savedData = ItemWebHandler()
 			val nodesTag = tag.get(NODES_TAG) ?: return savedData
 			val linesTag = tag.get(LINES_TAG) ?: return savedData
-			val ops: DynamicOps<Tag> = registries.createSerializationContext(NbtOps.INSTANCE)
+
+			val ops = registries.createSerializationContext(NbtOps.INSTANCE)
+
 			val loadedNodes = WebNode.CODEC
 				.listOf()
 				.parse(ops, nodesTag)
 				.getOrThrow()
+
 			val loadedLines = WebLineData.CODEC
 				.listOf()
 				.parse(ops, linesTag)
@@ -545,14 +549,28 @@ class WebHandler : SavedData() {
 			return savedData
 		}
 
-		fun get(level: ServerLevel): WebHandler {
+		fun get(level: ServerLevel): ItemWebHandler {
 			if (level != level.server.overworld()) {
 				return get(level.server.overworld())
 			}
 
-			return level.dataStorage.computeIfAbsent(FACTORY, SAVED_DATA_NAME)
+			val dataStorage = level.dataStorage
+			val savedData = dataStorage.get(FACTORY, SAVED_DATA_NAME)
+			if (savedData != null) {
+				return savedData
+			}
+
+			val legacySavedData = dataStorage.get(FACTORY, LEGACY_SAVED_DATA_NAME)
+			if (legacySavedData != null) {
+				dataStorage.set(LEGACY_SAVED_DATA_NAME, ItemWebHandler())
+				dataStorage.set(SAVED_DATA_NAME, legacySavedData)
+				legacySavedData.setDirty()
+				return legacySavedData
+			}
+
+			return dataStorage.computeIfAbsent(FACTORY, SAVED_DATA_NAME)
 		}
 
-		private val FACTORY = Factory(::WebHandler, ::load)
+		private val FACTORY = Factory(::ItemWebHandler, ::load)
 	}
 }

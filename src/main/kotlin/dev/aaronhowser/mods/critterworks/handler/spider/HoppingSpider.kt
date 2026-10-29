@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.handler.spider
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.HoppingSpiderBehavior
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.HoppingSpiderWanderBehavior
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.HoppingSpiderTransportBehavior
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.item.path.WebPath
 import dev.aaronhowser.mods.critterworks.item.ItemFilterItem
@@ -77,7 +77,7 @@ class HoppingSpider(
 		currentNodeUuid: UUID,
 		targetNodeUuid: UUID
 	): TravelResult {
-		val savedData = WebHandler.get(level)
+		val savedData = ItemWebHandler.get(level)
 		val currentNode = savedData.getNode(currentNodeUuid) ?: return TravelResult.MISSING_PATH
 		val targetNode = savedData.getNode(targetNodeUuid) ?: return TravelResult.MISSING_PATH
 		var path: WebPath? = null
@@ -357,7 +357,7 @@ class HoppingSpider(
 	}
 
 	private fun getBlockAnchor(level: ServerLevel, uuid: UUID): WebBlockAnchor? {
-		return WebHandler.get(level).getNode(uuid) as? WebBlockAnchor
+		return ItemWebHandler.get(level).getNode(uuid) as? WebBlockAnchor
 	}
 
 	private fun getItemHandler(level: ServerLevel, anchor: WebBlockAnchor): IItemHandler? {
