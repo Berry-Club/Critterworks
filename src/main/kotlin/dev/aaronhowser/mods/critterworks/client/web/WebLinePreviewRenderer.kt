@@ -3,9 +3,11 @@ package dev.aaronhowser.mods.critterworks.client.web
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
-import dev.aaronhowser.mods.critterworks.handler.web.common.line.ClientWebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.client.web.ClientWebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebInteractionHandler
+import dev.aaronhowser.mods.critterworks.item.WebstoneWeaverItem
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
@@ -25,18 +27,23 @@ object WebLinePreviewRenderer {
 
 	private fun renderPlacement(minecraft: Minecraft, bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
 		val player = minecraft.player ?: return
-		val itemStack = getHeldArtificialSpinnerets(player.mainHandItem, player.offhandItem) ?: return
+		val itemStack = getHeldWebTool(player.mainHandItem, player.offhandItem) ?: return
 
 		val firstNode = itemStack.get(ModDataComponents.WEB_NODE)?.node ?: return
 		val secondNode = getTargetedNode(minecraft, eyePosition, viewVector) ?: return
 
-		val isValid = WebLineInteractionHandler.canCreateLine(
-			level,
-			player,
-			itemStack,
-			firstNode,
-			secondNode
-		)
+		val isValid = if (itemStack.isItem(ModItems.WEBSTONE_WEAVER)) {
+			val webstoneWeaver = itemStack.item as? WebstoneWeaverItem ?: return
+			webstoneWeaver.canCreateLine(level, player, firstNode, secondNode)
+		} else {
+			ItemWebInteractionHandler.canCreateLine(
+				level,
+				player,
+				itemStack,
+				firstNode,
+				secondNode
+			)
+		}
 
 		val color = if (isValid) VALID_PREVIEW_COLOR else INVALID_PREVIEW_COLOR
 
@@ -74,11 +81,16 @@ object WebLinePreviewRenderer {
 		)
 	}
 
-	private fun getHeldArtificialSpinnerets(mainHandItem: ItemStack, offhandItem: ItemStack): ItemStack? {
-		if (mainHandItem.isItem(ModItems.ARTIFICIAL_SPINNERETS.get())) return mainHandItem
-		if (offhandItem.isItem(ModItems.ARTIFICIAL_SPINNERETS.get())) return offhandItem
+	private fun getHeldWebTool(mainHandItem: ItemStack, offhandItem: ItemStack): ItemStack? {
+		if (isWebTool(mainHandItem)) return mainHandItem
+		if (isWebTool(offhandItem)) return offhandItem
 
 		return null
+	}
+
+	private fun isWebTool(itemStack: ItemStack): Boolean {
+		return itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
+			|| itemStack.isItem(ModItems.WEBSTONE_WEAVER)
 	}
 
 	private fun getTargetedNode(minecraft: Minecraft, eyePosition: Vec3, viewVector: Vec3): WebNode? {
@@ -94,7 +106,7 @@ object WebLinePreviewRenderer {
 		if (hitResult !is BlockHitResult) return null
 		if (hitResult.type != HitResult.Type.BLOCK) return null
 
-		return WebLineInteractionHandler.createBlockAnchor(
+		return WebBlockAnchor.create(
 			hitResult.blockPos,
 			hitResult.direction,
 			hitResult.location
