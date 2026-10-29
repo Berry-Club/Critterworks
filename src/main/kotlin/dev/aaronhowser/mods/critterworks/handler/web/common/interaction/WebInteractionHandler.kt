@@ -1,11 +1,11 @@
-package dev.aaronhowser.mods.critterworks.handler.web
+package dev.aaronhowser.mods.critterworks.handler.web.common.interaction
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebTargeting
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler

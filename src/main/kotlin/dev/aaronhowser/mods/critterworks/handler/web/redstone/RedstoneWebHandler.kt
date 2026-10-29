@@ -10,7 +10,6 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineInvalida
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.part.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncRedstoneWebPowerPacket

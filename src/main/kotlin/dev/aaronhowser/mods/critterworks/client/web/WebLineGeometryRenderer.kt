@@ -6,7 +6,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.part.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType

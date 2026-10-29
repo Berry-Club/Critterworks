@@ -3,10 +3,10 @@ package dev.aaronhowser.mods.critterworks.client.web
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineData
-import dev.aaronhowser.mods.critterworks.handler.web.common.node.TargetedWebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.TargetedWebNode
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.part.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import java.util.*
 
 object ClientWebLines {

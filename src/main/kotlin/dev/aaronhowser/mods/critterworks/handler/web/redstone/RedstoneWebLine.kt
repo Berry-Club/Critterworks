@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.handler.web.redstone.part
+package dev.aaronhowser.mods.critterworks.handler.web.redstone
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder

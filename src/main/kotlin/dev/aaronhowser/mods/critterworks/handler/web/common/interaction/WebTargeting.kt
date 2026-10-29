@@ -1,6 +1,6 @@
-package dev.aaronhowser.mods.critterworks.handler.web.common.line
+package dev.aaronhowser.mods.critterworks.handler.web.common.interaction
 
-import dev.aaronhowser.mods.critterworks.handler.web.common.node.TargetedWebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import net.minecraft.world.phys.Vec3

@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.part.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.server.level.ServerLevel
