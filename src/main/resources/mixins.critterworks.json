@@ -9,6 +9,7 @@
 		"GrowingPlantBodyBlockMixin",
 		"GrowingPlantHeadBlockMixin",
 		"ItemUtilsMixin",
+		"RedStoneWireBlockMixin",
 		"SignalGetterMixin"
 	],
 	"client": [

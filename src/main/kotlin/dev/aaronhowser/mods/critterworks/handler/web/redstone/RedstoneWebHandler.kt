@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.RedStoneWireBlock
 import net.minecraft.world.level.saveddata.SavedData
 import java.util.*
 
@@ -88,14 +89,11 @@ class RedstoneWebHandler : SavedData() {
 	@Synchronized
 	fun getPower(position: BlockPos, direction: Direction): Int {
 		val lineUuids = lineUuidsBySignalPosition[position] ?: return 0
-		val linesBeingRead = lineUuidsBeingRead.get()
 		var strongestPower = 0
 
 		for (lineUuid in lineUuids) {
 			val line = lines[lineUuid] ?: continue
 			if (!line.connectsTo(position, direction)) continue
-
-			if (linesBeingRead != null && lineUuid in linesBeingRead) continue
 
 			strongestPower = maxOf(strongestPower, line.power)
 			if (strongestPower >= MAX_POWER) return MAX_POWER
@@ -160,47 +158,92 @@ class RedstoneWebHandler : SavedData() {
 
 	private fun refreshLinePower(level: ServerLevel): Set<RedstoneWebLine> {
 		val changedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
-		val newPowerByLine: MutableMap<RedstoneWebLine, Int> = mutableMapOf()
+		val remainingLines: MutableSet<RedstoneWebLine> = lines.values.toMutableSet()
 
-		for (line in lines.values) {
-			newPowerByLine[line] = calculateLinePower(level, line, mutableSetOf())
+		while (remainingLines.isNotEmpty()) {
+			val firstLine = remainingLines.first()
+			val component = getConnectedComponent(firstLine, remainingLines)
+			var newPower = calculateComponentPower(level, component)
+
+			if (hasFallingPower(component, newPower)) {
+				for (line in component) {
+					if (line.updatePower(0)) changedLines.add(line)
+				}
+
+				updateBlockAnchors(level, component)
+				newPower = calculateComponentPower(level, component)
+			}
+
+			val poweredLines: MutableSet<RedstoneWebLine> = mutableSetOf()
+			for (line in component) {
+				if (!line.updatePower(newPower)) continue
+
+				changedLines.add(line)
+				poweredLines.add(line)
+			}
+
+			updateBlockAnchors(level, poweredLines)
 		}
-
-		for ((line, newPower) in newPowerByLine) {
-			if (!line.updatePower(newPower)) continue
-			changedLines.add(line)
-		}
-
-		updateBlockAnchors(level, changedLines)
 
 		return changedLines
 	}
 
-	private fun calculateLinePower(
-		level: ServerLevel,
-		line: RedstoneWebLine,
-		checkedLines: MutableSet<UUID>
-	): Int {
-		if (!checkedLines.add(line.uuid)) return 0
-		lineUuidsBeingRead.set(checkedLines)
+	private fun getConnectedComponent(
+		firstLine: RedstoneWebLine,
+		remainingLines: MutableSet<RedstoneWebLine>
+	): Set<RedstoneWebLine> {
+		val component: MutableSet<RedstoneWebLine> = mutableSetOf()
+		val linesToCheck: ArrayDeque<RedstoneWebLine> = ArrayDeque()
+		linesToCheck.add(firstLine)
+		remainingLines.remove(firstLine)
 
-		return try {
-			var strongestPower = maxOf(
-				getBlockInputPower(level, line.firstNode),
-				getBlockInputPower(level, line.secondNode)
-			)
+		while (linesToCheck.isNotEmpty()) {
+			val line = linesToCheck.removeFirst()
+			component.add(line)
 
 			for (connectedLine in getConnectedLines(line)) {
-				val connectedPower = calculateLinePower(level, connectedLine, checkedLines)
-				strongestPower = maxOf(strongestPower, connectedPower)
+				if (!remainingLines.remove(connectedLine)) continue
+				linesToCheck.add(connectedLine)
+			}
+		}
+
+		return component
+	}
+
+	private fun calculateComponentPower(
+		level: ServerLevel,
+		component: Set<RedstoneWebLine>
+	): Int {
+		val checkedNodes: MutableSet<UUID> = mutableSetOf()
+		val previousSuppression = suppressWebstonePower
+		suppressWebstonePower = true
+
+		return try {
+			var strongestPower = 0
+			for (line in component) {
+				if (checkedNodes.add(line.firstNode.uuid)) {
+					strongestPower = maxOf(strongestPower, getBlockInputPower(level, line.firstNode))
+				}
+
+				if (checkedNodes.add(line.secondNode.uuid)) {
+					strongestPower = maxOf(strongestPower, getBlockInputPower(level, line.secondNode))
+				}
+
 				if (strongestPower >= MAX_POWER) break
 			}
 
 			strongestPower
 		} finally {
-			checkedLines.remove(line.uuid)
-			if (checkedLines.isEmpty()) lineUuidsBeingRead.remove()
+			suppressWebstonePower = previousSuppression
 		}
+	}
+
+	private fun hasFallingPower(component: Set<RedstoneWebLine>, newPower: Int): Boolean {
+		for (line in component) {
+			if (newPower < line.power) return true
+		}
+
+		return false
 	}
 
 	private fun getBlockInputPower(
@@ -210,8 +253,16 @@ class RedstoneWebHandler : SavedData() {
 		if (node !is WebBlockAnchor) return 0
 		if (!node.isLoaded(level)) return 0
 
-		return level.getSignal(node.blockPos, node.face.opposite)
-			.coerceIn(0, MAX_POWER)
+		val blockPower = level.getSignal(node.blockPos, node.face.opposite)
+		val signalPosition = node.blockPos.relative(node.face)
+		val signalState = level.getBlockState(signalPosition)
+		val dustPower = if (signalState.block is RedStoneWireBlock) {
+			(signalState.getValue(RedStoneWireBlock.POWER) - 1).coerceAtLeast(0)
+		} else {
+			0
+		}
+
+		return maxOf(blockPower, dustPower).coerceIn(0, MAX_POWER)
 	}
 
 	@Synchronized
@@ -474,6 +525,7 @@ class RedstoneWebHandler : SavedData() {
 		val signalPosition = node.blockPos.relative(node.face)
 		if (!node.isLoaded(level)) return
 
+		level.neighborChanged(signalPosition, Blocks.AIR, node.blockPos)
 		level.updateNeighborsAt(signalPosition, Blocks.AIR)
 	}
 
@@ -558,10 +610,16 @@ class RedstoneWebHandler : SavedData() {
 		private const val SAVED_DATA_NAME = "critterworks_redstone_webs"
 		private const val NODES_TAG = "Nodes"
 		private const val LINES_TAG = "Lines"
-		private val lineUuidsBeingRead = ThreadLocal<Set<UUID>>()
+		private var suppressWebstonePower = false
+
+		@JvmStatic
+		fun isWebstonePowerSuppressed(): Boolean {
+			return suppressWebstonePower
+		}
 
 		@JvmStatic
 		fun getInjectedPower(level: ServerLevel, position: BlockPos, direction: Direction): Int {
+			if (suppressWebstonePower) return 0
 			return get(level).getPower(position, direction)
 		}
 
