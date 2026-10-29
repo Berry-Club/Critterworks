@@ -1,8 +1,8 @@
-package dev.aaronhowser.mods.critterworks.handler.web.node
+package dev.aaronhowser.mods.critterworks.handler.web.item.node
 
 import com.mojang.serialization.Codec
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLineInvalidation
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLineInvalidation
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec

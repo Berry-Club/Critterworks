@@ -10,7 +10,7 @@ import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
-import dev.aaronhowser.mods.critterworks.handler.web.WebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents

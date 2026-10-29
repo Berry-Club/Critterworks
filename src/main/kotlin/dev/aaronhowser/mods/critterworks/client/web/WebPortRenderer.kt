@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.item.WebPortItem
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource

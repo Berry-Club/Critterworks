@@ -1,9 +1,9 @@
-package dev.aaronhowser.mods.critterworks.handler.web
+package dev.aaronhowser.mods.critterworks.handler.web.item
 
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
-import dev.aaronhowser.mods.critterworks.handler.web.path.WebPath
-import dev.aaronhowser.mods.critterworks.handler.web.path.WebPathfinder
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.path.WebPath
+import dev.aaronhowser.mods.critterworks.handler.web.item.path.WebPathfinder
 import java.util.*
 
 class WebNetwork(

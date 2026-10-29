@@ -1,7 +1,7 @@
-package dev.aaronhowser.mods.critterworks.handler.web.path
+package dev.aaronhowser.mods.critterworks.handler.web.item.path
 
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
 import java.util.*
 
 class WebPathfinder(

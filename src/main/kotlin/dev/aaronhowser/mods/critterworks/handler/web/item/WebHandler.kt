@@ -1,15 +1,15 @@
-package dev.aaronhowser.mods.critterworks.handler.web
+package dev.aaronhowser.mods.critterworks.handler.web.item
 
 import com.mojang.serialization.DynamicOps
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.scheduleTaskInTicks
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLineData
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLineInvalidation
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLineInvalidationReason
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebLineAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLineData
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLineInvalidation
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLineInvalidationReason
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
 import dev.aaronhowser.mods.critterworks.registry.ModSoundEvents

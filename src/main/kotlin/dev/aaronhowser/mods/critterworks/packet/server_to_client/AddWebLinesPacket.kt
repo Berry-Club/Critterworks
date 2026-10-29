@@ -2,10 +2,10 @@ package dev.aaronhowser.mods.critterworks.packet.server_to_client
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.handler.web.line.ClientWebLines
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLineData
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLineData
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec

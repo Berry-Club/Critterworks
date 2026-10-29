@@ -1,19 +1,17 @@
-package dev.aaronhowser.mods.critterworks.handler.web.line
+package dev.aaronhowser.mods.critterworks.handler.web.item.line
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
-import dev.aaronhowser.mods.critterworks.handler.web.TargetedWebNode
-import dev.aaronhowser.mods.critterworks.handler.web.WebLineInteractionHandler
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.TargetedWebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
-import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.client.event.InputEvent

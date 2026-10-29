@@ -1,8 +1,8 @@
-package dev.aaronhowser.mods.critterworks.handler.web.line
+package dev.aaronhowser.mods.critterworks.handler.web.item.line
 
-import dev.aaronhowser.mods.critterworks.handler.web.WebNetwork
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebLineAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.WebNetwork
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ChunkPos

@@ -5,8 +5,8 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.random
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
-import dev.aaronhowser.mods.critterworks.handler.web.WebHandler
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3

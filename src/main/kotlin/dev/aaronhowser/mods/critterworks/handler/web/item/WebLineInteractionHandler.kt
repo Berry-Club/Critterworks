@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.handler.web
+package dev.aaronhowser.mods.critterworks.handler.web.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
@@ -8,10 +8,10 @@ import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
-import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebBlockAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebLineAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
 import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortMenu
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.ShowWebPathPacket

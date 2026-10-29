@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.handler.spider
 
-import dev.aaronhowser.mods.critterworks.handler.web.path.WebPath
+import dev.aaronhowser.mods.critterworks.handler.web.item.path.WebPath
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.world.phys.Vec3
