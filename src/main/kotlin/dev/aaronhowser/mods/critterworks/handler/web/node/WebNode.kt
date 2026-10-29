@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.handler.web.node
 
 import com.mojang.serialization.Codec
+import dev.aaronhowser.mods.critterworks.handler.web.graph.WebVertex
 import dev.aaronhowser.mods.critterworks.handler.web.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.line.WebLineInvalidation
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -11,15 +12,15 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-sealed class WebNode {
+sealed class WebNode : WebVertex {
 
-	abstract val uuid: UUID
-	abstract val position: Vec3
+	abstract override val uuid: UUID
+	abstract override val position: Vec3
 
 	val lines: Set<WebLine>
 		field = mutableSetOf()
 
-	abstract fun isLoaded(level: ServerLevel): Boolean
+	abstract override fun isLoaded(level: ServerLevel): Boolean
 	abstract fun getInvalidation(
 		level: ServerLevel,
 		lines: Map<UUID, WebLine>,
