@@ -316,6 +316,13 @@ class RedstoneWebHandler : SavedData() {
 		addSignalPositionReference(line, line.secondNode)
 	}
 
+	private fun addLoadedLine(line: RedstoneWebLine) {
+		nodes[line.firstNode.uuid] = line.firstNode
+		nodes[line.secondNode.uuid] = line.secondNode
+		lines[line.uuid] = line
+		addLineReferences(line)
+	}
+
 	private fun addAnchorToParentLine(node: WebNode) {
 		if (node !is WebLineAnchor) return
 
@@ -559,24 +566,12 @@ class RedstoneWebHandler : SavedData() {
 		}
 
 		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): RedstoneWebHandler {
-			val savedData = RedstoneWebHandler()
+			val handler = RedstoneWebHandler()
+
+			val nodesTag = tag.get(NODES_TAG) ?: return handler
+			val linesTag = tag.get(LINES_TAG) ?: return handler
+
 			val ops = registries.createSerializationContext(NbtOps.INSTANCE)
-			val nodesTag = tag.get(NODES_TAG)
-			val linesTag = tag.get(LINES_TAG) ?: return savedData
-
-			if (nodesTag == null) {
-				val legacyLines = RedstoneWebLine.LEGACY_CODEC
-					.listOf()
-					.parse(ops, linesTag)
-					.getOrThrow()
-
-				for (line in legacyLines) {
-					savedData.addLoadedLine(line)
-				}
-
-				return savedData
-			}
-
 			val loadedNodes = WebNode.CODEC
 				.listOf()
 				.parse(ops, nodesTag)
@@ -593,35 +588,33 @@ class RedstoneWebHandler : SavedData() {
 			}
 
 			for (node in loadedNodes) {
-				if (node.uuid in referencedNodeUuids) savedData.nodes[node.uuid] = node
+				if (node.uuid in referencedNodeUuids) {
+					handler.nodes[node.uuid] = node
+				}
 			}
 
 			for (lineData in loadedLines) {
-				val firstNode = savedData.nodes[lineData.firstNodeUuid] ?: continue
-				val secondNode = savedData.nodes[lineData.secondNodeUuid] ?: continue
+				val firstNode = handler.nodes[lineData.firstNodeUuid] ?: continue
+				val secondNode = handler.nodes[lineData.secondNodeUuid] ?: continue
+
 				val line = RedstoneWebLine(
 					lineData.uuid,
 					firstNode,
 					secondNode
 				)
-				savedData.addLoadedLine(line)
+
+				handler.addLoadedLine(line)
 			}
 
-			return savedData
-		}
-
-		private fun RedstoneWebHandler.addLoadedLine(line: RedstoneWebLine) {
-			nodes[line.firstNode.uuid] = line.firstNode
-			nodes[line.secondNode.uuid] = line.secondNode
-			lines[line.uuid] = line
-			addLineReferences(line)
+			return handler
 		}
 
 		fun get(level: ServerLevel): RedstoneWebHandler {
-			return level.dataStorage.computeIfAbsent(FACTORY, SAVED_DATA_NAME)
+			return level.dataStorage.computeIfAbsent(
+				Factory(::RedstoneWebHandler, ::load),
+				SAVED_DATA_NAME
+			)
 		}
-
-		private val FACTORY = Factory(::RedstoneWebHandler, ::load)
 	}
 
 }
