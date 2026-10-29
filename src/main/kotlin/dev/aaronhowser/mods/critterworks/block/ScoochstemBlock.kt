@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.critterworks.block
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.chance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.critterworks.block.base.ScoochwormTravelBlock
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModBlockTagsProvider

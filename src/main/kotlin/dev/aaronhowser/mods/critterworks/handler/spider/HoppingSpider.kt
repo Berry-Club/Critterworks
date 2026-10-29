@@ -3,8 +3,8 @@ package dev.aaronhowser.mods.critterworks.handler.spider
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.HoppingSpiderBehavior
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.HoppingSpiderWanderBehavior
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.HoppingSpiderTransportBehavior
-import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.item.path.WebPath
 import dev.aaronhowser.mods.critterworks.item.ItemFilterItem
 import dev.aaronhowser.mods.critterworks.item.WebPortItem

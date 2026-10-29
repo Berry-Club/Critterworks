@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.handler.web.common.node
 
-import java.util.UUID
+import java.util.*
 
 data class TargetedWebNode(
 	val lineUuid: UUID?,

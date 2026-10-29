@@ -1,6 +1,5 @@
 package dev.aaronhowser.mods.critterworks.handler.web.item
 
-import com.mojang.serialization.DynamicOps
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.scheduleTaskInTicks
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
@@ -17,7 +16,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource

@@ -3,7 +3,7 @@ package dev.aaronhowser.mods.critterworks.handler.snail
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncEvilSnailsPacket.SnailData
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
-import java.util.UUID
+import java.util.*
 
 object ClientEvilSnails {
 
