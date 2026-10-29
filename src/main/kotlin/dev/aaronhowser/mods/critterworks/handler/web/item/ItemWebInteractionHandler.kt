@@ -51,7 +51,7 @@ object ItemWebInteractionHandler {
 			return
 		}
 
-		if (!stack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+		if (!stack.isItem(ModItemTagsProvider.ITEM_WEB_LINE_INTERACTABLE)) return
 		if (stack.isItem(ModItems.WEB_PORT)) {
 			val blockAnchor = selectedNode as? WebBlockAnchor ?: return
 			savedData.installWebPort(level, blockAnchor, stack)
@@ -67,7 +67,7 @@ object ItemWebInteractionHandler {
 
 		val player = event.player as? ServerPlayer ?: return
 		val stack = event.itemStack
-		if (!stack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return
+		if (!stack.isItem(ModItemTagsProvider.ITEM_WEB_LINE_INTERACTABLE)) return
 		if (ItemWebHandler.get(player.serverLevel()).getLine(event.lineUuid) == null) return
 
 		when {

@@ -10,7 +10,6 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
-import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -30,11 +29,11 @@ object WebInteractionHandler {
 		hand: InteractionHand
 	) {
 		val itemStack = player.getItemInHand(hand)
-		if (!canInteractWithType(itemStack, webType)) return
 
 		if (targetsNode) {
 			interactNode(player, webType, targetUuid, requestedPosition, itemStack, hand)
 		} else {
+			if (!canInteractWithType(itemStack, webType)) return
 			interactLine(player, webType, targetUuid, requestedPosition, itemStack, hand)
 		}
 	}
@@ -81,12 +80,10 @@ object WebInteractionHandler {
 		)
 	}
 
-	private fun canInteractWithType(itemStack: ItemStack, webType: WebLineType): Boolean {
-		return when {
-			itemStack.isItem(ModItems.WEBSTONE_WEAVER) -> webType == WebLineType.REDSTONE
-			itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
-				|| itemStack.isItem(ModItems.WEB_PORT) -> webType == WebLineType.ITEM
-			else -> true
+	fun canInteractWithType(itemStack: ItemStack, webType: WebLineType): Boolean {
+		return when (webType) {
+			WebLineType.ITEM -> itemStack.isItem(ModItemTagsProvider.ITEM_WEB_LINE_INTERACTABLE)
+			WebLineType.REDSTONE -> itemStack.isItem(ModItemTagsProvider.REDSTONE_WEB_LINE_INTERACTABLE)
 		}
 	}
 

@@ -1,5 +1,7 @@
-// 1.21.1	2026-10-29T01:18:59.9355473	Tags for minecraft:item mod id critterworks
+// 1.21.1	2026-10-29T07:24:49.3883509	Tags for minecraft:item mod id critterworks
 1e65bdb682a7782e8211da82359233d034083e8c data/critterworks/tags/item/dyeberries.json
+ef50cdde91052f3b5b2a2d0a6328400d856d2b3b data/critterworks/tags/item/item_web_line_interactable.json
+abcace129cca863dbae2f5da1c9db6bfe2648550 data/critterworks/tags/item/redstone_web_line_interactable.json
 f9e5031f5cee0a41e0092256ded8959118549fb7 data/critterworks/tags/item/requires_existing_node.json
 17bfc4b9c051ec105edb950a9d204196ff617b23 data/critterworks/tags/item/scoochstem_logs.json
 d03518e8ce9cc41bee42f2a279d292d83c55693d data/critterworks/tags/item/scoochworm_look_at.json
@@ -19,7 +21,6 @@ fa9942a74f540737b3e40c773135f54ec87eaefb data/critterworks/tags/item/sproutsnail
 9592c303108f3a26be9ca2ec694f2869130000ab data/critterworks/tags/item/sproutsnail_spawn_plants/swamp.json
 1febf0db24e55c1b72df5af234b797bba437e5ca data/critterworks/tags/item/sproutsnail_spawn_plants/taiga.json
 8f04724d80f9ca7327ce2407167962418f857741 data/critterworks/tags/item/tardigrade_blacklist.json
-fa4645b6b729dc40c0b2293b58287bce941fdab2 data/critterworks/tags/item/web_line_interactable.json
 3913219e7f30077482d907a7d15f2687f278b604 data/c/tags/item/slime_balls.json
 17bfc4b9c051ec105edb950a9d204196ff617b23 data/minecraft/tags/item/logs.json
 17bfc4b9c051ec105edb950a9d204196ff617b23 data/minecraft/tags/item/logs_that_burn.json

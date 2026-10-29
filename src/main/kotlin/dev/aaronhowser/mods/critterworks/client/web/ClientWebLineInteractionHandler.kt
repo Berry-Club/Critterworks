@@ -4,16 +4,17 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
+import dev.aaronhowser.mods.critterworks.handler.web.WebInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebTargeting
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.TargetedWebNode
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
-import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.client.event.InputEvent
@@ -34,7 +35,7 @@ object ClientWebLineInteractionHandler {
 		val interactionHand = getInteractionHand(player) ?: InteractionHand.MAIN_HAND
 		val target = getTargetedNode(player, eyePosition, viewVector, interactionHand) ?: return null
 		val heldStack = player.getItemInHand(interactionHand)
-		if (heldStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return target.second
+		if (WebInteractionHandler.canInteractWithType(heldStack, target.first)) return target.second
 		if (!targetsInstalledWebPort(target)) return null
 
 		return target.second
@@ -51,7 +52,7 @@ object ClientWebLineInteractionHandler {
 		) ?: return
 		val targetedNode = target.second
 		val heldStack = player.getItemInHand(interactionHand)
-		if (!heldStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)
+		if (!WebInteractionHandler.canInteractWithType(heldStack, target.first)
 			&& !targetsInstalledWebPort(target)
 		) return
 
@@ -94,10 +95,10 @@ object ClientWebLineInteractionHandler {
 	}
 
 	private fun getInteractionHand(player: Player): InteractionHand? {
-		if (player.mainHandItem.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) {
+		if (canInteractWithWeb(player.mainHandItem)) {
 			return InteractionHand.MAIN_HAND
 		}
-		if (player.offhandItem.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) {
+		if (canInteractWithWeb(player.offhandItem)) {
 			return InteractionHand.OFF_HAND
 		}
 		return null
@@ -111,7 +112,10 @@ object ClientWebLineInteractionHandler {
 	): Pair<WebLineType, TargetedWebNode>? {
 		val lookEnd = eyePosition.add(viewVector.scale(player.blockInteractionRange()))
 		val heldStack = player.getItemInHand(interactionHand)
-		if (!heldStack.isItem(ModItems.WEBSTONE_WEAVER)) {
+		val canInteractWithItemWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.ITEM)
+		val canInteractWithRedstoneWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.REDSTONE)
+
+		if (!canInteractWithRedstoneWeb || canInteractWithItemWeb) {
 			val installedWebPort = WebTargeting.getTargetedNode(
 				ClientWebLines.getLines(WebLineType.ITEM),
 				eyePosition,
@@ -131,9 +135,8 @@ object ClientWebLineInteractionHandler {
 		}
 
 		val webType = when {
-			heldStack.isItem(ModItems.WEBSTONE_WEAVER) -> WebLineType.REDSTONE
-			heldStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
-				|| heldStack.isItem(ModItems.WEB_PORT) -> WebLineType.ITEM
+			canInteractWithItemWeb && !canInteractWithRedstoneWeb -> WebLineType.ITEM
+			canInteractWithRedstoneWeb && !canInteractWithItemWeb -> WebLineType.REDSTONE
 			else -> null
 		}
 		if (webType != null) {
@@ -156,6 +159,11 @@ object ClientWebLineInteractionHandler {
 		) ?: return null
 		val targetType = ClientWebLines.getType(target) ?: return null
 		return Pair(targetType, target)
+	}
+
+	private fun canInteractWithWeb(itemStack: ItemStack): Boolean {
+		return WebInteractionHandler.canInteractWithType(itemStack, WebLineType.ITEM)
+			|| WebInteractionHandler.canInteractWithType(itemStack, WebLineType.REDSTONE)
 	}
 
 	private fun targetsInstalledWebPort(target: Pair<WebLineType, TargetedWebNode>): Boolean {

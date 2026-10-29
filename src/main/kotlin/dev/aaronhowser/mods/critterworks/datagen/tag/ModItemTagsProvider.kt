@@ -176,10 +176,13 @@ class ModItemTagsProvider(
 		tag(SCOOCHWORM_SADDLES)
 			.add(Items.SADDLE)
 
-		tag(WEB_LINE_INTERACTABLE)
+		tag(ITEM_WEB_LINE_INTERACTABLE)
 			.add(ModItems.ARTIFICIAL_SPINNERETS)
-			.add(ModItems.WEBSTONE_WEAVER)
 			.add(ModItems.WEB_PORT)
+			.addTag(Tags.Items.TOOLS_SHEAR)
+
+		tag(REDSTONE_WEB_LINE_INTERACTABLE)
+			.add(ModItems.WEBSTONE_WEAVER)
 			.addTag(Tags.Items.TOOLS_SHEAR)
 
 		tag(ItemTags.LOGS)
@@ -235,7 +238,8 @@ class ModItemTagsProvider(
 		val SPROUTSNAIL_SPAWN_PLANTS_DEFAULT = tk("sproutsnail_spawn_plants/default")
 		val SCOOCHWORM_LOOK_AT = tk("scoochworm_look_at")
 		val SCOOCHWORM_SADDLES = tk("scoochworm_saddles")
-		val WEB_LINE_INTERACTABLE = tk("web_line_interactable")
+		val ITEM_WEB_LINE_INTERACTABLE = tk("item_web_line_interactable")
+		val REDSTONE_WEB_LINE_INTERACTABLE = tk("redstone_web_line_interactable")
 		val SNAP_TO_NODE = tk("snap_to_node")
 		val REQUIRES_EXISTING_NODE = tk("requires_existing_node")
 		val SCOOCHSTEM_LOGS = tk("scoochstem_logs")

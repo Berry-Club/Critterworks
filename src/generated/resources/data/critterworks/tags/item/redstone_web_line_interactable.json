@@ -1,8 +1,6 @@
 {
   "values": [
-    "critterworks:artificial_spinnerets",
     "critterworks:webstone_weaver",
-    "critterworks:web_port",
     "#c:tools/shear"
   ]
 }
