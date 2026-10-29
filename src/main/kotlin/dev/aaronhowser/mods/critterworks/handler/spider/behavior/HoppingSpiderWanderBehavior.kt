@@ -73,7 +73,7 @@ class HoppingSpiderWanderBehavior(
 			return ItemWebHandler.get(level).getNode(homeNodeUuid)
 		}
 
-		val network = currentNode.lines.firstNotNullOfOrNull { line -> line.network } ?: return null
+		val network = ItemWebHandler.get(level).getNetwork(currentNode) ?: return null
 		val random = level.random
 
 		if (random.oneIn(DISTANT_TARGET_CHANCE)) {

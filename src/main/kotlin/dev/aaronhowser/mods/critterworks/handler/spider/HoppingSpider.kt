@@ -172,7 +172,7 @@ class HoppingSpider(
 			return
 		}
 
-		val webPort = WebPortItem.getComponent(source.webPort)
+		val webPort = WebPortItem.getComponent(ItemWebHandler.get(level).getWebPort(source))
 
 		if (webPort.transferDirection != WebPortComponent.TransferDirection.INPUT) {
 			cancelTransport()
@@ -212,7 +212,8 @@ class HoppingSpider(
 		val destination = getBlockAnchor(level, transportBehavior.destinationNodeUuid)
 			?: return failDelivery(level, transportBehavior, HoppingSpiderTransportBehavior.FailureReason.DESTINATION_MISSING)
 
-		val destinationWebPort = WebPortItem.getComponent(destination.webPort)
+		val savedData = ItemWebHandler.get(level)
+		val destinationWebPort = WebPortItem.getComponent(savedData.getWebPort(destination))
 
 		if (destinationWebPort.transferDirection != WebPortComponent.TransferDirection.OUTPUT) {
 			return failDelivery(level, transportBehavior, HoppingSpiderTransportBehavior.FailureReason.DESTINATION_NOT_OUTPUT)
@@ -221,7 +222,7 @@ class HoppingSpider(
 		val source = getBlockAnchor(level, transportBehavior.sourceNodeUuid)
 			?: return failDelivery(level, transportBehavior, HoppingSpiderTransportBehavior.FailureReason.SOURCE_MISSING)
 
-		val sourceWebPort = WebPortItem.getComponent(source.webPort)
+		val sourceWebPort = WebPortItem.getComponent(savedData.getWebPort(source))
 
 		if (sourceWebPort.color != destinationWebPort.color) {
 			return failDelivery(level, transportBehavior, HoppingSpiderTransportBehavior.FailureReason.CHANNEL_CHANGED)
@@ -361,7 +362,7 @@ class HoppingSpider(
 	}
 
 	private fun getItemHandler(level: ServerLevel, anchor: WebBlockAnchor): IItemHandler? {
-		if (!anchor.hasWebPort) return null
+		if (!ItemWebHandler.get(level).hasWebPort(anchor)) return null
 		return level.getCapability(Capabilities.ItemHandler.BLOCK, anchor.blockPos, anchor.face)
 	}
 

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.handler.web.common.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.item.WebPortItem
 import net.minecraft.client.renderer.LevelRenderer
@@ -21,11 +21,12 @@ object WebPortRenderer {
 	fun renderAll(bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
 
-		for (node in ClientWebLines.getNodes()) {
+		for (node in ClientWebLines.getNodes(WebLineType.ITEM)) {
 			val anchor = node as? WebBlockAnchor ?: continue
-			if (!anchor.hasWebPort) continue
+			val webPort = ClientItemWebPorts.get(anchor.uuid)
+			if (webPort.isEmpty) continue
 
-			val component = WebPortItem.getComponent(anchor.webPort)
+			val component = WebPortItem.getComponent(webPort)
 			val rotation = Quaternionf().rotationTo(
 				0f,
 				1f,

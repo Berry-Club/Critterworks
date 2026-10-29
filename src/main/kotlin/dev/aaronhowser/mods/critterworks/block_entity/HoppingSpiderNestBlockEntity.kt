@@ -319,7 +319,9 @@ class HoppingSpiderNestBlockEntity(
 		spider: HoppingSpider,
 		startingNode: WebNode
 	): HoppingSpiderTransportCandidate? {
-		val sourceWebPort = WebPortItem.getComponent(sourceNode.webPort)
+		val sourceWebPort = WebPortItem.getComponent(
+			ItemWebHandler.get(level).getWebPort(sourceNode)
+		)
 		if (sourceWebPort.transferDirection != WebPortComponent.TransferDirection.INPUT) return null
 
 		val sourceHandler = getItemHandler(level, sourceNode) ?: return null
@@ -366,13 +368,14 @@ class HoppingSpiderNestBlockEntity(
 		spider: HoppingSpider,
 		startingNode: WebNode
 	): HoppingSpiderTransportCandidate? {
-		val sourceWebPort = WebPortItem.getComponent(sourceNode.webPort)
+		val savedData = ItemWebHandler.get(level)
+		val sourceWebPort = WebPortItem.getComponent(savedData.getWebPort(sourceNode))
 		var bestCandidate: HoppingSpiderTransportCandidate? = null
 
 		for (destinationNode in inventoryNodes) {
 			if (isSameFace(sourceNode, destinationNode)) continue
 
-			val destinationWebPort = WebPortItem.getComponent(destinationNode.webPort)
+			val destinationWebPort = WebPortItem.getComponent(savedData.getWebPort(destinationNode))
 
 			if (destinationWebPort.transferDirection != WebPortComponent.TransferDirection.OUTPUT) continue
 			if (destinationWebPort.color != sourceWebPort.color) continue
@@ -440,7 +443,7 @@ class HoppingSpiderNestBlockEntity(
 
 		for (node in network.getNodes()) {
 			if (node !is WebBlockAnchor || node.blockPos == blockPos) continue
-			if (!node.hasWebPort) continue
+			if (!ItemWebHandler.get(level).hasWebPort(node)) continue
 			if (getItemHandler(level, node) == null) continue
 
 			anchors.add(node)

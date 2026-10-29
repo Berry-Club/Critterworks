@@ -3,7 +3,8 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebInteractionHandler
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
@@ -32,13 +33,13 @@ class ArtificialSpinneretsItem(properties: Properties) : Item(properties) {
 		if (level !is ServerLevel) return InteractionResult.SUCCESS
 
 		val player = context.player ?: return InteractionResult.PASS
-		val blockAnchor = WebLineInteractionHandler.createBlockAnchor(
+		val blockAnchor = WebBlockAnchor.create(
 			context.clickedPos,
 			context.clickedFace,
 			context.clickLocation
 		)
 
-		WebLineInteractionHandler.handleNodeSelection(level, player, context.itemInHand, blockAnchor)
+		ItemWebInteractionHandler.handleNodeSelection(level, player, context.itemInHand, blockAnchor)
 		return InteractionResult.CONSUME
 	}
 

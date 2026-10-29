@@ -12,7 +12,6 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.world.feature.config.HoppingSpiderNestConfiguration
 import net.minecraft.core.BlockPos
@@ -91,7 +90,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 				random,
 				FACE_EDGE_INSET
 			)
-			val nestAnchor = WebLineInteractionHandler.createBlockAnchor(
+			val nestAnchor = WebBlockAnchor.create(
 				nestPosition,
 				face,
 				pointOnFace
@@ -248,7 +247,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 		val generatedLines: MutableList<Pair<WebLine, WebBlockAnchor>> = mutableListOf()
 
 		for ((nestAnchor, rayHit) in rayHits) {
-			val caveAnchor = WebLineInteractionHandler.createBlockAnchor(
+			val caveAnchor = WebBlockAnchor.create(
 				rayHit.blockPos,
 				rayHit.direction,
 				rayHit.location

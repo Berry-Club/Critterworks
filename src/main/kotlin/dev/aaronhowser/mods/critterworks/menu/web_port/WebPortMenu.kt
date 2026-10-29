@@ -73,7 +73,8 @@ class WebPortMenu private constructor(
 
 		val level = playerInventory.player.level()
 		if (level is ServerLevel) {
-			return getAnchor(level)?.webPort ?: ItemStack.EMPTY
+			val anchor = getAnchor(level) ?: return ItemStack.EMPTY
+			return ItemWebHandler.get(level).getWebPort(anchor)
 		}
 		return clientAnchorStack
 	}
@@ -121,7 +122,8 @@ class WebPortMenu private constructor(
 		val level = player.level()
 		if (level !is ServerLevel) return true
 		val anchor = getAnchor(level) ?: return false
-		return anchor.hasWebPort && player.distanceToSqr(anchor.position) <= MAX_DISTANCE_SQUARED
+		return ItemWebHandler.get(level).hasWebPort(anchor)
+			&& player.distanceToSqr(anchor.position) <= MAX_DISTANCE_SQUARED
 	}
 
 	override fun handleButtonPressed(buttonId: Int, isShiftDown: Boolean) {

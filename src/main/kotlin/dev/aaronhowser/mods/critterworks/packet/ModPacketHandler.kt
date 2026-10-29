@@ -8,6 +8,8 @@ import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPack
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.ShowWebPathPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncEvilSnailsPacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncItemWebPortsPacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncRedstoneWebPowerPacket
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 
 object ModPacketHandler : AaronPacketRegistrar {
@@ -19,6 +21,8 @@ object ModPacketHandler : AaronPacketRegistrar {
 		toClient(registrar, RemoveWebLinePacket.TYPE, RemoveWebLinePacket.STREAM_CODEC)
 		toClient(registrar, ShowWebPathPacket.TYPE, ShowWebPathPacket.STREAM_CODEC)
 		toClient(registrar, SyncEvilSnailsPacket.TYPE, SyncEvilSnailsPacket.STREAM_CODEC)
+		toClient(registrar, SyncItemWebPortsPacket.TYPE, SyncItemWebPortsPacket.STREAM_CODEC)
+		toClient(registrar, SyncRedstoneWebPowerPacket.TYPE, SyncRedstoneWebPowerPacket.STREAM_CODEC)
 		toServer(registrar, SnailShieldMovedPacket.TYPE, SnailShieldMovedPacket.STREAM_CODEC)
 		toServer(registrar, UseCageOnEvilSnailPacket.TYPE, UseCageOnEvilSnailPacket.STREAM_CODEC)
 		toServer(registrar, WebLineInteractPacket.TYPE, WebLineInteractPacket.STREAM_CODEC)

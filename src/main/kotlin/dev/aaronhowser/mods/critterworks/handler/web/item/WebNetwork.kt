@@ -17,7 +17,6 @@ class WebNetwork(
 
 	fun addLine(line: WebLine) {
 		if (lines.add(line)) {
-			line.network = this
 			pathfinder.invalidate()
 		}
 	}
@@ -29,8 +28,7 @@ class WebNetwork(
 	}
 
 	fun removeLine(line: WebLine) {
-		if (lines.remove(line) && line.network === this) {
-			line.network = null
+		if (lines.remove(line)) {
 			pathfinder.invalidate()
 		}
 	}

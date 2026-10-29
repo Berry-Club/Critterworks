@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.handler.web.item
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.aaron.scheduler.SchedulerExtensions.scheduleTaskInTicks
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineData
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineInvalidation
@@ -11,6 +12,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncItemWebPortsPacket
 import dev.aaronhowser.mods.critterworks.registry.ModSoundEvents
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -32,6 +34,7 @@ class ItemWebHandler : SavedData() {
 	private val lines: MutableMap<UUID, WebLine> = mutableMapOf()
 	private val networks: MutableSet<WebNetwork> = mutableSetOf()
 	private val networksByLineUuid: MutableMap<UUID, WebNetwork> = mutableMapOf()
+	private val webPortsByNodeUuid: MutableMap<UUID, ItemStack> = mutableMapOf()
 
 	private val lineUuidsByChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
 	private val chunksToValidate: MutableSet<ChunkPos> = mutableSetOf()
@@ -52,7 +55,11 @@ class ItemWebHandler : SavedData() {
 		addLineToNetwork(line)
 		addToChunkCache(line)
 		setDirty()
-		sendToNearbyPlayers(level, line, AddWebLinesPacket.fromLines(listOf(line)))
+		sendToNearbyPlayers(
+			level,
+			line,
+			AddWebLinesPacket.fromLines(WebLineType.ITEM, listOf(line))
+		)
 	}
 
 	@Synchronized
@@ -76,23 +83,44 @@ class ItemWebHandler : SavedData() {
 	}
 
 	@Synchronized
+	fun getNetwork(node: WebNode): WebNetwork? {
+		for (line in node.lines) {
+			val network = networksByLineUuid[line.uuid]
+			if (network != null) return network
+		}
+
+		return null
+	}
+
+	@Synchronized
 	fun installWebPort(level: ServerLevel, anchor: WebBlockAnchor, webPortStack: ItemStack) {
-		anchor.webPort = webPortStack.copyWithCount(1)
+		webPortsByNodeUuid[anchor.uuid] = webPortStack.copyWithCount(1)
 		syncAnchor(level, anchor)
 	}
 
 	@Synchronized
 	fun removeWebPort(level: ServerLevel, anchor: WebBlockAnchor): ItemStack {
-		val removedStack = anchor.webPort
-		anchor.webPort = ItemStack.EMPTY
+		val removedStack = webPortsByNodeUuid.remove(anchor.uuid) ?: ItemStack.EMPTY
 		syncAnchor(level, anchor)
 		return removedStack
 	}
 
 	@Synchronized
+	fun getWebPort(anchor: WebBlockAnchor): ItemStack {
+		return webPortsByNodeUuid[anchor.uuid] ?: ItemStack.EMPTY
+	}
+
+	@Synchronized
+	fun hasWebPort(anchor: WebBlockAnchor): Boolean {
+		return anchor.uuid in webPortsByNodeUuid
+	}
+
+	@Synchronized
 	fun syncAnchor(level: ServerLevel, anchor: WebBlockAnchor) {
 		setDirty()
-		val packet = AddWebLinesPacket.fromLines(anchor.lines)
+		val packet = SyncItemWebPortsPacket(
+			listOf(ItemWebPortData(anchor.uuid, getWebPort(anchor)))
+		)
 		for (line in anchor.lines) {
 			sendToNearbyPlayers(level, line, packet)
 		}
@@ -128,7 +156,10 @@ class ItemWebHandler : SavedData() {
 		val nearbyLines = getLinesWithEndpointInChunk(chunkPos)
 		if (nearbyLines.isEmpty()) return
 
-		AddWebLinesPacket.fromLines(nearbyLines).messagePlayer(player)
+		AddWebLinesPacket
+			.fromLines(WebLineType.ITEM, nearbyLines)
+			.messagePlayer(player)
+		syncWebPorts(player, nearbyLines)
 	}
 
 	@Synchronized
@@ -150,7 +181,7 @@ class ItemWebHandler : SavedData() {
 			}
 
 			if (!stillTrackingLine) {
-				RemoveWebLinePacket(line.uuid).messagePlayer(player)
+				RemoveWebLinePacket(WebLineType.ITEM, line.uuid).messagePlayer(player)
 			}
 		}
 	}
@@ -167,6 +198,32 @@ class ItemWebHandler : SavedData() {
 		}
 
 		return matchingLines
+	}
+
+	private fun syncWebPorts(player: ServerPlayer, lines: Collection<WebLine>) {
+		val webPorts: MutableList<ItemWebPortData> = mutableListOf()
+		val checkedNodes: MutableSet<UUID> = mutableSetOf()
+
+		for (line in lines) {
+			addWebPortData(line.firstNode, checkedNodes, webPorts)
+			addWebPortData(line.secondNode, checkedNodes, webPorts)
+		}
+
+		if (webPorts.isNotEmpty()) {
+			SyncItemWebPortsPacket(webPorts).messagePlayer(player)
+		}
+	}
+
+	private fun addWebPortData(
+		node: WebNode,
+		checkedNodes: MutableSet<UUID>,
+		webPorts: MutableList<ItemWebPortData>
+	) {
+		if (node !is WebBlockAnchor) return
+		if (!checkedNodes.add(node.uuid)) return
+
+		val webPort = getWebPort(node)
+		if (!webPort.isEmpty) webPorts.add(ItemWebPortData(node.uuid, webPort))
 	}
 
 	@Synchronized
@@ -234,7 +291,7 @@ class ItemWebHandler : SavedData() {
 		lines.remove(line.uuid)
 		removeLineFromNetwork(line)
 		removeLineReferences(level, line)
-		sendToNearbyPlayers(level, line, RemoveWebLinePacket(line.uuid))
+		sendToNearbyPlayers(level, line, RemoveWebLinePacket(WebLineType.ITEM, line.uuid))
 		playBreakSound(level, line)
 		scheduleDependentLines(level, line.uuid)
 	}
@@ -460,13 +517,19 @@ class ItemWebHandler : SavedData() {
 		if (node is WebLineAnchor) {
 			lines[node.parentLineUuid]?.removeAttachedAnchor(node.uuid)
 		}
-		if (node is WebBlockAnchor && node.hasWebPort) {
+		if (node is WebBlockAnchor) {
+			val webPort = webPortsByNodeUuid.remove(node.uuid) ?: ItemStack.EMPTY
+			if (webPort.isEmpty) {
+				nodes.remove(nodeUuid)
+				return
+			}
+
 			Containers.dropItemStack(
 				level,
 				node.position.x,
 				node.position.y,
 				node.position.z,
-				node.webPort
+				webPort
 			)
 		}
 
@@ -500,9 +563,18 @@ class ItemWebHandler : SavedData() {
 			.listOf()
 			.encodeStart(ops, lines.values.map(WebLine::data))
 			.getOrThrow()
+		val webPorts: MutableList<ItemWebPortData> = mutableListOf()
+		for ((nodeUuid, stack) in webPortsByNodeUuid) {
+			webPorts.add(ItemWebPortData(nodeUuid, stack))
+		}
+		val webPortsTag = ItemWebPortData.CODEC
+			.listOf()
+			.encodeStart(ops, webPorts)
+			.getOrThrow()
 
 		tag.put(NODES_TAG, nodesTag)
 		tag.put(LINES_TAG, linesTag)
+		tag.put(WEB_PORTS_TAG, webPortsTag)
 		return tag
 	}
 
@@ -512,6 +584,7 @@ class ItemWebHandler : SavedData() {
 		private const val LEGACY_SAVED_DATA_NAME = "critterworks_webs"
 		private const val NODES_TAG = "Nodes"
 		private const val LINES_TAG = "Lines"
+		private const val WEB_PORTS_TAG = "WebPorts"
 
 		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): ItemWebHandler {
 			val savedData = ItemWebHandler()
@@ -530,8 +603,14 @@ class ItemWebHandler : SavedData() {
 				.parse(ops, linesTag)
 				.getOrThrow()
 
+			val referencedNodeUuids: MutableSet<UUID> = mutableSetOf()
+			for (lineData in loadedLines) {
+				referencedNodeUuids.add(lineData.firstNodeUuid)
+				referencedNodeUuids.add(lineData.secondNodeUuid)
+			}
+
 			for (node in loadedNodes) {
-				savedData.nodes[node.uuid] = node
+				if (node.uuid in referencedNodeUuids) savedData.nodes[node.uuid] = node
 			}
 
 			for (lineData in loadedLines) {
@@ -544,14 +623,21 @@ class ItemWebHandler : SavedData() {
 				savedData.addToChunkCache(line)
 			}
 
+			val webPortsTag = tag.get(WEB_PORTS_TAG) ?: nodesTag
+			val loadedWebPorts = ItemWebPortData.CODEC
+				.listOf()
+				.parse(ops, webPortsTag)
+				.getOrThrow()
+			for (webPort in loadedWebPorts) {
+				if (webPort.stack.isEmpty) continue
+				if (webPort.nodeUuid !in referencedNodeUuids) continue
+				savedData.webPortsByNodeUuid[webPort.nodeUuid] = webPort.stack
+			}
+
 			return savedData
 		}
 
 		fun get(level: ServerLevel): ItemWebHandler {
-			if (level != level.server.overworld()) {
-				return get(level.server.overworld())
-			}
-
 			val dataStorage = level.dataStorage
 			val savedData = dataStorage.get(FACTORY, SAVED_DATA_NAME)
 			if (savedData != null) {
