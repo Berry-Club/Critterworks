@@ -10,6 +10,11 @@ object ModMessageLang {
 	const val OBSTRUCTED_MESSAGE = "item.critterworks.artificial_spinnerets.obstructed"
 	const val LINE_CREATED_MESSAGE = "item.critterworks.artificial_spinnerets.line_created"
 	const val LINE_REMOVED_MESSAGE = "item.critterworks.artificial_spinnerets.line_removed"
+	const val WEBSTONE_FIRST_NODE_MESSAGE = "item.critterworks.webstone_weaver.first_node"
+	const val WEBSTONE_SAME_DIRECTION_MESSAGE = "item.critterworks.webstone_weaver.same_direction"
+	const val WEBSTONE_TOO_LONG_MESSAGE = "item.critterworks.webstone_weaver.too_long"
+	const val WEBSTONE_OBSTRUCTED_MESSAGE = "item.critterworks.webstone_weaver.obstructed"
+	const val WEBSTONE_LINE_CREATED_MESSAGE = "item.critterworks.webstone_weaver.line_created"
 	const val POLLEN_POINT_TOO_FAR_MESSAGE = "item.critterworks.sparkpollen_pouch.too_far"
 	const val POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE = "item.critterworks.sparkpollen_pouch.no_energy_connection"
 	const val EVIL_SNAIL_CAGE_MESSAGE = "message.critterworks.evil_snail_cage"
@@ -26,6 +31,11 @@ object ModMessageLang {
 			add(OBSTRUCTED_MESSAGE, "The selected faces do not have line of sight")
 			add(LINE_CREATED_MESSAGE, "Web line created")
 			add(LINE_REMOVED_MESSAGE, "Web line removed")
+			add(WEBSTONE_FIRST_NODE_MESSAGE, "First redstone web endpoint selected")
+			add(WEBSTONE_SAME_DIRECTION_MESSAGE, "The selected faces cannot point in the same direction")
+			add(WEBSTONE_TOO_LONG_MESSAGE, "The redstone web line must be shorter than 10 blocks")
+			add(WEBSTONE_OBSTRUCTED_MESSAGE, "The selected faces do not have line of sight")
+			add(WEBSTONE_LINE_CREATED_MESSAGE, "Redstone web line created")
 			add(POLLEN_POINT_TOO_FAR_MESSAGE, "The Pollen Point is too far from the Sparkbug Bush")
 			add(POLLEN_POINT_NO_ENERGY_CONNECTION_MESSAGE, "The selected face cannot transfer energy")
 			add(EVIL_SNAIL_CAGE_MESSAGE, "You thought you caught it, but it was only a decoy snail...")

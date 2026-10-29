@@ -24,6 +24,7 @@ class ModItemModelProvider(
 		hoppingSpider()
 		lockbox()
 		snailShield()
+		webstoneWeaver()
 
 		spawnEggItem(ModItems.SCOOCHWORM_SPAWN_EGG.get())
 		spawnEggItem(ModItems.ITEM_FILTERFEEDER_SPAWN_EGG.get())
@@ -169,6 +170,11 @@ class ModItemModelProvider(
 		basicItem(ModItems.PEARL.get())
 		basicItem(ModItems.SNAIL_SLIME.get())
 		basicItem(ModItems.SNAIL_SHELL_FRAGMENT.get())
+	}
+
+	private fun webstoneWeaver() {
+		withExistingParent("webstone_weaver", mcLoc("item/generated"))
+			.texture("layer0", modLoc("item/artificial_spinnerets"))
 	}
 
 	private fun filterfeederItems() {
