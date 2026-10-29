@@ -15,8 +15,8 @@ import dev.aaronhowser.mods.critterworks.client.entity.sproutsnail.SproutsnailRe
 import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageItemRenderer
 import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.snail.ClientEvilSnails
-import dev.aaronhowser.mods.critterworks.handler.web.common.line.ClientWebLineInteractionHandler
-import dev.aaronhowser.mods.critterworks.handler.web.common.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.client.web.ClientWebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.client.web.ClientWebLines
 import dev.aaronhowser.mods.critterworks.item.CritterCageItem
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShieldMovedPacket

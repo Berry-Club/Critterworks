@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.event.custom
 
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
@@ -9,6 +10,7 @@ import net.neoforged.bus.api.ICancellableEvent
 
 class WebNodeInteractionEvent(
 	val player: Player,
+	val webType: WebLineType,
 	val node: WebNode,
 	val itemStack: ItemStack,
 	val hand: InteractionHand

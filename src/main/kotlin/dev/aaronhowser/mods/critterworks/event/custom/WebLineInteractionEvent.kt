@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.event.custom
 
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
@@ -10,6 +11,7 @@ import java.util.*
 
 class WebLineInteractionEvent(
 	val player: Player,
+	val webType: WebLineType,
 	val lineUuid: UUID,
 	val target: WebLineAnchor,
 	val itemStack: ItemStack,

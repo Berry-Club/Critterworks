@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.critterworks.handler.web.common.line
 
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebNetwork
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ChunkPos
@@ -12,19 +11,19 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import java.util.*
 
-data class WebLine(
+open class WebLine(
 	val uuid: UUID,
 	val firstNode: WebNode,
 	val secondNode: WebNode
 ) {
-	var network: WebNetwork? = null
 
 	private val attachmentsByAnchorUuid: MutableMap<UUID, LineAnchorAttachment> = mutableMapOf()
 
 	val attachedAnchors: Collection<LineAnchorAttachment>
 		get() = attachmentsByAnchorUuid.values
 
-	val data = WebLineData(uuid, firstNode.uuid, secondNode.uuid)
+	val data: WebLineData
+		get() = WebLineData(uuid, firstNode.uuid, secondNode.uuid)
 	val intersectedChunkPositions: Set<ChunkPos> = calculateIntersectedChunkPositions()
 
 	val length: Double by lazy {
@@ -37,20 +36,16 @@ data class WebLine(
 			anchor.position.distanceTo(firstNode.position),
 			anchor.position.distanceTo(secondNode.position)
 		)
-		network?.invalidatePaths()
 	}
 
 	fun removeAttachedAnchor(anchorUuid: UUID) {
-		if (attachmentsByAnchorUuid.remove(anchorUuid) != null) {
-			network?.invalidatePaths()
-		}
+		attachmentsByAnchorUuid.remove(anchorUuid)
 	}
 
 	fun clearAttachedAnchors() {
 		if (attachmentsByAnchorUuid.isEmpty()) return
 
 		attachmentsByAnchorUuid.clear()
-		network?.invalidatePaths()
 	}
 
 	fun isLoaded(level: ServerLevel): Boolean {
@@ -134,6 +129,22 @@ data class WebLine(
 		}
 
 		return chunkPositions
+	}
+
+	override fun equals(other: Any?): Boolean {
+		if (this === other) return true
+		if (other !is WebLine) return false
+
+		return uuid == other.uuid
+			&& firstNode == other.firstNode
+			&& secondNode == other.secondNode
+	}
+
+	override fun hashCode(): Int {
+		var result = uuid.hashCode()
+		result = 31 * result + firstNode.hashCode()
+		result = 31 * result + secondNode.hashCode()
+		return result
 	}
 
 }

@@ -3,7 +3,8 @@ package dev.aaronhowser.mods.critterworks.packet.client_to_server
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.WebInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.UUIDUtil
 import net.minecraft.network.codec.ByteBufCodecs
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 import java.util.*
 
 class WebLineInteractPacket(
+	val webType: WebLineType,
 	val targetUuid: UUID,
 	val targetsNode: Boolean,
 	val position: Vec3,
@@ -24,7 +26,7 @@ class WebLineInteractPacket(
 
 	override fun handleOnServer(context: IPayloadContext) {
 		val player = context.player() as? ServerPlayer ?: return
-		WebLineInteractionHandler.interact(player, targetUuid, targetsNode, position, hand)
+		WebInteractionHandler.interact(player, webType, targetUuid, targetsNode, position, hand)
 	}
 
 	override fun type(): CustomPacketPayload.Type<WebLineInteractPacket> = TYPE
@@ -34,6 +36,7 @@ class WebLineInteractPacket(
 			makeType(Critterworks.MOD_ID, "web_line_interact")
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, WebLineInteractPacket> = StreamCodec.composite(
+			WebLineType.STREAM_CODEC, WebLineInteractPacket::webType,
 			UUIDUtil.STREAM_CODEC, WebLineInteractPacket::targetUuid,
 			ByteBufCodecs.BOOL, WebLineInteractPacket::targetsNode,
 			AaronExtraStreamCodecs.VEC3, WebLineInteractPacket::position,

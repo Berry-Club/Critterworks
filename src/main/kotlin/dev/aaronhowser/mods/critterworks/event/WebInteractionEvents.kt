@@ -3,7 +3,9 @@ package dev.aaronhowser.mods.critterworks.event
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
+import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebInteractionHandler
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 
@@ -13,12 +15,20 @@ object WebInteractionEvents {
 	@SubscribeEvent
 	fun handleNodeInteraction(event: WebNodeInteractionEvent) {
 		if (event.isCanceled) return
-		WebLineInteractionHandler.handleNodeInteraction(event)
+
+		when (event.webType) {
+			WebLineType.ITEM -> ItemWebInteractionHandler.handleNodeInteraction(event)
+			WebLineType.REDSTONE -> RedstoneWebInteractionHandler.handleNodeInteraction(event)
+		}
 	}
 
 	@SubscribeEvent
 	fun handleLineInteraction(event: WebLineInteractionEvent) {
 		if (event.isCanceled) return
-		WebLineInteractionHandler.handleLineInteraction(event)
+
+		when (event.webType) {
+			WebLineType.ITEM -> ItemWebInteractionHandler.handleLineInteraction(event)
+			WebLineType.REDSTONE -> RedstoneWebInteractionHandler.handleLineInteraction(event)
+		}
 	}
 }

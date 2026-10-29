@@ -12,7 +12,6 @@ import net.minecraft.core.UUIDUtil
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 import java.util.*
@@ -21,12 +20,8 @@ class WebBlockAnchor(
 	override val uuid: UUID,
 	val blockPos: BlockPos,
 	val face: Direction,
-	override val position: Vec3,
-	var webPort: ItemStack = ItemStack.EMPTY
+	override val position: Vec3
 ) : WebNode() {
-
-	val hasWebPort: Boolean
-		get() = !webPort.isEmpty
 
 	override fun isLoaded(level: ServerLevel): Boolean {
 		return isChunkLoaded(level, ChunkPos(blockPos))
@@ -48,6 +43,18 @@ class WebBlockAnchor(
 		const val TYPE = "block"
 		const val TYPE_ID = 0
 
+		fun create(blockPos: BlockPos, face: Direction, position: Vec3): WebBlockAnchor {
+			val surfaceOffset = 0.001
+			val faceNormal = Vec3.atLowerCornerOf(face.normal)
+
+			return WebBlockAnchor(
+				UUID.randomUUID(),
+				blockPos,
+				face,
+				position.add(faceNormal.scale(surfaceOffset))
+			)
+		}
+
 		val CODEC: MapCodec<WebBlockAnchor> =
 			RecordCodecBuilder.mapCodec { instance ->
 				instance.group(
@@ -62,10 +69,7 @@ class WebBlockAnchor(
 						.forGetter(WebBlockAnchor::face),
 					Vec3.CODEC
 						.fieldOf("position")
-						.forGetter(WebBlockAnchor::position),
-					ItemStack.OPTIONAL_CODEC
-						.optionalFieldOf("web_port", ItemStack.EMPTY)
-						.forGetter(WebBlockAnchor::webPort)
+						.forGetter(WebBlockAnchor::position)
 				).apply(instance, ::WebBlockAnchor)
 			}
 
@@ -74,7 +78,6 @@ class WebBlockAnchor(
 			BlockPos.STREAM_CODEC, WebBlockAnchor::blockPos,
 			Direction.STREAM_CODEC, WebBlockAnchor::face,
 			AaronExtraStreamCodecs.VEC3, WebBlockAnchor::position,
-			ItemStack.OPTIONAL_STREAM_CODEC, WebBlockAnchor::webPort,
 			::WebBlockAnchor
 		)
 	}

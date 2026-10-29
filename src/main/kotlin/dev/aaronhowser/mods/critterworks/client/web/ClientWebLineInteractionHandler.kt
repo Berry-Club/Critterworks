@@ -1,14 +1,16 @@
-package dev.aaronhowser.mods.critterworks.handler.web.common.line
+package dev.aaronhowser.mods.critterworks.client.web
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
+import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebTargeting
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.TargetedWebNode
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
+import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
@@ -30,46 +32,35 @@ object ClientWebLineInteractionHandler {
 		viewVector: Vec3
 	): TargetedWebNode? {
 		val interactionHand = getInteractionHand(player) ?: InteractionHand.MAIN_HAND
-		val targetedNode = getTargetedNode(
-			player,
-			eyePosition,
-			viewVector,
-			interactionHand
-		) ?: return null
-
+		val target = getTargetedNode(player, eyePosition, viewVector, interactionHand) ?: return null
 		val heldStack = player.getItemInHand(interactionHand)
-		if (heldStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) {
-			return targetedNode
-		}
+		if (heldStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) return target.second
+		if (!targetsInstalledWebPort(target)) return null
 
-		if (!targetsInstalledWebPort(targetedNode)) return null
-
-		return targetedNode
+		return target.second
 	}
 
 	private fun interactWithTarget(event: InputEvent.InteractionKeyMappingTriggered) {
 		val player = Minecraft.getInstance().player ?: return
 		val interactionHand = getInteractionHand(player) ?: event.hand
-
-		val targetedNode = getTargetedNode(
+		val target = getTargetedNode(
 			player,
 			player.eyePosition,
 			player.lookAngle,
 			interactionHand
 		) ?: return
-
+		val targetedNode = target.second
 		val heldStack = player.getItemInHand(interactionHand)
 		if (!heldStack.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)
-			&& !targetsInstalledWebPort(targetedNode)
-		) {
-			return
-		}
+			&& !targetsInstalledWebPort(target)
+		) return
 
 		val interactionEvent = if (targetedNode.lineUuid == null) {
-			WebNodeInteractionEvent(player, targetedNode.node, heldStack, interactionHand)
+			WebNodeInteractionEvent(player, target.first, targetedNode.node, heldStack, interactionHand)
 		} else {
 			WebLineInteractionEvent(
 				player,
+				target.first,
 				targetedNode.lineUuid,
 				targetedNode.node as WebLineAnchor,
 				heldStack,
@@ -78,21 +69,23 @@ object ClientWebLineInteractionHandler {
 		}
 
 		NeoForge.EVENT_BUS.post(interactionEvent)
-
-		if (event.hand == interactionHand) {
-			if (!interactionEvent.isCanceled) {
-				sendInteraction(targetedNode, interactionHand)
-			}
+		if (event.hand == interactionHand && !interactionEvent.isCanceled) {
+			sendInteraction(target, interactionHand)
 		}
 
 		event.isCanceled = true
 	}
 
-	private fun sendInteraction(targetedNode: TargetedWebNode, hand: InteractionHand) {
+	private fun sendInteraction(
+		target: Pair<WebLineType, TargetedWebNode>,
+		hand: InteractionHand
+	) {
+		val targetedNode = target.second
 		val targetsNode = targetedNode.lineUuid == null
 		val targetUuid = targetedNode.lineUuid ?: targetedNode.node.uuid
 
 		WebLineInteractPacket(
+			target.first,
 			targetUuid,
 			targetsNode,
 			targetedNode.node.position,
@@ -104,11 +97,9 @@ object ClientWebLineInteractionHandler {
 		if (player.mainHandItem.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) {
 			return InteractionHand.MAIN_HAND
 		}
-
 		if (player.offhandItem.isItem(ModItemTagsProvider.WEB_LINE_INTERACTABLE)) {
 			return InteractionHand.OFF_HAND
 		}
-
 		return null
 	}
 
@@ -117,39 +108,61 @@ object ClientWebLineInteractionHandler {
 		eyePosition: Vec3,
 		viewVector: Vec3,
 		interactionHand: InteractionHand
-	): TargetedWebNode? {
+	): Pair<WebLineType, TargetedWebNode>? {
 		val lookEnd = eyePosition.add(viewVector.scale(player.blockInteractionRange()))
-
-		val lines = ClientWebLines.getLines()
-		val installedWebPort = WebLineInteractionHandler.getTargetedNode(
-			lines,
-			eyePosition,
-			lookEnd,
-			snapToExistingNode = true,
-			requireExistingNode = true
-		)
-
-		if (installedWebPort != null && targetsInstalledWebPort(installedWebPort)) {
-			if (isBehindCurrentHit(installedWebPort, eyePosition)) return null
-
-			return installedWebPort
+		val heldStack = player.getItemInHand(interactionHand)
+		if (!heldStack.isItem(ModItems.WEBSTONE_WEAVER)) {
+			val installedWebPort = WebTargeting.getTargetedNode(
+				ClientWebLines.getLines(WebLineType.ITEM),
+				eyePosition,
+				lookEnd,
+				snapToExistingNode = true,
+				requireExistingNode = true
+			)
+			val target = if (installedWebPort == null) {
+				null
+			} else {
+				Pair(WebLineType.ITEM, installedWebPort)
+			}
+			if (target != null && targetsInstalledWebPort(target)) {
+				if (isBehindCurrentHit(target.second, eyePosition)) return null
+				return target
+			}
 		}
 
-		val heldStack = player.getItemInHand(interactionHand)
-		return WebLineInteractionHandler.getTargetedNode(
-			lines,
+		val webType = when {
+			heldStack.isItem(ModItems.WEBSTONE_WEAVER) -> WebLineType.REDSTONE
+			heldStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
+				|| heldStack.isItem(ModItems.WEB_PORT) -> WebLineType.ITEM
+			else -> null
+		}
+		if (webType != null) {
+			val target = WebTargeting.getTargetedNode(
+				ClientWebLines.getLines(webType),
+				eyePosition,
+				lookEnd,
+				heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
+				heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
+			) ?: return null
+			return Pair(webType, target)
+		}
+
+		val target = WebTargeting.getTargetedNode(
+			ClientWebLines.getLines(),
 			eyePosition,
 			lookEnd,
 			heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
 			heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
-		)
+		) ?: return null
+		val targetType = ClientWebLines.getType(target) ?: return null
+		return Pair(targetType, target)
 	}
 
-	private fun targetsInstalledWebPort(targetedNode: TargetedWebNode): Boolean {
-		if (targetedNode.lineUuid != null) return false
-
-		val blockAnchor = targetedNode.node as? WebBlockAnchor ?: return false
-		return blockAnchor.hasWebPort
+	private fun targetsInstalledWebPort(target: Pair<WebLineType, TargetedWebNode>): Boolean {
+		if (target.first != WebLineType.ITEM) return false
+		if (target.second.lineUuid != null) return false
+		val blockAnchor = target.second.node as? WebBlockAnchor ?: return false
+		return !ClientItemWebPorts.get(blockAnchor.uuid).isEmpty
 	}
 
 	private fun isBehindCurrentHit(targetedNode: TargetedWebNode, eyePosition: Vec3): Boolean {
@@ -157,8 +170,7 @@ object ClientWebLineInteractionHandler {
 		if (hitResult.type == HitResult.Type.MISS) return false
 
 		val hitDistanceSquared = eyePosition.distanceToSqr(hitResult.location)
-		val webPortDistanceSquared = eyePosition.distanceToSqr(targetedNode.node.position)
-		return hitDistanceSquared < webPortDistanceSquared
+		val webDistanceSquared = eyePosition.distanceToSqr(targetedNode.node.position)
+		return hitDistanceSquared < webDistanceSquared
 	}
-
 }
