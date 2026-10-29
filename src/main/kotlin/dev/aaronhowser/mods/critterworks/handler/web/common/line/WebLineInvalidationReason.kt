@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.handler.web.item.line
+package dev.aaronhowser.mods.critterworks.handler.web.common.line
 
 enum class WebLineInvalidationReason {
 	INVALID_ANCHOR,

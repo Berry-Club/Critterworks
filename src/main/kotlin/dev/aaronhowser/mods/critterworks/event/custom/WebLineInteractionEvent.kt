@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.event.custom
 
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack

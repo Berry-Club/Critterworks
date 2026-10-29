@@ -1,6 +1,6 @@
 package dev.aaronhowser.mods.critterworks.handler.web.item.path
 
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 
 data class WebPath(
 	val startNode: WebNode,

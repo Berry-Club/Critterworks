@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.line.ClientWebLineInteractionHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.ClientWebLineInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft

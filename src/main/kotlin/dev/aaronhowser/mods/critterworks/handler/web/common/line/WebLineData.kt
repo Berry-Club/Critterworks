@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.handler.web.item.line
+package dev.aaronhowser.mods.critterworks.handler.web.common.line
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder

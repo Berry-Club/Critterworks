@@ -9,10 +9,10 @@ import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.handler.spider.HoppingSpider
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.registry.ModBlocks
 import dev.aaronhowser.mods.critterworks.world.feature.config.HoppingSpiderNestConfiguration
 import net.minecraft.core.BlockPos

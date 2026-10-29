@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.packet.server_to_client
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.handler.web.item.line.ClientWebLines
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.ClientWebLines
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.UUIDUtil
 import net.minecraft.network.codec.StreamCodec

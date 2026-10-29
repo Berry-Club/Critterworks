@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.handler.web.item.line
+package dev.aaronhowser.mods.critterworks.handler.web.common.line
 
 data class WebLineInvalidation(
 	val reason: WebLineInvalidationReason,

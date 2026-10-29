@@ -1,7 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item.component
 
 import com.mojang.serialization.Codec
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 

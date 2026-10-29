@@ -1,13 +1,13 @@
-package dev.aaronhowser.mods.critterworks.handler.web.item.line
+package dev.aaronhowser.mods.critterworks.handler.web.common.line
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
-import dev.aaronhowser.mods.critterworks.handler.web.item.TargetedWebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.TargetedWebNode
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebLineInteractionHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand

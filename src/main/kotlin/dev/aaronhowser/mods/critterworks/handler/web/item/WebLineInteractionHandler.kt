@@ -8,10 +8,11 @@ import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
-import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebLineAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.TargetedWebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
 import dev.aaronhowser.mods.critterworks.menu.web_port.WebPortMenu
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.ShowWebPathPacket

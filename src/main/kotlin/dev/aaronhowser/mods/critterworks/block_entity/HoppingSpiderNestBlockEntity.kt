@@ -9,8 +9,8 @@ import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.Hoppi
 import dev.aaronhowser.mods.critterworks.handler.spider.behavior.transport.HoppingSpiderTransportReservations
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebNetwork
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.item.HoppingSpiderItem
 import dev.aaronhowser.mods.critterworks.item.ItemFilterItem
 import dev.aaronhowser.mods.critterworks.item.WebPortItem

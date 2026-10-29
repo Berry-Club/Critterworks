@@ -1,11 +1,11 @@
-package dev.aaronhowser.mods.critterworks.handler.web.item.node
+package dev.aaronhowser.mods.critterworks.handler.web.common.node
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
-import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLine
-import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLineInvalidation
-import dev.aaronhowser.mods.critterworks.handler.web.item.line.WebLineInvalidationReason
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineInvalidation
+import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineInvalidationReason
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.UUIDUtil

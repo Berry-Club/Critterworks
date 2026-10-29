@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextEnum
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.prevEnum
 import dev.aaronhowser.mods.critterworks.handler.web.item.WebHandler
-import dev.aaronhowser.mods.critterworks.handler.web.item.node.WebBlockAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.item.WebPortItem
 import dev.aaronhowser.mods.critterworks.item.component.WebPortComponent
 import dev.aaronhowser.mods.critterworks.registry.ModItems
