@@ -1,58 +1,88 @@
 package dev.aaronhowser.mods.critterworks.handler.web.redstone.node
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 
-data class ArachnodeMount(
-	val blockPosition: BlockPos,
-	val face: Direction,
-	val isMounted: Boolean
-) {
+sealed class ArachnodeMount {
 
-	fun getSurfaceNormal(): Vec3 {
-		return Vec3.atLowerCornerOf(face.normal)
-	}
+	data object Line : ArachnodeMount()
 
-	fun isValid(level: ServerLevel): Boolean {
-		if (!isMounted) return true
-		val chunkPosition = ChunkPos(blockPosition)
-		if (!level.hasChunk(chunkPosition.x, chunkPosition.z)) return true
+	data class Surface(
+		val blockPosition: BlockPos,
+		val face: Direction
+	) : ArachnodeMount() {
 
-		return !level.getBlockState(blockPosition)
-			.getCollisionShape(level, blockPosition)
-			.isEmpty
+		fun getSurfaceNormal(): Vec3 {
+			return Vec3.atLowerCornerOf(face.normal)
+		}
+
+		companion object {
+			val CODEC: MapCodec<Surface> = RecordCodecBuilder.mapCodec { instance ->
+				instance.group(
+					BlockPos.CODEC
+						.fieldOf("block_position")
+						.forGetter(Surface::blockPosition),
+					Direction.CODEC
+						.fieldOf("face")
+						.forGetter(Surface::face)
+				).apply(instance, ::Surface)
+			}
+		}
 	}
 
 	companion object {
-		val NONE = ArachnodeMount(BlockPos.ZERO, Direction.UP, false)
+		private const val LINE_TYPE = "line"
+		private const val SURFACE_TYPE = "surface"
+		private const val LINE_TYPE_ID = 0
+		private const val SURFACE_TYPE_ID = 1
 
-		val CODEC: Codec<ArachnodeMount> = RecordCodecBuilder.create { instance ->
-			instance.group(
-				BlockPos.CODEC
-					.fieldOf("block_position")
-					.forGetter(ArachnodeMount::blockPosition),
-				Direction.CODEC
-					.fieldOf("face")
-					.forGetter(ArachnodeMount::face),
-				Codec.BOOL
-					.fieldOf("is_mounted")
-					.forGetter(ArachnodeMount::isMounted)
-			).apply(instance, ::ArachnodeMount)
-		}
-
-		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ArachnodeMount> = StreamCodec.composite(
-			BlockPos.STREAM_CODEC, ArachnodeMount::blockPosition,
-			Direction.STREAM_CODEC, ArachnodeMount::face,
-			ByteBufCodecs.BOOL, ArachnodeMount::isMounted,
-			::ArachnodeMount
+		val CODEC: Codec<ArachnodeMount> = Codec.STRING.dispatch(
+			"type",
+			{ mount ->
+				when (mount) {
+					Line -> LINE_TYPE
+					is Surface -> SURFACE_TYPE
+				}
+			},
+			{ type ->
+				when (type) {
+					LINE_TYPE -> MapCodec.unit(Line)
+					SURFACE_TYPE -> Surface.CODEC
+					else -> error("Unknown arachnode mount type: $type")
+				}
+			}
 		)
+
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ArachnodeMount> =
+			object : StreamCodec<RegistryFriendlyByteBuf, ArachnodeMount> {
+				override fun decode(buffer: RegistryFriendlyByteBuf): ArachnodeMount {
+					return when (ByteBufCodecs.VAR_INT.decode(buffer)) {
+						LINE_TYPE_ID -> Line
+						SURFACE_TYPE_ID -> Surface(
+							BlockPos.STREAM_CODEC.decode(buffer),
+							Direction.STREAM_CODEC.decode(buffer)
+						)
+						else -> error("Unknown arachnode mount type")
+					}
+				}
+
+				override fun encode(buffer: RegistryFriendlyByteBuf, mount: ArachnodeMount) {
+					when (mount) {
+						Line -> ByteBufCodecs.VAR_INT.encode(buffer, LINE_TYPE_ID)
+						is Surface -> {
+							ByteBufCodecs.VAR_INT.encode(buffer, SURFACE_TYPE_ID)
+							BlockPos.STREAM_CODEC.encode(buffer, mount.blockPosition)
+							Direction.STREAM_CODEC.encode(buffer, mount.face)
+						}
+					}
+				}
+			}
 	}
 }

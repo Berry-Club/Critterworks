@@ -55,7 +55,7 @@ class InvertingArachnode(
 						.fieldOf("item_stack")
 						.forGetter(InvertingArachnode::itemStack),
 					ArachnodeMount.CODEC
-						.optionalFieldOf("mount", ArachnodeMount.NONE)
+						.fieldOf("mount")
 						.forGetter(InvertingArachnode::mount),
 					ArachnodePort.CODEC.codec()
 						.listOf()

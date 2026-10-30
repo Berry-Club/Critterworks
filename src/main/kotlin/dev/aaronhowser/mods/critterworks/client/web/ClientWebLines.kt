@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import java.util.*
 
@@ -195,7 +196,9 @@ object ClientWebLines {
 				hasLine = true
 				break
 			}
-			if (!hasLine && !arachnode.mount.isMounted) removedArachnodeUuids.add(arachnode.uuid)
+			if (!hasLine && arachnode.mount is ArachnodeMount.Line) {
+				removedArachnodeUuids.add(arachnode.uuid)
+			}
 		}
 
 		for (arachnodeUuid in removedArachnodeUuids) {

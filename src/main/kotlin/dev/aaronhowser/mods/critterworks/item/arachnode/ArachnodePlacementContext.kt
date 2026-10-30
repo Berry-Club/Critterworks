@@ -5,10 +5,23 @@ import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMoun
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
-data class ArachnodePlacementContext(
-	val originalLine: RedstoneWebLine?,
-	val position: Vec3,
-	val playerPosition: Vec3,
-	val itemStack: ItemStack,
-	val mount: ArachnodeMount = ArachnodeMount.NONE
-)
+sealed class ArachnodePlacementContext {
+
+	abstract val position: Vec3
+	abstract val playerPosition: Vec3
+	abstract val itemStack: ItemStack
+
+	class OnLine(
+		val originalLine: RedstoneWebLine,
+		override val position: Vec3,
+		override val playerPosition: Vec3,
+		override val itemStack: ItemStack
+	) : ArachnodePlacementContext()
+
+	class OnSurface(
+		val mount: ArachnodeMount.Surface,
+		override val position: Vec3,
+		override val playerPosition: Vec3,
+		override val itemStack: ItemStack
+	) : ArachnodePlacementContext()
+}

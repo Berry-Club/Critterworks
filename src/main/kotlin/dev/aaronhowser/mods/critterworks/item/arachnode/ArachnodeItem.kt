@@ -62,9 +62,10 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 	}
 
 	private fun getPortDirections(context: ArachnodePlacementContext): Pair<Vec3, Vec3>? {
-		val line = context.originalLine
-		if (line != null) return getLinePortDirections(context, line)
-		if (!context.mount.isMounted) return null
+		if (context is ArachnodePlacementContext.OnLine) {
+			return getLinePortDirections(context, context.originalLine)
+		}
+		if (context !is ArachnodePlacementContext.OnSurface) return null
 
 		val surfaceNormal = context.mount.getSurfaceNormal()
 		val awayFromPlayer = context.position.subtract(context.playerPosition)

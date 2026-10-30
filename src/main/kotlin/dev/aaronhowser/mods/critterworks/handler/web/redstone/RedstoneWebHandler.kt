@@ -142,7 +142,7 @@ class RedstoneWebHandler : SavedData() {
 		if (isNearExistingNode(line, position)) return false
 
 		val arachnodeItem = itemStack.item as? ArachnodeItem ?: return false
-		val placementContext = ArachnodePlacementContext(
+		val placementContext = ArachnodePlacementContext.OnLine(
 			line,
 			position,
 			playerPosition,
@@ -214,7 +214,7 @@ class RedstoneWebHandler : SavedData() {
 			.getCollisionShape(level, blockPosition)
 		if (collisionShape.isEmpty) return false
 
-		val mount = ArachnodeMount(blockPosition, face, true)
+		val mount = ArachnodeMount.Surface(blockPosition, face)
 		val position = clickedPosition.add(
 			mount.getSurfaceNormal().scale(SURFACE_OFFSET)
 		)
@@ -225,12 +225,11 @@ class RedstoneWebHandler : SavedData() {
 		}
 
 		val arachnodeItem = itemStack.item as? ArachnodeItem ?: return false
-		val placementContext = ArachnodePlacementContext(
-			null,
+		val placementContext = ArachnodePlacementContext.OnSurface(
+			mount,
 			position,
 			playerPosition,
-			itemStack.copyWithCount(1),
-			mount
+			itemStack.copyWithCount(1)
 		)
 		val arachnode = arachnodeItem.createArachnode(placementContext) ?: return false
 
@@ -261,7 +260,7 @@ class RedstoneWebHandler : SavedData() {
 				if (line is RedstoneWebLine && line !in connectedLines) connectedLines.add(line)
 			}
 		}
-		if (arachnode.mount.isMounted) {
+		if (arachnode.mount is ArachnodeMount.Surface) {
 			for (line in connectedLines) removeStoredLine(level, line, false)
 			removeArachnodeReferences(arachnode)
 			synchronizeArachnodeRemoval(level, arachnode)
@@ -427,9 +426,12 @@ class RedstoneWebHandler : SavedData() {
 
 		val invalidArachnodes: MutableList<Arachnode> = mutableListOf()
 		for (arachnode in arachnodes.values) {
-			if (!arachnode.mount.isMounted) continue
-			if (ChunkPos(arachnode.mount.blockPosition) !in changedChunks) continue
-			if (arachnode.mount.isValid(level)) continue
+			val mount = arachnode.mount as? ArachnodeMount.Surface ?: continue
+			if (ChunkPos(mount.blockPosition) !in changedChunks) continue
+			if (!level.getBlockState(mount.blockPosition)
+				.getCollisionShape(level, mount.blockPosition)
+				.isEmpty
+			) continue
 			invalidArachnodes.add(arachnode)
 		}
 
@@ -557,7 +559,7 @@ class RedstoneWebHandler : SavedData() {
 		for (arachnodeUuid in arachnodeUuids) {
 			val arachnode = arachnodes[arachnodeUuid] ?: continue
 			if (hasConnectedLine(arachnode)) continue
-			if (arachnode.mount.isMounted) continue
+			if (arachnode.mount is ArachnodeMount.Surface) continue
 
 			removeArachnodeReferences(arachnode)
 			synchronizeArachnodeRemoval(level, arachnode)

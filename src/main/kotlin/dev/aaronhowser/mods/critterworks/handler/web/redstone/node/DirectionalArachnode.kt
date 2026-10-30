@@ -50,7 +50,7 @@ class DirectionalArachnode(
 						.fieldOf("item_stack")
 						.forGetter(DirectionalArachnode::itemStack),
 					ArachnodeMount.CODEC
-						.optionalFieldOf("mount", ArachnodeMount.NONE)
+						.fieldOf("mount")
 						.forGetter(DirectionalArachnode::mount),
 					ArachnodePort.CODEC.codec()
 						.listOf()

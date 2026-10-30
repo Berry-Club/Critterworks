@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.client.web
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
@@ -29,8 +30,9 @@ object ArachnodeRenderer {
 
 		for (arachnode in ClientWebLines.getArachnodes()) {
 			val outputDirection = arachnode.getDisplayDirection() ?: continue
-			val spiderUp = if (arachnode.mount.isMounted) {
-				arachnode.mount.getSurfaceNormal()
+			val mount = arachnode.mount
+			val spiderUp = if (mount is ArachnodeMount.Surface) {
+				mount.getSurfaceNormal()
 			} else {
 				getSpiderUp(outputDirection)
 			}
