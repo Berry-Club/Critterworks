@@ -21,7 +21,7 @@ abstract class WebNode {
 		field = mutableSetOf()
 
 	abstract fun isLoaded(level: ServerLevel): Boolean
-	abstract fun getInvalidation(
+	abstract fun findInvalidation(
 		level: ServerLevel,
 		lines: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>

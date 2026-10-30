@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.packet.server_to_client
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.client.web.ClientWebLines
+import dev.aaronhowser.mods.critterworks.client.web.ClientWebState
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineData
@@ -27,7 +27,7 @@ class AddWebLinesPacket(
 	}
 
 	override fun handleOnClient(context: IPayloadContext) {
-		ClientWebLines.addLines(webType, arachnodes, nodes, lines)
+		ClientWebState.addLines(webType, arachnodes, nodes, lines)
 	}
 
 	companion object {

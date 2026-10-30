@@ -21,7 +21,7 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 		if (level !is ServerLevel) return InteractionResult.SUCCESS
 
 		val player = context.player ?: return InteractionResult.PASS
-		val placed = RedstoneWebHandler.get(level).addMountedArachnode(
+		val placed = RedstoneWebHandler.get(level).placeSurfaceArachnode(
 			level,
 			context.itemInHand,
 			context.clickedPos,

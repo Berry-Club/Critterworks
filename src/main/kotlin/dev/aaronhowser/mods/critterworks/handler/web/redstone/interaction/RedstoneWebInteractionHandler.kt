@@ -1,4 +1,4 @@
-package dev.aaronhowser.mods.critterworks.handler.web.redstone
+package dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import dev.aaronhowser.mods.critterworks.item.WebstoneWeaverItem
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
@@ -23,10 +24,10 @@ object RedstoneWebInteractionHandler {
 
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
-		val handler = RedstoneWebHandler.get(level)
-		val selectedNode = handler.getNode(event.node.uuid) ?: return
+		val redstoneWebHandler = RedstoneWebHandler.get(level)
+		val selectedNode = redstoneWebHandler.getNode(event.node.uuid) ?: return
 		if (selectedNode is ArachnodePort && event.itemStack.isEmpty) {
-			val removedArachnode = handler
+			val removedArachnode = redstoneWebHandler
 				.removeArachnode(level, selectedNode.arachnodeUuid)
 				?: return
 
@@ -47,12 +48,12 @@ object RedstoneWebInteractionHandler {
 
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
-		val savedData = RedstoneWebHandler.get(level)
-		if (savedData.getLine(event.lineUuid) == null) return
+		val redstoneWebHandler = RedstoneWebHandler.get(level)
+		if (redstoneWebHandler.getLine(event.lineUuid) == null) return
 
 		when {
 			event.itemStack.item is ArachnodeItem -> {
-				val placed = savedData.addArachnode(
+				val placed = redstoneWebHandler.insertArachnodeOnLine(
 					level,
 					event.lineUuid,
 					event.itemStack,
@@ -66,7 +67,7 @@ object RedstoneWebInteractionHandler {
 			}
 
 			event.itemStack.isItem(Tags.Items.TOOLS_SHEAR) -> {
-				if (savedData.removeLine(level, event.lineUuid) == null) return
+				if (redstoneWebHandler.removeLine(level, event.lineUuid) == null) return
 				event.itemStack.hurtAndBreak(1, player, event.hand.getEquipmentSlot())
 				player.status(ModMessageLang.LINE_REMOVED_MESSAGE.toComponent())
 				level.gameEvent(player, GameEvent.SHEAR, event.target.position)

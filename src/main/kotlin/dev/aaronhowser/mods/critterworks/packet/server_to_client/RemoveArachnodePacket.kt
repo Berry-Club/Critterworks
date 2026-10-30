@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.packet.server_to_client
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.client.web.ClientWebLines
+import dev.aaronhowser.mods.critterworks.client.web.ClientWebState
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.UUIDUtil
 import net.minecraft.network.codec.StreamCodec
@@ -19,7 +19,7 @@ class RemoveArachnodePacket(
 	}
 
 	override fun handleOnClient(context: IPayloadContext) {
-		ClientWebLines.removeArachnode(uuid)
+		ClientWebState.removeArachnode(uuid)
 	}
 
 	companion object {

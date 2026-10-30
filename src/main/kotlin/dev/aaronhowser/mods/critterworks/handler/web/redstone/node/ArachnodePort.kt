@@ -25,7 +25,7 @@ class ArachnodePort(
 		return isChunkLoaded(level, ChunkPos(BlockPos.containing(position)))
 	}
 
-	override fun getInvalidation(
+	override fun findInvalidation(
 		level: ServerLevel,
 		lines: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>

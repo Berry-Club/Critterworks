@@ -20,7 +20,7 @@ import org.joml.Quaternionf
 object WebLineGeometryRenderer {
 
 	fun renderAll(bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
-		for (line in ClientWebLines.getLines()) {
+		for (line in ClientWebState.getLines()) {
 			render(
 				bufferSource,
 				level,

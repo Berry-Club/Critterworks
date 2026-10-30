@@ -14,7 +14,7 @@ public class RedStoneWireBlockMixin {
 		at = @At("RETURN")
 	)
 	private int critterworks$suppressSignalWhileReadingWebstoneInput(int original) {
-		if (RedstoneWebHandler.isWebstonePowerSuppressed()) return 0;
+		if (RedstoneWebHandler.isReadingRedstoneInputs()) return 0;
 		return original;
 	}
 }

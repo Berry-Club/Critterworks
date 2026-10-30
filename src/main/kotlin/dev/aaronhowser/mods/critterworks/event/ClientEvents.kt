@@ -16,7 +16,7 @@ import dev.aaronhowser.mods.critterworks.client.item.critter_cage.CritterCageIte
 import dev.aaronhowser.mods.critterworks.client.item.tardigrade.TardigradeItemDecorator
 import dev.aaronhowser.mods.critterworks.handler.snail.ClientEvilSnails
 import dev.aaronhowser.mods.critterworks.client.web.ClientWebLineInteractionHandler
-import dev.aaronhowser.mods.critterworks.client.web.ClientWebLines
+import dev.aaronhowser.mods.critterworks.client.web.ClientWebState
 import dev.aaronhowser.mods.critterworks.item.CritterCageItem
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShieldMovedPacket
@@ -108,7 +108,7 @@ object ClientEvents {
 	@SubscribeEvent
 	fun onLoggingOut(event: ClientPlayerNetworkEvent.LoggingOut) {
 		ClientEvilSnails.clear()
-		ClientWebLines.clear()
+		ClientWebState.clear()
 	}
 
 	@SubscribeEvent

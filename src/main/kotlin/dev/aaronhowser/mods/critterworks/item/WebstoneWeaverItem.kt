@@ -73,18 +73,18 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 			return
 		}
 
-		val savedData = RedstoneWebHandler.get(level)
-		if (firstNode is WebLineAnchor && savedData.getLine(firstNode.parentLineUuid) == null) {
+		val redstoneWebHandler = RedstoneWebHandler.get(level)
+		if (firstNode is WebLineAnchor && redstoneWebHandler.getLine(firstNode.parentLineUuid) == null) {
 			itemStack.remove(ModDataComponents.WEB_NODE)
 			return
 		}
-		if (firstNode is ArachnodePort && savedData.getArachnode(firstNode) == null) {
+		if (firstNode is ArachnodePort && redstoneWebHandler.getOwningArachnode(firstNode) == null) {
 			itemStack.remove(ModDataComponents.WEB_NODE)
 			return
 		}
 
-		val canonicalFirstNode = savedData.getCanonicalNode(firstNode)
-		val canonicalSelectedNode = savedData.getCanonicalNode(selectedNode)
+		val canonicalFirstNode = redstoneWebHandler.getCanonicalNode(firstNode)
+		val canonicalSelectedNode = redstoneWebHandler.getCanonicalNode(selectedNode)
 		val invalidMessage = getInvalidMessage(level, player, canonicalFirstNode, canonicalSelectedNode)
 		if (invalidMessage != null) {
 			player.status(invalidMessage.toComponent())
@@ -92,7 +92,7 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 		}
 
 		val line = RedstoneWebLine(UUID.randomUUID(), canonicalFirstNode, canonicalSelectedNode)
-		savedData.addLine(level, line)
+		redstoneWebHandler.addLine(level, line)
 		itemStack.remove(ModDataComponents.WEB_NODE)
 		player.status(ModMessageLang.WEBSTONE_LINE_CREATED_MESSAGE.toComponent())
 	}

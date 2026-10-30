@@ -28,7 +28,7 @@ object ArachnodeRenderer {
 		val minecraft = Minecraft.getInstance()
 		val hoppingSpiderScale = ClientConfig.CONFIG.hoppingSpiderScale.get().toFloat()
 
-		for (arachnode in ClientWebLines.getArachnodes()) {
+		for (arachnode in ClientWebState.getArachnodes()) {
 			val outputDirection = arachnode.getDisplayDirection() ?: continue
 			val mount = arachnode.mount
 			val spiderUp = if (mount is ArachnodeMount.Surface) {

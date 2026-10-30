@@ -21,7 +21,7 @@ object WebPortRenderer {
 	fun renderAll(bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
 
-		for (node in ClientWebLines.getNodes(WebLineType.ITEM)) {
+		for (node in ClientWebState.getNodes(WebLineType.ITEM)) {
 			val anchor = node as? WebBlockAnchor ?: continue
 			val webPort = ClientItemWebPorts.get(anchor.uuid)
 			if (webPort.isEmpty) continue

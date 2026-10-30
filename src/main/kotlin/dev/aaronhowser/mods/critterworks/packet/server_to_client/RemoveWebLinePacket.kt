@@ -2,7 +2,7 @@ package dev.aaronhowser.mods.critterworks.packet.server_to_client
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.client.web.ClientWebLines
+import dev.aaronhowser.mods.critterworks.client.web.ClientWebState
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.UUIDUtil
@@ -21,7 +21,7 @@ class RemoveWebLinePacket(
 	}
 
 	override fun handleOnClient(context: IPayloadContext) {
-		ClientWebLines.removeLine(webType, uuid)
+		ClientWebState.removeLine(webType, uuid)
 	}
 
 	companion object {

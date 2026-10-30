@@ -119,7 +119,7 @@ object ClientWebLineInteractionHandler {
 
 		if (!canInteractWithRedstoneWeb || canInteractWithItemWeb) {
 			val installedWebPort = WebTargeting.getTargetedNode(
-				ClientWebLines.getLines(WebLineType.ITEM),
+				ClientWebState.getLines(WebLineType.ITEM),
 				eyePosition,
 				lookEnd,
 				snapToExistingNode = true,
@@ -138,7 +138,7 @@ object ClientWebLineInteractionHandler {
 
 		if (heldStack.isEmpty) {
 			val targetedArachnodePort = WebTargeting.getTargetedExistingNode(
-				ClientWebLines.getArachnodePorts(),
+				ClientWebState.getArachnodePorts(),
 				eyePosition,
 				lookEnd
 			)
@@ -163,7 +163,7 @@ object ClientWebLineInteractionHandler {
 				&& heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
 			) {
 				val portTarget = WebTargeting.getTargetedExistingNode(
-					ClientWebLines.getArachnodePorts(),
+					ClientWebState.getArachnodePorts(),
 					eyePosition,
 					lookEnd
 				)
@@ -173,7 +173,7 @@ object ClientWebLineInteractionHandler {
 			}
 
 			val target = WebTargeting.getTargetedNode(
-				ClientWebLines.getLines(webType),
+				ClientWebState.getLines(webType),
 				eyePosition,
 				lookEnd,
 				heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
@@ -183,13 +183,13 @@ object ClientWebLineInteractionHandler {
 		}
 
 		val target = WebTargeting.getTargetedNode(
-			ClientWebLines.getLines(),
+			ClientWebState.getLines(),
 			eyePosition,
 			lookEnd,
 			heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
 			heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
 		) ?: return null
-		val targetType = ClientWebLines.getType(target) ?: return null
+		val targetType = ClientWebState.getType(target) ?: return null
 		return Pair(targetType, target)
 	}
 

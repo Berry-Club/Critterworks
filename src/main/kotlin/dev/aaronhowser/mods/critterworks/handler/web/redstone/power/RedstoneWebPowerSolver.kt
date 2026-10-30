@@ -1,15 +1,16 @@
-package dev.aaronhowser.mods.critterworks.handler.web.redstone
+package dev.aaronhowser.mods.critterworks.handler.web.redstone.power
 
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.RedStoneWireBlock
 import java.util.*
 
-class RedstonePowerSolver(
+class RedstoneWebPowerSolver(
 	private val lines: Map<UUID, RedstoneWebLine>,
 	private val arachnodes: Collection<Arachnode>
 ) {
@@ -54,7 +55,7 @@ class RedstonePowerSolver(
 		val desiredPower: MutableMap<UUID, Int> = mutableMapOf()
 		val linesToCheck: ArrayDeque<RedstoneWebLine> = ArrayDeque()
 		val blockInputPower: MutableMap<UUID, Int> = mutableMapOf()
-		RedstoneWebPowerSuppression.begin()
+		beginReadingInputs()
 
 		return try {
 			for (line in lines.values) {
@@ -99,7 +100,7 @@ class RedstonePowerSolver(
 
 			desiredPower
 		} finally {
-			RedstoneWebPowerSuppression.end()
+			endReadingInputs()
 		}
 	}
 
@@ -216,5 +217,23 @@ class RedstonePowerSolver(
 
 	companion object {
 		private const val MAX_POWER = 15
+		private val inputReadingDepth: ThreadLocal<Int> = ThreadLocal.withInitial { 0 }
+
+		fun isReadingInputs(): Boolean {
+			return inputReadingDepth.get() > 0
+		}
+
+		private fun beginReadingInputs() {
+			inputReadingDepth.set(inputReadingDepth.get() + 1)
+		}
+
+		private fun endReadingInputs() {
+			val newDepth = inputReadingDepth.get() - 1
+			if (newDepth <= 0) {
+				inputReadingDepth.remove()
+			} else {
+				inputReadingDepth.set(newDepth)
+			}
+		}
 	}
 }

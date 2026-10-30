@@ -24,6 +24,7 @@ open class WebLine(
 
 	val data: WebLineData
 		get() = WebLineData(uuid, firstNode.uuid, secondNode.uuid)
+
 	val intersectedChunkPositions: Set<ChunkPos> = calculateIntersectedChunkPositions()
 
 	val length: Double by lazy {
@@ -68,10 +69,10 @@ open class WebLine(
 			return WebLineInvalidation(WebLineInvalidationReason.CYCLIC_DEPENDENCY)
 		}
 
-		val firstInvalidation = firstNode.getInvalidation(level, lines, checkedLines)
+		val firstInvalidation = firstNode.findInvalidation(level, lines, checkedLines)
 		if (firstInvalidation != null) return firstInvalidation
 
-		val secondInvalidation = secondNode.getInvalidation(level, lines, checkedLines)
+		val secondInvalidation = secondNode.findInvalidation(level, lines, checkedLines)
 		if (secondInvalidation != null) return secondInvalidation
 
 		checkedLines.remove(uuid)
@@ -93,10 +94,12 @@ open class WebLine(
 	private fun calculateIntersectedChunkPositions(): Set<ChunkPos> {
 		val firstChunk = ChunkPos(BlockPos.containing(firstNode.position))
 		val secondChunk = ChunkPos(BlockPos.containing(secondNode.position))
+
 		val minChunkX = minOf(firstChunk.x, secondChunk.x)
 		val maxChunkX = maxOf(firstChunk.x, secondChunk.x)
 		val minChunkZ = minOf(firstChunk.z, secondChunk.z)
 		val maxChunkZ = maxOf(firstChunk.z, secondChunk.z)
+
 		val minY = minOf(firstNode.position.y, secondNode.position.y) - 1.0
 		val maxY = maxOf(firstNode.position.y, secondNode.position.y) + 1.0
 		val chunkPositions: MutableSet<ChunkPos> = mutableSetOf()

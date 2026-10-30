@@ -5,7 +5,7 @@ import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
 import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebInteractionHandler
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebInteractionHandler
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebInteractionHandler
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 

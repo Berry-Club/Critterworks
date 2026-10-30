@@ -27,7 +27,7 @@ class WebBlockAnchor(
 		return isChunkLoaded(level, ChunkPos(blockPos))
 	}
 
-	override fun getInvalidation(
+	override fun findInvalidation(
 		level: ServerLevel,
 		lines: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>

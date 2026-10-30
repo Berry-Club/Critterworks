@@ -1,7 +1,8 @@
-package dev.aaronhowser.mods.critterworks.handler.web.redstone
+package dev.aaronhowser.mods.critterworks.handler.web.redstone.sync
 
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncRedstoneWebPowerPacket
 import net.minecraft.core.BlockPos
@@ -65,9 +66,11 @@ object RedstoneWebSynchronizer {
 		return level.chunkSource.chunkMap.getPlayers(chunkPosition, false)
 	}
 
-	private fun createPowerData(lines: Collection<RedstoneWebLine>): List<RedstoneWebPowerData> {
-		val powerData: MutableList<RedstoneWebPowerData> = mutableListOf()
-		for (line in lines) powerData.add(RedstoneWebPowerData(line.uuid, line.power))
+	private fun createPowerData(lines: Collection<RedstoneWebLine>): List<SyncRedstoneWebPowerPacket.LinePower> {
+		val powerData: MutableList<SyncRedstoneWebPowerPacket.LinePower> = mutableListOf()
+		for (line in lines) {
+			powerData.add(SyncRedstoneWebPowerPacket.LinePower(line.uuid, line.power))
+		}
 		return powerData
 	}
 }

@@ -12,7 +12,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMoun
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import java.util.*
 
-object ClientWebLines {
+object ClientWebState {
 
 	private val linesByType: MutableMap<WebLineType, MutableMap<UUID, WebLine>> = mutableMapOf()
 	private val nodesByType: MutableMap<WebLineType, MutableMap<UUID, WebNode>> = mutableMapOf()
