@@ -11,7 +11,7 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-sealed class WebNode {
+abstract class WebNode {
 
 	abstract val uuid: UUID
 	abstract val position: Vec3
