@@ -66,14 +66,22 @@
 - Probably should be more than just multiple channels of wire
 - Logic gates? would that even make sense?
 - Clock Cuckoo
-- WEBSTONE
-	- Red spider webs
-	- Maybe spiders sit stationary on the web and that does the logic
-		- Make them look like circuit boards or something
-		- Their legs are the pins etc
-			- NE555
-	- Webstone Weaver
-		- Item that places lines
+
+# Webstone
+
+- Webstone wires that are placed by the Webstone Weaver
+- Place Aracnhodes along the lines that do logic
+	- They have different web nodes for input and output
+	- Make them look like computer chips
+		- NE555 style
+- Conceptual problems
+	- When making a redstone thing, you dont place all the wires first and then replace parts of the wires with logic gates
+	- But that's the only way to do it right now. How to solve this?
+		- Place arachnodes on blocks and let wires connect to them?
+		- Place them free-floating or something?
+- Names:
+	- OR = Eitherweaver
+	- Clock = Clockroach?
 
 # Farm critters?
 
@@ -119,7 +127,7 @@
 - One of those shield-head ants
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
 - Boxing Glove drop from Punchprawns?
-  - All critters should probably drop something
+	- All critters should probably drop something
 
 # Guidebook
 
