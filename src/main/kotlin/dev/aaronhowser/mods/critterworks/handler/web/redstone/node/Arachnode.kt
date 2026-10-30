@@ -14,6 +14,7 @@ abstract class Arachnode {
 	abstract val uuid: UUID
 	abstract val position: Vec3
 	abstract val itemStack: ItemStack
+	abstract val mount: ArachnodeMount
 	abstract val inputPorts: List<ArachnodePort>
 	abstract val outputPorts: List<ArachnodePort>
 

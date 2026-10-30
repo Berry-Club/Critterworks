@@ -138,6 +138,12 @@ object ClientWebLines {
 		removeOrphanedArachnodes(nodes)
 	}
 
+	fun removeArachnode(uuid: UUID) {
+		val arachnode = arachnodesByUuid.remove(uuid) ?: return
+		val nodes = getNodeMap(WebLineType.REDSTONE)
+		for (port in arachnode.getPorts()) nodes.remove(port.uuid)
+	}
+
 	fun clear() {
 		for (typedLines in linesByType.values) {
 			for (line in typedLines.values) detachLine(line)
@@ -189,7 +195,7 @@ object ClientWebLines {
 				hasLine = true
 				break
 			}
-			if (!hasLine) removedArachnodeUuids.add(arachnode.uuid)
+			if (!hasLine && !arachnode.mount.isMounted) removedArachnodeUuids.add(arachnode.uuid)
 		}
 
 		for (arachnodeUuid in removedArachnodeUuids) {

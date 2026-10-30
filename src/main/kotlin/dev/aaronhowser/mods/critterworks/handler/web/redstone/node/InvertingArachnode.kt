@@ -15,6 +15,7 @@ class InvertingArachnode(
 	override val uuid: UUID,
 	override val position: Vec3,
 	override val itemStack: ItemStack,
+	override val mount: ArachnodeMount,
 	override val inputPorts: List<ArachnodePort>,
 	override val outputPorts: List<ArachnodePort>
 ) : Arachnode() {
@@ -53,6 +54,9 @@ class InvertingArachnode(
 					ItemStack.OPTIONAL_CODEC
 						.fieldOf("item_stack")
 						.forGetter(InvertingArachnode::itemStack),
+					ArachnodeMount.CODEC
+						.optionalFieldOf("mount", ArachnodeMount.NONE)
+						.forGetter(InvertingArachnode::mount),
 					ArachnodePort.CODEC.codec()
 						.listOf()
 						.fieldOf("input_ports")
@@ -69,6 +73,7 @@ class InvertingArachnode(
 				UUIDUtil.STREAM_CODEC, InvertingArachnode::uuid,
 				AaronExtraStreamCodecs.VEC3, InvertingArachnode::position,
 				ItemStack.OPTIONAL_STREAM_CODEC, InvertingArachnode::itemStack,
+				ArachnodeMount.STREAM_CODEC, InvertingArachnode::mount,
 				ArachnodePort.STREAM_CODEC.apply(ByteBufCodecs.list()), InvertingArachnode::inputPorts,
 				ArachnodePort.STREAM_CODEC.apply(ByteBufCodecs.list()), InvertingArachnode::outputPorts,
 				::InvertingArachnode

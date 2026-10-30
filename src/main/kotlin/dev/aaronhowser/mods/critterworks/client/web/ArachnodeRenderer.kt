@@ -29,7 +29,11 @@ object ArachnodeRenderer {
 
 		for (arachnode in ClientWebLines.getArachnodes()) {
 			val outputDirection = arachnode.getDisplayDirection() ?: continue
-			val spiderUp = getSpiderUp(outputDirection)
+			val spiderUp = if (arachnode.mount.isMounted) {
+				arachnode.mount.getSurfaceNormal()
+			} else {
+				getSpiderUp(outputDirection)
+			}
 			val rotation = getTravelRotation(outputDirection, spiderUp)
 			val light = LevelRenderer.getLightColor(level, BlockPos.containing(arachnode.position))
 

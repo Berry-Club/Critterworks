@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShieldMove
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.UseCageOnEvilSnailPacket
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveArachnodePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.ShowWebPathPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncEvilSnailsPacket
@@ -18,6 +19,7 @@ object ModPacketHandler : AaronPacketRegistrar {
 		val registrar = event.registrar("1")
 
 		toClient(registrar, AddWebLinesPacket.TYPE, AddWebLinesPacket.STREAM_CODEC)
+		toClient(registrar, RemoveArachnodePacket.TYPE, RemoveArachnodePacket.STREAM_CODEC)
 		toClient(registrar, RemoveWebLinePacket.TYPE, RemoveWebLinePacket.STREAM_CODEC)
 		toClient(registrar, ShowWebPathPacket.TYPE, ShowWebPathPacket.STREAM_CODEC)
 		toClient(registrar, SyncEvilSnailsPacket.TYPE, SyncEvilSnailsPacket.STREAM_CODEC)

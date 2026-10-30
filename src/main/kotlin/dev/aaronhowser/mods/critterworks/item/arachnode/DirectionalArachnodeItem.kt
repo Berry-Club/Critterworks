@@ -14,6 +14,7 @@ class DirectionalArachnodeItem(properties: Properties) : ArachnodeItem(propertie
 			arachnodeUuid,
 			context.position,
 			context.itemStack,
+			context.mount,
 			listOf(ports.inputPort),
 			listOf(ports.outputPort)
 		)

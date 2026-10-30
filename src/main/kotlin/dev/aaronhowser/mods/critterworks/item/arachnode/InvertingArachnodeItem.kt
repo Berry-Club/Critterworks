@@ -14,6 +14,7 @@ class InvertingArachnodeItem(properties: Properties) : ArachnodeItem(properties)
 			arachnodeUuid,
 			context.position,
 			context.itemStack,
+			context.mount,
 			listOf(ports.inputPort),
 			listOf(ports.outputPort)
 		)

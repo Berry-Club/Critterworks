@@ -11,10 +11,12 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodePlacementContext
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveArachnodePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncRedstoneWebPowerPacket
 import dev.aaronhowser.mods.critterworks.registry.ModSoundEvents
@@ -200,6 +202,54 @@ class RedstoneWebHandler : SavedData() {
 	}
 
 	@Synchronized
+	fun addMountedArachnode(
+		level: ServerLevel,
+		itemStack: ItemStack,
+		blockPosition: BlockPos,
+		face: Direction,
+		clickedPosition: Vec3,
+		playerPosition: Vec3
+	): Boolean {
+		val collisionShape = level.getBlockState(blockPosition)
+			.getCollisionShape(level, blockPosition)
+		if (collisionShape.isEmpty) return false
+
+		val mount = ArachnodeMount(blockPosition, face, true)
+		val position = clickedPosition.add(
+			mount.getSurfaceNormal().scale(SURFACE_OFFSET)
+		)
+		for (existingArachnode in arachnodes.values) {
+			if (existingArachnode.position.distanceToSqr(position)
+				<= NODE_OCCUPANCY_RADIUS_SQUARED
+			) return false
+		}
+
+		val arachnodeItem = itemStack.item as? ArachnodeItem ?: return false
+		val placementContext = ArachnodePlacementContext(
+			null,
+			position,
+			playerPosition,
+			itemStack.copyWithCount(1),
+			mount
+		)
+		val arachnode = arachnodeItem.createArachnode(placementContext) ?: return false
+
+		addArachnodeReferences(arachnode)
+		setDirty()
+		sendToNearbyPlayers(
+			level,
+			arachnode,
+			AddWebLinesPacket(
+				WebLineType.REDSTONE,
+				listOf(arachnode),
+				emptyList(),
+				emptyList()
+			)
+		)
+		return true
+	}
+
+	@Synchronized
 	fun removeArachnode(
 		level: ServerLevel,
 		nodeUuid: UUID
@@ -211,10 +261,18 @@ class RedstoneWebHandler : SavedData() {
 				if (line is RedstoneWebLine && line !in connectedLines) connectedLines.add(line)
 			}
 		}
+		if (arachnode.mount.isMounted) {
+			for (line in connectedLines) removeStoredLine(level, line, false)
+			removeArachnodeReferences(arachnode)
+			synchronizeArachnodeRemoval(level, arachnode)
+			setDirty()
+			return arachnode
+		}
 		if (connectedLines.size > 2) return null
 		if (connectedLines.size != 2 || !hasConnectedInputAndOutput(arachnode)) {
 			for (line in connectedLines) removeStoredLine(level, line, false)
 			removeArachnodeReferences(arachnode)
+			synchronizeArachnodeRemoval(level, arachnode)
 			setDirty()
 			return arachnode
 		}
@@ -243,6 +301,7 @@ class RedstoneWebHandler : SavedData() {
 		removeLineForReplacement(level, firstLine)
 		removeLineForReplacement(level, secondLine)
 		removeArachnodeReferences(arachnode)
+		synchronizeArachnodeRemoval(level, arachnode)
 		addLineForReplacement(fusedLine)
 		finishLineReplacement(level, listOf(fusedLine), affectedLines)
 		return arachnode
@@ -251,12 +310,14 @@ class RedstoneWebHandler : SavedData() {
 	@Synchronized
 	fun syncChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val nearbyLines = getLinesIntersectingChunk(chunkPos)
-		if (nearbyLines.isEmpty()) return
+		val nearbyArachnodes = getArachnodesInChunk(chunkPos).toMutableSet()
+		nearbyArachnodes.addAll(getArachnodes(nearbyLines))
+		if (nearbyLines.isEmpty() && nearbyArachnodes.isEmpty()) return
 
 		AddWebLinesPacket
-			.fromLines(WebLineType.REDSTONE, nearbyLines, getArachnodes(nearbyLines))
+			.fromLines(WebLineType.REDSTONE, nearbyLines, nearbyArachnodes)
 			.messagePlayer(player)
-		synchronizePower(player, nearbyLines)
+		if (nearbyLines.isNotEmpty()) synchronizePower(player, nearbyLines)
 	}
 
 	@Synchronized
@@ -280,6 +341,32 @@ class RedstoneWebHandler : SavedData() {
 				RemoveWebLinePacket(WebLineType.REDSTONE, line.uuid).messagePlayer(player)
 			}
 		}
+
+		for (arachnode in getArachnodesInChunk(chunkPos)) {
+			if (isArachnodeTrackedOutsideChunk(level, player, arachnode, chunkPos)) continue
+			RemoveArachnodePacket(arachnode.uuid).messagePlayer(player)
+		}
+	}
+
+	private fun isArachnodeTrackedOutsideChunk(
+		level: ServerLevel,
+		player: ServerPlayer,
+		arachnode: Arachnode,
+		forgottenChunk: ChunkPos
+	): Boolean {
+		for (port in arachnode.getPorts()) {
+			for (webLine in port.lines) {
+				val line = webLine as? RedstoneWebLine ?: continue
+				for (chunkPosition in line.intersectedChunkPositions) {
+					if (chunkPosition == forgottenChunk) continue
+					val trackingPlayers = level.chunkSource.chunkMap
+						.getPlayers(chunkPosition, false)
+					if (player in trackingPlayers) return true
+				}
+			}
+		}
+
+		return false
 	}
 
 	@Synchronized
@@ -330,14 +417,34 @@ class RedstoneWebHandler : SavedData() {
 	fun validateChangedChunks(level: ServerLevel) {
 		if (chunksToValidate.isEmpty()) return
 
-		val invalidLines = getInvalidLines(level, getLinesNearChangedChunks())
-		if (invalidLines.isEmpty()) return
+		val changedChunks = chunksToValidate.toSet()
+		chunksToValidate.clear()
+		val invalidLines = getInvalidLines(level, getLinesNearChangedChunks(changedChunks))
 
 		for (line in invalidLines.keys) {
 			removeStoredLine(level, line)
 		}
 
-		setDirty()
+		val invalidArachnodes: MutableList<Arachnode> = mutableListOf()
+		for (arachnode in arachnodes.values) {
+			if (!arachnode.mount.isMounted) continue
+			if (ChunkPos(arachnode.mount.blockPosition) !in changedChunks) continue
+			if (arachnode.mount.isValid(level)) continue
+			invalidArachnodes.add(arachnode)
+		}
+
+		for (arachnode in invalidArachnodes) {
+			val removedArachnode = removeArachnode(level, arachnode.uuid) ?: continue
+			Containers.dropItemStack(
+				level,
+				removedArachnode.position.x,
+				removedArachnode.position.y,
+				removedArachnode.position.z,
+				removedArachnode.itemStack.copy()
+			)
+		}
+
+		if (invalidLines.isNotEmpty() || invalidArachnodes.isNotEmpty()) setDirty()
 	}
 
 	private fun getInvalidLines(
@@ -362,9 +469,9 @@ class RedstoneWebHandler : SavedData() {
 		return invalidLines
 	}
 
-	private fun getLinesNearChangedChunks(): Set<UUID> {
+	private fun getLinesNearChangedChunks(changedChunks: Collection<ChunkPos>): Set<UUID> {
 		val lineUuids: MutableSet<UUID> = mutableSetOf()
-		for (changedChunk in chunksToValidate) {
+		for (changedChunk in changedChunks) {
 			for (chunkX in changedChunk.x - 1..changedChunk.x + 1) {
 				for (chunkZ in changedChunk.z - 1..changedChunk.z + 1) {
 					val cachedUuids = lineUuidsByChunk[ChunkPos(chunkX, chunkZ)] ?: continue
@@ -373,7 +480,6 @@ class RedstoneWebHandler : SavedData() {
 			}
 		}
 
-		chunksToValidate.clear()
 		return lineUuids
 	}
 
@@ -387,6 +493,16 @@ class RedstoneWebHandler : SavedData() {
 		}
 
 		return matchingLines
+	}
+
+	private fun getArachnodesInChunk(chunkPos: ChunkPos): List<Arachnode> {
+		val matchingArachnodes: MutableList<Arachnode> = mutableListOf()
+		for (arachnode in arachnodes.values) {
+			if (ChunkPos(BlockPos.containing(arachnode.position)) != chunkPos) continue
+			matchingArachnodes.add(arachnode)
+		}
+
+		return matchingArachnodes
 	}
 
 	private fun removeStoredLine(
@@ -441,8 +557,10 @@ class RedstoneWebHandler : SavedData() {
 		for (arachnodeUuid in arachnodeUuids) {
 			val arachnode = arachnodes[arachnodeUuid] ?: continue
 			if (hasConnectedLine(arachnode)) continue
+			if (arachnode.mount.isMounted) continue
 
 			removeArachnodeReferences(arachnode)
+			synchronizeArachnodeRemoval(level, arachnode)
 			Containers.dropItemStack(
 				level,
 				arachnode.position.x,
@@ -782,6 +900,21 @@ class RedstoneWebHandler : SavedData() {
 
 	private fun sendToNearbyPlayers(
 		level: ServerLevel,
+		arachnode: Arachnode,
+		packet: AaronPacket
+	) {
+		val chunkPosition = ChunkPos(BlockPos.containing(arachnode.position))
+		for (player in level.chunkSource.chunkMap.getPlayers(chunkPosition, false)) {
+			packet.messagePlayer(player)
+		}
+	}
+
+	private fun synchronizeArachnodeRemoval(level: ServerLevel, arachnode: Arachnode) {
+		sendToNearbyPlayers(level, arachnode, RemoveArachnodePacket(arachnode.uuid))
+	}
+
+	private fun sendToNearbyPlayers(
+		level: ServerLevel,
 		lines: Collection<WebLine>,
 		packet: AaronPacket
 	) {
@@ -840,6 +973,7 @@ class RedstoneWebHandler : SavedData() {
 	companion object {
 		private const val MAX_POWER = 15
 		private const val NODE_OCCUPANCY_RADIUS_SQUARED = 0.09
+		private const val SURFACE_OFFSET = 0.001
 		private const val CASCADE_DELAY_TICKS = 2
 		private const val SAVED_DATA_NAME = "critterworks_redstone_webs"
 		private const val NODES_TAG = "Nodes"

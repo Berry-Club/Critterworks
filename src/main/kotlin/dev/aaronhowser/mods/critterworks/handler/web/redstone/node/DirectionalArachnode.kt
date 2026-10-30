@@ -15,6 +15,7 @@ class DirectionalArachnode(
 	override val uuid: UUID,
 	override val position: Vec3,
 	override val itemStack: ItemStack,
+	override val mount: ArachnodeMount,
 	override val inputPorts: List<ArachnodePort>,
 	override val outputPorts: List<ArachnodePort>
 ) : Arachnode() {
@@ -48,6 +49,9 @@ class DirectionalArachnode(
 					ItemStack.OPTIONAL_CODEC
 						.fieldOf("item_stack")
 						.forGetter(DirectionalArachnode::itemStack),
+					ArachnodeMount.CODEC
+						.optionalFieldOf("mount", ArachnodeMount.NONE)
+						.forGetter(DirectionalArachnode::mount),
 					ArachnodePort.CODEC.codec()
 						.listOf()
 						.fieldOf("input_ports")
@@ -64,6 +68,7 @@ class DirectionalArachnode(
 				UUIDUtil.STREAM_CODEC, DirectionalArachnode::uuid,
 				AaronExtraStreamCodecs.VEC3, DirectionalArachnode::position,
 				ItemStack.OPTIONAL_STREAM_CODEC, DirectionalArachnode::itemStack,
+				ArachnodeMount.STREAM_CODEC, DirectionalArachnode::mount,
 				ArachnodePort.STREAM_CODEC.apply(ByteBufCodecs.list()), DirectionalArachnode::inputPorts,
 				ArachnodePort.STREAM_CODEC.apply(ByteBufCodecs.list()), DirectionalArachnode::outputPorts,
 				::DirectionalArachnode
