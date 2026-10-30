@@ -35,7 +35,6 @@ import net.minecraft.world.Containers
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.RedStoneWireBlock
 import net.minecraft.world.level.saveddata.SavedData
 import net.minecraft.world.phys.Vec3
 import java.util.*
@@ -301,12 +300,8 @@ class RedstoneWebHandler : SavedData() {
 
 	private fun refreshLinePower(level: ServerLevel): Set<RedstoneWebLine> {
 		val changedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
-		val currentPower: MutableMap<UUID, Int> = mutableMapOf()
-		for (line in lines.values) {
-			currentPower[line.uuid] = line.power
-		}
-		val initialGeneratedPower = getGeneratedLinePower(level, currentPower)
-		var desiredPower = calculateDesiredPower(level, initialGeneratedPower)
+		val solver = RedstonePowerSolver(lines, arachnodes.values)
+		var desiredPower = solver.solve(level)
 		var hasFallingPower = false
 
 		for (line in lines.values) {
@@ -321,7 +316,7 @@ class RedstoneWebHandler : SavedData() {
 			}
 
 			updateBlockAnchors(level, lines.values)
-			desiredPower = calculateDesiredPower(level, initialGeneratedPower)
+			desiredPower = solver.solve(level)
 		}
 
 		val poweredLines: MutableSet<RedstoneWebLine> = mutableSetOf()
@@ -334,130 +329,6 @@ class RedstoneWebHandler : SavedData() {
 
 		updateBlockAnchors(level, poweredLines)
 		return changedLines
-	}
-
-	private fun calculateDesiredPower(
-		level: ServerLevel,
-		initialGeneratedPower: Map<UUID, Int>
-	): MutableMap<UUID, Int> {
-		var generatedPower = initialGeneratedPower
-		val seenGeneratedPower: MutableSet<Map<UUID, Int>> = mutableSetOf()
-		seenGeneratedPower.add(generatedPower)
-
-		val firstDesiredPower = calculatePropagatedPower(level, generatedPower)
-		var desiredPower = firstDesiredPower
-
-		while (true) {
-			val nextGeneratedPower = getGeneratedLinePower(level, desiredPower)
-			if (nextGeneratedPower == generatedPower) return desiredPower
-			if (!seenGeneratedPower.add(nextGeneratedPower)) return firstDesiredPower
-
-			generatedPower = nextGeneratedPower
-			desiredPower = calculatePropagatedPower(level, generatedPower)
-		}
-	}
-
-	private fun calculatePropagatedPower(
-		level: ServerLevel,
-		generatedPower: Map<UUID, Int>
-	): MutableMap<UUID, Int> {
-		val desiredPower: MutableMap<UUID, Int> = mutableMapOf()
-		val linesToCheck: ArrayDeque<RedstoneWebLine> = ArrayDeque()
-		val previousSuppression = suppressWebstonePower
-		suppressWebstonePower = true
-
-		return try {
-			for (line in lines.values) {
-				val directPower = maxOf(
-					getBlockInputPower(level, line.firstNode),
-					getBlockInputPower(level, line.secondNode)
-				)
-				desiredPower[line.uuid] = directPower
-				if (directPower > 0) linesToCheck.add(line)
-			}
-
-			for ((lineUuid, power) in generatedPower) {
-				val line = lines[lineUuid] ?: continue
-				val previousPower = desiredPower.getValue(lineUuid)
-				if (previousPower >= power) continue
-
-				desiredPower[lineUuid] = power
-				linesToCheck.add(line)
-			}
-
-			while (linesToCheck.isNotEmpty()) {
-				val line = linesToCheck.removeFirst()
-				val linePower = desiredPower.getValue(line.uuid)
-
-				for (poweredLine in getPoweredLines(line)) {
-					val previousPower = desiredPower.getValue(poweredLine.uuid)
-					if (previousPower >= linePower) continue
-
-					desiredPower[poweredLine.uuid] = linePower
-					linesToCheck.add(poweredLine)
-				}
-			}
-
-			desiredPower
-		} finally {
-			suppressWebstonePower = previousSuppression
-		}
-	}
-
-	private fun getGeneratedLinePower(
-		level: ServerLevel,
-		linePowers: Map<UUID, Int>
-	): Map<UUID, Int> {
-		val generatedPower: MutableMap<UUID, Int> = mutableMapOf()
-
-		for (arachnode in arachnodes.values) {
-			if (!arachnode.isLoaded(level)) continue
-
-			val inputPowers: MutableMap<ArachnodePort, Int> = mutableMapOf()
-			for (inputPort in arachnode.inputPorts) {
-				var strongestPower = 0
-				for (line in inputPort.lines) {
-					if (line !is RedstoneWebLine) continue
-					strongestPower = maxOf(
-						strongestPower,
-						linePowers.getOrDefault(line.uuid, 0)
-					)
-				}
-
-				inputPowers[inputPort] = strongestPower
-			}
-
-			val outputPowers = arachnode.calculateOutputPowers(inputPowers)
-			for ((outputPort, power) in outputPowers) {
-				for (line in outputPort.lines) {
-					if (line !is RedstoneWebLine) continue
-					if (power <= generatedPower.getOrDefault(line.uuid, 0)) continue
-
-					generatedPower[line.uuid] = power
-				}
-			}
-		}
-
-		return generatedPower
-	}
-
-	private fun getBlockInputPower(
-		level: ServerLevel,
-		node: WebNode
-	): Int {
-		if (node !is WebBlockAnchor) return 0
-		if (!node.isLoaded(level)) return 0
-
-		val blockPower = level.getSignal(node.blockPos, node.face.opposite)
-		val signalPosition = node.blockPos.relative(node.face)
-		val signalState = level.getBlockState(signalPosition)
-		val dustPower = if (signalState.block is RedStoneWireBlock) {
-			(signalState.getValue(RedStoneWireBlock.POWER) - 1).coerceAtLeast(0)
-		} else {
-			0
-		}
-
-		return maxOf(blockPower, dustPower).coerceIn(0, MAX_POWER)
 	}
 
 	@Synchronized
@@ -893,39 +764,6 @@ class RedstoneWebHandler : SavedData() {
 		nodes.remove(node.uuid)
 	}
 
-	private fun getPoweredLines(line: RedstoneWebLine): Set<RedstoneWebLine> {
-		val connectedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
-		addLinesPoweredThroughNode(line, line.firstNode, connectedLines)
-		addLinesPoweredThroughNode(line, line.secondNode, connectedLines)
-
-		for (attachment in line.attachedAnchors) {
-			for (connectedLine in attachment.anchor.lines) {
-				if (connectedLine is RedstoneWebLine) {
-					connectedLines.add(connectedLine)
-				}
-			}
-		}
-
-		connectedLines.remove(line)
-		return connectedLines
-	}
-
-	private fun addLinesPoweredThroughNode(
-		sourceLine: RedstoneWebLine,
-		node: WebNode,
-		connectedLines: MutableSet<RedstoneWebLine>
-	) {
-		for (connectedLine in node.lines) {
-			if (connectedLine !is RedstoneWebLine) continue
-			connectedLines.add(connectedLine)
-		}
-
-		if (node !is WebLineAnchor) return
-
-		val parentLine = lines[node.parentLineUuid] ?: return
-		connectedLines.add(parentLine)
-	}
-
 	private fun scheduleDependentLines(level: ServerLevel, removedLineUuid: UUID) {
 		val dependentLineUuids: MutableList<UUID> = mutableListOf()
 		for (line in lines.values) {
@@ -1117,16 +955,14 @@ class RedstoneWebHandler : SavedData() {
 		private const val NODES_TAG = "Nodes"
 		private const val ARACHNODES_TAG = "Arachnodes"
 		private const val LINES_TAG = "Lines"
-		private var suppressWebstonePower = false
-
 		@JvmStatic
 		fun isWebstonePowerSuppressed(): Boolean {
-			return suppressWebstonePower
+			return RedstoneWebPowerSuppression.isSuppressed()
 		}
 
 		@JvmStatic
 		fun getInjectedPower(level: ServerLevel, position: BlockPos, direction: Direction): Int {
-			if (suppressWebstonePower) return 0
+			if (RedstoneWebPowerSuppression.isSuppressed()) return 0
 			return get(level).getPower(position, direction)
 		}
 
