@@ -32,10 +32,18 @@ object RedstoneWebSynchronizer {
 	}
 
 	fun sendToTracking(level: ServerLevel, arachnode: Arachnode, packet: AaronPacket) {
-		val chunkPosition = ChunkPos(BlockPos.containing(arachnode.position))
-		for (player in level.chunkSource.chunkMap.getPlayers(chunkPosition, false)) {
-			packet.messagePlayer(player)
-		}
+		for (player in getTrackingPlayers(level, arachnode)) packet.messagePlayer(player)
+	}
+
+	fun sendArachnodeRemoval(
+		level: ServerLevel,
+		arachnode: Arachnode,
+		connectedLines: Collection<WebLine>,
+		packet: AaronPacket
+	) {
+		val players = getTrackingPlayers(level, connectedLines).toMutableSet()
+		players.addAll(getTrackingPlayers(level, arachnode))
+		for (player in players) packet.messagePlayer(player)
 	}
 
 	fun getTrackingPlayers(
@@ -50,6 +58,11 @@ object RedstoneWebSynchronizer {
 		}
 
 		return players
+	}
+
+	private fun getTrackingPlayers(level: ServerLevel, arachnode: Arachnode): List<ServerPlayer> {
+		val chunkPosition = ChunkPos(BlockPos.containing(arachnode.position))
+		return level.chunkSource.chunkMap.getPlayers(chunkPosition, false)
 	}
 
 	private fun createPowerData(lines: Collection<RedstoneWebLine>): List<RedstoneWebPowerData> {

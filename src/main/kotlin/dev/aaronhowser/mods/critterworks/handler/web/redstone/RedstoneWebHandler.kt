@@ -260,7 +260,7 @@ class RedstoneWebHandler : SavedData() {
 		if (arachnode.mount is ArachnodeMount.Surface) {
 			removeStoredLines(level, connectedLines, false)
 			removeArachnodeReferences(arachnode)
-			synchronizeArachnodeRemoval(level, arachnode)
+			synchronizeArachnodeRemoval(level, arachnode, connectedLines)
 			setDirty()
 			return arachnode
 		}
@@ -268,7 +268,7 @@ class RedstoneWebHandler : SavedData() {
 		if (connectedLines.size != 2 || !hasConnectedInputAndOutput(arachnode)) {
 			removeStoredLines(level, connectedLines, false)
 			removeArachnodeReferences(arachnode)
-			synchronizeArachnodeRemoval(level, arachnode)
+			synchronizeArachnodeRemoval(level, arachnode, connectedLines)
 			setDirty()
 			return arachnode
 		}
@@ -297,7 +297,7 @@ class RedstoneWebHandler : SavedData() {
 		removeLineForReplacement(level, firstLine)
 		removeLineForReplacement(level, secondLine)
 		removeArachnodeReferences(arachnode)
-		synchronizeArachnodeRemoval(level, arachnode)
+		synchronizeArachnodeRemoval(level, arachnode, replacedLines)
 		addLineForReplacement(fusedLine)
 		finishLineReplacement(level, listOf(fusedLine), affectedLines)
 		return arachnode
@@ -960,10 +960,15 @@ class RedstoneWebHandler : SavedData() {
 		matchingArachnodes.add(arachnode)
 	}
 
-	private fun synchronizeArachnodeRemoval(level: ServerLevel, arachnode: Arachnode) {
-		RedstoneWebSynchronizer.sendToTracking(
+	private fun synchronizeArachnodeRemoval(
+		level: ServerLevel,
+		arachnode: Arachnode,
+		connectedLines: Collection<WebLine> = emptyList()
+	) {
+		RedstoneWebSynchronizer.sendArachnodeRemoval(
 			level,
 			arachnode,
+			connectedLines,
 			RemoveArachnodePacket(arachnode.uuid)
 		)
 	}
