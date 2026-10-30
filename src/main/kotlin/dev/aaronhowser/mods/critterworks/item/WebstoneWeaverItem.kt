@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.server.level.ServerLevel
@@ -74,6 +75,10 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 
 		val savedData = RedstoneWebHandler.get(level)
 		if (firstNode is WebLineAnchor && savedData.getLine(firstNode.parentLineUuid) == null) {
+			itemStack.remove(ModDataComponents.WEB_NODE)
+			return
+		}
+		if (firstNode is ArachnodePort && savedData.getArachnode(firstNode) == null) {
 			itemStack.remove(ModDataComponents.WEB_NODE)
 			return
 		}

@@ -137,12 +137,10 @@ object ClientWebLineInteractionHandler {
 		}
 
 		if (heldStack.isEmpty) {
-			val targetedArachnodePort = WebTargeting.getTargetedNode(
-				ClientWebLines.getLines(WebLineType.REDSTONE),
+			val targetedArachnodePort = WebTargeting.getTargetedExistingNode(
+				ClientWebLines.getArachnodePorts(),
 				eyePosition,
-				lookEnd,
-				snapToExistingNode = true,
-				requireExistingNode = true
+				lookEnd
 			)
 			val target = if (targetedArachnodePort == null) {
 				null
@@ -161,6 +159,19 @@ object ClientWebLineInteractionHandler {
 			else -> null
 		}
 		if (webType != null) {
+			if (webType == WebLineType.REDSTONE
+				&& heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+			) {
+				val portTarget = WebTargeting.getTargetedExistingNode(
+					ClientWebLines.getArachnodePorts(),
+					eyePosition,
+					lookEnd
+				)
+				if (portTarget != null && !isBehindCurrentHit(portTarget, eyePosition)) {
+					return Pair(webType, portTarget)
+				}
+			}
+
 			val target = WebTargeting.getTargetedNode(
 				ClientWebLines.getLines(webType),
 				eyePosition,

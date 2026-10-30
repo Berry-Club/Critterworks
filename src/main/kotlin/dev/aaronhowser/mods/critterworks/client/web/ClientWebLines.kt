@@ -35,6 +35,15 @@ object ClientWebLines {
 		return arachnodesByUuid.values.toList()
 	}
 
+	fun getArachnodePorts(): List<ArachnodePort> {
+		val ports: MutableList<ArachnodePort> = mutableListOf()
+		for (node in getNodeMap(WebLineType.REDSTONE).values) {
+			if (node is ArachnodePort) ports.add(node)
+		}
+
+		return ports
+	}
+
 	fun getType(target: TargetedWebNode): WebLineType? {
 		for (type in WebLineType.entries) {
 			val lineUuid = target.lineUuid
@@ -53,6 +62,7 @@ object ClientWebLines {
 	) {
 		val newNodesByUuid: MutableMap<UUID, WebNode> = mutableMapOf()
 		for (node in newNodes) newNodesByUuid[node.uuid] = node
+		val storedNodes = getNodeMap(type)
 		for (newArachnode in newArachnodes) {
 			var arachnode = arachnodesByUuid[newArachnode.uuid]
 			if (arachnode == null) {
@@ -60,7 +70,15 @@ object ClientWebLines {
 				arachnodesByUuid[arachnode.uuid] = arachnode
 			}
 
-			for (port in arachnode.getPorts()) newNodesByUuid[port.uuid] = port
+			for (port in arachnode.getPorts()) {
+				var storedPort = storedNodes[port.uuid]
+				if (storedPort == null) {
+					storedPort = port
+					storedNodes[port.uuid] = storedPort
+				}
+
+				newNodesByUuid[port.uuid] = storedPort
+			}
 		}
 
 		for (lineData in newLines) {
