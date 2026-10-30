@@ -4,7 +4,6 @@ import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePortRole
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.Item
@@ -46,15 +45,11 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 		val inputPort = ArachnodePort(
 			UUID.randomUUID(),
 			arachnodeUuid,
-			ArachnodePortRole.INPUT,
-			0,
 			context.position.add(portDirections.first.scale(HALF_DEVICE_LENGTH))
 		)
 		val outputPort = ArachnodePort(
 			UUID.randomUUID(),
 			arachnodeUuid,
-			ArachnodePortRole.OUTPUT,
-			0,
 			context.position.add(portDirections.second.scale(HALF_DEVICE_LENGTH))
 		)
 
