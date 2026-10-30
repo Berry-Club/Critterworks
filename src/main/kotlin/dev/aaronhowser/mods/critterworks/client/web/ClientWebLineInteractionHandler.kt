@@ -10,7 +10,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.WebTarge
 import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.TargetedWebNode
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand
@@ -201,7 +201,7 @@ object ClientWebLineInteractionHandler {
 		if (!heldStack.isEmpty) return false
 		if (target.first != WebLineType.REDSTONE) return false
 		if (target.second.lineUuid != null) return false
-		return target.second.node is Arachnode
+		return target.second.node is ArachnodePort
 	}
 
 	private fun isBehindCurrentHit(targetedNode: TargetedWebNode, eyePosition: Vec3): Boolean {

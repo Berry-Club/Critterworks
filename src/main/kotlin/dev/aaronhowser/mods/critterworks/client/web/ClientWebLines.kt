@@ -7,12 +7,15 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.Targeted
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import java.util.*
 
 object ClientWebLines {
 
 	private val linesByType: MutableMap<WebLineType, MutableMap<UUID, WebLine>> = mutableMapOf()
 	private val nodesByType: MutableMap<WebLineType, MutableMap<UUID, WebNode>> = mutableMapOf()
+	private val arachnodesByUuid: MutableMap<UUID, Arachnode> = mutableMapOf()
 
 	fun getLines(): List<WebLine> {
 		val lines: MutableList<WebLine> = mutableListOf()
@@ -28,6 +31,10 @@ object ClientWebLines {
 		return getNodeMap(type).values.toList()
 	}
 
+	fun getArachnodes(): List<Arachnode> {
+		return arachnodesByUuid.values.toList()
+	}
+
 	fun getType(target: TargetedWebNode): WebLineType? {
 		for (type in WebLineType.entries) {
 			val lineUuid = target.lineUuid
@@ -38,9 +45,23 @@ object ClientWebLines {
 		return null
 	}
 
-	fun addLines(type: WebLineType, newNodes: List<WebNode>, newLines: List<WebLineData>) {
+	fun addLines(
+		type: WebLineType,
+		newArachnodes: List<Arachnode>,
+		newNodes: List<WebNode>,
+		newLines: List<WebLineData>
+	) {
 		val newNodesByUuid: MutableMap<UUID, WebNode> = mutableMapOf()
 		for (node in newNodes) newNodesByUuid[node.uuid] = node
+		for (newArachnode in newArachnodes) {
+			var arachnode = arachnodesByUuid[newArachnode.uuid]
+			if (arachnode == null) {
+				arachnode = newArachnode
+				arachnodesByUuid[arachnode.uuid] = arachnode
+			}
+
+			for (port in arachnode.getPorts()) newNodesByUuid[port.uuid] = port
+		}
 
 		for (lineData in newLines) {
 			addLine(type, lineData, newNodesByUuid)
@@ -96,6 +117,7 @@ object ClientWebLines {
 		line.clearAttachedAnchors()
 		removeNodeIfOrphaned(type, lines, nodes, line.firstNode)
 		removeNodeIfOrphaned(type, lines, nodes, line.secondNode)
+		removeOrphanedArachnodes(nodes)
 	}
 
 	fun clear() {
@@ -105,6 +127,7 @@ object ClientWebLines {
 
 		linesByType.clear()
 		nodesByType.clear()
+		arachnodesByUuid.clear()
 		ClientItemWebPorts.clear()
 	}
 
@@ -128,6 +151,7 @@ object ClientWebLines {
 	) {
 		if (node.lines.isNotEmpty()) return
 		if (nodes[node.uuid] !== node) return
+		if (node is ArachnodePort && node.arachnodeUuid in arachnodesByUuid) return
 
 		if (node is WebLineAnchor) {
 			lines[node.parentLineUuid]?.removeAttachedAnchor(node.uuid)
@@ -135,6 +159,25 @@ object ClientWebLines {
 
 		nodes.remove(node.uuid)
 		if (type == WebLineType.ITEM) ClientItemWebPorts.remove(node.uuid)
+	}
+
+	private fun removeOrphanedArachnodes(nodes: MutableMap<UUID, WebNode>) {
+		val removedArachnodeUuids: MutableList<UUID> = mutableListOf()
+		for (arachnode in arachnodesByUuid.values) {
+			var hasLine = false
+			for (port in arachnode.getPorts()) {
+				if (port.lines.isEmpty()) continue
+
+				hasLine = true
+				break
+			}
+			if (!hasLine) removedArachnodeUuids.add(arachnode.uuid)
+		}
+
+		for (arachnodeUuid in removedArachnodeUuids) {
+			val arachnode = arachnodesByUuid.remove(arachnodeUuid) ?: continue
+			for (port in arachnode.getPorts()) nodes.remove(port.uuid)
+		}
 	}
 
 	private fun getCanonicalNode(

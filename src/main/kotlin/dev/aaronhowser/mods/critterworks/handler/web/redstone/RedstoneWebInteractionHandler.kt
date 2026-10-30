@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import dev.aaronhowser.mods.critterworks.item.WebstoneWeaverItem
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
 import dev.aaronhowser.mods.critterworks.registry.ModItems
@@ -23,11 +23,12 @@ object RedstoneWebInteractionHandler {
 
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
-		val selectedNode = RedstoneWebHandler.get(level).getNode(event.node.uuid) ?: return
-		if (selectedNode is Arachnode) {
+		val handler = RedstoneWebHandler.get(level)
+		val selectedNode = handler.getNode(event.node.uuid) ?: return
+		if (selectedNode is ArachnodePort) {
 			if (!event.itemStack.isEmpty) return
-			val removedArachnode = RedstoneWebHandler.get(level)
-				.removeArachnode(level, selectedNode.uuid)
+			val removedArachnode = handler
+				.removeArachnode(level, selectedNode.arachnodeUuid)
 				?: return
 
 			val returnedStack = removedArachnode.itemStack.copy()

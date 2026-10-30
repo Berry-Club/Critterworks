@@ -3,8 +3,6 @@ package dev.aaronhowser.mods.critterworks.client.web
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
-import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
@@ -29,16 +27,14 @@ object DirectionalArachnodeRenderer {
 		val minecraft = Minecraft.getInstance()
 		val hoppingSpiderScale = ClientConfig.CONFIG.hoppingSpiderScale.get().toFloat()
 
-		for (node in ClientWebLines.getNodes(WebLineType.REDSTONE)) {
-			if (node !is Arachnode) continue
-
-			val outputDirection = node.getOutputDirection() ?: continue
+		for (arachnode in ClientWebLines.getArachnodes()) {
+			val outputDirection = arachnode.getDisplayDirection() ?: continue
 			val spiderUp = getSpiderUp(outputDirection)
 			val rotation = getTravelRotation(outputDirection, spiderUp)
-			val light = LevelRenderer.getLightColor(level, BlockPos.containing(node.position))
+			val light = LevelRenderer.getLightColor(level, BlockPos.containing(arachnode.position))
 
 			poseStack.withPose {
-				val displayPosition = node.position.add(spiderUp.scale(DISTANCE_FROM_LINE))
+				val displayPosition = arachnode.position.add(spiderUp.scale(DISTANCE_FROM_LINE))
 				val relativePosition = displayPosition.subtract(cameraPosition)
 				poseStack.translate(relativePosition.x, relativePosition.y, relativePosition.z)
 				poseStack.mulPose(rotation)
