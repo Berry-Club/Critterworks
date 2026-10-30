@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.DirectionalArachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
@@ -30,7 +30,7 @@ object DirectionalArachnodeRenderer {
 		val hoppingSpiderScale = ClientConfig.CONFIG.hoppingSpiderScale.get().toFloat()
 
 		for (node in ClientWebLines.getNodes(WebLineType.REDSTONE)) {
-			if (node !is DirectionalArachnode) continue
+			if (node !is Arachnode) continue
 
 			val outputDirection = node.getOutputDirection() ?: continue
 			val spiderUp = getSpiderUp(outputDirection)

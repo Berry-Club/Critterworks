@@ -26,6 +26,7 @@ class ModItemModelProvider(
 		snailShield()
 		webstoneWeaver()
 		directionalArachnode()
+		invertingArachnode()
 
 		spawnEggItem(ModItems.SCOOCHWORM_SPAWN_EGG.get())
 		spawnEggItem(ModItems.ITEM_FILTERFEEDER_SPAWN_EGG.get())
@@ -182,6 +183,12 @@ class ModItemModelProvider(
 		withExistingParent("directional_arachnode", mcLoc("item/generated"))
 			.texture("layer0", modLoc("item/hopping_spider"))
 			.texture("layer1", mcLoc("item/spectral_arrow"))
+	}
+
+	private fun invertingArachnode() {
+		withExistingParent("inverting_arachnode", mcLoc("item/generated"))
+			.texture("layer0", modLoc("item/hopping_spider"))
+			.texture("layer1", mcLoc("block/redstone_torch"))
 	}
 
 	private fun filterfeederItems() {

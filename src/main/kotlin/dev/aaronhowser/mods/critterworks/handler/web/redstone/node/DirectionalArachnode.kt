@@ -15,7 +15,7 @@ data class DirectionalArachnode(
 	override val uuid: UUID,
 	override val position: Vec3,
 	override val itemStack: ItemStack,
-	val inputLineUuid: UUID
+	override val inputLineUuid: UUID
 ) : Arachnode() {
 
 	override fun canPower(sourceLine: RedstoneWebLine, destinationLine: RedstoneWebLine): Boolean {
@@ -24,28 +24,6 @@ data class DirectionalArachnode(
 		val sourceIsInput = isInputLine(sourceLine)
 		val destinationIsInput = isInputLine(destinationLine)
 		return sourceIsInput || !destinationIsInput
-	}
-
-	fun isInputLine(line: RedstoneWebLine): Boolean {
-		return line.uuid == inputLineUuid
-	}
-
-	fun getOutputDirection(): Vec3? {
-		for (line in lines) {
-			if (line !is RedstoneWebLine || isInputLine(line)) continue
-
-			val outputNode = when (this) {
-				line.firstNode -> line.secondNode
-				line.secondNode -> line.firstNode
-				else -> continue
-			}
-			val outputDirection = outputNode.position.subtract(position)
-			if (outputDirection.lengthSqr() == 0.0) return null
-
-			return outputDirection.normalize()
-		}
-
-		return null
 	}
 
 	companion object {

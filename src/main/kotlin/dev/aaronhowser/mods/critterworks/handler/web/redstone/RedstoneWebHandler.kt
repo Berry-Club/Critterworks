@@ -262,7 +262,12 @@ class RedstoneWebHandler : SavedData() {
 
 	private fun refreshLinePower(level: ServerLevel): Set<RedstoneWebLine> {
 		val changedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
-		var desiredPower = calculateDesiredPower(level)
+		val currentPower: MutableMap<UUID, Int> = mutableMapOf()
+		for (line in lines.values) {
+			currentPower[line.uuid] = line.power
+		}
+		val initialGeneratedPower = getGeneratedLinePower(currentPower)
+		var desiredPower = calculateDesiredPower(level, initialGeneratedPower)
 		var hasFallingPower = false
 
 		for (line in lines.values) {
@@ -277,7 +282,7 @@ class RedstoneWebHandler : SavedData() {
 			}
 
 			updateBlockAnchors(level, lines.values)
-			desiredPower = calculateDesiredPower(level)
+			desiredPower = calculateDesiredPower(level, initialGeneratedPower)
 		}
 
 		val poweredLines: MutableSet<RedstoneWebLine> = mutableSetOf()
@@ -292,7 +297,31 @@ class RedstoneWebHandler : SavedData() {
 		return changedLines
 	}
 
-	private fun calculateDesiredPower(level: ServerLevel): MutableMap<UUID, Int> {
+	private fun calculateDesiredPower(
+		level: ServerLevel,
+		initialGeneratedPower: Map<UUID, Int>
+	): MutableMap<UUID, Int> {
+		var generatedPower = initialGeneratedPower
+		val seenGeneratedPower: MutableSet<Map<UUID, Int>> = mutableSetOf()
+		seenGeneratedPower.add(generatedPower)
+
+		val firstDesiredPower = calculatePropagatedPower(level, generatedPower)
+		var desiredPower = firstDesiredPower
+
+		while (true) {
+			val nextGeneratedPower = getGeneratedLinePower(desiredPower)
+			if (nextGeneratedPower == generatedPower) return desiredPower
+			if (!seenGeneratedPower.add(nextGeneratedPower)) return firstDesiredPower
+
+			generatedPower = nextGeneratedPower
+			desiredPower = calculatePropagatedPower(level, generatedPower)
+		}
+	}
+
+	private fun calculatePropagatedPower(
+		level: ServerLevel,
+		generatedPower: Map<UUID, Int>
+	): MutableMap<UUID, Int> {
 		val desiredPower: MutableMap<UUID, Int> = mutableMapOf()
 		val linesToCheck: ArrayDeque<RedstoneWebLine> = ArrayDeque()
 		val previousSuppression = suppressWebstonePower
@@ -306,6 +335,15 @@ class RedstoneWebHandler : SavedData() {
 				)
 				desiredPower[line.uuid] = directPower
 				if (directPower > 0) linesToCheck.add(line)
+			}
+
+			for ((lineUuid, power) in generatedPower) {
+				val line = lines[lineUuid] ?: continue
+				val previousPower = desiredPower.getValue(lineUuid)
+				if (previousPower >= power) continue
+
+				desiredPower[lineUuid] = power
+				linesToCheck.add(line)
 			}
 
 			while (linesToCheck.isNotEmpty()) {
@@ -325,6 +363,25 @@ class RedstoneWebHandler : SavedData() {
 		} finally {
 			suppressWebstonePower = previousSuppression
 		}
+	}
+
+	private fun getGeneratedLinePower(linePowers: Map<UUID, Int>): Map<UUID, Int> {
+		val generatedPower: MutableMap<UUID, Int> = mutableMapOf()
+
+		for (node in nodes.values) {
+			if (node !is Arachnode) continue
+
+			for (line in node.lines) {
+				if (line !is RedstoneWebLine) continue
+
+				val power = node.getGeneratedPower(line, linePowers)
+				if (power <= generatedPower.getOrDefault(line.uuid, 0)) continue
+
+				generatedPower[line.uuid] = power
+			}
+		}
+
+		return generatedPower
 	}
 
 	private fun getBlockInputPower(

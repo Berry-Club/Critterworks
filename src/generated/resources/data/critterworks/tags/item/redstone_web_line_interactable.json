@@ -2,6 +2,7 @@
   "values": [
     "critterworks:webstone_weaver",
     "critterworks:directional_arachnode",
+    "critterworks:inverting_arachnode",
     "#c:tools/shear"
   ]
 }

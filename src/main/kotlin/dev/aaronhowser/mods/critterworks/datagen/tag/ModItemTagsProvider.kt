@@ -184,6 +184,7 @@ class ModItemTagsProvider(
 		tag(REDSTONE_WEB_LINE_INTERACTABLE)
 			.add(ModItems.WEBSTONE_WEAVER)
 			.add(ModItems.DIRECTIONAL_ARACHNODE)
+			.add(ModItems.INVERTING_ARACHNODE)
 			.addTag(Tags.Items.TOOLS_SHEAR)
 
 		tag(ItemTags.LOGS)
