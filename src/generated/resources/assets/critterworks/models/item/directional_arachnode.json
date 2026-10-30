@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "critterworks:item/hopping_spider",
+    "layer1": "minecraft:item/spectral_arrow"
+  }
+}

@@ -5,6 +5,7 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.data.WormColor
 import dev.aaronhowser.mods.critterworks.item.*
+import dev.aaronhowser.mods.critterworks.item.arachnode.DirectionalArachnodeItem
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.Item
@@ -33,6 +34,8 @@ object ModItems : AaronItemRegistry() {
 		register("artificial_spinnerets", ::ArtificialSpinneretsItem, ArtificialSpinneretsItem.DEFAULT_PROPERTIES)
 	val WEBSTONE_WEAVER: DeferredItem<WebstoneWeaverItem> =
 		register("webstone_weaver", ::WebstoneWeaverItem, WebstoneWeaverItem.DEFAULT_PROPERTIES)
+	val DIRECTIONAL_ARACHNODE: DeferredItem<DirectionalArachnodeItem> =
+		register("directional_arachnode", ::DirectionalArachnodeItem)
 
 	val SPARKPOLLEN_POUCH: DeferredItem<SparkpollenPouchItem> =
 		register("sparkpollen_pouch", ::SparkpollenPouchItem, SparkpollenPouchItem.DEFAULT_PROPERTIES)
