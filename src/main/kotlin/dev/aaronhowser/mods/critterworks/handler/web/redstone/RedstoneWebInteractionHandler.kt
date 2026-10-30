@@ -25,8 +25,7 @@ object RedstoneWebInteractionHandler {
 		val level = player.serverLevel()
 		val handler = RedstoneWebHandler.get(level)
 		val selectedNode = handler.getNode(event.node.uuid) ?: return
-		if (selectedNode is ArachnodePort) {
-			if (!event.itemStack.isEmpty) return
+		if (selectedNode is ArachnodePort && event.itemStack.isEmpty) {
 			val removedArachnode = handler
 				.removeArachnode(level, selectedNode.arachnodeUuid)
 				?: return
