@@ -411,6 +411,7 @@ class RedstoneWebHandler : SavedData() {
 
 	@Synchronized
 	fun validateChangedChunks(level: ServerLevel) {
+		queuePeriodicValidation(level)
 		if (chunksToValidate.isEmpty()) return
 
 		val changedChunks = chunksToValidate.toSet()
@@ -438,6 +439,21 @@ class RedstoneWebHandler : SavedData() {
 		}
 
 		if (invalidLines.isNotEmpty() || invalidArachnodes.isNotEmpty()) setDirty()
+	}
+
+	private fun queuePeriodicValidation(level: ServerLevel) {
+		if (level.gameTime % FULL_VALIDATION_INTERVAL_TICKS != 0L) return
+
+		for (chunkPosition in lineUuidsByChunk.keys) {
+			if (level.hasChunk(chunkPosition.x, chunkPosition.z)) {
+				chunksToValidate.add(chunkPosition)
+			}
+		}
+		for (chunkPosition in mountedArachnodeUuidsBySupportChunk.keys) {
+			if (level.hasChunk(chunkPosition.x, chunkPosition.z)) {
+				chunksToValidate.add(chunkPosition)
+			}
+		}
 	}
 
 	private fun getInvalidLines(
@@ -997,6 +1013,7 @@ class RedstoneWebHandler : SavedData() {
 		private const val NODE_OCCUPANCY_RADIUS_SQUARED = 0.09
 		private const val SURFACE_OFFSET = 0.001
 		private const val CASCADE_DELAY_TICKS = 2
+		private const val FULL_VALIDATION_INTERVAL_TICKS = 20
 		private const val SAVED_DATA_NAME = "critterworks_redstone_webs"
 		private const val NODES_TAG = "Nodes"
 		private const val ARACHNODES_TAG = "Arachnodes"

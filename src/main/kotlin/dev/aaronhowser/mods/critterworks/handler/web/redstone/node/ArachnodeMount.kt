@@ -11,6 +11,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 
 sealed class ArachnodeMount {
@@ -28,6 +29,8 @@ sealed class ArachnodeMount {
 		}
 
 		fun isValid(level: ServerLevel): Boolean {
+			val chunkPosition = ChunkPos(blockPosition)
+			if (!level.hasChunk(chunkPosition.x, chunkPosition.z)) return true
 			return WebAnchorSupport.hasSupport(level, blockPosition, face, contactPosition)
 		}
 
