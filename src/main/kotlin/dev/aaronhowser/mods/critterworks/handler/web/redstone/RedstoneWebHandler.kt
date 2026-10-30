@@ -10,6 +10,9 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineInvalida
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
+import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
+import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodePlacementContext
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncRedstoneWebPowerPacket
@@ -22,10 +25,12 @@ import net.minecraft.nbt.NbtOps
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.RedStoneWireBlock
 import net.minecraft.world.level.saveddata.SavedData
+import net.minecraft.world.phys.Vec3
 import java.util.*
 
 class RedstoneWebHandler : SavedData() {
@@ -112,6 +117,105 @@ class RedstoneWebHandler : SavedData() {
 	}
 
 	@Synchronized
+	fun addArachnode(
+		level: ServerLevel,
+		lineUuid: UUID,
+		itemStack: ItemStack,
+		position: Vec3,
+		playerPosition: Vec3
+	): Boolean {
+		val line = lines[lineUuid] ?: return false
+		if (isNearExistingNode(line, position)) return false
+
+		val arachnodeItem = itemStack.item as? ArachnodeItem ?: return false
+		val firstLineUuid = UUID.randomUUID()
+		val secondLineUuid = UUID.randomUUID()
+		val placementContext = ArachnodePlacementContext(
+			line,
+			firstLineUuid,
+			secondLineUuid,
+			position,
+			playerPosition,
+			itemStack.copyWithCount(1)
+		)
+		val arachnode = arachnodeItem.createArachnode(placementContext) ?: return false
+
+		val firstSegment = RedstoneWebLine(
+			firstLineUuid,
+			line.firstNode,
+			arachnode,
+			line.power
+		)
+		val secondSegment = RedstoneWebLine(
+			secondLineUuid,
+			arachnode,
+			line.secondNode,
+			line.power
+		)
+
+		val affectedLines = getLinesAttachedTo(line)
+		synchronizeReplacementRemovals(level, listOf(line), affectedLines)
+
+		for (attachment in line.attachedAnchors) {
+			val parentLine = if (attachment.distanceToFirstNode
+				<= line.firstNode.position.distanceTo(arachnode.position)
+			) {
+				firstSegment
+			} else {
+				secondSegment
+			}
+
+			attachment.anchor.parentLineUuid = parentLine.uuid
+		}
+
+		removeLineForReplacement(level, line)
+		addLineForReplacement(firstSegment)
+		addLineForReplacement(secondSegment)
+		finishLineReplacement(level, listOf(firstSegment, secondSegment), affectedLines)
+		return true
+	}
+
+	@Synchronized
+	fun removeArachnode(
+		level: ServerLevel,
+		nodeUuid: UUID
+	): Arachnode? {
+		val arachnode = nodes[nodeUuid] as? Arachnode ?: return null
+		val connectedLines: MutableList<RedstoneWebLine> = mutableListOf()
+		for (line in arachnode.lines) {
+			if (line is RedstoneWebLine) connectedLines.add(line)
+		}
+		if (connectedLines.size != 2) return null
+
+		val firstLine = connectedLines[0]
+		val secondLine = connectedLines[1]
+		val firstNode = getOtherNode(firstLine, arachnode) ?: return null
+		val secondNode = getOtherNode(secondLine, arachnode) ?: return null
+		val fusedLine = RedstoneWebLine(
+			UUID.randomUUID(),
+			firstNode,
+			secondNode,
+			maxOf(firstLine.power, secondLine.power)
+		)
+
+		val replacedLines = listOf(firstLine, secondLine)
+		val affectedLines = getLinesAttachedTo(replacedLines)
+		synchronizeReplacementRemovals(level, replacedLines, affectedLines)
+
+		for (line in replacedLines) {
+			for (attachment in line.attachedAnchors) {
+				attachment.anchor.parentLineUuid = fusedLine.uuid
+			}
+		}
+
+		removeLineForReplacement(level, firstLine)
+		removeLineForReplacement(level, secondLine)
+		addLineForReplacement(fusedLine)
+		finishLineReplacement(level, listOf(fusedLine), affectedLines)
+		return arachnode
+	}
+
+	@Synchronized
 	fun syncChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val nearbyLines = getLinesWithEndpointInChunk(chunkPos)
 		if (nearbyLines.isEmpty()) return
@@ -158,92 +262,69 @@ class RedstoneWebHandler : SavedData() {
 
 	private fun refreshLinePower(level: ServerLevel): Set<RedstoneWebLine> {
 		val changedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
-		val remainingLines: MutableSet<RedstoneWebLine> = lines.values.toMutableSet()
+		var desiredPower = calculateDesiredPower(level)
+		var hasFallingPower = false
 
-		while (remainingLines.isNotEmpty()) {
-			val firstLine = remainingLines.first()
-			val component = getConnectedComponent(firstLine, remainingLines)
-			var newPower = calculateComponentPower(level, component)
-
-			if (hasFallingPower(component, newPower)) {
-				for (line in component) {
-					if (line.updatePower(0)) changedLines.add(line)
-				}
-
-				updateBlockAnchors(level, component)
-				newPower = calculateComponentPower(level, component)
-			}
-
-			val poweredLines: MutableSet<RedstoneWebLine> = mutableSetOf()
-			for (line in component) {
-				if (!line.updatePower(newPower)) continue
-
-				changedLines.add(line)
-				poweredLines.add(line)
-			}
-
-			updateBlockAnchors(level, poweredLines)
+		for (line in lines.values) {
+			if (desiredPower.getValue(line.uuid) >= line.power) continue
+			hasFallingPower = true
+			break
 		}
 
+		if (hasFallingPower) {
+			for (line in lines.values) {
+				if (line.updatePower(0)) changedLines.add(line)
+			}
+
+			updateBlockAnchors(level, lines.values)
+			desiredPower = calculateDesiredPower(level)
+		}
+
+		val poweredLines: MutableSet<RedstoneWebLine> = mutableSetOf()
+		for (line in lines.values) {
+			if (!line.updatePower(desiredPower.getValue(line.uuid))) continue
+
+			changedLines.add(line)
+			poweredLines.add(line)
+		}
+
+		updateBlockAnchors(level, poweredLines)
 		return changedLines
 	}
 
-	private fun getConnectedComponent(
-		firstLine: RedstoneWebLine,
-		remainingLines: MutableSet<RedstoneWebLine>
-	): Set<RedstoneWebLine> {
-		val component: MutableSet<RedstoneWebLine> = mutableSetOf()
+	private fun calculateDesiredPower(level: ServerLevel): MutableMap<UUID, Int> {
+		val desiredPower: MutableMap<UUID, Int> = mutableMapOf()
 		val linesToCheck: ArrayDeque<RedstoneWebLine> = ArrayDeque()
-		linesToCheck.add(firstLine)
-		remainingLines.remove(firstLine)
-
-		while (linesToCheck.isNotEmpty()) {
-			val line = linesToCheck.removeFirst()
-			component.add(line)
-
-			for (connectedLine in getConnectedLines(line)) {
-				if (!remainingLines.remove(connectedLine)) continue
-				linesToCheck.add(connectedLine)
-			}
-		}
-
-		return component
-	}
-
-	private fun calculateComponentPower(
-		level: ServerLevel,
-		component: Set<RedstoneWebLine>
-	): Int {
-		val checkedNodes: MutableSet<UUID> = mutableSetOf()
 		val previousSuppression = suppressWebstonePower
 		suppressWebstonePower = true
 
 		return try {
-			var strongestPower = 0
-			for (line in component) {
-				if (checkedNodes.add(line.firstNode.uuid)) {
-					strongestPower = maxOf(strongestPower, getBlockInputPower(level, line.firstNode))
-				}
-
-				if (checkedNodes.add(line.secondNode.uuid)) {
-					strongestPower = maxOf(strongestPower, getBlockInputPower(level, line.secondNode))
-				}
-
-				if (strongestPower >= MAX_POWER) break
+			for (line in lines.values) {
+				val directPower = maxOf(
+					getBlockInputPower(level, line.firstNode),
+					getBlockInputPower(level, line.secondNode)
+				)
+				desiredPower[line.uuid] = directPower
+				if (directPower > 0) linesToCheck.add(line)
 			}
 
-			strongestPower
+			while (linesToCheck.isNotEmpty()) {
+				val line = linesToCheck.removeFirst()
+				val linePower = desiredPower.getValue(line.uuid)
+
+				for (poweredLine in getPoweredLines(line)) {
+					val previousPower = desiredPower.getValue(poweredLine.uuid)
+					if (previousPower >= linePower) continue
+
+					desiredPower[poweredLine.uuid] = linePower
+					linesToCheck.add(poweredLine)
+				}
+			}
+
+			desiredPower
 		} finally {
 			suppressWebstonePower = previousSuppression
 		}
-	}
-
-	private fun hasFallingPower(component: Set<RedstoneWebLine>, newPower: Int): Boolean {
-		for (line in component) {
-			if (newPower < line.power) return true
-		}
-
-		return false
 	}
 
 	private fun getBlockInputPower(
@@ -342,6 +423,87 @@ class RedstoneWebHandler : SavedData() {
 		synchronizePower(level, changedLines)
 	}
 
+	private fun isNearExistingNode(line: RedstoneWebLine, position: Vec3): Boolean {
+		if (line.firstNode.position.distanceToSqr(position) <= NODE_OCCUPANCY_RADIUS_SQUARED) return true
+		if (line.secondNode.position.distanceToSqr(position) <= NODE_OCCUPANCY_RADIUS_SQUARED) return true
+
+		for (attachment in line.attachedAnchors) {
+			if (attachment.anchor.position.distanceToSqr(position) <= NODE_OCCUPANCY_RADIUS_SQUARED) return true
+		}
+
+		return false
+	}
+
+	private fun getLinesAttachedTo(line: RedstoneWebLine): Set<RedstoneWebLine> {
+		return getLinesAttachedTo(listOf(line))
+	}
+
+	private fun getLinesAttachedTo(parentLines: Collection<RedstoneWebLine>): Set<RedstoneWebLine> {
+		val attachedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
+
+		for (parentLine in parentLines) {
+			for (attachment in parentLine.attachedAnchors) {
+				for (attachedLine in attachment.anchor.lines) {
+					if (attachedLine is RedstoneWebLine && attachedLine !in parentLines) {
+						attachedLines.add(attachedLine)
+					}
+				}
+			}
+		}
+
+		return attachedLines
+	}
+
+	private fun synchronizeReplacementRemovals(
+		level: ServerLevel,
+		replacedLines: Collection<RedstoneWebLine>,
+		affectedLines: Collection<RedstoneWebLine>
+	) {
+		for (line in replacedLines) {
+			sendToNearbyPlayers(level, line, RemoveWebLinePacket(WebLineType.REDSTONE, line.uuid))
+		}
+
+		for (line in affectedLines) {
+			sendToNearbyPlayers(level, line, RemoveWebLinePacket(WebLineType.REDSTONE, line.uuid))
+		}
+	}
+
+	private fun removeLineForReplacement(level: ServerLevel, line: RedstoneWebLine) {
+		lines.remove(line.uuid)
+		removeLineReferences(line)
+		updateBlockAnchors(level, line)
+	}
+
+	private fun addLineForReplacement(line: RedstoneWebLine) {
+		nodes[line.firstNode.uuid] = line.firstNode
+		nodes[line.secondNode.uuid] = line.secondNode
+		lines[line.uuid] = line
+		addLineReferences(line)
+	}
+
+	private fun finishLineReplacement(
+		level: ServerLevel,
+		newLines: Collection<RedstoneWebLine>,
+		affectedLines: Collection<RedstoneWebLine>
+	) {
+		setDirty()
+
+		val synchronizedLines: MutableSet<RedstoneWebLine> = affectedLines.toMutableSet()
+		synchronizedLines.addAll(newLines)
+		val addPacket = AddWebLinesPacket.fromLines(WebLineType.REDSTONE, synchronizedLines)
+		sendToNearbyPlayers(level, synchronizedLines, addPacket)
+
+		val changedLines = refreshLinePower(level).toMutableSet()
+		changedLines.addAll(newLines)
+		synchronizePower(level, changedLines)
+	}
+
+	private fun getOtherNode(line: RedstoneWebLine, node: WebNode): WebNode? {
+		if (line.firstNode === node) return line.secondNode
+		if (line.secondNode === node) return line.firstNode
+		return null
+	}
+
 	private fun addLineReferences(line: RedstoneWebLine) {
 		line.firstNode.addLine(line)
 		line.secondNode.addLine(line)
@@ -436,10 +598,10 @@ class RedstoneWebHandler : SavedData() {
 		nodes.remove(node.uuid)
 	}
 
-	private fun getConnectedLines(line: RedstoneWebLine): Set<RedstoneWebLine> {
+	private fun getPoweredLines(line: RedstoneWebLine): Set<RedstoneWebLine> {
 		val connectedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
-		addLinesConnectedAtNode(line.firstNode, connectedLines)
-		addLinesConnectedAtNode(line.secondNode, connectedLines)
+		addLinesPoweredThroughNode(line, line.firstNode, connectedLines)
+		addLinesPoweredThroughNode(line, line.secondNode, connectedLines)
 
 		for (attachment in line.attachedAnchors) {
 			for (connectedLine in attachment.anchor.lines) {
@@ -453,14 +615,16 @@ class RedstoneWebHandler : SavedData() {
 		return connectedLines
 	}
 
-	private fun addLinesConnectedAtNode(
+	private fun addLinesPoweredThroughNode(
+		sourceLine: RedstoneWebLine,
 		node: WebNode,
 		connectedLines: MutableSet<RedstoneWebLine>
 	) {
 		for (connectedLine in node.lines) {
-			if (connectedLine is RedstoneWebLine) {
-				connectedLines.add(connectedLine)
-			}
+			if (connectedLine !is RedstoneWebLine) continue
+			if (node is Arachnode && !node.canPower(sourceLine, connectedLine)) continue
+
+			connectedLines.add(connectedLine)
 		}
 
 		if (node !is WebLineAnchor) return
@@ -569,6 +733,23 @@ class RedstoneWebHandler : SavedData() {
 		}
 	}
 
+	private fun sendToNearbyPlayers(
+		level: ServerLevel,
+		lines: Collection<WebLine>,
+		packet: AaronPacket
+	) {
+		val nearbyPlayers: MutableSet<ServerPlayer> = mutableSetOf()
+		for (line in lines) {
+			for (chunkPos in line.getEndpointChunkPositions()) {
+				nearbyPlayers.addAll(level.chunkSource.chunkMap.getPlayers(chunkPos, false))
+			}
+		}
+
+		for (player in nearbyPlayers) {
+			packet.messagePlayer(player)
+		}
+	}
+
 	private fun playBreakSound(level: ServerLevel, line: WebLine) {
 		val center = line.firstNode.position
 			.add(line.secondNode.position)
@@ -606,6 +787,7 @@ class RedstoneWebHandler : SavedData() {
 
 	companion object {
 		private const val MAX_POWER = 15
+		private const val NODE_OCCUPANCY_RADIUS_SQUARED = 0.09
 		private const val CASCADE_DELAY_TICKS = 2
 		private const val SAVED_DATA_NAME = "critterworks_redstone_webs"
 		private const val NODES_TAG = "Nodes"

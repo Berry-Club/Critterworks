@@ -10,6 +10,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
+import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -83,7 +84,8 @@ object WebInteractionHandler {
 	fun canInteractWithType(itemStack: ItemStack, webType: WebLineType): Boolean {
 		return when (webType) {
 			WebLineType.ITEM -> itemStack.isItem(ModItemTagsProvider.ITEM_WEB_LINE_INTERACTABLE)
-			WebLineType.REDSTONE -> itemStack.isItem(ModItemTagsProvider.REDSTONE_WEB_LINE_INTERACTABLE)
+			WebLineType.REDSTONE -> itemStack.item is ArachnodeItem
+				|| itemStack.isItem(ModItemTagsProvider.REDSTONE_WEB_LINE_INTERACTABLE)
 		}
 	}
 

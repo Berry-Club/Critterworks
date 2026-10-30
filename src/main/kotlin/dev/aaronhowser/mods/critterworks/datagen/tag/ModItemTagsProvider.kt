@@ -183,6 +183,7 @@ class ModItemTagsProvider(
 
 		tag(REDSTONE_WEB_LINE_INTERACTABLE)
 			.add(ModItems.WEBSTONE_WEAVER)
+			.add(ModItems.DIRECTIONAL_ARACHNODE)
 			.addTag(Tags.Items.TOOLS_SHEAR)
 
 		tag(ItemTags.LOGS)

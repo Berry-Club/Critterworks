@@ -10,6 +10,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.WebTarge
 import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.TargetedWebNode
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand
@@ -36,7 +37,7 @@ object ClientWebLineInteractionHandler {
 		val target = getTargetedNode(player, eyePosition, viewVector, interactionHand) ?: return null
 		val heldStack = player.getItemInHand(interactionHand)
 		if (WebInteractionHandler.canInteractWithType(heldStack, target.first)) return target.second
-		if (!targetsInstalledWebPort(target)) return null
+		if (!targetsInstalledWebPort(target) && !targetsArachnode(target, heldStack)) return null
 
 		return target.second
 	}
@@ -54,6 +55,7 @@ object ClientWebLineInteractionHandler {
 		val heldStack = player.getItemInHand(interactionHand)
 		if (!WebInteractionHandler.canInteractWithType(heldStack, target.first)
 			&& !targetsInstalledWebPort(target)
+			&& !targetsArachnode(target, heldStack)
 		) return
 
 		val interactionEvent = if (targetedNode.lineUuid == null) {
@@ -134,6 +136,25 @@ object ClientWebLineInteractionHandler {
 			}
 		}
 
+		if (heldStack.isEmpty) {
+			val installedArachnode = WebTargeting.getTargetedNode(
+				ClientWebLines.getLines(WebLineType.REDSTONE),
+				eyePosition,
+				lookEnd,
+				snapToExistingNode = true,
+				requireExistingNode = true
+			)
+			val target = if (installedArachnode == null) {
+				null
+			} else {
+				Pair(WebLineType.REDSTONE, installedArachnode)
+			}
+			if (target != null && targetsArachnode(target, heldStack)) {
+				if (isBehindCurrentHit(target.second, eyePosition)) return null
+				return target
+			}
+		}
+
 		val webType = when {
 			canInteractWithItemWeb && !canInteractWithRedstoneWeb -> WebLineType.ITEM
 			canInteractWithRedstoneWeb && !canInteractWithItemWeb -> WebLineType.REDSTONE
@@ -171,6 +192,16 @@ object ClientWebLineInteractionHandler {
 		if (target.second.lineUuid != null) return false
 		val blockAnchor = target.second.node as? WebBlockAnchor ?: return false
 		return !ClientItemWebPorts.get(blockAnchor.uuid).isEmpty
+	}
+
+	private fun targetsArachnode(
+		target: Pair<WebLineType, TargetedWebNode>,
+		heldStack: ItemStack
+	): Boolean {
+		if (!heldStack.isEmpty) return false
+		if (target.first != WebLineType.REDSTONE) return false
+		if (target.second.lineUuid != null) return false
+		return target.second.node is Arachnode
 	}
 
 	private fun isBehindCurrentHit(targetedNode: TargetedWebNode, eyePosition: Vec3): Boolean {

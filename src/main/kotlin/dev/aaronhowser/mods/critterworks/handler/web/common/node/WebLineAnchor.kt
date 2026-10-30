@@ -15,9 +15,9 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-data class WebLineAnchor(
+class WebLineAnchor(
 	override val uuid: UUID,
-	val parentLineUuid: UUID,
+	var parentLineUuid: UUID,
 	override val position: Vec3
 ) : WebNode() {
 
