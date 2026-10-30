@@ -81,6 +81,8 @@
 		- Place them free-floating or something?
 - Names:
 	- OR = Eitherweaver
+      - OR Weaver, like Orb?
+      - Eitherweaver could be XOR instead
 	- Clock = Clockroach?
 
 # Farm critters?
