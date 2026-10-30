@@ -12,11 +12,6 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePortRole
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.DirectionalArachnode
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.InvertingArachnode
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.LegacyArachnodeNode
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.LegacyArachnodeType
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodePlacementContext
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
@@ -590,108 +585,6 @@ class RedstoneWebHandler : SavedData() {
 		for (port in arachnode.getPorts()) nodes.remove(port.uuid)
 	}
 
-	private fun migrateLegacyArachnode(
-		legacyNode: LegacyArachnodeNode,
-		loadedNodesByUuid: Map<UUID, WebNode>,
-		loadedLines: MutableList<WebLineData>
-	) {
-		val incidentLines: MutableList<WebLineData> = mutableListOf()
-		for (lineData in loadedLines) {
-			if (lineData.firstNodeUuid == legacyNode.uuid
-				|| lineData.secondNodeUuid == legacyNode.uuid
-			) incidentLines.add(lineData)
-		}
-		if (incidentLines.isEmpty()) return
-
-		var inputLine: WebLineData? = null
-		for (lineData in incidentLines) {
-			if (lineData.uuid != legacyNode.inputLineUuid) continue
-
-			inputLine = lineData
-			break
-		}
-		if (inputLine == null) inputLine = incidentLines.first()
-
-		var outputLine: WebLineData? = null
-		for (lineData in incidentLines) {
-			if (lineData === inputLine) continue
-
-			outputLine = lineData
-			break
-		}
-
-		val loadedInputDirection = getLegacyLineDirection(legacyNode, inputLine, loadedNodesByUuid)
-		val loadedOutputDirection = getLegacyLineDirection(legacyNode, outputLine, loadedNodesByUuid)
-		val inputDirection = loadedInputDirection
-			?: loadedOutputDirection?.scale(-1.0)
-			?: Vec3(1.0, 0.0, 0.0)
-		val outputDirection = loadedOutputDirection ?: inputDirection.scale(-1.0)
-
-		val inputPort = ArachnodePort(
-			UUID.randomUUID(),
-			legacyNode.uuid,
-			ArachnodePortRole.INPUT,
-			0,
-			legacyNode.position.add(inputDirection.scale(ARACHNODE_HALF_LENGTH))
-		)
-		val outputPort = ArachnodePort(
-			UUID.randomUUID(),
-			legacyNode.uuid,
-			ArachnodePortRole.OUTPUT,
-			0,
-			legacyNode.position.add(outputDirection.scale(ARACHNODE_HALF_LENGTH))
-		)
-		val arachnode = when (legacyNode.type) {
-			LegacyArachnodeType.DIRECTIONAL -> DirectionalArachnode(
-				legacyNode.uuid,
-				legacyNode.position,
-				legacyNode.itemStack,
-				listOf(inputPort),
-				listOf(outputPort)
-			)
-
-			LegacyArachnodeType.INVERTING -> InvertingArachnode(
-				legacyNode.uuid,
-				legacyNode.position,
-				legacyNode.itemStack,
-				listOf(inputPort),
-				listOf(outputPort)
-			)
-		}
-		addArachnodeReferences(arachnode)
-
-		for (index in loadedLines.indices) {
-			val lineData = loadedLines[index]
-			if (lineData !in incidentLines) continue
-
-			val portUuid = if (lineData === inputLine) inputPort.uuid else outputPort.uuid
-			loadedLines[index] = WebLineData(
-				lineData.uuid,
-				if (lineData.firstNodeUuid == legacyNode.uuid) portUuid else lineData.firstNodeUuid,
-				if (lineData.secondNodeUuid == legacyNode.uuid) portUuid else lineData.secondNodeUuid
-			)
-		}
-	}
-
-	private fun getLegacyLineDirection(
-		legacyNode: LegacyArachnodeNode,
-		lineData: WebLineData?,
-		loadedNodesByUuid: Map<UUID, WebNode>
-	): Vec3? {
-		if (lineData == null) return null
-
-		val otherNodeUuid = if (lineData.firstNodeUuid == legacyNode.uuid) {
-			lineData.secondNodeUuid
-		} else {
-			lineData.firstNodeUuid
-		}
-		val otherNode = loadedNodesByUuid[otherNodeUuid] ?: return null
-		val direction = otherNode.position.subtract(legacyNode.position)
-		if (direction.lengthSqr() == 0.0) return null
-
-		return direction.normalize()
-	}
-
 	private fun addLoadedLine(line: RedstoneWebLine) {
 		nodes[line.firstNode.uuid] = line.firstNode
 		nodes[line.secondNode.uuid] = line.secondNode
@@ -947,7 +840,6 @@ class RedstoneWebHandler : SavedData() {
 	companion object {
 		private const val MAX_POWER = 15
 		private const val NODE_OCCUPANCY_RADIUS_SQUARED = 0.09
-		private const val ARACHNODE_HALF_LENGTH = 0.125
 		private const val CASCADE_DELAY_TICKS = 2
 		private const val SAVED_DATA_NAME = "critterworks_redstone_webs"
 		private const val NODES_TAG = "Nodes"
@@ -968,7 +860,7 @@ class RedstoneWebHandler : SavedData() {
 			val handler = RedstoneWebHandler()
 
 			val nodesTag = tag.get(NODES_TAG) ?: return handler
-			val arachnodesTag = tag.get(ARACHNODES_TAG)
+			val arachnodesTag = tag.get(ARACHNODES_TAG) ?: return handler
 			val linesTag = tag.get(LINES_TAG) ?: return handler
 
 			val ops = registries.createSerializationContext(NbtOps.INSTANCE)
@@ -980,22 +872,10 @@ class RedstoneWebHandler : SavedData() {
 				.listOf()
 				.parse(ops, linesTag)
 				.getOrThrow()
-				.toMutableList()
-			val loadedArachnodes = if (arachnodesTag == null) {
-				emptyList()
-			} else {
-				Arachnode.CODEC
-					.listOf()
-					.parse(ops, arachnodesTag)
-					.getOrThrow()
-			}
-			val loadedNodesByUuid: MutableMap<UUID, WebNode> = mutableMapOf()
-			for (node in loadedNodes) loadedNodesByUuid[node.uuid] = node
-			for (node in loadedNodes) {
-				if (node !is LegacyArachnodeNode) continue
-
-				handler.migrateLegacyArachnode(node, loadedNodesByUuid, loadedLines)
-			}
+			val loadedArachnodes = Arachnode.CODEC
+				.listOf()
+				.parse(ops, arachnodesTag)
+				.getOrThrow()
 
 			val referencedNodeUuids: MutableSet<UUID> = mutableSetOf()
 			for (lineData in loadedLines) {
@@ -1004,7 +884,6 @@ class RedstoneWebHandler : SavedData() {
 			}
 
 			for (node in loadedNodes) {
-				if (node is LegacyArachnodeNode) continue
 				if (node.uuid in referencedNodeUuids) {
 					handler.nodes[node.uuid] = node
 				}

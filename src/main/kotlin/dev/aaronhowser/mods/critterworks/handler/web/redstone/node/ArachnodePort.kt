@@ -39,7 +39,7 @@ class ArachnodePort(
 
 	companion object {
 		const val TYPE = "arachnode_port"
-		const val TYPE_ID = 4
+		const val TYPE_ID = 2
 
 		val CODEC: MapCodec<ArachnodePort> = RecordCodecBuilder.mapCodec { instance ->
 			instance.group(
