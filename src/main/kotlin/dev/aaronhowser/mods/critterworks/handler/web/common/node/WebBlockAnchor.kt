@@ -32,9 +32,10 @@ class WebBlockAnchor(
 		lines: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>
 	): WebLineInvalidation? {
-		val collisionShape = level.getBlockState(blockPos)
-			.getCollisionShape(level, blockPos)
-		if (!collisionShape.isEmpty) return null
+		val contactPosition = position.subtract(
+			Vec3.atLowerCornerOf(face.normal).scale(SURFACE_OFFSET)
+		)
+		if (WebAnchorSupport.hasSupport(level, blockPos, face, contactPosition)) return null
 
 		return WebLineInvalidation(WebLineInvalidationReason.INVALID_ANCHOR)
 	}
@@ -44,14 +45,13 @@ class WebBlockAnchor(
 		const val TYPE_ID = 0
 
 		fun create(blockPos: BlockPos, face: Direction, position: Vec3): WebBlockAnchor {
-			val surfaceOffset = 0.001
 			val faceNormal = Vec3.atLowerCornerOf(face.normal)
 
 			return WebBlockAnchor(
 				UUID.randomUUID(),
 				blockPos,
 				face,
-				position.add(faceNormal.scale(surfaceOffset))
+				position.add(faceNormal.scale(SURFACE_OFFSET))
 			)
 		}
 
@@ -80,5 +80,7 @@ class WebBlockAnchor(
 			AaronExtraStreamCodecs.VEC3, WebBlockAnchor::position,
 			::WebBlockAnchor
 		)
+
+		private const val SURFACE_OFFSET = 0.001
 	}
 }

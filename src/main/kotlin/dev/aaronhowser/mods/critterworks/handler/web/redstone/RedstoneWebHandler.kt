@@ -210,11 +210,8 @@ class RedstoneWebHandler : SavedData() {
 		clickedPosition: Vec3,
 		playerPosition: Vec3
 	): Boolean {
-		val collisionShape = level.getBlockState(blockPosition)
-			.getCollisionShape(level, blockPosition)
-		if (collisionShape.isEmpty) return false
-
-		val mount = ArachnodeMount.Surface(blockPosition, face)
+		val mount = ArachnodeMount.Surface(blockPosition, face, clickedPosition)
+		if (!mount.isValid(level)) return false
 		val position = clickedPosition.add(
 			mount.getSurfaceNormal().scale(SURFACE_OFFSET)
 		)
@@ -428,10 +425,7 @@ class RedstoneWebHandler : SavedData() {
 		for (arachnode in arachnodes.values) {
 			val mount = arachnode.mount as? ArachnodeMount.Surface ?: continue
 			if (ChunkPos(mount.blockPosition) !in changedChunks) continue
-			if (!level.getBlockState(mount.blockPosition)
-				.getCollisionShape(level, mount.blockPosition)
-				.isEmpty
-			) continue
+			if (mount.isValid(level)) continue
 			invalidArachnodes.add(arachnode)
 		}
 

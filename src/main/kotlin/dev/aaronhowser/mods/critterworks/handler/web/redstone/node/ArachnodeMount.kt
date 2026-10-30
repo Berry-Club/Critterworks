@@ -3,11 +3,14 @@ package dev.aaronhowser.mods.critterworks.handler.web.redstone.node
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebAnchorSupport
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
 
 sealed class ArachnodeMount {
@@ -16,11 +19,16 @@ sealed class ArachnodeMount {
 
 	data class Surface(
 		val blockPosition: BlockPos,
-		val face: Direction
+		val face: Direction,
+		val contactPosition: Vec3
 	) : ArachnodeMount() {
 
 		fun getSurfaceNormal(): Vec3 {
 			return Vec3.atLowerCornerOf(face.normal)
+		}
+
+		fun isValid(level: ServerLevel): Boolean {
+			return WebAnchorSupport.hasSupport(level, blockPosition, face, contactPosition)
 		}
 
 		companion object {
@@ -31,7 +39,10 @@ sealed class ArachnodeMount {
 						.forGetter(Surface::blockPosition),
 					Direction.CODEC
 						.fieldOf("face")
-						.forGetter(Surface::face)
+						.forGetter(Surface::face),
+					Vec3.CODEC
+						.fieldOf("contact_position")
+						.forGetter(Surface::contactPosition)
 				).apply(instance, ::Surface)
 			}
 		}
@@ -67,7 +78,8 @@ sealed class ArachnodeMount {
 						LINE_TYPE_ID -> Line
 						SURFACE_TYPE_ID -> Surface(
 							BlockPos.STREAM_CODEC.decode(buffer),
-							Direction.STREAM_CODEC.decode(buffer)
+							Direction.STREAM_CODEC.decode(buffer),
+							AaronExtraStreamCodecs.VEC3.decode(buffer)
 						)
 						else -> error("Unknown arachnode mount type")
 					}
@@ -80,6 +92,7 @@ sealed class ArachnodeMount {
 							ByteBufCodecs.VAR_INT.encode(buffer, SURFACE_TYPE_ID)
 							BlockPos.STREAM_CODEC.encode(buffer, mount.blockPosition)
 							Direction.STREAM_CODEC.encode(buffer, mount.face)
+							AaronExtraStreamCodecs.VEC3.encode(buffer, mount.contactPosition)
 						}
 					}
 				}
