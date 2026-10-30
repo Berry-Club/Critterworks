@@ -15,6 +15,8 @@ class RedstonePowerSolver(
 ) {
 
 	fun solve(level: ServerLevel): Map<UUID, Int> {
+		if (lines.isEmpty()) return emptyMap()
+
 		val currentPower: MutableMap<UUID, Int> = mutableMapOf()
 		for (line in lines.values) currentPower[line.uuid] = line.power
 

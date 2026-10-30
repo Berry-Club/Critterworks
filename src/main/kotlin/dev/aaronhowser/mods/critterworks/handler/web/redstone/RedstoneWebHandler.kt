@@ -46,7 +46,6 @@ class RedstoneWebHandler : SavedData() {
 	private val mountedArachnodeUuidsBySupportChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
 	private val chunksToValidate: MutableSet<ChunkPos> = mutableSetOf()
 
-	@Synchronized
 	fun addLine(level: ServerLevel, line: RedstoneWebLine) {
 		val firstNode = getCanonicalNode(line.firstNode)
 		val secondNode = getCanonicalNode(line.secondNode)
@@ -80,32 +79,26 @@ class RedstoneWebHandler : SavedData() {
 		RedstoneWebSynchronizer.synchronizePower(level, linesToSynchronize)
 	}
 
-	@Synchronized
 	fun getNode(uuid: UUID): WebNode? {
 		return nodes[uuid]
 	}
 
-	@Synchronized
 	fun getCanonicalNode(node: WebNode): WebNode {
 		return nodes[node.uuid] ?: node
 	}
 
-	@Synchronized
 	fun getLine(uuid: UUID): RedstoneWebLine? {
 		return lines[uuid]
 	}
 
-	@Synchronized
 	fun getArachnode(uuid: UUID): Arachnode? {
 		return arachnodes[uuid]
 	}
 
-	@Synchronized
 	fun getArachnode(port: ArachnodePort): Arachnode? {
 		return arachnodes[port.arachnodeUuid]
 	}
 
-	@Synchronized
 	fun getPower(position: BlockPos, direction: Direction): Int {
 		val lineUuids = lineUuidsBySignalPosition[position] ?: return 0
 		var strongestPower = 0
@@ -121,7 +114,6 @@ class RedstoneWebHandler : SavedData() {
 		return strongestPower
 	}
 
-	@Synchronized
 	fun removeLine(level: ServerLevel, uuid: UUID): RedstoneWebLine? {
 		val line = lines[uuid] ?: return null
 		removeStoredLine(level, line)
@@ -130,7 +122,6 @@ class RedstoneWebHandler : SavedData() {
 		return line
 	}
 
-	@Synchronized
 	fun addArachnode(
 		level: ServerLevel,
 		lineUuid: UUID,
@@ -201,7 +192,6 @@ class RedstoneWebHandler : SavedData() {
 		return true
 	}
 
-	@Synchronized
 	fun addMountedArachnode(
 		level: ServerLevel,
 		itemStack: ItemStack,
@@ -245,7 +235,6 @@ class RedstoneWebHandler : SavedData() {
 		return true
 	}
 
-	@Synchronized
 	fun removeArachnode(
 		level: ServerLevel,
 		nodeUuid: UUID
@@ -303,7 +292,6 @@ class RedstoneWebHandler : SavedData() {
 		return arachnode
 	}
 
-	@Synchronized
 	fun syncChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val nearbyLines = getLinesIntersectingChunk(chunkPos)
 		val nearbyArachnodes = getArachnodesInChunk(chunkPos).toMutableSet()
@@ -316,7 +304,6 @@ class RedstoneWebHandler : SavedData() {
 		RedstoneWebSynchronizer.synchronizePower(player, nearbyLines)
 	}
 
-	@Synchronized
 	fun forgetChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val level = player.serverLevel()
 
@@ -365,18 +352,20 @@ class RedstoneWebHandler : SavedData() {
 		return false
 	}
 
-	@Synchronized
 	fun markForValidation(blockPos: BlockPos) {
 		chunksToValidate.add(ChunkPos(blockPos))
 	}
 
-	@Synchronized
 	fun tick(level: ServerLevel) {
+		if (lines.isEmpty()) return
+
 		val changedLines = refreshLinePower(level)
 		RedstoneWebSynchronizer.synchronizePower(level, changedLines)
 	}
 
 	private fun refreshLinePower(level: ServerLevel): Set<RedstoneWebLine> {
+		if (lines.isEmpty()) return emptySet()
+
 		val changedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
 		val solver = RedstonePowerSolver(lines, arachnodes.values)
 		var desiredPower = solver.solve(level)
@@ -409,7 +398,6 @@ class RedstoneWebHandler : SavedData() {
 		return changedLines
 	}
 
-	@Synchronized
 	fun validateChangedChunks(level: ServerLevel) {
 		queuePeriodicValidation(level)
 		if (chunksToValidate.isEmpty()) return
@@ -990,7 +978,6 @@ class RedstoneWebHandler : SavedData() {
 		)
 	}
 
-	@Synchronized
 	override fun save(tag: CompoundTag, registries: HolderLookup.Provider): CompoundTag {
 		val ops = registries.createSerializationContext(NbtOps.INSTANCE)
 
@@ -1023,6 +1010,8 @@ class RedstoneWebHandler : SavedData() {
 		private const val NODES_TAG = "Nodes"
 		private const val ARACHNODES_TAG = "Arachnodes"
 		private const val LINES_TAG = "Lines"
+		private val FACTORY = Factory(::RedstoneWebHandler, ::load)
+		private val handlersByLevel: MutableMap<ServerLevel, RedstoneWebHandler> = WeakHashMap()
 		@JvmStatic
 		fun isWebstonePowerSuppressed(): Boolean {
 			return RedstoneWebPowerSuppression.isSuppressed()
@@ -1031,7 +1020,8 @@ class RedstoneWebHandler : SavedData() {
 		@JvmStatic
 		fun getInjectedPower(level: ServerLevel, position: BlockPos, direction: Direction): Int {
 			if (RedstoneWebPowerSuppression.isSuppressed()) return 0
-			return get(level).getPower(position, direction)
+			val handler = handlersByLevel[level] ?: return 0
+			return handler.getPower(position, direction)
 		}
 
 		private fun load(tag: CompoundTag, registries: HolderLookup.Provider): RedstoneWebHandler {
@@ -1087,10 +1077,12 @@ class RedstoneWebHandler : SavedData() {
 		}
 
 		fun get(level: ServerLevel): RedstoneWebHandler {
-			return level.dataStorage.computeIfAbsent(
-				Factory(::RedstoneWebHandler, ::load),
-				SAVED_DATA_NAME
-			)
+			val loadedHandler = handlersByLevel[level]
+			if (loadedHandler != null) return loadedHandler
+
+			val handler = level.dataStorage.computeIfAbsent(FACTORY, SAVED_DATA_NAME)
+			handlersByLevel[level] = handler
+			return handler
 		}
 	}
 
