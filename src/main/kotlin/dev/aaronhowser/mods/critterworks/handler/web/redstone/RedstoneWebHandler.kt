@@ -255,7 +255,7 @@ class RedstoneWebHandler : SavedData() {
 
 	@Synchronized
 	fun syncChunk(player: ServerPlayer, chunkPos: ChunkPos) {
-		val nearbyLines = getLinesWithEndpointInChunk(chunkPos)
+		val nearbyLines = getLinesIntersectingChunk(chunkPos)
 		if (nearbyLines.isEmpty()) return
 
 		AddWebLinesPacket
@@ -268,13 +268,13 @@ class RedstoneWebHandler : SavedData() {
 	fun forgetChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val level = player.serverLevel()
 
-		for (line in getLinesWithEndpointInChunk(chunkPos)) {
+		for (line in getLinesIntersectingChunk(chunkPos)) {
 			var stillTrackingLine = false
 
-			for (endpointChunk in line.getEndpointChunkPositions()) {
-				if (endpointChunk == chunkPos) continue
+			for (intersectedChunk in line.intersectedChunkPositions) {
+				if (intersectedChunk == chunkPos) continue
 
-				val trackingPlayers = level.chunkSource.chunkMap.getPlayers(endpointChunk, false)
+				val trackingPlayers = level.chunkSource.chunkMap.getPlayers(intersectedChunk, false)
 				if (player !in trackingPlayers) continue
 
 				stillTrackingLine = true
@@ -382,14 +382,12 @@ class RedstoneWebHandler : SavedData() {
 		return lineUuids
 	}
 
-	private fun getLinesWithEndpointInChunk(chunkPos: ChunkPos): List<RedstoneWebLine> {
+	private fun getLinesIntersectingChunk(chunkPos: ChunkPos): List<RedstoneWebLine> {
 		val cachedUuids = lineUuidsByChunk[chunkPos] ?: return emptyList()
 		val matchingLines: MutableList<RedstoneWebLine> = mutableListOf()
 
 		for (lineUuid in cachedUuids) {
 			val line = lines[lineUuid] ?: continue
-			if (chunkPos !in line.getEndpointChunkPositions()) continue
-
 			matchingLines.add(line)
 		}
 
@@ -859,7 +857,7 @@ class RedstoneWebHandler : SavedData() {
 		val packet = SyncRedstoneWebPowerPacket(powerData)
 		val nearbyPlayers: MutableSet<ServerPlayer> = mutableSetOf()
 		for (line in synchronizedLines) {
-			for (chunkPos in line.getEndpointChunkPositions()) {
+			for (chunkPos in line.intersectedChunkPositions) {
 				nearbyPlayers.addAll(level.chunkSource.chunkMap.getPlayers(chunkPos, false))
 			}
 		}
@@ -880,7 +878,7 @@ class RedstoneWebHandler : SavedData() {
 
 	private fun sendToNearbyPlayers(level: ServerLevel, line: WebLine, packet: AaronPacket) {
 		val nearbyPlayers: MutableSet<ServerPlayer> = mutableSetOf()
-		for (chunkPos in line.getEndpointChunkPositions()) {
+		for (chunkPos in line.intersectedChunkPositions) {
 			nearbyPlayers.addAll(level.chunkSource.chunkMap.getPlayers(chunkPos, false))
 		}
 
@@ -896,7 +894,7 @@ class RedstoneWebHandler : SavedData() {
 	) {
 		val nearbyPlayers: MutableSet<ServerPlayer> = mutableSetOf()
 		for (line in lines) {
-			for (chunkPos in line.getEndpointChunkPositions()) {
+			for (chunkPos in line.intersectedChunkPositions) {
 				nearbyPlayers.addAll(level.chunkSource.chunkMap.getPlayers(chunkPos, false))
 			}
 		}

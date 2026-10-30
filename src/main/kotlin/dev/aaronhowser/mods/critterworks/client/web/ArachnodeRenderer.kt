@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 
-object DirectionalArachnodeRenderer {
+object ArachnodeRenderer {
 	private val hoppingSpiderStack by lazy { ModItems.HOPPING_SPIDER.get().defaultInstance }
 
 	fun renderAll(

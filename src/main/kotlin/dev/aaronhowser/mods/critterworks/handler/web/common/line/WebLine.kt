@@ -90,13 +90,6 @@ open class WebLine(
 		return WebLineInvalidation(WebLineInvalidationReason.OBSTRUCTED)
 	}
 
-	fun getEndpointChunkPositions(): Set<ChunkPos> {
-		return setOf(
-			ChunkPos(BlockPos.containing(firstNode.position)),
-			ChunkPos(BlockPos.containing(secondNode.position))
-		)
-	}
-
 	private fun calculateIntersectedChunkPositions(): Set<ChunkPos> {
 		val firstChunk = ChunkPos(BlockPos.containing(firstNode.position))
 		val secondChunk = ChunkPos(BlockPos.containing(secondNode.position))
