@@ -258,7 +258,7 @@ class RedstoneWebHandler : SavedData() {
 			}
 		}
 		if (arachnode.mount is ArachnodeMount.Surface) {
-			for (line in connectedLines) removeStoredLine(level, line, false)
+			removeStoredLines(level, connectedLines, false)
 			removeArachnodeReferences(arachnode)
 			synchronizeArachnodeRemoval(level, arachnode)
 			setDirty()
@@ -266,7 +266,7 @@ class RedstoneWebHandler : SavedData() {
 		}
 		if (connectedLines.size > 2) return null
 		if (connectedLines.size != 2 || !hasConnectedInputAndOutput(arachnode)) {
-			for (line in connectedLines) removeStoredLine(level, line, false)
+			removeStoredLines(level, connectedLines, false)
 			removeArachnodeReferences(arachnode)
 			synchronizeArachnodeRemoval(level, arachnode)
 			setDirty()
@@ -417,9 +417,7 @@ class RedstoneWebHandler : SavedData() {
 		chunksToValidate.clear()
 		val invalidLines = getInvalidLines(level, getLinesNearChangedChunks(changedChunks))
 
-		for (line in invalidLines.keys) {
-			removeStoredLine(level, line)
-		}
+		removeStoredLines(level, invalidLines.keys)
 
 		val invalidArachnodes: MutableList<Arachnode> = mutableListOf()
 		for (arachnode in getMountedArachnodesInSupportChunks(changedChunks)) {
@@ -521,20 +519,33 @@ class RedstoneWebHandler : SavedData() {
 		line: RedstoneWebLine,
 		removeOrphanedArachnodes: Boolean = true
 	) {
-		val attachedArachnodeUuids: MutableSet<UUID> = mutableSetOf()
-		addArachnodeUuid(line.firstNode, attachedArachnodeUuids)
-		addArachnodeUuid(line.secondNode, attachedArachnodeUuids)
+		removeStoredLines(level, listOf(line), removeOrphanedArachnodes)
+	}
 
-		lines.remove(line.uuid)
-		removeLineReferences(line)
-		updateBlockAnchors(level, line)
-		RedstoneWebSynchronizer.sendToTracking(
-			level,
-			line,
-			RemoveWebLinePacket(WebLineType.REDSTONE, line.uuid)
-		)
-		playBreakSound(level, line)
-		scheduleDependentLines(level, line.uuid)
+	private fun removeStoredLines(
+		level: ServerLevel,
+		removedLines: Collection<RedstoneWebLine>,
+		removeOrphanedArachnodes: Boolean = true
+	) {
+		if (removedLines.isEmpty()) return
+
+		val attachedArachnodeUuids: MutableSet<UUID> = mutableSetOf()
+		for (line in removedLines) {
+			addArachnodeUuid(line.firstNode, attachedArachnodeUuids)
+			addArachnodeUuid(line.secondNode, attachedArachnodeUuids)
+
+			lines.remove(line.uuid)
+			removeLineReferences(line)
+			RedstoneWebSynchronizer.sendToTracking(
+				level,
+				line,
+				RemoveWebLinePacket(WebLineType.REDSTONE, line.uuid)
+			)
+			playBreakSound(level, line)
+			scheduleDependentLines(level, line.uuid)
+		}
+
+		updateBlockAnchors(level, removedLines)
 
 		val changedLines = refreshLinePower(level)
 		RedstoneWebSynchronizer.synchronizePower(level, changedLines)
