@@ -27,6 +27,7 @@ object WebLineRenderer {
 
 		WebLineGeometryRenderer.renderAll(bufferSource, level, poseStack, cameraPosition)
 		WebPortRenderer.renderAll(bufferSource, level, poseStack, cameraPosition)
+		DirectionalArachnodeRenderer.renderAll(bufferSource, level, poseStack, cameraPosition)
 		WebLinePreviewRenderer.render(minecraft, bufferSource, level, poseStack, cameraPosition, viewVector)
 	}
 
