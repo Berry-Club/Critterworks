@@ -38,14 +38,15 @@ import java.util.*
 
 class RedstoneWebHandler : SavedData() {
 
-	private val topology = RedstoneWebGraph()
-	private val powerController = RedstoneWebPowerController(topology)
+	private val graph = RedstoneWebGraph()
+	private val powerController = RedstoneWebPowerController(graph)
+
 	private val nodes: Map<UUID, WebNode>
-		get() = topology.nodes
+		get() = graph.nodes
 	private val lines: Map<UUID, RedstoneWebLine>
-		get() = topology.lines
+		get() = graph.lines
 	private val arachnodes: Map<UUID, Arachnode>
-		get() = topology.arachnodes
+		get() = graph.arachnodes
 
 	private val chunksToValidate: MutableSet<ChunkPos> = mutableSetOf()
 
@@ -60,11 +61,11 @@ class RedstoneWebHandler : SavedData() {
 
 		val previousLine = lines[storedLine.uuid]
 		if (previousLine != null) {
-			topology.removeLine(previousLine)
+			graph.removeLine(previousLine)
 			powerController.notifyConnectedBlocks(level, previousLine)
 		}
 
-		topology.storeLine(storedLine)
+		graph.storeLine(storedLine)
 		setDirty()
 
 		val changedLines = powerController.updatePower(level)
@@ -80,27 +81,27 @@ class RedstoneWebHandler : SavedData() {
 	}
 
 	fun getNode(uuid: UUID): WebNode? {
-		return topology.getNode(uuid)
+		return graph.getNode(uuid)
 	}
 
 	fun getCanonicalNode(node: WebNode): WebNode {
-		return topology.getCanonicalNode(node)
+		return graph.getCanonicalNode(node)
 	}
 
 	fun getLine(uuid: UUID): RedstoneWebLine? {
-		return topology.getLine(uuid)
+		return graph.getLine(uuid)
 	}
 
 	fun getArachnode(uuid: UUID): Arachnode? {
-		return topology.getArachnode(uuid)
+		return graph.getArachnode(uuid)
 	}
 
 	fun getOwningArachnode(port: ArachnodePort): Arachnode? {
-		return topology.getOwningArachnode(port)
+		return graph.getOwningArachnode(port)
 	}
 
 	fun getPower(position: BlockPos, direction: Direction): Int {
-		return topology.getPower(position, direction)
+		return graph.getPower(position, direction)
 	}
 
 	fun removeLine(level: ServerLevel, uuid: UUID): RedstoneWebLine? {
@@ -174,9 +175,9 @@ class RedstoneWebHandler : SavedData() {
 		}
 
 		removeLineForReplacement(level, line)
-		topology.storeArachnode(arachnode)
-		topology.storeLine(firstSegment)
-		topology.storeLine(secondSegment)
+		graph.storeArachnode(arachnode)
+		graph.storeLine(firstSegment)
+		graph.storeLine(secondSegment)
 		finishLineReplacement(level, listOf(firstSegment, secondSegment), affectedLines)
 		return true
 	}
@@ -209,7 +210,7 @@ class RedstoneWebHandler : SavedData() {
 		)
 		val arachnode = arachnodeItem.createArachnode(placementContext) ?: return false
 
-		topology.storeArachnode(arachnode)
+		graph.storeArachnode(arachnode)
 		setDirty()
 		RedstoneWebSynchronizer.sendToTracking(
 			level,
@@ -237,14 +238,14 @@ class RedstoneWebHandler : SavedData() {
 		}
 		if (arachnode.mount is ArachnodeMount.Surface) {
 			removeStoredLines(level, connectedLines, false)
-			topology.removeArachnode(arachnode)
+			graph.removeArachnode(arachnode)
 			synchronizeArachnodeRemoval(level, arachnode, connectedLines)
 			setDirty()
 			return arachnode
 		}
 		if (connectedLines.size != 2 || !hasConnectedInputAndOutput(arachnode)) {
 			removeStoredLines(level, connectedLines, false)
-			topology.removeArachnode(arachnode)
+			graph.removeArachnode(arachnode)
 			synchronizeArachnodeRemoval(level, arachnode, connectedLines)
 			setDirty()
 			return arachnode
@@ -273,17 +274,17 @@ class RedstoneWebHandler : SavedData() {
 
 		removeLineForReplacement(level, firstLine)
 		removeLineForReplacement(level, secondLine)
-		topology.removeArachnode(arachnode)
+		graph.removeArachnode(arachnode)
 		synchronizeArachnodeRemoval(level, arachnode, replacedLines)
-		topology.storeLine(fusedLine)
+		graph.storeLine(fusedLine)
 		finishLineReplacement(level, listOf(fusedLine), affectedLines)
 		return arachnode
 	}
 
 	fun syncChunk(player: ServerPlayer, chunkPos: ChunkPos) {
-		val nearbyLines = topology.getLinesIntersectingChunk(chunkPos)
-		val nearbyArachnodes = topology.getArachnodesInChunk(chunkPos).toMutableSet()
-		nearbyArachnodes.addAll(topology.getArachnodes(nearbyLines))
+		val nearbyLines = graph.getLinesIntersectingChunk(chunkPos)
+		val nearbyArachnodes = graph.getArachnodesInChunk(chunkPos).toMutableSet()
+		nearbyArachnodes.addAll(graph.getArachnodes(nearbyLines))
 		if (nearbyLines.isEmpty() && nearbyArachnodes.isEmpty()) return
 
 		AddWebLinesPacket
@@ -294,9 +295,9 @@ class RedstoneWebHandler : SavedData() {
 
 	fun forgetChunk(player: ServerPlayer, chunkPos: ChunkPos) {
 		val level = player.serverLevel()
-		val arachnodesToCheck = topology.getArachnodesInChunk(chunkPos).toMutableSet()
+		val arachnodesToCheck = graph.getArachnodesInChunk(chunkPos).toMutableSet()
 
-		for (line in topology.getLinesIntersectingChunk(chunkPos)) {
+		for (line in graph.getLinesIntersectingChunk(chunkPos)) {
 			var stillTrackingLine = false
 
 			for (intersectedChunk in line.intersectedChunkPositions) {
@@ -311,7 +312,7 @@ class RedstoneWebHandler : SavedData() {
 
 			if (!stillTrackingLine) {
 				RemoveWebLinePacket(WebLineType.REDSTONE, line.uuid).messagePlayer(player)
-				arachnodesToCheck.addAll(topology.getArachnodes(listOf(line)))
+				arachnodesToCheck.addAll(graph.getArachnodes(listOf(line)))
 			}
 		}
 
@@ -359,12 +360,12 @@ class RedstoneWebHandler : SavedData() {
 
 		val changedChunks = chunksToValidate.toSet()
 		chunksToValidate.clear()
-		val invalidLines = getInvalidLines(level, topology.getLinesNearChunks(changedChunks))
+		val invalidLines = getInvalidLines(level, graph.getLinesNearChunks(changedChunks))
 
 		removeStoredLines(level, invalidLines.keys)
 
 		val invalidArachnodes: MutableList<Arachnode> = mutableListOf()
-		for (arachnode in topology.getMountedArachnodesInSupportChunks(changedChunks)) {
+		for (arachnode in graph.getMountedArachnodesInSupportChunks(changedChunks)) {
 			val mount = arachnode.mount as? ArachnodeMount.Surface ?: continue
 			if (mount.isValid(level)) continue
 			invalidArachnodes.add(arachnode)
@@ -387,7 +388,7 @@ class RedstoneWebHandler : SavedData() {
 	private fun queuePeriodicValidation(level: ServerLevel) {
 		if (level.gameTime % FULL_VALIDATION_INTERVAL_TICKS != 0L) return
 
-		for (chunkPosition in topology.getLoadedValidationChunks()) {
+		for (chunkPosition in graph.getLoadedValidationChunks()) {
 			if (level.hasChunk(chunkPosition.x, chunkPosition.z)) {
 				chunksToValidate.add(chunkPosition)
 			}
@@ -436,7 +437,7 @@ class RedstoneWebHandler : SavedData() {
 			addArachnodeUuid(line.firstNode, attachedArachnodeUuids)
 			addArachnodeUuid(line.secondNode, attachedArachnodeUuids)
 
-			topology.removeLine(line)
+			graph.removeLine(line)
 			RedstoneWebSynchronizer.sendToTracking(
 				level,
 				line,
@@ -486,7 +487,7 @@ class RedstoneWebHandler : SavedData() {
 			if (hasConnectedLine(arachnode)) continue
 			if (arachnode.mount is ArachnodeMount.Surface) continue
 
-			topology.removeArachnode(arachnode)
+			graph.removeArachnode(arachnode)
 			synchronizeArachnodeRemoval(level, arachnode)
 			Containers.dropItemStack(
 				level,
@@ -561,7 +562,7 @@ class RedstoneWebHandler : SavedData() {
 	}
 
 	private fun removeLineForReplacement(level: ServerLevel, line: RedstoneWebLine) {
-		topology.removeLine(line)
+		graph.removeLine(line)
 		powerController.notifyConnectedBlocks(level, line)
 	}
 
@@ -627,7 +628,7 @@ class RedstoneWebHandler : SavedData() {
 		return AddWebLinesPacket.fromLines(
 			WebLineType.REDSTONE,
 			lines,
-			topology.getArachnodes(lines)
+			graph.getArachnodes(lines)
 		)
 	}
 
@@ -735,16 +736,16 @@ class RedstoneWebHandler : SavedData() {
 
 			for (node in loadedNodes) {
 				if (node.uuid in referencedNodeUuids) {
-					network.topology.storeStandaloneNode(node)
+					network.graph.storeStandaloneNode(node)
 				}
 			}
 			for (arachnode in loadedArachnodes) {
-				network.topology.storeArachnode(arachnode)
+				network.graph.storeArachnode(arachnode)
 			}
 
 			for (lineData in loadedLines) {
-				val firstNode = network.topology.getNode(lineData.firstNodeUuid) ?: continue
-				val secondNode = network.topology.getNode(lineData.secondNodeUuid) ?: continue
+				val firstNode = network.graph.getNode(lineData.firstNodeUuid) ?: continue
+				val secondNode = network.graph.getNode(lineData.secondNodeUuid) ?: continue
 
 				val line = RedstoneWebLine(
 					lineData.uuid,
@@ -752,7 +753,7 @@ class RedstoneWebHandler : SavedData() {
 					secondNode
 				)
 
-				network.topology.storeLine(line)
+				network.graph.storeLine(line)
 			}
 
 			return network
