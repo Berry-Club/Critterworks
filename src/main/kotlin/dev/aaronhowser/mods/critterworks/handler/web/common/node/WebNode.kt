@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLineInvalidation
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.LegacyArachnodeNode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.LegacyArachnodeType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -48,6 +50,10 @@ abstract class WebNode {
 						is WebBlockAnchor -> WebBlockAnchor.TYPE
 						is WebLineAnchor -> WebLineAnchor.TYPE
 						is ArachnodePort -> ArachnodePort.TYPE
+						is LegacyArachnodeNode -> when (node.type) {
+							LegacyArachnodeType.DIRECTIONAL -> LegacyArachnodeNode.DIRECTIONAL_TYPE
+							LegacyArachnodeType.INVERTING -> LegacyArachnodeNode.INVERTING_TYPE
+						}
 						else -> error("Unknown web node: ${node::class.simpleName}")
 					}
 				},
@@ -56,6 +62,8 @@ abstract class WebNode {
 						WebBlockAnchor.TYPE -> WebBlockAnchor.CODEC
 						WebLineAnchor.TYPE -> WebLineAnchor.CODEC
 						ArachnodePort.TYPE -> ArachnodePort.CODEC
+						LegacyArachnodeNode.DIRECTIONAL_TYPE -> LegacyArachnodeNode.DIRECTIONAL_CODEC
+						LegacyArachnodeNode.INVERTING_TYPE -> LegacyArachnodeNode.INVERTING_CODEC
 						else -> error("Unknown web node type: $type")
 					}
 				}
@@ -68,6 +76,10 @@ abstract class WebNode {
 						WebBlockAnchor.TYPE_ID -> WebBlockAnchor.STREAM_CODEC.decode(buffer)
 						WebLineAnchor.TYPE_ID -> WebLineAnchor.STREAM_CODEC.decode(buffer)
 						ArachnodePort.TYPE_ID -> ArachnodePort.STREAM_CODEC.decode(buffer)
+						LegacyArachnodeNode.DIRECTIONAL_TYPE_ID ->
+							LegacyArachnodeNode.DIRECTIONAL_STREAM_CODEC.decode(buffer)
+						LegacyArachnodeNode.INVERTING_TYPE_ID ->
+							LegacyArachnodeNode.INVERTING_STREAM_CODEC.decode(buffer)
 						else -> error("Unknown web node type")
 					}
 				}
@@ -87,6 +99,26 @@ abstract class WebNode {
 						is ArachnodePort -> {
 							ByteBufCodecs.VAR_INT.encode(buffer, ArachnodePort.TYPE_ID)
 							ArachnodePort.STREAM_CODEC.encode(buffer, node)
+						}
+
+						is LegacyArachnodeNode -> {
+							when (node.type) {
+								LegacyArachnodeType.DIRECTIONAL -> {
+									ByteBufCodecs.VAR_INT.encode(
+										buffer,
+										LegacyArachnodeNode.DIRECTIONAL_TYPE_ID
+									)
+									LegacyArachnodeNode.DIRECTIONAL_STREAM_CODEC.encode(buffer, node)
+								}
+
+								LegacyArachnodeType.INVERTING -> {
+									ByteBufCodecs.VAR_INT.encode(
+										buffer,
+										LegacyArachnodeNode.INVERTING_TYPE_ID
+									)
+									LegacyArachnodeNode.INVERTING_STREAM_CODEC.encode(buffer, node)
+								}
+							}
 						}
 
 						else -> error("Unknown web node: ${node::class.simpleName}")

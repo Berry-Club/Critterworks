@@ -12,6 +12,11 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePortRole
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.DirectionalArachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.InvertingArachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.LegacyArachnodeNode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.LegacyArachnodeType
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodePlacementContext
 import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
@@ -26,6 +31,7 @@ import net.minecraft.nbt.NbtOps
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.Containers
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.Blocks
@@ -211,7 +217,13 @@ class RedstoneWebHandler : SavedData() {
 				if (line is RedstoneWebLine && line !in connectedLines) connectedLines.add(line)
 			}
 		}
-		if (connectedLines.size != 2) return null
+		if (connectedLines.size > 2) return null
+		if (connectedLines.size != 2 || !hasConnectedInputAndOutput(arachnode)) {
+			for (line in connectedLines) removeStoredLine(level, line, false)
+			removeArachnodeReferences(arachnode)
+			setDirty()
+			return arachnode
+		}
 
 		val firstLine = connectedLines[0]
 		val secondLine = connectedLines[1]
@@ -513,7 +525,15 @@ class RedstoneWebHandler : SavedData() {
 		return matchingLines
 	}
 
-	private fun removeStoredLine(level: ServerLevel, line: RedstoneWebLine) {
+	private fun removeStoredLine(
+		level: ServerLevel,
+		line: RedstoneWebLine,
+		removeOrphanedArachnodes: Boolean = true
+	) {
+		val attachedArachnodeUuids: MutableSet<UUID> = mutableSetOf()
+		addArachnodeUuid(line.firstNode, attachedArachnodeUuids)
+		addArachnodeUuid(line.secondNode, attachedArachnodeUuids)
+
 		lines.remove(line.uuid)
 		removeLineReferences(line)
 		updateBlockAnchors(level, line)
@@ -523,6 +543,59 @@ class RedstoneWebHandler : SavedData() {
 
 		val changedLines = refreshLinePower(level)
 		synchronizePower(level, changedLines)
+
+		if (removeOrphanedArachnodes) {
+			removeOrphanedArachnodes(level, attachedArachnodeUuids)
+		}
+	}
+
+	private fun hasConnectedInputAndOutput(arachnode: Arachnode): Boolean {
+		var hasInput = false
+		for (port in arachnode.inputPorts) {
+			if (port.lines.isEmpty()) continue
+
+			hasInput = true
+			break
+		}
+		if (!hasInput) return false
+
+		for (port in arachnode.outputPorts) {
+			if (port.lines.isNotEmpty()) return true
+		}
+
+		return false
+	}
+
+	private fun addArachnodeUuid(node: WebNode, arachnodeUuids: MutableSet<UUID>) {
+		if (node is ArachnodePort) arachnodeUuids.add(node.arachnodeUuid)
+	}
+
+	private fun removeOrphanedArachnodes(
+		level: ServerLevel,
+		arachnodeUuids: Collection<UUID>
+	) {
+		for (arachnodeUuid in arachnodeUuids) {
+			val arachnode = arachnodes[arachnodeUuid] ?: continue
+			if (hasConnectedLine(arachnode)) continue
+
+			removeArachnodeReferences(arachnode)
+			Containers.dropItemStack(
+				level,
+				arachnode.position.x,
+				arachnode.position.y,
+				arachnode.position.z,
+				arachnode.itemStack.copy()
+			)
+			setDirty()
+		}
+	}
+
+	private fun hasConnectedLine(arachnode: Arachnode): Boolean {
+		for (port in arachnode.getPorts()) {
+			if (port.lines.isNotEmpty()) return true
+		}
+
+		return false
 	}
 
 	private fun isNearExistingNode(line: RedstoneWebLine, position: Vec3): Boolean {
@@ -646,6 +719,108 @@ class RedstoneWebHandler : SavedData() {
 	private fun removeArachnodeReferences(arachnode: Arachnode) {
 		arachnodes.remove(arachnode.uuid)
 		for (port in arachnode.getPorts()) nodes.remove(port.uuid)
+	}
+
+	private fun migrateLegacyArachnode(
+		legacyNode: LegacyArachnodeNode,
+		loadedNodesByUuid: Map<UUID, WebNode>,
+		loadedLines: MutableList<WebLineData>
+	) {
+		val incidentLines: MutableList<WebLineData> = mutableListOf()
+		for (lineData in loadedLines) {
+			if (lineData.firstNodeUuid == legacyNode.uuid
+				|| lineData.secondNodeUuid == legacyNode.uuid
+			) incidentLines.add(lineData)
+		}
+		if (incidentLines.isEmpty()) return
+
+		var inputLine: WebLineData? = null
+		for (lineData in incidentLines) {
+			if (lineData.uuid != legacyNode.inputLineUuid) continue
+
+			inputLine = lineData
+			break
+		}
+		if (inputLine == null) inputLine = incidentLines.first()
+
+		var outputLine: WebLineData? = null
+		for (lineData in incidentLines) {
+			if (lineData === inputLine) continue
+
+			outputLine = lineData
+			break
+		}
+
+		val loadedInputDirection = getLegacyLineDirection(legacyNode, inputLine, loadedNodesByUuid)
+		val loadedOutputDirection = getLegacyLineDirection(legacyNode, outputLine, loadedNodesByUuid)
+		val inputDirection = loadedInputDirection
+			?: loadedOutputDirection?.scale(-1.0)
+			?: Vec3(1.0, 0.0, 0.0)
+		val outputDirection = loadedOutputDirection ?: inputDirection.scale(-1.0)
+
+		val inputPort = ArachnodePort(
+			UUID.randomUUID(),
+			legacyNode.uuid,
+			ArachnodePortRole.INPUT,
+			0,
+			legacyNode.position.add(inputDirection.scale(ARACHNODE_HALF_LENGTH))
+		)
+		val outputPort = ArachnodePort(
+			UUID.randomUUID(),
+			legacyNode.uuid,
+			ArachnodePortRole.OUTPUT,
+			0,
+			legacyNode.position.add(outputDirection.scale(ARACHNODE_HALF_LENGTH))
+		)
+		val arachnode = when (legacyNode.type) {
+			LegacyArachnodeType.DIRECTIONAL -> DirectionalArachnode(
+				legacyNode.uuid,
+				legacyNode.position,
+				legacyNode.itemStack,
+				listOf(inputPort),
+				listOf(outputPort)
+			)
+
+			LegacyArachnodeType.INVERTING -> InvertingArachnode(
+				legacyNode.uuid,
+				legacyNode.position,
+				legacyNode.itemStack,
+				listOf(inputPort),
+				listOf(outputPort)
+			)
+		}
+		addArachnodeReferences(arachnode)
+
+		for (index in loadedLines.indices) {
+			val lineData = loadedLines[index]
+			if (lineData !in incidentLines) continue
+
+			val portUuid = if (lineData === inputLine) inputPort.uuid else outputPort.uuid
+			loadedLines[index] = WebLineData(
+				lineData.uuid,
+				if (lineData.firstNodeUuid == legacyNode.uuid) portUuid else lineData.firstNodeUuid,
+				if (lineData.secondNodeUuid == legacyNode.uuid) portUuid else lineData.secondNodeUuid
+			)
+		}
+	}
+
+	private fun getLegacyLineDirection(
+		legacyNode: LegacyArachnodeNode,
+		lineData: WebLineData?,
+		loadedNodesByUuid: Map<UUID, WebNode>
+	): Vec3? {
+		if (lineData == null) return null
+
+		val otherNodeUuid = if (lineData.firstNodeUuid == legacyNode.uuid) {
+			lineData.secondNodeUuid
+		} else {
+			lineData.firstNodeUuid
+		}
+		val otherNode = loadedNodesByUuid[otherNodeUuid] ?: return null
+		val direction = otherNode.position.subtract(legacyNode.position)
+		if (direction.lengthSqr() == 0.0) return null
+
+		return direction.normalize()
 	}
 
 	private fun addLoadedLine(line: RedstoneWebLine) {
@@ -936,6 +1111,7 @@ class RedstoneWebHandler : SavedData() {
 	companion object {
 		private const val MAX_POWER = 15
 		private const val NODE_OCCUPANCY_RADIUS_SQUARED = 0.09
+		private const val ARACHNODE_HALF_LENGTH = 0.125
 		private const val CASCADE_DELAY_TICKS = 2
 		private const val SAVED_DATA_NAME = "critterworks_redstone_webs"
 		private const val NODES_TAG = "Nodes"
@@ -958,7 +1134,7 @@ class RedstoneWebHandler : SavedData() {
 			val handler = RedstoneWebHandler()
 
 			val nodesTag = tag.get(NODES_TAG) ?: return handler
-			val arachnodesTag = tag.get(ARACHNODES_TAG) ?: return handler
+			val arachnodesTag = tag.get(ARACHNODES_TAG)
 			val linesTag = tag.get(LINES_TAG) ?: return handler
 
 			val ops = registries.createSerializationContext(NbtOps.INSTANCE)
@@ -970,10 +1146,22 @@ class RedstoneWebHandler : SavedData() {
 				.listOf()
 				.parse(ops, linesTag)
 				.getOrThrow()
-			val loadedArachnodes = Arachnode.CODEC
-				.listOf()
-				.parse(ops, arachnodesTag)
-				.getOrThrow()
+				.toMutableList()
+			val loadedArachnodes = if (arachnodesTag == null) {
+				emptyList()
+			} else {
+				Arachnode.CODEC
+					.listOf()
+					.parse(ops, arachnodesTag)
+					.getOrThrow()
+			}
+			val loadedNodesByUuid: MutableMap<UUID, WebNode> = mutableMapOf()
+			for (node in loadedNodes) loadedNodesByUuid[node.uuid] = node
+			for (node in loadedNodes) {
+				if (node !is LegacyArachnodeNode) continue
+
+				handler.migrateLegacyArachnode(node, loadedNodesByUuid, loadedLines)
+			}
 
 			val referencedNodeUuids: MutableSet<UUID> = mutableSetOf()
 			for (lineData in loadedLines) {
@@ -982,6 +1170,7 @@ class RedstoneWebHandler : SavedData() {
 			}
 
 			for (node in loadedNodes) {
+				if (node is LegacyArachnodeNode) continue
 				if (node.uuid in referencedNodeUuids) {
 					handler.nodes[node.uuid] = node
 				}
