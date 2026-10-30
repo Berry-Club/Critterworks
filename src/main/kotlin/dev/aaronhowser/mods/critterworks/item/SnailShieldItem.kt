@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.item
 
+import com.mojang.serialization.Codec
 import dev.aaronhowser.mods.aaron.client.AaronClientUtil
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
@@ -7,6 +8,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isNotTrue
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.client.item.snail_shield.SnailShieldItemRenderer
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModEntityTypeTagsProvider
@@ -14,11 +16,11 @@ import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
-import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
@@ -305,24 +307,24 @@ class SnailShieldItem(properties: Properties) : Item(properties), GeoItem {
 		}
 	}
 
-	enum class SnailShieldState {
-		UNSHELLED,
-		PARTIALLY_SHELLED,
-		FULLY_SHELLED;
+	enum class SnailShieldState(
+		private val serializedName: String
+	) : StringRepresentable {
+		UNSHELLED("unshelled"),
+		PARTIALLY_SHELLED("partially_shelled"),
+		FULLY_SHELLED("fully_shelled");
 
 		val isShelled: Boolean
 			get() = this != UNSHELLED
 
-		companion object {
-			val STREAM_CODEC: StreamCodec<ByteBuf, SnailShieldState> =
-				ByteBufCodecs.idMapper(
-					SnailShieldState::fromOrdinal,
-					SnailShieldState::ordinal
-				)
+		override fun getSerializedName(): String = serializedName
 
-			private fun fromOrdinal(ordinal: Int): SnailShieldState {
-				return entries.getOrElse(ordinal) { UNSHELLED }
-			}
+		companion object {
+			val CODEC: Codec<SnailShieldState> =
+				StringRepresentable.fromEnum { entries.toTypedArray() }
+
+			val STREAM_CODEC: StreamCodec<ByteBuf, SnailShieldState> =
+				AaronExtraStreamCodecs.enumStreamCodec(SnailShieldState::class.java)
 		}
 	}
 

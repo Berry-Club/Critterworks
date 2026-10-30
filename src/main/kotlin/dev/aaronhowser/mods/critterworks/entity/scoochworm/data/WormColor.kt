@@ -1,10 +1,10 @@
 package dev.aaronhowser.mods.critterworks.entity.scoochworm.data
 
 import com.mojang.serialization.Codec
+import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import io.netty.buffer.ByteBuf
-import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.item.ItemStack
@@ -43,13 +43,11 @@ enum class WormColor(
 	}
 
 	companion object {
-		val CODEC: Codec<WormColor> = StringRepresentable.fromEnum(::values)
+		val CODEC: Codec<WormColor> =
+			StringRepresentable.fromEnum { entries.toTypedArray() }
 
 		val STREAM_CODEC: StreamCodec<ByteBuf, WormColor> =
-			ByteBufCodecs.idMapper(
-				WormColor::fromOrdinal,
-				WormColor::ordinal
-			)
+			AaronExtraStreamCodecs.enumStreamCodec(WormColor::class.java)
 
 		fun fromOrdinal(ordinal: Int): WormColor {
 			return entries.getOrElse(ordinal) { GREEN }

@@ -75,7 +75,7 @@ data class WebPortComponent(
 		fun next(): TransferDirection = if (this == INPUT) OUTPUT else INPUT
 
 		companion object {
-			val CODEC: StringRepresentable.EnumCodec<TransferDirection> =
+			val CODEC: Codec<TransferDirection> =
 				StringRepresentable.fromEnum { entries.toTypedArray() }
 			val STREAM_CODEC: StreamCodec<ByteBuf, TransferDirection> =
 				AaronExtraStreamCodecs.enumStreamCodec(TransferDirection::class.java)

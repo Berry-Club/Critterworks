@@ -149,7 +149,7 @@ data class FluidFilterComponent(
 		}
 
 		companion object {
-			val CODEC: StringRepresentable.EnumCodec<Flag> = StringRepresentable.fromEnum { entries.toTypedArray() }
+			val CODEC: Codec<Flag> = StringRepresentable.fromEnum { entries.toTypedArray() }
 			val STREAM_CODEC: StreamCodec<ByteBuf, Flag> = AaronExtraStreamCodecs.enumStreamCodec(Flag::class.java)
 		}
 	}
