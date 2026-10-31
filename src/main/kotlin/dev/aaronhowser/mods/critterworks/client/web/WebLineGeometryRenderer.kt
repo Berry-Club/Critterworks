@@ -7,6 +7,8 @@ import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.handler.web.common.line.WebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
@@ -31,6 +33,35 @@ object WebLineGeometryRenderer {
 				getColor(line)
 			)
 		}
+
+		for (arachnode in ClientWebState.getArachnodes()) {
+			if (arachnode.mount !is ArachnodeMount.Line) continue
+			if (arachnode.inputPorts.size != 1 || arachnode.outputPorts.size != 1) continue
+
+			val inputPort = arachnode.inputPorts.first()
+			val outputPort = arachnode.outputPorts.first()
+
+			render(
+				bufferSource,
+				level,
+				poseStack,
+				inputPort.position,
+				outputPort.position,
+				cameraPosition,
+				lerpRedstoneColor(getStrongestConnectedPower(outputPort))
+			)
+		}
+	}
+
+	private fun getStrongestConnectedPower(port: ArachnodePort): Int {
+		var power = 0
+
+		for (line in port.lines) {
+			if (line !is RedstoneWebLine) continue
+			power = maxOf(power, line.power)
+		}
+
+		return power
 	}
 
 	/**
