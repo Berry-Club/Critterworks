@@ -10,6 +10,8 @@ import dev.aaronhowser.mods.critterworks.recipe.crafting.RemoveTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
+import mezz.jei.api.constants.RecipeTypes
+import mezz.jei.api.registration.IAdvancedRegistration
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -32,6 +34,13 @@ class ModJeiPlugin : IModPlugin {
 		craftingCategory.addExtension(
 			RemoveTardigradeRecipe::class.java,
 			RemoveTardigradeJeiExtension(targetStacks)
+		)
+	}
+
+	override fun registerAdvanced(registration: IAdvancedRegistration) {
+		registration.addTypedRecipeManagerPlugin(
+			RecipeTypes.CRAFTING,
+			RemoveTardigradeRecipeManagerPlugin()
 		)
 	}
 

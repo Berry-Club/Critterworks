@@ -46,7 +46,7 @@ class RemoveTardigradeJeiExtension(
 			.addIngredients(recipeHolder.value.removalIngredient)
 
 		val targetInputSlot = builder
-			.addSlot(RecipeIngredientRole.INPUT, 19, 1)
+			.addSlot(RecipeIngredientRole.RENDER_ONLY, 19, 1)
 			.setStandardSlotBackground()
 			.addItemStacks(inputStacks)
 
