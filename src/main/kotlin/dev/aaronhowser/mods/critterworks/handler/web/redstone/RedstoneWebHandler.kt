@@ -415,15 +415,15 @@ class RedstoneWebHandler : SavedData() {
 	private fun removeStoredLine(
 		level: ServerLevel,
 		line: RedstoneWebLine,
-		removeOrphanedArachnodes: Boolean = true
+		removeInvalidArachnodes: Boolean = true
 	) {
-		removeStoredLines(level, listOf(line), removeOrphanedArachnodes)
+		removeStoredLines(level, listOf(line), removeInvalidArachnodes)
 	}
 
 	private fun removeStoredLines(
 		level: ServerLevel,
 		removedLines: Collection<RedstoneWebLine>,
-		removeOrphanedArachnodes: Boolean = true
+		removeInvalidArachnodes: Boolean = true
 	) {
 		if (removedLines.isEmpty()) return
 
@@ -447,8 +447,8 @@ class RedstoneWebHandler : SavedData() {
 		val changedLines = powerController.updatePower(level)
 		RedstoneWebSynchronizer.synchronizePower(level, changedLines)
 
-		if (removeOrphanedArachnodes) {
-			removeOrphanedArachnodes(level, attachedArachnodeUuids)
+		if (removeInvalidArachnodes) {
+			removeInvalidLineMountedArachnodes(level, attachedArachnodeUuids)
 		}
 	}
 
@@ -457,34 +457,38 @@ class RedstoneWebHandler : SavedData() {
 			arachnode.outputPorts.any { port -> port.lines.isNotEmpty() }
 	}
 
-	private fun addArachnodeUuid(node: WebNode, arachnodeUuids: MutableSet<UUID>) {
+	private fun addArachnodeUuid(node: WebNode, arachnodeUuids: MutableCollection<UUID>) {
 		if (node is ArachnodePort) arachnodeUuids.add(node.arachnodeUuid)
 	}
 
-	private fun removeOrphanedArachnodes(
+	private fun removeInvalidLineMountedArachnodes(
 		level: ServerLevel,
 		arachnodeUuids: Collection<UUID>
 	) {
-		for (arachnodeUuid in arachnodeUuids) {
-			val arachnode = arachnodes[arachnodeUuid] ?: continue
-			if (hasConnectedLine(arachnode)) continue
-			if (arachnode.mount is ArachnodeMount.Surface) continue
+		val arachnodeUuidsToCheck = ArrayDeque(arachnodeUuids)
 
-			graph.removeArachnode(arachnode)
-			synchronizeArachnodeRemoval(level, arachnode)
+		while (arachnodeUuidsToCheck.isNotEmpty()) {
+			val arachnodeUuid = arachnodeUuidsToCheck.removeFirst()
+			val arachnode = arachnodes[arachnodeUuid] ?: continue
+			if (arachnode.mount is ArachnodeMount.Surface) continue
+			if (hasConnectedInputAndOutput(arachnode)) continue
+
+			for (port in arachnode.getPorts()) {
+				for (line in port.lines) {
+					addArachnodeUuid(line.firstNode, arachnodeUuidsToCheck)
+					addArachnodeUuid(line.secondNode, arachnodeUuidsToCheck)
+				}
+			}
+
+			val removedArachnode = removeArachnode(level, arachnode.uuid) ?: continue
 			Containers.dropItemStack(
 				level,
-				arachnode.position.x,
-				arachnode.position.y,
-				arachnode.position.z,
-				arachnode.itemStack.copy()
+				removedArachnode.position.x,
+				removedArachnode.position.y,
+				removedArachnode.position.z,
+				removedArachnode.itemStack.copy()
 			)
-			setDirty()
 		}
-	}
-
-	private fun hasConnectedLine(arachnode: Arachnode): Boolean {
-		return arachnode.getPorts().any { port -> port.lines.isNotEmpty() }
 	}
 
 	private fun isNearExistingNode(line: RedstoneWebLine, position: Vec3): Boolean {
