@@ -29,12 +29,15 @@ class ItemFilterItem(properties: Properties) : FilterfeederItem(
 		usedHand: InteractionHand
 	): InteractionResultHolder<ItemStack?> {
 		val usedStack = player.getItemInHand(usedHand)
+
 		if (level.isServerSide) {
 			val constructor = MenuConstructor { containerId, inventory, _ ->
 				ItemFilterMenu(containerId, inventory, usedHand)
 			}
+
 			player.openMenu(SimpleMenuProvider(constructor, usedStack.hoverName)) { it.writeEnum(usedHand) }
 		}
+
 		return InteractionResultHolder.sidedSuccess(usedStack, level.isClientSide)
 	}
 
@@ -45,17 +48,21 @@ class ItemFilterItem(properties: Properties) : FilterfeederItem(
 		tooltipFlag: TooltipFlag
 	) {
 		val component = getFilterComponent(stack)
+
 		for (flag in component.flags) {
 			tooltipComponents.add(flag.getMessage(true).withStyle(ChatFormatting.BLUE))
 		}
 
 		val filterStacks = component.getItems()
+
 		for (y in 0 until 4) {
 			val stacks: MutableList<ItemStack> = mutableListOf()
+
 			for (x in 0 until 4) {
 				val ghostStack = filterStacks.getOrNull(y * 4 + x) ?: continue
 				if (ghostStack.isNotEmpty()) stacks.add(ghostStack)
 			}
+
 			if (stacks.isEmpty()) continue
 
 			val line = Component.empty()
@@ -63,6 +70,7 @@ class ItemFilterItem(properties: Properties) : FilterfeederItem(
 				line.append(stacks[index].hoverName)
 				if (index < stacks.lastIndex) line.append(Component.literal(", "))
 			}
+
 			tooltipComponents.add(line)
 		}
 	}
@@ -78,10 +86,12 @@ class ItemFilterItem(properties: Properties) : FilterfeederItem(
 
 		fun setStack(filterStack: ItemStack, slot: Int, stackToPlace: ItemStack): Boolean {
 			if (slot !in 0 until ItemFilterComponent.CONTAINER_SIZE) return false
+
 			filterStack.set(
 				ModDataComponents.ITEM_FILTER,
 				getFilterComponent(filterStack).withSetItem(slot, stackToPlace)
 			)
+
 			return true
 		}
 

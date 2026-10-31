@@ -50,6 +50,7 @@ class FluidFilterItem(properties: Properties) : FilterfeederItem(
 		tooltipFlag: TooltipFlag
 	) {
 		val filterComponent = getFilterComponent(stack)
+
 		for (flag in filterComponent.flags) {
 			val component = flag.getMessage(true).withStyle(ChatFormatting.BLUE)
 			tooltipComponents.add(component)
@@ -64,6 +65,7 @@ class FluidFilterItem(properties: Properties) : FilterfeederItem(
 				val slot = y * 4 + x
 				val ghostStack = filterStacks.getOrNull(slot) ?: continue
 				val fluidStack = FluidUtil.getFluidContained(ghostStack).orElse(FluidStack.EMPTY)
+
 				if (!fluidStack.isEmpty) {
 					stacks.add(fluidStack)
 				}
@@ -107,6 +109,7 @@ class FluidFilterItem(properties: Properties) : FilterfeederItem(
 
 		fun getFilterItems(filterStack: ItemStack): NonNullList<ItemStack> {
 			val component = getFilterComponent(filterStack)
+
 			return component.getItems()
 		}
 

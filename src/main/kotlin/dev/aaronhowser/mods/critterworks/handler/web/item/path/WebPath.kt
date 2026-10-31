@@ -10,10 +10,7 @@ data class WebPath(
 ) {
 
 	fun reversed(): WebPath {
-		val reversedSegments: MutableList<WebPathSegment> = mutableListOf()
-		for (segment in segments.asReversed()) {
-			reversedSegments.add(segment.reversed())
-		}
+		val reversedSegments = segments.asReversed().map(WebPathSegment::reversed)
 
 		return WebPath(endNode, startNode, reversedSegments, distance)
 	}

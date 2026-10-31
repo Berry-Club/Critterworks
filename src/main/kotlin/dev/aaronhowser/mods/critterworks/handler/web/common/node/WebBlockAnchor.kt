@@ -35,6 +35,7 @@ class WebBlockAnchor(
 		val contactPosition = position.subtract(
 			Vec3.atLowerCornerOf(face.normal).scale(SURFACE_OFFSET)
 		)
+
 		if (WebAnchorSupport.hasSupport(level, blockPos, face, contactPosition)) return null
 
 		return WebLineInvalidation(WebLineInvalidationReason.INVALID_ANCHOR)

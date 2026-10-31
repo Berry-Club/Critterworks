@@ -39,6 +39,7 @@ data class FluidFilterComponent(
 	fun getItems(): NonNullList<ItemStack> {
 		val list = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY)
 		itemContents.copyInto(list)
+
 		return list
 	}
 
@@ -68,6 +69,7 @@ data class FluidFilterComponent(
 
 		val result = checkPassesFilter(checkedStack)
 		cache[cacheKey] = result
+
 		return result
 	}
 
@@ -78,6 +80,7 @@ data class FluidFilterComponent(
 
 			if (stackInFilter.isItem(ModItems.FLUID_FILTERFEEDER)) {
 				val passesNestedFilter = FluidFilterItem.passesFilter(stackInFilter, checkedStack)
+
 				return passesNestedFilter != isInverted
 			}
 

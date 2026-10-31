@@ -50,6 +50,7 @@ class ArtificialSpinneretsItem(properties: Properties) : Item(properties) {
 	): InteractionResultHolder<ItemStack> {
 		if (player.isSecondaryUseActive) {
 			val usedStack = player.getItemInHand(usedHand)
+
 			if (usedStack.has(ModDataComponents.WEB_NODE)) {
 				usedStack.remove(ModDataComponents.WEB_NODE)
 				return InteractionResultHolder.sidedSuccess(usedStack, level.isClientSide)
@@ -90,6 +91,7 @@ class ArtificialSpinneretsItem(properties: Properties) : Item(properties) {
 
 		val webFluid = spinnerets.getOrDefault(ModDataComponents.WEB_FLUID, 0.0)
 		val availableCapacity = MAX_WEB_FLUID - webFluid
+
 		if (availableCapacity <= 0.0) return false
 
 		val stringsToInsert = minOf(stringStack.count, ceil(availableCapacity).toInt())

@@ -18,8 +18,7 @@ class RedstoneWebPowerSolver(
 	fun solve(level: ServerLevel): Map<UUID, Int> {
 		if (lines.isEmpty()) return emptyMap()
 
-		val currentPower: MutableMap<UUID, Int> = mutableMapOf()
-		for (line in lines.values) currentPower[line.uuid] = line.power
+		val currentPower = lines.values.associate { line -> line.uuid to line.power }
 
 		var generatedPower = getGeneratedLinePower(level, currentPower)
 		val generatedPowerHistory: MutableList<Map<UUID, Int>> = mutableListOf()
@@ -27,6 +26,7 @@ class RedstoneWebPowerSolver(
 
 		var desiredPower = calculatePropagatedPower(level, generatedPower)
 		val maximumPasses = maxOf(1, arachnodes.size + 1)
+
 		for (pass in 0 until maximumPasses) {
 			val nextGeneratedPower = getGeneratedLinePower(level, desiredPower)
 			if (nextGeneratedPower == generatedPower) return desiredPower
@@ -68,6 +68,7 @@ class RedstoneWebPowerSolver(
 					getBlockInputPower(level, line.firstNode, blockInputPower),
 					getBlockInputPower(level, line.secondNode, blockInputPower)
 				)
+
 				desiredPower[line.uuid] = directPower
 				if (directPower > 0) linesToCheck.add(line)
 			}
@@ -148,12 +149,8 @@ class RedstoneWebPowerSolver(
 		val stableGeneratedPower: MutableMap<UUID, Int> = mutableMapOf()
 		val firstState = generatedPowerHistory.first()
 		for ((lineUuid, firstPower) in firstState) {
-			var stable = true
-			for (state in generatedPowerHistory) {
-				if (state.getOrDefault(lineUuid, 0) == firstPower) continue
-
-				stable = false
-				break
+			val stable = generatedPowerHistory.all { state ->
+				state.getOrDefault(lineUuid, 0) == firstPower
 			}
 
 			if (stable && firstPower > 0) stableGeneratedPower[lineUuid] = firstPower
@@ -181,6 +178,7 @@ class RedstoneWebPowerSolver(
 		} else {
 			0
 		}
+
 		val power = maxOf(blockPower, dustPower).coerceIn(0, MAX_POWER)
 		cachedPower[node.uuid] = power
 		return power
@@ -192,9 +190,7 @@ class RedstoneWebPowerSolver(
 		addLinesPoweredThroughNode(line.secondNode, connectedLines)
 
 		for (attachment in line.attachedAnchors) {
-			for (connectedLine in attachment.anchor.lines) {
-				if (connectedLine is RedstoneWebLine) connectedLines.add(connectedLine)
-			}
+			connectedLines.addAll(attachment.anchor.lines.filterIsInstance<RedstoneWebLine>())
 		}
 
 		connectedLines.remove(line)
@@ -205,9 +201,7 @@ class RedstoneWebPowerSolver(
 		node: WebNode,
 		connectedLines: MutableSet<RedstoneWebLine>
 	) {
-		for (connectedLine in node.lines) {
-			if (connectedLine is RedstoneWebLine) connectedLines.add(connectedLine)
-		}
+		connectedLines.addAll(node.lines.filterIsInstance<RedstoneWebLine>())
 
 		if (node !is WebLineAnchor) return
 

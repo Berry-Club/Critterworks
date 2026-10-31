@@ -17,15 +17,14 @@ class RedstoneWebLine(
 	firstNode,
 	secondNode
 ) {
-	private var transmittedPower = initialPower
 
-	val power: Int
-		get() = transmittedPower
+	var power = initialPower
+		private set
 
 	fun updatePower(newPower: Int): Boolean {
-		if (transmittedPower == newPower) return false
+		if (power == newPower) return false
 
-		transmittedPower = newPower
+		power = newPower
 		return true
 	}
 
@@ -36,6 +35,7 @@ class RedstoneWebLine(
 
 	private fun nodeConnectsTo(node: WebNode, position: BlockPos, direction: Direction): Boolean {
 		if (node !is WebBlockAnchor) return false
+
 		return position == getSignalPosition(node) && direction == node.face
 	}
 

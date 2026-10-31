@@ -29,6 +29,7 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 			context.clickLocation,
 			player.eyePosition
 		)
+
 		if (!placed) return InteractionResult.FAIL
 
 		context.itemInHand.consume(1, player)
@@ -47,6 +48,7 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 			arachnodeUuid,
 			context.position.add(portDirections.first.scale(HALF_DEVICE_LENGTH))
 		)
+
 		val outputPort = ArachnodePort(
 			UUID.randomUUID(),
 			arachnodeUuid,
@@ -64,6 +66,7 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 
 		val surfaceNormal = context.mount.getSurfaceNormal()
 		val awayFromPlayer = context.position.subtract(context.playerPosition)
+
 		var outputDirection = awayFromPlayer.subtract(
 			surfaceNormal.scale(awayFromPlayer.dot(surfaceNormal))
 		)
@@ -90,9 +93,9 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 			.subtract(context.position)
 			.normalize()
 
-		if (directionToFirstNode.dot(directionToPlayer)
-			>= directionToSecondNode.dot(directionToPlayer)
-		) return Pair(directionToFirstNode, directionToSecondNode)
+		val isFirstNodeCloserToPlayer = directionToFirstNode.dot(directionToPlayer) >=
+			directionToSecondNode.dot(directionToPlayer)
+		if (isFirstNodeCloserToPlayer) return Pair(directionToFirstNode, directionToSecondNode)
 
 		return Pair(directionToSecondNode, directionToFirstNode)
 	}

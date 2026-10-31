@@ -19,23 +19,20 @@ abstract class Arachnode {
 	abstract val outputPorts: List<ArachnodePort>
 
 	fun getPorts(): List<ArachnodePort> {
-		val ports: MutableList<ArachnodePort> = mutableListOf()
-		ports.addAll(inputPorts)
-		ports.addAll(outputPorts)
-		return ports
+		return buildList {
+			addAll(inputPorts)
+			addAll(outputPorts)
+		}
 	}
 
 	fun isLoaded(level: ServerLevel): Boolean {
-		for (port in getPorts()) {
-			if (port.isLoaded(level)) return true
-		}
-
-		return false
+		return getPorts().any { it.isLoaded(level) }
 	}
 
 	fun getDisplayDirection(): Vec3? {
 		val inputCenter = getPortCenter(inputPorts) ?: return null
 		val outputCenter = getPortCenter(outputPorts) ?: return null
+
 		val direction = outputCenter.subtract(inputCenter)
 		if (direction.lengthSqr() == 0.0) return null
 
@@ -49,8 +46,10 @@ abstract class Arachnode {
 	private fun getPortCenter(ports: List<ArachnodePort>): Vec3? {
 		if (ports.isEmpty()) return null
 
-		var total = Vec3.ZERO
-		for (port in ports) total = total.add(port.position)
+		val total = ports.fold(Vec3.ZERO) { currentTotal, port ->
+			currentTotal.add(port.position)
+		}
+
 		return total.scale(1.0 / ports.size)
 	}
 

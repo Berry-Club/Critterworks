@@ -31,6 +31,7 @@ sealed class ArachnodeMount {
 		fun isValid(level: ServerLevel): Boolean {
 			val chunkPosition = ChunkPos(blockPosition)
 			if (!level.hasChunk(chunkPosition.x, chunkPosition.z)) return true
+
 			return WebAnchorSupport.hasSupport(level, blockPosition, face, contactPosition)
 		}
 

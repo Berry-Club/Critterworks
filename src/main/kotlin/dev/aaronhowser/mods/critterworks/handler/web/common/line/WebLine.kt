@@ -116,9 +116,9 @@ open class WebLine(
 					(chunkPos.maxBlockZ + 1).toDouble()
 				)
 
-				if (bounds.contains(firstNode.position)
-					|| bounds.clip(firstNode.position, secondNode.position).isPresent
-				) {
+				val intersectsChunk = bounds.contains(firstNode.position) ||
+					bounds.clip(firstNode.position, secondNode.position).isPresent
+				if (intersectsChunk) {
 					chunkPositions.add(chunkPos)
 				}
 			}
@@ -140,6 +140,7 @@ open class WebLine(
 		var result = uuid.hashCode()
 		result = 31 * result + firstNode.hashCode()
 		result = 31 * result + secondNode.hashCode()
+
 		return result
 	}
 

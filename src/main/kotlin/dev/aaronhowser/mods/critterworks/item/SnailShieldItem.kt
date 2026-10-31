@@ -217,9 +217,9 @@ class SnailShieldItem(properties: Properties) : Item(properties), GeoItem {
 				baseDimensions
 			}
 
-			if (player.bbWidth == expectedDimensions.width()
-				&& player.bbHeight == expectedDimensions.height()
-			) return
+			val dimensionsMatch = player.bbWidth == expectedDimensions.width() &&
+				player.bbHeight == expectedDimensions.height()
+			if (dimensionsMatch) return
 
 			player.refreshDimensions()
 		}
@@ -260,6 +260,7 @@ class SnailShieldItem(properties: Properties) : Item(properties), GeoItem {
 			if (!player.shellState.isShelled) return
 
 			event.isCanceled = true
+
 			if (player.isClientSide) return
 
 			player.level().playSound(

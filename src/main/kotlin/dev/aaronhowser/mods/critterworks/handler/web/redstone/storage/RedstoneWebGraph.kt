@@ -26,34 +26,21 @@ class RedstoneWebGraph {
 	private val arachnodeUuidsByChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
 	private val mountedArachnodeUuidsBySupportChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
 
-	fun getNode(uuid: UUID): WebNode? {
-		return nodes[uuid]
-	}
+	fun getNode(uuid: UUID): WebNode? = nodes[uuid]
+	fun getCanonicalNode(node: WebNode): WebNode = nodes[node.uuid] ?: node
+	fun getLine(uuid: UUID): RedstoneWebLine? = lines[uuid]
+	fun getArachnode(uuid: UUID): Arachnode? = arachnodes[uuid]
+	fun getOwningArachnode(port: ArachnodePort): Arachnode? = arachnodes[port.arachnodeUuid]
 
-	fun getCanonicalNode(node: WebNode): WebNode {
-		return nodes[node.uuid] ?: node
-	}
-
-	fun getLine(uuid: UUID): RedstoneWebLine? {
-		return lines[uuid]
-	}
-
-	fun getArachnode(uuid: UUID): Arachnode? {
-		return arachnodes[uuid]
-	}
-
-	fun getOwningArachnode(port: ArachnodePort): Arachnode? {
-		return arachnodes[port.arachnodeUuid]
-	}
-
-	fun storeStandaloneNode(node: WebNode) {
+	fun storeNode(node: WebNode) {
 		nodes[node.uuid] = node
 	}
 
 	fun storeLine(line: RedstoneWebLine) {
-		nodes[line.firstNode.uuid] = line.firstNode
-		nodes[line.secondNode.uuid] = line.secondNode
+		storeNode(line.firstNode)
+		storeNode(line.secondNode)
 		lines[line.uuid] = line
+
 		addLineReferences(line)
 	}
 
@@ -64,7 +51,9 @@ class RedstoneWebGraph {
 
 	fun storeArachnode(arachnode: Arachnode) {
 		arachnodes[arachnode.uuid] = arachnode
-		for (port in arachnode.getPorts()) nodes[port.uuid] = port
+		for (port in arachnode.getPorts()) {
+			nodes[port.uuid] = port
+		}
 
 		addArachnodeIndexReference(
 			arachnodeUuidsByChunk,
@@ -84,7 +73,9 @@ class RedstoneWebGraph {
 
 	fun removeArachnode(arachnode: Arachnode) {
 		arachnodes.remove(arachnode.uuid)
-		for (port in arachnode.getPorts()) nodes.remove(port.uuid)
+		for (port in arachnode.getPorts()) {
+			nodes.remove(port.uuid)
+		}
 
 		removeArachnodeIndexReference(
 			arachnodeUuidsByChunk,
@@ -133,26 +124,14 @@ class RedstoneWebGraph {
 
 	fun getLinesIntersectingChunk(chunkPosition: ChunkPos): List<RedstoneWebLine> {
 		val cachedUuids = lineUuidsByChunk[chunkPosition] ?: return emptyList()
-		val matchingLines: MutableList<RedstoneWebLine> = mutableListOf()
 
-		for (lineUuid in cachedUuids) {
-			val line = lines[lineUuid] ?: continue
-			matchingLines.add(line)
-		}
-
-		return matchingLines
+		return cachedUuids.mapNotNull { lines[it] }
 	}
 
 	fun getArachnodesInChunk(chunkPosition: ChunkPos): List<Arachnode> {
 		val arachnodeUuids = arachnodeUuidsByChunk[chunkPosition] ?: return emptyList()
-		val matchingArachnodes: MutableList<Arachnode> = mutableListOf()
 
-		for (arachnodeUuid in arachnodeUuids) {
-			val arachnode = arachnodes[arachnodeUuid] ?: continue
-			matchingArachnodes.add(arachnode)
-		}
-
-		return matchingArachnodes
+		return arachnodeUuids.mapNotNull { arachnodes[it] }
 	}
 
 	fun getMountedArachnodesInSupportChunks(chunkPositions: Collection<ChunkPos>): Set<Arachnode> {
@@ -169,10 +148,7 @@ class RedstoneWebGraph {
 	}
 
 	fun getLoadedValidationChunks(): Set<ChunkPos> {
-		val chunkPositions: MutableSet<ChunkPos> = mutableSetOf()
-		chunkPositions.addAll(lineUuidsByChunk.keys)
-		chunkPositions.addAll(mountedArachnodeUuidsBySupportChunk.keys)
-		return chunkPositions
+		return lineUuidsByChunk.keys + mountedArachnodeUuidsBySupportChunk.keys
 	}
 
 	fun getArachnodes(lines: Collection<RedstoneWebLine>): Set<Arachnode> {
@@ -229,6 +205,7 @@ class RedstoneWebGraph {
 
 	private fun addAnchorToParentLine(node: WebNode) {
 		if (node !is WebLineAnchor) return
+
 		val parentLine = lines[node.parentLineUuid] ?: return
 		parentLine.addAttachedAnchor(node)
 	}
@@ -268,6 +245,7 @@ class RedstoneWebGraph {
 
 	private fun addOwningArachnode(node: WebNode, matchingArachnodes: MutableSet<Arachnode>) {
 		if (node !is ArachnodePort) return
+
 		val arachnode = arachnodes[node.arachnodeUuid] ?: return
 		matchingArachnodes.add(arachnode)
 	}

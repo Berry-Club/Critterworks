@@ -10,6 +10,7 @@ class InvertingArachnodeItem(properties: Properties) : ArachnodeItem(properties)
 	override fun createArachnode(context: ArachnodePlacementContext): Arachnode? {
 		val arachnodeUuid = UUID.randomUUID()
 		val ports = createDefaultPorts(context, arachnodeUuid) ?: return null
+
 		val mount = when (context) {
 			is ArachnodePlacementContext.OnLine -> ArachnodeMount.Line
 			is ArachnodePlacementContext.OnSurface -> context.mount

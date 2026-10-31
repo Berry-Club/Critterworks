@@ -74,6 +74,7 @@ object WebInteractionHandler {
 		) ?: return
 
 		val lineAnchor = targetedNode.node as? WebLineAnchor ?: return
+
 		if (!isWithinPositionTolerance(lineAnchor.position, requestedPosition)) return
 
 		NeoForge.EVENT_BUS.post(

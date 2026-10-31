@@ -26,6 +26,7 @@ object RedstoneWebInteractionHandler {
 		val level = player.serverLevel()
 		val redstoneWebHandler = RedstoneWebHandler.get(level)
 		val selectedNode = redstoneWebHandler.getNode(event.node.uuid) ?: return
+
 		if (selectedNode is ArachnodePort && event.itemStack.isEmpty) {
 			val removedArachnode = redstoneWebHandler
 				.removeArachnode(level, selectedNode.arachnodeUuid)
@@ -33,6 +34,7 @@ object RedstoneWebInteractionHandler {
 
 			val returnedStack = removedArachnode.itemStack.copy()
 			if (!player.addItem(returnedStack)) player.drop(returnedStack, false)
+
 			level.gameEvent(player, GameEvent.BLOCK_DESTROY, selectedNode.position)
 			return
 		}
@@ -49,6 +51,7 @@ object RedstoneWebInteractionHandler {
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
 		val redstoneWebHandler = RedstoneWebHandler.get(level)
+
 		if (redstoneWebHandler.getLine(event.lineUuid) == null) return
 
 		when {
@@ -60,6 +63,7 @@ object RedstoneWebInteractionHandler {
 					event.target.position,
 					player.eyePosition
 				)
+
 				if (!placed) return
 
 				event.itemStack.consume(1, player)
@@ -68,6 +72,7 @@ object RedstoneWebInteractionHandler {
 
 			event.itemStack.isItem(Tags.Items.TOOLS_SHEAR) -> {
 				if (redstoneWebHandler.removeLine(level, event.lineUuid) == null) return
+
 				event.itemStack.hurtAndBreak(1, player, event.hand.getEquipmentSlot())
 				player.status(ModMessageLang.LINE_REMOVED_MESSAGE.toComponent())
 				level.gameEvent(player, GameEvent.SHEAR, event.target.position)

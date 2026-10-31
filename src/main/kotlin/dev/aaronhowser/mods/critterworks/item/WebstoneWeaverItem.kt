@@ -78,6 +78,7 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 			itemStack.remove(ModDataComponents.WEB_NODE)
 			return
 		}
+
 		if (firstNode is ArachnodePort && redstoneWebHandler.getOwningArachnode(firstNode) == null) {
 			itemStack.remove(ModDataComponents.WEB_NODE)
 			return
@@ -86,6 +87,7 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 		val canonicalFirstNode = redstoneWebHandler.getCanonicalNode(firstNode)
 		val canonicalSelectedNode = redstoneWebHandler.getCanonicalNode(selectedNode)
 		val invalidMessage = getInvalidMessage(level, player, canonicalFirstNode, canonicalSelectedNode)
+
 		if (invalidMessage != null) {
 			player.status(invalidMessage.toComponent())
 			return
@@ -107,17 +109,17 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 			return ModMessageLang.SAME_LINE_MESSAGE
 		}
 
-		if (firstNode is WebLineAnchor
-			&& secondNode is WebLineAnchor
-			&& firstNode.parentLineUuid == secondNode.parentLineUuid
-		) {
+		val areAnchorsOnSameLine = firstNode is WebLineAnchor &&
+			secondNode is WebLineAnchor &&
+			firstNode.parentLineUuid == secondNode.parentLineUuid
+		if (areAnchorsOnSameLine) {
 			return ModMessageLang.SAME_LINE_MESSAGE
 		}
 
-		if (firstNode is WebBlockAnchor
-			&& secondNode is WebBlockAnchor
-			&& firstNode.face == secondNode.face
-		) {
+		val areAnchorsOnSameFace = firstNode is WebBlockAnchor &&
+			secondNode is WebBlockAnchor &&
+			firstNode.face == secondNode.face
+		if (areAnchorsOnSameFace) {
 			return ModMessageLang.WEBSTONE_SAME_DIRECTION_MESSAGE
 		}
 

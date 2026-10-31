@@ -23,18 +23,12 @@ class InvertingArachnode(
 	override fun calculateOutputPowers(
 		inputPowers: Map<ArachnodePort, Int>
 	): Map<ArachnodePort, Int> {
-		var hasPoweredInput = false
-		for (inputPort in inputPorts) {
-			if (inputPowers.getOrDefault(inputPort, 0) <= 0) continue
-
-			hasPoweredInput = true
-			break
+		val hasPoweredInput = inputPorts.any { inputPort ->
+			inputPowers.getOrDefault(inputPort, 0) > 0
 		}
 
 		val outputPower = if (hasPoweredInput) 0 else MAX_POWER
-		val outputPowers: MutableMap<ArachnodePort, Int> = mutableMapOf()
-		for (outputPort in outputPorts) outputPowers[outputPort] = outputPower
-		return outputPowers
+		return outputPorts.associateWith { outputPower }
 	}
 
 	companion object {

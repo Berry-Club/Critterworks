@@ -72,6 +72,7 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 			entity.discard()
 			return InteractionResult.FAIL
 		}
+
 		if (!level.addFreshEntity(entity)) return InteractionResult.FAIL
 
 		stack.remove(ModDataComponents.ENTITY_DATA)
@@ -169,6 +170,7 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		): LivingEntity? {
 			val entityData = stack.get(ModDataComponents.ENTITY_DATA) ?: return null
 			val entity = createEntity(entityData, level) ?: return null
+
 			entity.setPos(spawnPos.bottomCenter)
 
 			if (entity !is ScoochwormEntity) {
@@ -189,6 +191,7 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		private fun createScoochworm(entityData: CustomData, level: Level): ScoochwormEntity {
 			val scoochworm = ScoochwormEntity(ModEntityTypes.SCOOCHWORM.get(), level)
 			scoochworm.load(entityData.copyTag())
+
 			return scoochworm
 		}
 
@@ -203,6 +206,7 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 			val snail = ClientEvilSnails.getSnail(player.uuid) ?: return false
 			val snailPosition = snail.getPosition(System.nanoTime())
 			val snailBounds = AABB.ofSize(snailPosition, 1.0, 1.0, 1.0)
+
 			if (!isLookingAtSnail(player, snailBounds)) return false
 
 			UseCageOnEvilSnailPacket(hand).messageServer()
@@ -212,6 +216,7 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		private fun tryClickSnailOnServer(player: ServerPlayer): Boolean {
 			val snailHandler = EvilSnailHandler.get(player.serverLevel())
 			val snail = snailHandler.getSnail(player) ?: return false
+
 			if (snail.dimension != player.level().dimension()) return false
 			if (!isLookingAtSnail(player, snail.boundingBox)) return false
 

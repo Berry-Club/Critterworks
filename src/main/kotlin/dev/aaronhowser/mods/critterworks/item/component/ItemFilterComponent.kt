@@ -41,6 +41,7 @@ data class ItemFilterComponent(
 	fun getItems(): NonNullList<ItemStack> {
 		val list = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY)
 		itemContents.copyInto(list)
+
 		return list
 	}
 
@@ -50,6 +51,7 @@ data class ItemFilterComponent(
 		val newList = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY)
 		itemContents.copyInto(newList)
 		newList[index] = itemStack
+
 		return copy(itemContents = ItemContainerContents.fromItems(newList))
 	}
 
@@ -64,6 +66,7 @@ data class ItemFilterComponent(
 
 		val result = checkPassesFilter(checkedStack)
 		cache[cacheKey] = result
+
 		return result
 	}
 
@@ -74,6 +77,7 @@ data class ItemFilterComponent(
 
 			if (stackInFilter.isItem(ModItems.ITEM_FILTERFEEDER)) {
 				val passesNestedFilter = ItemFilterItem.passesFilter(stackInFilter, checkedStack)
+
 				return passesNestedFilter != isInverted
 			}
 
@@ -129,6 +133,7 @@ data class ItemFilterComponent(
 				if (type === DataComponents.DAMAGE) continue
 				rightMap[type] = value
 			}
+
 			return leftMap == rightMap
 		}
 	}

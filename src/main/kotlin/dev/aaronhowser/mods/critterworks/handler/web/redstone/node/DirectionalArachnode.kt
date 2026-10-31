@@ -23,14 +23,11 @@ class DirectionalArachnode(
 	override fun calculateOutputPowers(
 		inputPowers: Map<ArachnodePort, Int>
 	): Map<ArachnodePort, Int> {
-		var strongestPower = 0
-		for (inputPort in inputPorts) {
-			strongestPower = maxOf(strongestPower, inputPowers.getOrDefault(inputPort, 0))
-		}
+		val strongestPower = inputPorts
+			.maxOfOrNull { inputPowers.getOrDefault(it, 0) }
+			?: 0
 
-		val outputPowers: MutableMap<ArachnodePort, Int> = mutableMapOf()
-		for (outputPort in outputPorts) outputPowers[outputPort] = strongestPower
-		return outputPowers
+		return outputPorts.associateWith { strongestPower }
 	}
 
 	companion object {

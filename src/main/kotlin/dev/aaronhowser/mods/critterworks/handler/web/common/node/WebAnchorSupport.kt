@@ -27,6 +27,7 @@ object WebAnchorSupport {
 			} else {
 				getMinimum(bounds, face.axis)
 			}
+
 			val contactCoordinate = getCoordinate(localPosition, face.axis)
 			if (kotlin.math.abs(surfaceCoordinate - contactCoordinate) <= CONTACT_TOLERANCE) {
 				return true
@@ -45,6 +46,7 @@ object WebAnchorSupport {
 			if (axis == excludedAxis) continue
 
 			val coordinate = getCoordinate(position, axis)
+
 			if (coordinate < getMinimum(bounds, axis) - CONTACT_TOLERANCE) return false
 			if (coordinate > getMaximum(bounds, axis) + CONTACT_TOLERANCE) return false
 		}

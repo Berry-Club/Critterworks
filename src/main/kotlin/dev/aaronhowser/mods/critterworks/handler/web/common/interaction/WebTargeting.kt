@@ -45,6 +45,7 @@ object WebTargeting {
 			} else {
 				WebLineAnchor(UUID.randomUUID(), line.uuid, position)
 			}
+
 			val lineUuid = if (node === line.firstNode || node === line.secondNode) null else line.uuid
 			targetedNode = TargetedWebNode(lineUuid, node)
 		}
@@ -62,6 +63,7 @@ object WebTargeting {
 			.dot(lookOffset)
 			.div(lookLengthSquared)
 			.coerceIn(0.0, 1.0)
+
 		val closestPosition = lookStart.add(lookOffset.scale(progress))
 		return closestPosition.distanceToSqr(node.position) <= LINE_SELECTION_RADIUS * LINE_SELECTION_RADIUS
 	}
@@ -79,6 +81,7 @@ object WebTargeting {
 		var targetedNode: WebNode? = null
 		var targetedDistanceSquared = selectionRadiusSquared
 		var targetedEyeDistanceSquared = Double.MAX_VALUE
+
 		for (node in nodes) {
 			val progress = node.position
 				.subtract(lookStart)
@@ -90,9 +93,9 @@ object WebTargeting {
 			if (distanceSquared > targetedDistanceSquared) continue
 
 			val eyeDistanceSquared = lookStart.distanceToSqr(node.position)
-			if (distanceSquared == targetedDistanceSquared
-				&& eyeDistanceSquared >= targetedEyeDistanceSquared
-			) continue
+			val isFartherFromEye = distanceSquared == targetedDistanceSquared &&
+				eyeDistanceSquared >= targetedEyeDistanceSquared
+			if (isFartherFromEye) continue
 
 			targetedNode = node
 			targetedDistanceSquared = distanceSquared
@@ -100,6 +103,7 @@ object WebTargeting {
 		}
 
 		val node = targetedNode ?: return null
+
 		return TargetedWebNode(null, node)
 	}
 
@@ -131,6 +135,7 @@ object WebTargeting {
 
 		if (closestNode != null) {
 			val closestDistanceSquared = closestNode.position.distanceToSqr(position)
+
 			if (closestDistanceSquared < candidateDistanceSquared) return closestNode
 		}
 

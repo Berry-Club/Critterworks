@@ -36,9 +36,11 @@ class WebLineAnchor(
 				WebLineInvalidationReason.MISSING_LINE,
 				dependencyDepth = 1
 			)
+
 		if (!line.isLoaded(level)) return null
 
 		val invalidation = line.getInvalidation(level, lines, checkedLines) ?: return null
+
 		return invalidation.copy(dependencyDepth = invalidation.dependencyDepth + 1)
 	}
 
