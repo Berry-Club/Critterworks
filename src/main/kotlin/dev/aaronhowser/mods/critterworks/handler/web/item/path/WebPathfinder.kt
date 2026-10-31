@@ -8,7 +8,7 @@ class WebPathfinder(
 	private val lines: Set<WebLine>
 ) {
 
-	private val pathCache: MutableMap<PathKey, WebPath?> = mutableMapOf()
+	private val pathCache = mutableMapOf<PathKey, WebPath?>()
 	private var connectionsByNodeUuid: Map<UUID, List<WebPathSegment>>? = null
 
 	fun findShortestPath(startNode: WebNode, endNode: WebNode): WebPath? {
@@ -47,8 +47,8 @@ class WebPathfinder(
 			return WebPath(startNode, endNode, emptyList(), 0.0)
 		}
 
-		val distancesByNodeUuid: MutableMap<UUID, Double> = mutableMapOf(startNode.uuid to 0.0)
-		val previousSegmentsByNodeUuid: MutableMap<UUID, WebPathSegment> = mutableMapOf()
+		val distancesByNodeUuid = mutableMapOf<UUID, Double>(startNode.uuid to 0.0)
+		val previousSegmentsByNodeUuid = mutableMapOf<UUID, WebPathSegment>()
 		val pendingNodes = PriorityQueue(compareBy(PendingNode::distance))
 		pendingNodes.add(PendingNode(startNode.uuid, 0.0))
 
@@ -95,7 +95,7 @@ class WebPathfinder(
 		distance: Double,
 		previousSegmentsByNodeUuid: Map<UUID, WebPathSegment>
 	): WebPath? {
-		val reversedSegments: MutableList<WebPathSegment> = mutableListOf()
+		val reversedSegments = mutableListOf<WebPathSegment>()
 		var currentNodeUuid = endNode.uuid
 
 		while (currentNodeUuid != startNode.uuid) {
@@ -111,7 +111,7 @@ class WebPathfinder(
 		val cachedConnections = connectionsByNodeUuid
 		if (cachedConnections != null) return cachedConnections
 
-		val connections: MutableMap<UUID, MutableList<WebPathSegment>> = mutableMapOf()
+		val connections = mutableMapOf<UUID, MutableList<WebPathSegment>>()
 		for (line in lines) {
 			addLineConnections(line, connections)
 		}
@@ -120,11 +120,12 @@ class WebPathfinder(
 		return connections
 	}
 
+	/** Splits a line at each attached node and adds paths in both directions. */
 	private fun addLineConnections(
 		line: WebLine,
 		connections: MutableMap<UUID, MutableList<WebPathSegment>>
 	) {
-		val nodesByUuid: MutableMap<UUID, Pair<WebNode, Double>> = mutableMapOf(
+		val nodesByUuid = mutableMapOf(
 			line.firstNode.uuid to (line.firstNode to 0.0),
 			line.secondNode.uuid to (line.secondNode to line.length)
 		)

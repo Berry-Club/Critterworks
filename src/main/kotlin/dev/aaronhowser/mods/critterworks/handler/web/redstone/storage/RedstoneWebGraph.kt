@@ -21,10 +21,10 @@ class RedstoneWebGraph {
 	val arachnodes: Map<UUID, Arachnode>
 		field = mutableMapOf()
 
-	private val lineUuidsByChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
-	private val lineUuidsBySignalPosition: MutableMap<BlockPos, MutableSet<UUID>> = mutableMapOf()
-	private val arachnodeUuidsByChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
-	private val mountedArachnodeUuidsBySupportChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
+	private val lineUuidsByChunk = mutableMapOf<ChunkPos, MutableSet<UUID>>()
+	private val lineUuidsBySignalPosition = mutableMapOf<BlockPos, MutableSet<UUID>>()
+	private val arachnodeUuidsByChunk = mutableMapOf<ChunkPos, MutableSet<UUID>>()
+	private val mountedArachnodeUuidsBySupportChunk = mutableMapOf<ChunkPos, MutableSet<UUID>>()
 
 	fun getNode(uuid: UUID): WebNode? = nodes[uuid]
 	fun getCanonicalNode(node: WebNode): WebNode = nodes[node.uuid] ?: node
@@ -93,6 +93,7 @@ class RedstoneWebGraph {
 		}
 	}
 
+	/** Gets the strongest web power connected to this block face. */
 	fun getPower(position: BlockPos, direction: Direction): Int {
 		val lineUuids = lineUuidsBySignalPosition[position] ?: return 0
 		var strongestPower = 0
@@ -109,7 +110,7 @@ class RedstoneWebGraph {
 	}
 
 	fun getLinesNearChunks(chunkPositions: Collection<ChunkPos>): Set<UUID> {
-		val lineUuids: MutableSet<UUID> = mutableSetOf()
+		val lineUuids = mutableSetOf<UUID>()
 		for (chunkPosition in chunkPositions) {
 			for (chunkX in chunkPosition.x - 1..chunkPosition.x + 1) {
 				for (chunkZ in chunkPosition.z - 1..chunkPosition.z + 1) {
@@ -135,7 +136,7 @@ class RedstoneWebGraph {
 	}
 
 	fun getMountedArachnodesInSupportChunks(chunkPositions: Collection<ChunkPos>): Set<Arachnode> {
-		val matchingArachnodes: MutableSet<Arachnode> = mutableSetOf()
+		val matchingArachnodes = mutableSetOf<Arachnode>()
 		for (chunkPosition in chunkPositions) {
 			val arachnodeUuids = mountedArachnodeUuidsBySupportChunk[chunkPosition] ?: continue
 			for (arachnodeUuid in arachnodeUuids) {
@@ -152,7 +153,7 @@ class RedstoneWebGraph {
 	}
 
 	fun getArachnodes(lines: Collection<RedstoneWebLine>): Set<Arachnode> {
-		val matchingArachnodes: MutableSet<Arachnode> = mutableSetOf()
+		val matchingArachnodes = mutableSetOf<Arachnode>()
 		for (line in lines) {
 			addOwningArachnode(line.firstNode, matchingArachnodes)
 			addOwningArachnode(line.secondNode, matchingArachnodes)
@@ -172,7 +173,7 @@ class RedstoneWebGraph {
 			line.addAttachedAnchor(node)
 		}
 
-		for (chunkPosition in line.intersectedChunkPositions) {
+		for (chunkPosition in line.occupiedChunks) {
 			var lineUuids = lineUuidsByChunk[chunkPosition]
 			if (lineUuids == null) {
 				lineUuids = mutableSetOf()
@@ -190,7 +191,7 @@ class RedstoneWebGraph {
 		line.firstNode.removeLine(line)
 		line.secondNode.removeLine(line)
 
-		for (chunkPosition in line.intersectedChunkPositions) {
+		for (chunkPosition in line.occupiedChunks) {
 			val lineUuids = lineUuidsByChunk[chunkPosition] ?: continue
 			lineUuids.remove(line.uuid)
 			if (lineUuids.isEmpty()) lineUuidsByChunk.remove(chunkPosition)

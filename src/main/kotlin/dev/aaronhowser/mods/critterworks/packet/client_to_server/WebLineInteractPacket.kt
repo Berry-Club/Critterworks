@@ -26,7 +26,7 @@ class WebLineInteractPacket(
 
 	override fun handleOnServer(context: IPayloadContext) {
 		val player = context.player() as? ServerPlayer ?: return
-		WebInteractionHandler.interact(player, webType, targetUuid, targetsNode, position, hand)
+		WebInteractionHandler.interactFromC2S(player, webType, targetUuid, targetsNode, position, hand)
 	}
 
 	override fun type(): CustomPacketPayload.Type<WebLineInteractPacket> = TYPE

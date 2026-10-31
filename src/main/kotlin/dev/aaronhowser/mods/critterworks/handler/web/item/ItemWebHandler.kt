@@ -30,15 +30,16 @@ import kotlin.collections.ArrayDeque
 
 class ItemWebHandler : SavedData() {
 
-	private val nodes: MutableMap<UUID, WebNode> = mutableMapOf()
-	private val lines: MutableMap<UUID, WebLine> = mutableMapOf()
-	private val networks: MutableSet<WebNetwork> = mutableSetOf()
-	private val networksByLineUuid: MutableMap<UUID, WebNetwork> = mutableMapOf()
-	private val webPortsByNodeUuid: MutableMap<UUID, ItemStack> = mutableMapOf()
+	private val nodes = mutableMapOf<UUID, WebNode>()
+	private val lines = mutableMapOf<UUID, WebLine>()
+	private val networks = mutableSetOf<WebNetwork>()
+	private val networksByLineUuid = mutableMapOf<UUID, WebNetwork>()
+	private val webPortsByNodeUuid = mutableMapOf<UUID, ItemStack>()
 
-	private val lineUuidsByChunk: MutableMap<ChunkPos, MutableSet<UUID>> = mutableMapOf()
-	private val chunksToValidate: MutableSet<ChunkPos> = mutableSetOf()
+	private val lineUuidsByChunk = mutableMapOf<ChunkPos, MutableSet<UUID>>()
+	private val chunksToValidate = mutableSetOf<ChunkPos>()
 
+	/** Adds the line to its network and updates all lookup maps. */
 	@Synchronized
 	fun addLine(level: ServerLevel, line: WebLine) {
 		val previousLine = lines[line.uuid]
@@ -128,7 +129,7 @@ class ItemWebHandler : SavedData() {
 
 	@Synchronized
 	fun getNetworksAt(blockPos: BlockPos): Set<WebNetwork> {
-		val matchingNetworks: MutableSet<WebNetwork> = mutableSetOf()
+		val matchingNetworks = mutableSetOf<WebNetwork>()
 		for (node in nodes.values) {
 			if (node !is WebBlockAnchor) continue
 			if (node.blockPos != blockPos) continue
@@ -146,7 +147,7 @@ class ItemWebHandler : SavedData() {
 	fun removeLine(level: ServerLevel, uuid: UUID): WebLine? {
 		val removedLine = lines[uuid] ?: return null
 		removeStoredLine(level, removedLine)
-		chunksToValidate.addAll(removedLine.intersectedChunkPositions)
+		chunksToValidate += removedLine.occupiedChunks
 		setDirty()
 		return removedLine
 	}
@@ -159,6 +160,7 @@ class ItemWebHandler : SavedData() {
 		AddWebLinesPacket
 			.fromLines(WebLineType.ITEM, nearbyLines)
 			.messagePlayer(player)
+
 		syncWebPorts(player, nearbyLines)
 	}
 
@@ -168,7 +170,7 @@ class ItemWebHandler : SavedData() {
 
 		for (line in getLinesIntersectingChunk(chunkPos)) {
 			var stillTrackingLine = false
-			for (lineChunk in line.intersectedChunkPositions) {
+			for (lineChunk in line.occupiedChunks) {
 				if (lineChunk == chunkPos) continue
 
 				val trackingPlayers = level.chunkSource.chunkMap.getPlayers(lineChunk, false)
@@ -191,8 +193,8 @@ class ItemWebHandler : SavedData() {
 	}
 
 	private fun syncWebPorts(player: ServerPlayer, lines: Collection<WebLine>) {
-		val webPorts: MutableList<ItemWebPortData> = mutableListOf()
-		val checkedNodes: MutableSet<UUID> = mutableSetOf()
+		val webPorts = mutableListOf<ItemWebPortData>()
+		val checkedNodes = mutableSetOf<UUID>()
 
 		for (line in lines) {
 			addWebPortData(line.firstNode, checkedNodes, webPorts)
@@ -213,7 +215,9 @@ class ItemWebHandler : SavedData() {
 		if (!checkedNodes.add(node.uuid)) return
 
 		val webPort = getWebPort(node)
-		if (!webPort.isEmpty) webPorts.add(ItemWebPortData(node.uuid, webPort))
+		if (!webPort.isEmpty) {
+			webPorts += ItemWebPortData(node.uuid, webPort)
+		}
 	}
 
 	@Synchronized
@@ -221,6 +225,7 @@ class ItemWebHandler : SavedData() {
 		chunksToValidate.add(ChunkPos(blockPos))
 	}
 
+	/** Checks lines near changed chunks and removes broken lines. */
 	@Synchronized
 	fun validateChangedChunks(level: ServerLevel) {
 		if (chunksToValidate.isEmpty()) return
@@ -234,7 +239,7 @@ class ItemWebHandler : SavedData() {
 	}
 
 	private fun getLinesNearChangedChunks(): Set<UUID> {
-		val lineUuids: MutableSet<UUID> = mutableSetOf()
+		val lineUuids = mutableSetOf<UUID>()
 		for (changedChunk in chunksToValidate) {
 			for (chunkX in changedChunk.x - 1..changedChunk.x + 1) {
 				for (chunkZ in changedChunk.z - 1..changedChunk.z + 1) {
@@ -253,15 +258,16 @@ class ItemWebHandler : SavedData() {
 		level: ServerLevel,
 		lineUuids: Set<UUID>
 	): Map<WebLine, WebLineInvalidation> {
-		val invalidLines: MutableMap<WebLine, WebLineInvalidation> = mutableMapOf()
+		val invalidLines = mutableMapOf<WebLine, WebLineInvalidation>()
 		for (lineUuid in lineUuids) {
 			val line = lines[lineUuid] ?: continue
 			if (!line.isLoaded(level)) continue
 
-			val invalidation = line.getInvalidation(level, lines) ?: continue
-			if (invalidation.dependencyDepth != 0
-				&& invalidation.reason != WebLineInvalidationReason.CYCLIC_DEPENDENCY
-			) continue
+			val invalidation = line.findInvalidation(level, lines) ?: continue
+			val isDependentInvalidation = invalidation.dependencyDepth != 0 &&
+				invalidation.reason != WebLineInvalidationReason.CYCLIC_DEPENDENCY
+			if (isDependentInvalidation) continue
+
 			invalidLines[line] = invalidation
 		}
 
@@ -314,10 +320,11 @@ class ItemWebHandler : SavedData() {
 		parentLine.addAttachedAnchor(node)
 	}
 
+	/** Adds the line to a connected network and joins networks when needed. */
 	private fun addLineToNetwork(line: WebLine) {
-		val connectedNetworks = getConnectedLines(line).mapNotNullTo(mutableSetOf()) { connectedLine ->
-			networksByLineUuid[connectedLine.uuid]
-		}
+		val connectedNetworks = getConnectedLines(line)
+			.mapNotNull { connectedLine -> networksByLineUuid[connectedLine.uuid] }
+			.toSet()
 
 		val network = connectedNetworks.firstOrNull() ?: WebNetwork()
 		if (connectedNetworks.isEmpty()) {
@@ -341,7 +348,7 @@ class ItemWebHandler : SavedData() {
 	}
 
 	private fun getConnectedLines(line: WebLine): Set<WebLine> {
-		val connectedLines: MutableSet<WebLine> = mutableSetOf()
+		val connectedLines = mutableSetOf<WebLine>()
 		addLinesConnectedAtNode(line.firstNode, connectedLines)
 		addLinesConnectedAtNode(line.secondNode, connectedLines)
 
@@ -373,13 +380,14 @@ class ItemWebHandler : SavedData() {
 		rebuildNetworkComponents(network)
 	}
 
+	/** Splits a network into separate groups after a line is removed. */
 	private fun rebuildNetworkComponents(network: WebNetwork) {
 		val remainingLines = network.lines.toMutableSet()
-		val components: MutableList<Set<WebLine>> = mutableListOf()
+		val components = mutableListOf<Set<WebLine>>()
 
 		while (remainingLines.isNotEmpty()) {
-			val component: MutableSet<WebLine> = mutableSetOf()
-			val pendingLines: ArrayDeque<WebLine> = ArrayDeque()
+			val component = mutableSetOf<WebLine>()
+			val pendingLines = ArrayDeque<WebLine>()
 			pendingLines.addLast(remainingLines.first())
 
 			while (pendingLines.isNotEmpty()) {
@@ -432,7 +440,11 @@ class ItemWebHandler : SavedData() {
 		return secondParentLineUuid == referencedLineUuid
 	}
 
-	private fun scheduleDependentLines(level: ServerLevel, removedLineUuid: UUID) {
+	/** Removes lines that depended on the removed line on a later tick. */
+	private fun scheduleDependentLines(
+		level: ServerLevel,
+		removedLineUuid: UUID
+	) {
 		val dependentLineUuids = lines.values
 			.filter { line -> referencesLine(line, removedLineUuid) }
 			.map(WebLine::uuid)
@@ -444,7 +456,7 @@ class ItemWebHandler : SavedData() {
 			for (lineUuid in dependentLineUuids) {
 				val line = lines[lineUuid] ?: continue
 				if (!line.isLoaded(level)) continue
-				if (line.getInvalidation(level, lines) == null) continue
+				if (line.isValid(level, lines)) continue
 
 				removeStoredLine(level, line)
 				removedLine = true
@@ -472,7 +484,7 @@ class ItemWebHandler : SavedData() {
 	}
 
 	private fun addToChunkCache(line: WebLine) {
-		for (chunkPos in line.intersectedChunkPositions) {
+		for (chunkPos in line.occupiedChunks) {
 			var lineUuids = lineUuidsByChunk[chunkPos]
 			if (lineUuids == null) {
 				lineUuids = mutableSetOf()
@@ -484,7 +496,7 @@ class ItemWebHandler : SavedData() {
 	}
 
 	private fun removeFromChunkCache(line: WebLine) {
-		for (chunkPos in line.intersectedChunkPositions) {
+		for (chunkPos in line.occupiedChunks) {
 			val lineUuids = lineUuidsByChunk[chunkPos] ?: continue
 			lineUuids.remove(line.uuid)
 
@@ -500,8 +512,7 @@ class ItemWebHandler : SavedData() {
 
 		if (node is WebLineAnchor) {
 			lines[node.parentLineUuid]?.removeAttachedAnchor(node.uuid)
-		}
-		if (node is WebBlockAnchor) {
+		} else if (node is WebBlockAnchor) {
 			val webPort = webPortsByNodeUuid.remove(node.uuid) ?: ItemStack.EMPTY
 			if (webPort.isEmpty) {
 				nodes.remove(nodeUuid)
@@ -521,9 +532,9 @@ class ItemWebHandler : SavedData() {
 	}
 
 	private fun sendToNearbyPlayers(level: ServerLevel, line: WebLine, packet: AaronPacket) {
-		val nearbyPlayers = line.intersectedChunkPositions.flatMapTo(mutableSetOf()) { chunkPosition ->
-			level.chunkSource.chunkMap.getPlayers(chunkPosition, false)
-		}
+		val nearbyPlayers = line.occupiedChunks
+			.flatMap { level.chunkSource.chunkMap.getPlayers(it, false) }
+			.toSet()
 
 		for (player in nearbyPlayers) {
 			packet.messagePlayer(player)
@@ -583,9 +594,9 @@ class ItemWebHandler : SavedData() {
 				.parse(ops, linesTag)
 				.getOrThrow()
 
-			val referencedNodeUuids = loadedLines.flatMapTo(mutableSetOf()) { lineData ->
-				listOf(lineData.firstNodeUuid, lineData.secondNodeUuid)
-			}
+			val referencedNodeUuids = loadedLines
+				.flatMap { listOf(it.firstNodeUuid, it.secondNodeUuid) }
+				.toSet()
 
 			for (node in loadedNodes) {
 				if (node.uuid in referencedNodeUuids) savedData.nodes[node.uuid] = node

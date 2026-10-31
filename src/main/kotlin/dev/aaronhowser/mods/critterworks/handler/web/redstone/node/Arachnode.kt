@@ -39,6 +39,7 @@ abstract class Arachnode {
 		return direction.normalize()
 	}
 
+	/** Gets the output power for each port without changing the graph. */
 	abstract fun calculateOutputPowers(
 		inputPowers: Map<ArachnodePort, Int>
 	): Map<ArachnodePort, Int>

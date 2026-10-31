@@ -21,7 +21,7 @@ import java.util.*
 
 object WebInteractionHandler {
 
-	fun interact(
+	fun interactFromC2S(
 		player: ServerPlayer,
 		webType: WebLineType,
 		targetUuid: UUID,

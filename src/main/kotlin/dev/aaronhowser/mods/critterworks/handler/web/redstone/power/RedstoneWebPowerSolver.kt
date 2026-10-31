@@ -21,7 +21,7 @@ class RedstoneWebPowerSolver(
 		val currentPower = lines.values.associate { line -> line.uuid to line.power }
 
 		var generatedPower = getGeneratedLinePower(level, currentPower)
-		val generatedPowerHistory: MutableList<Map<UUID, Int>> = mutableListOf()
+		val generatedPowerHistory = mutableListOf<Map<UUID, Int>>()
 		generatedPowerHistory.add(generatedPower)
 
 		var desiredPower = calculatePropagatedPower(level, generatedPower)
@@ -48,13 +48,14 @@ class RedstoneWebPowerSolver(
 		return calculatePropagatedPower(level, stableGeneratedPower)
 	}
 
+	/** Spreads the strongest power through all connected lines. */
 	private fun calculatePropagatedPower(
 		level: ServerLevel,
 		generatedPower: Map<UUID, Int>
 	): MutableMap<UUID, Int> {
-		val desiredPower: MutableMap<UUID, Int> = mutableMapOf()
-		val linesToCheck: ArrayDeque<RedstoneWebLine> = ArrayDeque()
-		val blockInputPower: MutableMap<UUID, Int> = mutableMapOf()
+		val desiredPower = mutableMapOf<UUID, Int>()
+		val linesToCheck = ArrayDeque<RedstoneWebLine>()
+		val blockInputPower = mutableMapOf<UUID, Int>()
 		beginReadingInputs()
 
 		return try {
@@ -109,11 +110,11 @@ class RedstoneWebPowerSolver(
 		level: ServerLevel,
 		linePowers: Map<UUID, Int>
 	): Map<UUID, Int> {
-		val generatedPower: MutableMap<UUID, Int> = mutableMapOf()
+		val generatedPower = mutableMapOf<UUID, Int>()
 		for (arachnode in arachnodes) {
 			if (!arachnode.isLoaded(level)) continue
 
-			val inputPowers: MutableMap<ArachnodePort, Int> = mutableMapOf()
+			val inputPowers = mutableMapOf<ArachnodePort, Int>()
 			for (inputPort in arachnode.inputPorts) {
 				var strongestPower = 0
 				for (line in inputPort.lines) {
@@ -141,12 +142,13 @@ class RedstoneWebPowerSolver(
 		return generatedPower
 	}
 
+	/** Keeps power that stayed the same in every checked state. */
 	private fun getStableGeneratedPower(
 		generatedPowerHistory: List<Map<UUID, Int>>
 	): Map<UUID, Int> {
 		if (generatedPowerHistory.isEmpty()) return emptyMap()
 
-		val stableGeneratedPower: MutableMap<UUID, Int> = mutableMapOf()
+		val stableGeneratedPower = mutableMapOf<UUID, Int>()
 		val firstState = generatedPowerHistory.first()
 		for ((lineUuid, firstPower) in firstState) {
 			val stable = generatedPowerHistory.all { state ->
@@ -185,7 +187,7 @@ class RedstoneWebPowerSolver(
 	}
 
 	private fun getPoweredLines(line: RedstoneWebLine): Set<RedstoneWebLine> {
-		val connectedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
+		val connectedLines = mutableSetOf<RedstoneWebLine>()
 		addLinesPoweredThroughNode(line.firstNode, connectedLines)
 		addLinesPoweredThroughNode(line.secondNode, connectedLines)
 
@@ -213,6 +215,7 @@ class RedstoneWebPowerSolver(
 		private const val MAX_POWER = 15
 		private val inputReadingDepth: ThreadLocal<Int> = ThreadLocal.withInitial { 0 }
 
+		/** Prevents the solver from reading its own web output as block input. */
 		fun isReadingInputs(): Boolean {
 			return inputReadingDepth.get() > 0
 		}

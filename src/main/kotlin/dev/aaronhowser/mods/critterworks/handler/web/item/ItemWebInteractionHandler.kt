@@ -77,6 +77,7 @@ object ItemWebInteractionHandler {
 		}
 	}
 
+	/** Saves the first node on the item, then creates a line when a second node is selected. */
 	fun handleNodeSelection(
 		level: ServerLevel,
 		player: Player,

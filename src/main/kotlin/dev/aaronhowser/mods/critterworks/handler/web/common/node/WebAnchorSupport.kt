@@ -5,9 +5,11 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import kotlin.math.abs
 
 object WebAnchorSupport {
 
+	/** Checks whether the point touches the requested face of any collision box in the block. */
 	fun hasSupport(
 		level: Level,
 		blockPosition: BlockPos,
@@ -20,7 +22,7 @@ object WebAnchorSupport {
 
 		val localPosition = contactPosition.subtract(Vec3.atLowerCornerOf(blockPosition))
 		for (bounds in collisionShape.toAabbs()) {
-			if (!containsOnOtherAxes(bounds, localPosition, face.axis)) continue
+			if (!isWithinFaceBounds(bounds, localPosition, face.axis)) continue
 
 			val surfaceCoordinate = if (face.axisDirection == Direction.AxisDirection.POSITIVE) {
 				getMaximum(bounds, face.axis)
@@ -29,7 +31,7 @@ object WebAnchorSupport {
 			}
 
 			val contactCoordinate = getCoordinate(localPosition, face.axis)
-			if (kotlin.math.abs(surfaceCoordinate - contactCoordinate) <= CONTACT_TOLERANCE) {
+			if (abs(surfaceCoordinate - contactCoordinate) <= CONTACT_TOLERANCE) {
 				return true
 			}
 		}
@@ -37,7 +39,7 @@ object WebAnchorSupport {
 		return false
 	}
 
-	private fun containsOnOtherAxes(
+	private fun isWithinFaceBounds(
 		bounds: AABB,
 		position: Vec3,
 		excludedAxis: Direction.Axis

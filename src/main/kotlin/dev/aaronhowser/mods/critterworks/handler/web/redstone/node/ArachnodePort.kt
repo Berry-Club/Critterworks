@@ -27,7 +27,7 @@ class ArachnodePort(
 
 	override fun findInvalidation(
 		level: ServerLevel,
-		lines: Map<UUID, WebLine>,
+		dependencyLinesByUuid: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>
 	): WebLineInvalidation? {
 		return null

@@ -17,7 +17,7 @@ open class WebLine(
 	val secondNode: WebNode
 ) {
 
-	private val attachmentsByAnchorUuid: MutableMap<UUID, LineAnchorAttachment> = mutableMapOf()
+	private val attachmentsByAnchorUuid = mutableMapOf<UUID, LineAnchorAttachment>()
 
 	val attachedAnchors: Collection<LineAnchorAttachment>
 		get() = attachmentsByAnchorUuid.values
@@ -25,7 +25,7 @@ open class WebLine(
 	val data: WebLineData
 		get() = WebLineData(uuid, firstNode.uuid, secondNode.uuid)
 
-	val intersectedChunkPositions: Set<ChunkPos> = calculateIntersectedChunkPositions()
+	val occupiedChunks: Set<ChunkPos> by lazy { calculateOccupiedChunks() }
 
 	val length: Double by lazy {
 		firstNode.position.distanceTo(secondNode.position)
@@ -53,26 +53,33 @@ open class WebLine(
 		return firstNode.isLoaded(level) && secondNode.isLoaded(level)
 	}
 
-	fun getInvalidation(
+	fun isValid(
 		level: ServerLevel,
-		lines: Map<UUID, WebLine>
-	): WebLineInvalidation? {
-		return getInvalidation(level, lines, mutableSetOf())
+		dependencyLinesByUuid: Map<UUID, WebLine>
+	): Boolean {
+		return findInvalidation(level, dependencyLinesByUuid) == null
 	}
 
-	fun getInvalidation(
+	/**
+	 * Checks parent lines first, then checks if a block cuts through this line.
+	 *
+	 * @param level level containing the anchors and blocks being checked
+	 * @param dependencyLinesByUuid lines that may be referenced as parents by line anchors
+	 * @param checkedLines lines in the current dependency chain, used to detect cycles
+	 */
+	fun findInvalidation(
 		level: ServerLevel,
-		lines: Map<UUID, WebLine>,
-		checkedLines: MutableSet<UUID>
+		dependencyLinesByUuid: Map<UUID, WebLine>,
+		checkedLines: MutableSet<UUID> = mutableSetOf()
 	): WebLineInvalidation? {
 		if (!checkedLines.add(uuid)) {
 			return WebLineInvalidation(WebLineInvalidationReason.CYCLIC_DEPENDENCY)
 		}
 
-		val firstInvalidation = firstNode.findInvalidation(level, lines, checkedLines)
+		val firstInvalidation = firstNode.findInvalidation(level, dependencyLinesByUuid, checkedLines)
 		if (firstInvalidation != null) return firstInvalidation
 
-		val secondInvalidation = secondNode.findInvalidation(level, lines, checkedLines)
+		val secondInvalidation = secondNode.findInvalidation(level, dependencyLinesByUuid, checkedLines)
 		if (secondInvalidation != null) return secondInvalidation
 
 		checkedLines.remove(uuid)
@@ -91,7 +98,7 @@ open class WebLine(
 		return WebLineInvalidation(WebLineInvalidationReason.OBSTRUCTED)
 	}
 
-	private fun calculateIntersectedChunkPositions(): Set<ChunkPos> {
+	private fun calculateOccupiedChunks(): Set<ChunkPos> {
 		val firstChunk = ChunkPos(BlockPos.containing(firstNode.position))
 		val secondChunk = ChunkPos(BlockPos.containing(secondNode.position))
 
@@ -102,7 +109,7 @@ open class WebLine(
 
 		val minY = minOf(firstNode.position.y, secondNode.position.y) - 1.0
 		val maxY = maxOf(firstNode.position.y, secondNode.position.y) + 1.0
-		val chunkPositions: MutableSet<ChunkPos> = mutableSetOf()
+		val chunkPositions = mutableSetOf<ChunkPos>()
 
 		for (chunkX in minChunkX..maxChunkX) {
 			for (chunkZ in minChunkZ..maxChunkZ) {
@@ -119,7 +126,7 @@ open class WebLine(
 				val intersectsChunk = bounds.contains(firstNode.position) ||
 					bounds.clip(firstNode.position, secondNode.position).isPresent
 				if (intersectsChunk) {
-					chunkPositions.add(chunkPos)
+					chunkPositions += chunkPos
 				}
 			}
 		}

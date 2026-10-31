@@ -28,10 +28,10 @@ class WebLineAnchor(
 
 	override fun findInvalidation(
 		level: ServerLevel,
-		lines: Map<UUID, WebLine>,
+		dependencyLinesByUuid: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>
 	): WebLineInvalidation? {
-		val line = lines[parentLineUuid]
+		val line = dependencyLinesByUuid[parentLineUuid]
 			?: return WebLineInvalidation(
 				WebLineInvalidationReason.MISSING_LINE,
 				dependencyDepth = 1
@@ -39,7 +39,7 @@ class WebLineAnchor(
 
 		if (!line.isLoaded(level)) return null
 
-		val invalidation = line.getInvalidation(level, lines, checkedLines) ?: return null
+		val invalidation = line.findInvalidation(level, dependencyLinesByUuid, checkedLines) ?: return null
 
 		return invalidation.copy(dependencyDepth = invalidation.dependencyDepth + 1)
 	}

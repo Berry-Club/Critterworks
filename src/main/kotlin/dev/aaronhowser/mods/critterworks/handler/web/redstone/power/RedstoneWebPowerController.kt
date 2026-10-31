@@ -11,11 +11,15 @@ class RedstoneWebPowerController(
 	private val graph: RedstoneWebGraph
 ) {
 
+	/**
+	 * Updates every line and returns the lines that changed.
+	 * Power is cleared first when a signal gets weaker so nearby blocks do not keep it powered.
+	 */
 	fun updatePower(level: ServerLevel): Set<RedstoneWebLine> {
 		val lines = graph.lines
 		if (lines.isEmpty()) return emptySet()
 
-		val changedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
+		val changedLines = mutableSetOf<RedstoneWebLine>()
 		val solver = RedstoneWebPowerSolver(lines, graph.arachnodes.values)
 
 		var desiredPower = solver.solve(level)
@@ -37,7 +41,7 @@ class RedstoneWebPowerController(
 			desiredPower = solver.solve(level)
 		}
 
-		val poweredLines: MutableSet<RedstoneWebLine> = mutableSetOf()
+		val poweredLines = mutableSetOf<RedstoneWebLine>()
 		for (line in lines.values) {
 			if (!line.updatePower(desiredPower.getValue(line.uuid))) continue
 
@@ -53,7 +57,7 @@ class RedstoneWebPowerController(
 		level: ServerLevel,
 		lines: Collection<RedstoneWebLine>
 	) {
-		val notifiedAnchors: MutableSet<UUID> = mutableSetOf()
+		val notifiedAnchors = mutableSetOf<UUID>()
 		for (line in lines) {
 			val firstNode = line.firstNode
 			if (firstNode is WebBlockAnchor && notifiedAnchors.add(firstNode.uuid)) {

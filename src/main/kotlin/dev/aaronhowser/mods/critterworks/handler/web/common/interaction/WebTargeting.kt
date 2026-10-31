@@ -10,6 +10,7 @@ import java.util.*
 
 object WebTargeting {
 
+	/** Finds the closest line being looked at and optionally snaps to a nearby node. */
 	fun getTargetedNode(
 		lines: Collection<WebLine>,
 		lookStart: Vec3,
@@ -17,9 +18,8 @@ object WebTargeting {
 		snapToExistingNode: Boolean,
 		requireExistingNode: Boolean = false
 	): TargetedWebNode? {
-		val selectionRadiusSquared = LINE_SELECTION_RADIUS * LINE_SELECTION_RADIUS
 		var targetedNode: TargetedWebNode? = null
-		var targetedDistanceSquared = selectionRadiusSquared
+		var targetedDistanceSquared = LINE_SELECTION_RADIUS_SQUARED
 
 		for (line in lines) {
 			val anchorPosition = Vector3d()
@@ -65,9 +65,10 @@ object WebTargeting {
 			.coerceIn(0.0, 1.0)
 
 		val closestPosition = lookStart.add(lookOffset.scale(progress))
-		return closestPosition.distanceToSqr(node.position) <= LINE_SELECTION_RADIUS * LINE_SELECTION_RADIUS
+		return closestPosition.distanceToSqr(node.position) <= LINE_SELECTION_RADIUS_SQUARED
 	}
 
+	/** Finds the closest existing node. Ties use the node closest to the player. */
 	fun getTargetedExistingNode(
 		nodes: Collection<WebNode>,
 		lookStart: Vec3,
@@ -77,9 +78,8 @@ object WebTargeting {
 		val lookLengthSquared = lookOffset.lengthSqr()
 		if (lookLengthSquared == 0.0) return null
 
-		val selectionRadiusSquared = LINE_SELECTION_RADIUS * LINE_SELECTION_RADIUS
 		var targetedNode: WebNode? = null
-		var targetedDistanceSquared = selectionRadiusSquared
+		var targetedDistanceSquared = LINE_SELECTION_RADIUS_SQUARED
 		var targetedEyeDistanceSquared = Double.MAX_VALUE
 
 		for (node in nodes) {
@@ -108,16 +108,14 @@ object WebTargeting {
 	}
 
 	private fun getClosestExistingNode(line: WebLine, position: Vec3): WebNode? {
-		val snapRadiusSquared = NODE_SNAP_RADIUS * NODE_SNAP_RADIUS
-		var closestNode = getCloserNode(null, line.firstNode, position, snapRadiusSquared)
-		closestNode = getCloserNode(closestNode, line.secondNode, position, snapRadiusSquared)
+		var closestNode = getCloserNode(null, line.firstNode, position)
+		closestNode = getCloserNode(closestNode, line.secondNode, position)
 
 		for (attachment in line.attachedAnchors) {
 			closestNode = getCloserNode(
 				closestNode,
 				attachment.anchor,
-				position,
-				snapRadiusSquared
+				position
 			)
 		}
 
@@ -127,11 +125,10 @@ object WebTargeting {
 	private fun getCloserNode(
 		closestNode: WebNode?,
 		candidateNode: WebNode,
-		position: Vec3,
-		maximumDistanceSquared: Double
+		position: Vec3
 	): WebNode? {
 		val candidateDistanceSquared = candidateNode.position.distanceToSqr(position)
-		if (candidateDistanceSquared > maximumDistanceSquared) return closestNode
+		if (candidateDistanceSquared > NODE_SNAP_RADIUS_SQUARED) return closestNode
 
 		if (closestNode != null) {
 			val closestDistanceSquared = closestNode.position.distanceToSqr(position)
@@ -142,6 +139,6 @@ object WebTargeting {
 		return candidateNode
 	}
 
-	private const val LINE_SELECTION_RADIUS = 0.3
-	private const val NODE_SNAP_RADIUS = 0.3
+	private const val LINE_SELECTION_RADIUS_SQUARED = 0.3 * 0.3
+	private const val NODE_SNAP_RADIUS_SQUARED = 0.3 * 0.3
 }

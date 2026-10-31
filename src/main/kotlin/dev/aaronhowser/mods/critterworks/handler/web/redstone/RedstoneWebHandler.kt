@@ -48,7 +48,7 @@ class RedstoneWebHandler : SavedData() {
 	private val arachnodes: Map<UUID, Arachnode>
 		get() = graph.arachnodes
 
-	private val chunksToValidate: MutableSet<ChunkPos> = mutableSetOf()
+	private val chunksToValidate = mutableSetOf<ChunkPos>()
 
 	fun addLine(level: ServerLevel, line: RedstoneWebLine) {
 		val firstNode = getCanonicalNode(line.firstNode)
@@ -75,7 +75,7 @@ class RedstoneWebHandler : SavedData() {
 			createAddLinesPacket(listOf(storedLine))
 		)
 
-		val linesToSynchronize: MutableSet<RedstoneWebLine> = changedLines.toMutableSet()
+		val linesToSynchronize = changedLines.toMutableSet()
 		linesToSynchronize.add(storedLine)
 		RedstoneWebSynchronizer.synchronizePower(level, linesToSynchronize)
 	}
@@ -90,11 +90,12 @@ class RedstoneWebHandler : SavedData() {
 	fun removeLine(level: ServerLevel, uuid: UUID): RedstoneWebLine? {
 		val line = lines[uuid] ?: return null
 		removeStoredLine(level, line)
-		chunksToValidate.addAll(line.intersectedChunkPositions)
+		chunksToValidate.addAll(line.occupiedChunks)
 		setDirty()
 		return line
 	}
 
+	/** Splits the line around the new arachnode and moves attached nodes to the correct half. */
 	fun insertArachnodeOnLine(
 		level: ServerLevel,
 		lineUuid: UUID,
@@ -216,6 +217,7 @@ class RedstoneWebHandler : SavedData() {
 		return true
 	}
 
+	/** Removes the arachnode and joins its two lines when it has one input and one output. */
 	fun removeArachnode(
 		level: ServerLevel,
 		arachnodeUuid: UUID
@@ -292,7 +294,7 @@ class RedstoneWebHandler : SavedData() {
 		for (line in graph.getLinesIntersectingChunk(chunkPos)) {
 			var stillTrackingLine = false
 
-			for (intersectedChunk in line.intersectedChunkPositions) {
+			for (intersectedChunk in line.occupiedChunks) {
 				if (intersectedChunk == chunkPos) continue
 
 				val trackingPlayers = level.chunkSource.chunkMap.getPlayers(intersectedChunk, false)
@@ -323,7 +325,7 @@ class RedstoneWebHandler : SavedData() {
 		for (port in arachnode.getPorts()) {
 			for (webLine in port.lines) {
 				val line = webLine as? RedstoneWebLine ?: continue
-				for (chunkPosition in line.intersectedChunkPositions) {
+				for (chunkPosition in line.occupiedChunks) {
 					if (chunkPosition == forgottenChunk) continue
 					val trackingPlayers = level.chunkSource.chunkMap
 						.getPlayers(chunkPosition, false)
@@ -346,6 +348,7 @@ class RedstoneWebHandler : SavedData() {
 		RedstoneWebSynchronizer.synchronizePower(level, changedLines)
 	}
 
+	/** Removes broken lines and mounts, then updates power. */
 	fun validateChangedChunks(level: ServerLevel) {
 		queuePeriodicValidation(level)
 		if (chunksToValidate.isEmpty()) return
@@ -356,7 +359,7 @@ class RedstoneWebHandler : SavedData() {
 
 		removeStoredLines(level, invalidLines.keys)
 
-		val invalidArachnodes: MutableList<Arachnode> = mutableListOf()
+		val invalidArachnodes = mutableListOf<Arachnode>()
 		for (arachnode in graph.getMountedArachnodesInSupportChunks(changedChunks)) {
 			val mount = arachnode.mount as? ArachnodeMount.Surface ?: continue
 			if (mount.isValid(level)) continue
@@ -391,14 +394,14 @@ class RedstoneWebHandler : SavedData() {
 		level: ServerLevel,
 		lineUuids: Set<UUID>
 	): Map<RedstoneWebLine, WebLineInvalidation> {
-		val commonLines: Map<UUID, WebLine> = lines
-		val invalidLines: MutableMap<RedstoneWebLine, WebLineInvalidation> = mutableMapOf()
+		val commonLines = lines
+		val invalidLines = mutableMapOf<RedstoneWebLine, WebLineInvalidation>()
 
 		for (lineUuid in lineUuids) {
 			val line = lines[lineUuid] ?: continue
 			if (!line.isLoaded(level)) continue
 
-			val invalidation = line.getInvalidation(level, commonLines) ?: continue
+			val invalidation = line.findInvalidation(level, commonLines) ?: continue
 			val isDependentInvalidation = invalidation.dependencyDepth != 0 &&
 				invalidation.reason != WebLineInvalidationReason.CYCLIC_DEPENDENCY
 			if (isDependentInvalidation) continue
@@ -424,7 +427,7 @@ class RedstoneWebHandler : SavedData() {
 	) {
 		if (removedLines.isEmpty()) return
 
-		val attachedArachnodeUuids: MutableSet<UUID> = mutableSetOf()
+		val attachedArachnodeUuids = mutableSetOf<UUID>()
 		for (line in removedLines) {
 			addArachnodeUuid(line.firstNode, attachedArachnodeUuids)
 			addArachnodeUuid(line.secondNode, attachedArachnodeUuids)
@@ -500,7 +503,7 @@ class RedstoneWebHandler : SavedData() {
 	}
 
 	private fun getLinesAttachedTo(parentLines: Collection<RedstoneWebLine>): Set<RedstoneWebLine> {
-		val attachedLines: MutableSet<RedstoneWebLine> = mutableSetOf()
+		val attachedLines = mutableSetOf<RedstoneWebLine>()
 
 		for (parentLine in parentLines) {
 			for (attachment in parentLine.attachedAnchors) {
@@ -549,7 +552,7 @@ class RedstoneWebHandler : SavedData() {
 	) {
 		setDirty()
 
-		val synchronizedLines: MutableSet<RedstoneWebLine> = affectedLines.toMutableSet()
+		val synchronizedLines = affectedLines.toMutableSet()
 		synchronizedLines.addAll(newLines)
 		val addPacket = createAddLinesPacket(synchronizedLines)
 		RedstoneWebSynchronizer.sendToTracking(level, synchronizedLines, addPacket)
@@ -585,12 +588,12 @@ class RedstoneWebHandler : SavedData() {
 
 		level.scheduleTaskInTicks(CASCADE_DELAY_TICKS) {
 			var removedLine = false
-			val commonLines: Map<UUID, WebLine> = lines
+			val commonLines = lines
 
 			for (lineUuid in dependentLineUuids) {
 				val line = lines[lineUuid] ?: continue
 				if (!line.isLoaded(level)) continue
-				if (line.getInvalidation(level, commonLines) == null) continue
+				if (line.isValid(level, commonLines)) continue
 
 				removeStoredLine(level, line)
 				removedLine = true
@@ -670,7 +673,7 @@ class RedstoneWebHandler : SavedData() {
 		private const val ARACHNODES_TAG = "Arachnodes"
 		private const val LINES_TAG = "Lines"
 		private val FACTORY = Factory(::RedstoneWebHandler, ::load)
-		private val networksByLevel: MutableMap<ServerLevel, RedstoneWebHandler> = WeakHashMap()
+		private val networksByLevel = WeakHashMap<ServerLevel, RedstoneWebHandler>()
 
 		@JvmStatic
 		fun isReadingRedstoneInputs(): Boolean {
@@ -705,9 +708,9 @@ class RedstoneWebHandler : SavedData() {
 				.parse(ops, arachnodesTag)
 				.getOrThrow()
 
-			val referencedNodeUuids = loadedLines.flatMapTo(mutableSetOf()) { lineData ->
-				listOf(lineData.firstNodeUuid, lineData.secondNodeUuid)
-			}
+			val referencedNodeUuids = loadedLines
+				.flatMap { listOf(it.firstNodeUuid, it.secondNodeUuid) }
+				.toSet()
 
 			for (node in loadedNodes) {
 				if (node.uuid in referencedNodeUuids) {

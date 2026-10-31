@@ -27,14 +27,15 @@ object RedstoneWebSynchronizer {
 	}
 
 	fun sendToTracking(level: ServerLevel, line: WebLine, packet: AaronPacket) {
-		sendToTrackingChunks(level, line.intersectedChunkPositions, packet)
+		sendToTrackingChunks(level, line.occupiedChunks, packet)
 	}
 
+	/** Sends the packet once to each player watching any crossed chunk. */
 	fun sendToTracking(level: ServerLevel, lines: Collection<WebLine>, packet: AaronPacket) {
 		val chunkPositions = mutableSetOf<ChunkPos>()
 
 		for (line in lines) {
-			chunkPositions.addAll(line.intersectedChunkPositions)
+			chunkPositions.addAll(line.occupiedChunks)
 		}
 
 		sendToTrackingChunks(level, chunkPositions, packet)
@@ -56,7 +57,7 @@ object RedstoneWebSynchronizer {
 		)
 
 		for (line in connectedLines) {
-			chunkPositions += line.intersectedChunkPositions
+			chunkPositions += line.occupiedChunks
 		}
 
 		sendToTrackingChunks(level, chunkPositions, packet)

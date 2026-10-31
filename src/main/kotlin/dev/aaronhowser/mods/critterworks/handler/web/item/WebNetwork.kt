@@ -38,9 +38,9 @@ class WebNetwork(
 	}
 
 	fun getNodes(): Set<WebNode> {
-		return lines.flatMapTo(mutableSetOf()) { line ->
-			listOf(line.firstNode, line.secondNode)
-		}
+		return lines
+			.flatMap { line -> listOf(line.firstNode, line.secondNode) }
+			.toSet()
 	}
 
 	fun clear() {

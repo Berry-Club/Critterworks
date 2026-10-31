@@ -29,7 +29,7 @@ class WebBlockAnchor(
 
 	override fun findInvalidation(
 		level: ServerLevel,
-		lines: Map<UUID, WebLine>,
+		dependencyLinesByUuid: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>
 	): WebLineInvalidation? {
 		val contactPosition = position.subtract(
@@ -45,6 +45,7 @@ class WebBlockAnchor(
 		const val TYPE = "block"
 		const val TYPE_ID = 0
 
+		/** Moves the anchor slightly away from the block so the line does not hit it. */
 		fun create(blockPos: BlockPos, face: Direction, position: Vec3): WebBlockAnchor {
 			val faceNormal = Vec3.atLowerCornerOf(face.normal)
 

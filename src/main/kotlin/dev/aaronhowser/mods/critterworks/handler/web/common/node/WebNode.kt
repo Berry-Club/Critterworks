@@ -21,9 +21,11 @@ abstract class WebNode {
 		field = mutableSetOf()
 
 	abstract fun isLoaded(level: ServerLevel): Boolean
+
+	/** Checks parent lines and uses [checkedLines] to catch loops. */
 	abstract fun findInvalidation(
 		level: ServerLevel,
-		lines: Map<UUID, WebLine>,
+		dependencyLinesByUuid: Map<UUID, WebLine>,
 		checkedLines: MutableSet<UUID>
 	): WebLineInvalidation?
 
