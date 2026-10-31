@@ -76,7 +76,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 		random: RandomSource,
 		configuration: HoppingSpiderNestConfiguration
 	): List<Pair<WebBlockAnchor, BlockHitResult>> {
-		val rayHits: MutableList<Pair<WebBlockAnchor, BlockHitResult>> = mutableListOf()
+		val rayHits = mutableListOf<Pair<WebBlockAnchor, BlockHitResult>>()
 		val availableFaces = exposedFaces.toMutableList()
 
 		for (rayIndex in 0 until configuration.rayAttempts) {
@@ -122,7 +122,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 	}
 
 	private fun getExposedFaces(level: WorldGenLevel, position: BlockPos): List<Direction> {
-		val exposedFaces: MutableList<Direction> = mutableListOf()
+		val exposedFaces = mutableListOf<Direction>()
 
 		for (direction in Direction.entries) {
 			if (level.isEmptyBlock(position.relative(direction))) {
@@ -244,7 +244,7 @@ class HoppingSpiderNestFeature : Feature<HoppingSpiderNestConfiguration>(Hopping
 	) {
 		val serverLevel = level.level
 		val savedData = ItemWebHandler.get(serverLevel)
-		val generatedLines: MutableList<Pair<WebLine, WebBlockAnchor>> = mutableListOf()
+		val generatedLines = mutableListOf<Pair<WebLine, WebBlockAnchor>>()
 
 		for ((nestAnchor, rayHit) in rayHits) {
 			val caveAnchor = WebBlockAnchor.create(

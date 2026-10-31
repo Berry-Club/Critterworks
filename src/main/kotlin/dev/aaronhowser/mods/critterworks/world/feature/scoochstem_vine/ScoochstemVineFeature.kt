@@ -98,7 +98,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		origin: BlockPos,
 		surfaceSearchRange: Int
 	): MutableList<BlockPos> {
-		val cavePositions: MutableList<BlockPos> = mutableListOf()
+		val cavePositions = mutableListOf<BlockPos>()
 
 		if (ScoochstemVinePlan.canReplace(level, origin)) {
 			cavePositions.add(origin)
@@ -126,7 +126,7 @@ class ScoochstemVineFeature : Feature<ScoochstemVineConfiguration>(ScoochstemVin
 		biomeManager: BiomeManager,
 		requiredBiome: Holder<Biome>
 	): List<Surface> {
-		val surfaces: MutableList<Surface> = mutableListOf()
+		val surfaces = mutableListOf<Surface>()
 
 		for (supportDirection in Direction.entries) {
 			val surface = findSurface(

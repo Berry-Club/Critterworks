@@ -10,7 +10,7 @@ import java.util.*
 
 class ChunkLoaderHandler : SavedData() {
 
-	private val recordsByAttachment: MutableMap<UUID, ChunkLoaderRecord> = mutableMapOf()
+	private val recordsByAttachment = mutableMapOf<UUID, ChunkLoaderRecord>()
 
 	fun updateRecord(attachmentUuid: UUID, placerUuid: UUID, headUuid: UUID, headChunk: ChunkPos) {
 		val record = ChunkLoaderRecord(attachmentUuid, placerUuid, headUuid, headChunk)

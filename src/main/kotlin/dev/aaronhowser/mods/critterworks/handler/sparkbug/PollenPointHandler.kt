@@ -15,14 +15,14 @@ import net.neoforged.neoforge.energy.IEnergyStorage
 
 class PollenPointHandler {
 
-	private val inputPollenPoints: MutableSet<PollenPoint> = mutableSetOf()
-	private val outputPollenPoints: MutableSet<PollenPoint> = mutableSetOf()
+	private val inputPollenPoints = mutableSetOf<PollenPoint>()
+	private val outputPollenPoints = mutableSetOf<PollenPoint>()
 	private val energyDistributor = PollenEnergyDistributor()
 
-	private var serverDisplayPollenPoints: Set<DisplayPollenPoint> = setOf()
-	private val remainingActiveDisplayTicks: MutableMap<PollenPoint, Int> = mutableMapOf()
+	private var serverDisplayPollenPoints = setOf<DisplayPollenPoint>()
+	private val remainingActiveDisplayTicks = mutableMapOf<PollenPoint, Int>()
 
-	var displayPollenPoints: Set<DisplayPollenPoint> = setOf()
+	var displayPollenPoints = setOf<DisplayPollenPoint>()
 		private set
 
 	fun togglePollenPoint(

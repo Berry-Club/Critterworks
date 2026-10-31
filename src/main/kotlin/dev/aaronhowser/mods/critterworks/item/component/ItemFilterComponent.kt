@@ -55,7 +55,7 @@ data class ItemFilterComponent(
 		return copy(itemContents = ItemContainerContents.fromItems(newList))
 	}
 
-	private val cache: MutableMap<CacheKey, Boolean> = mutableMapOf()
+	private val cache = mutableMapOf<CacheKey, Boolean>()
 
 	fun passesFilter(checkedStack: ItemStack): Boolean {
 		if (checkedStack.isEmpty) return isInverted

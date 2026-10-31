@@ -56,7 +56,7 @@ class ItemFilterItem(properties: Properties) : FilterfeederItem(
 		val filterStacks = component.getItems()
 
 		for (y in 0 until 4) {
-			val stacks: MutableList<ItemStack> = mutableListOf()
+			val stacks = mutableListOf<ItemStack>()
 
 			for (x in 0 until 4) {
 				val ghostStack = filterStacks.getOrNull(y * 4 + x) ?: continue

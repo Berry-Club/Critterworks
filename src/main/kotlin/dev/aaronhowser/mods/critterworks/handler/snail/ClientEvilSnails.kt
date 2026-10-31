@@ -7,7 +7,7 @@ import java.util.*
 
 object ClientEvilSnails {
 
-	private val snails: MutableMap<UUID, ClientEvilSnail> = mutableMapOf()
+	private val snails = mutableMapOf<UUID, ClientEvilSnail>()
 
 	fun getSnails(): Collection<ClientEvilSnail> {
 		return snails.values

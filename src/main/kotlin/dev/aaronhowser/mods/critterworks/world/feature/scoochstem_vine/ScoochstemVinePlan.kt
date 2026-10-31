@@ -14,8 +14,8 @@ class ScoochstemVinePlan private constructor(
 	seedPosition: SurfacePosition
 ) {
 
-	private val positions: MutableList<BlockPos> = mutableListOf(seedPosition.position)
-	private val occupiedPositions: MutableSet<BlockPos> = mutableSetOf(seedPosition.position)
+	private val positions = mutableListOf<BlockPos>(seedPosition.position)
+	private val occupiedPositions = mutableSetOf<BlockPos>(seedPosition.position)
 
 	val size: Int
 		get() = positions.size

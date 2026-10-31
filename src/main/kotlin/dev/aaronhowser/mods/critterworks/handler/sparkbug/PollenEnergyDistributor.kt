@@ -6,7 +6,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage
 class PollenEnergyDistributor {
 
 	private var nextOutputIndex = 0
-	private val activeOutputSpots: MutableSet<PollenPoint> = mutableSetOf()
+	private val activeOutputSpots = mutableSetOf<PollenPoint>()
 
 	fun resetTickActivity() {
 		activeOutputSpots.clear()

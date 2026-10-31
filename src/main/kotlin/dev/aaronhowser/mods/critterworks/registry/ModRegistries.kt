@@ -6,7 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister
 object ModRegistries {
 
 	fun register(modBus: IEventBus) {
-		val registries: List<DeferredRegister<*>> = listOf(
+		val registries = listOf<DeferredRegister<*>>(
 			ModScoochwormAttachmentTypes.SCOOCHWORM_ATTACHMENT_TYPE_REGISTRY,
 			ModItems.ITEM_REGISTRY,
 			ModBlocks.BLOCK_REGISTRY,

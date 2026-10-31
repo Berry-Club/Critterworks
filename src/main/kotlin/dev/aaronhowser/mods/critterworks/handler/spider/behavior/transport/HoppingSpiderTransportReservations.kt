@@ -4,8 +4,8 @@ import java.util.*
 
 class HoppingSpiderTransportReservations {
 
-	private val sources: MutableSet<Pair<UUID, Int>> = mutableSetOf()
-	private val destinations: MutableSet<UUID> = mutableSetOf()
+	private val sources = mutableSetOf<Pair<UUID, Int>>()
+	private val destinations = mutableSetOf<UUID>()
 
 	fun reserve(behavior: HoppingSpiderTransportBehavior) {
 		sources.add(behavior.sourceNodeUuid to behavior.sourceSlot)

@@ -42,7 +42,7 @@ class HoppingSpiderNestBlockEntity(
 
 	override val syncImmediately: Boolean = false
 
-	val hoppingSpiders: MutableList<HoppingSpider> = mutableListOf()
+	val hoppingSpiders = mutableListOf<HoppingSpider>()
 
 	var renderBounds: AABB = AABB(pos)
 		private set

@@ -122,7 +122,7 @@ class HoppingSpiderRoute(
 		private const val Z_TAG = "Z"
 
 		fun fromPath(path: WebPath, startGameTime: Long, speed: Double): HoppingSpiderRoute {
-			val positions: MutableList<Vec3> = mutableListOf(path.startNode.position)
+			val positions = mutableListOf<Vec3>(path.startNode.position)
 
 			for (segment in path.segments) {
 				positions.add(segment.toNode.position)
@@ -155,7 +155,7 @@ class HoppingSpiderRoute(
 		}
 
 		private fun loadPositions(tag: ListTag): List<Vec3> {
-			val positions: MutableList<Vec3> = mutableListOf()
+			val positions = mutableListOf<Vec3>()
 
 			for (index in tag.indices) {
 				val positionTag = tag.getCompound(index)

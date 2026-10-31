@@ -58,7 +58,7 @@ data class FluidFilterComponent(
 		return copy(itemContents = ItemContainerContents.fromItems(newList))
 	}
 
-	private val cache: MutableMap<CacheKey, Boolean> = mutableMapOf()
+	private val cache = mutableMapOf<CacheKey, Boolean>()
 
 	fun passesFilter(checkedStack: FluidStack): Boolean {
 		if (checkedStack.isEmpty) return isInverted

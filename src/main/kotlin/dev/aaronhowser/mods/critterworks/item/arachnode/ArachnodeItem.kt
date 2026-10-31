@@ -11,6 +11,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 import java.util.*
+import kotlin.math.abs
 
 abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 
@@ -101,7 +102,7 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties) {
 	}
 
 	private fun getFallbackSurfaceDirection(surfaceNormal: Vec3): Vec3 {
-		if (kotlin.math.abs(surfaceNormal.y) < 0.5) return Vec3(0.0, 1.0, 0.0)
+		if (abs(surfaceNormal.y) < 0.5) return Vec3(0.0, 1.0, 0.0)
 		return Vec3(0.0, 0.0, -1.0)
 	}
 
