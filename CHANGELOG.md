@@ -18,6 +18,10 @@
 - Inverting Arachnode
 	- Outputs a signal when the input does not have one
 
+### Changed
+
+- Tardigrade recipes no longer pollute every item in JEI
+
 # 1.5.1
 
 ### Changed
