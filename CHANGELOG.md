@@ -5,9 +5,9 @@
 - Webstone Weaver
 	- Can be used to place lines of Webstone across blocks
 		- Act like Hopping Spider web lines
-		- They carry a redstone signal that does not decay
-		- This signal is carried along through connected Webstone lines
-		- Signals input and output via the blocks they're connected to
+	- They carry a redstone signal that does not decay
+	- This signal is carried along through connected Webstone lines
+	- Signals input and output via the blocks they're connected to
 - Arachnodes
 	- Can be placed on either a block or an existing Webstone line
 	- They have 2 ports
