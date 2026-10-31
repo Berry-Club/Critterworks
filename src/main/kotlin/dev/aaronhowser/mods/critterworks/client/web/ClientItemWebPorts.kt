@@ -6,7 +6,7 @@ import java.util.*
 
 object ClientItemWebPorts {
 
-	private val stacksByNodeUuid: MutableMap<UUID, ItemStack> = mutableMapOf()
+	private val stacksByNodeUuid = mutableMapOf<UUID, ItemStack>()
 
 	fun get(nodeUuid: UUID): ItemStack {
 		return stacksByNodeUuid[nodeUuid] ?: ItemStack.EMPTY

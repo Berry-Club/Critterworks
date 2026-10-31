@@ -15,7 +15,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent
 @EventBusSubscriber(modid = Critterworks.MOD_ID, value = [Dist.CLIENT])
 object WebPathIndicatorRenderer {
 
-	private var indicatedPositions: List<Vec3> = emptyList()
+	private var indicatedPositions = emptyList<Vec3>()
 	private var ticksLeft = 0
 
 	fun show(positions: List<Vec3>, durationTicks: Int) {

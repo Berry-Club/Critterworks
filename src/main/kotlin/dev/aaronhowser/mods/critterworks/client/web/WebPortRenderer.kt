@@ -18,7 +18,12 @@ import org.joml.Vector3f
 
 object WebPortRenderer {
 
-	fun renderAll(bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, cameraPosition: Vec3) {
+	fun renderAll(
+		bufferSource: MultiBufferSource.BufferSource,
+		level: Level,
+		poseStack: PoseStack,
+		cameraPosition: Vec3
+	) {
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
 
 		for (node in ClientWebState.getNodes(WebLineType.ITEM)) {
@@ -35,6 +40,7 @@ object WebPortRenderer {
 				anchor.face.stepY.toFloat(),
 				anchor.face.stepZ.toFloat()
 			)
+
 			val light = LevelRenderer.getLightColor(level, anchor.blockPos.relative(anchor.face))
 
 			poseStack.withPose {

@@ -14,9 +14,9 @@ import java.util.*
 
 object ClientWebState {
 
-	private val linesByType: MutableMap<WebLineType, MutableMap<UUID, WebLine>> = mutableMapOf()
-	private val nodesByType: MutableMap<WebLineType, MutableMap<UUID, WebNode>> = mutableMapOf()
-	private val arachnodesByUuid: MutableMap<UUID, Arachnode> = mutableMapOf()
+	private val linesByType = mutableMapOf<WebLineType, MutableMap<UUID, WebLine>>()
+	private val nodesByType = mutableMapOf<WebLineType, MutableMap<UUID, WebNode>>()
+	private val arachnodesByUuid = mutableMapOf<UUID, Arachnode>()
 
 	fun getLines(): List<WebLine> = linesByType.values.flatMap { it.values }
 	fun getLines(type: WebLineType): List<WebLine> = getLineMap(type).values.toList()
@@ -34,6 +34,7 @@ object ClientWebState {
 		return null
 	}
 
+	/** Adds packet data while reusing nodes that are already stored. */
 	fun addLines(
 		type: WebLineType,
 		newArachnodes: List<Arachnode>,
@@ -175,7 +176,7 @@ object ClientWebState {
 	}
 
 	private fun removeOrphanedArachnodes(nodes: MutableMap<UUID, WebNode>) {
-		val removedArachnodeUuids: MutableList<UUID> = mutableListOf()
+		val removedArachnodeUuids = mutableListOf<UUID>()
 
 		for (arachnode in arachnodesByUuid.values) {
 			var hasLine = false

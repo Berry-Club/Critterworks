@@ -33,6 +33,10 @@ object WebLineGeometryRenderer {
 		}
 	}
 
+	/**
+	 * Draws the line in short sections so lighting can change along it.
+	 * The texture continues across the sections without seams.
+	 */
 	fun render(
 		bufferSource: MultiBufferSource.BufferSource,
 		level: Level,

@@ -3,7 +3,6 @@ package dev.aaronhowser.mods.critterworks.client.web
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.client.render.AaronRenderUtil
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
-import dev.aaronhowser.mods.critterworks.client.web.ClientWebLineInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebBlockAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebInteractionHandler
@@ -20,12 +19,26 @@ import net.minecraft.world.phys.Vec3
 
 object WebLinePreviewRenderer {
 
-	fun render(minecraft: Minecraft, bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
+	fun render(
+		minecraft: Minecraft,
+		bufferSource: MultiBufferSource.BufferSource,
+		level: Level,
+		poseStack: PoseStack,
+		eyePosition: Vec3,
+		viewVector: Vec3
+	) {
 		renderPlacement(minecraft, bufferSource, level, poseStack, eyePosition, viewVector)
 		renderHoveredAnchor(minecraft, poseStack, eyePosition, viewVector)
 	}
 
-	private fun renderPlacement(minecraft: Minecraft, bufferSource: MultiBufferSource.BufferSource, level: Level, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
+	private fun renderPlacement(
+		minecraft: Minecraft,
+		bufferSource: MultiBufferSource.BufferSource,
+		level: Level,
+		poseStack: PoseStack,
+		eyePosition: Vec3,
+		viewVector: Vec3
+	) {
 		val player = minecraft.player ?: return
 		val itemStack = getHeldWebTool(player.mainHandItem, player.offhandItem) ?: return
 
@@ -58,7 +71,12 @@ object WebLinePreviewRenderer {
 		)
 	}
 
-	private fun renderHoveredAnchor(minecraft: Minecraft, poseStack: PoseStack, eyePosition: Vec3, viewVector: Vec3) {
+	private fun renderHoveredAnchor(
+		minecraft: Minecraft,
+		poseStack: PoseStack,
+		eyePosition: Vec3,
+		viewVector: Vec3
+	) {
 		val player = minecraft.player ?: return
 
 		val targetedNode = ClientWebLineInteractionHandler.getHoveredAnchor(
@@ -89,10 +107,10 @@ object WebLinePreviewRenderer {
 	}
 
 	private fun isWebTool(itemStack: ItemStack): Boolean {
-		return itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS)
-			|| itemStack.isItem(ModItems.WEBSTONE_WEAVER)
+		return itemStack.isItem(ModItems.ARTIFICIAL_SPINNERETS) || itemStack.isItem(ModItems.WEBSTONE_WEAVER)
 	}
 
+	/** Uses the web target only when it is in front of the normal target. */
 	private fun getTargetedNode(minecraft: Minecraft, eyePosition: Vec3, viewVector: Vec3): WebNode? {
 		val player = minecraft.player ?: return null
 		val targetedNode = ClientWebLineInteractionHandler.getHoveredAnchor(
@@ -100,6 +118,7 @@ object WebLinePreviewRenderer {
 			eyePosition,
 			viewVector
 		)
+
 		if (targetedNode != null) return targetedNode.node
 
 		val hitResult = minecraft.hitResult
