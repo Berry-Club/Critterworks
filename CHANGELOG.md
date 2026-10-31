@@ -1,3 +1,23 @@
+# 1.6.0
+
+### Added
+
+- Webstone Weaver
+	- Can be used to place lines of Webstone across blocks
+		- Act like Hopping Spider web lines
+		- They carry a redstone signal that does not decay
+		- This signal is carried along through connected Webstone lines
+		- Signals input and output via the blocks they're connected to
+- Arachnodes
+	- Can be placed on either a block or an existing Webstone line
+	- They have 2 ports
+		- The port at their rear is the input
+		- The port at their head is the output
+- Directional Arachnode
+	- Simply carries the input signal to the output, without letting the output power the input
+- Inverting Arachnode
+	- Outputs a signal when the input does not have one
+
 # 1.5.1
 
 ### Changed
