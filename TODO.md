@@ -116,6 +116,7 @@
 - Magpie item magnet
 - Homing Pigeon that you can use to send items back to your base, or request from storage?
 - Bloodhound that you give blocks and it points you towards more of it
+	-  BLOCKHOUND
 
 # Tool/Weapon critters
 
