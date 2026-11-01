@@ -34,8 +34,6 @@ object ClientWebLineInteractionHandler {
 		eyePosition: Vec3,
 		viewVector: Vec3
 	): TargetedWebNode? {
-		if (player.isShiftKeyDown) return null
-
 		val interactionHand = getInteractionHand(player) ?: InteractionHand.MAIN_HAND
 		val target = getTargetedNode(player, eyePosition, viewVector, interactionHand) ?: return null
 		val heldStack = player.getItemInHand(interactionHand)
@@ -47,8 +45,6 @@ object ClientWebLineInteractionHandler {
 
 	private fun interactWithTarget(event: InputEvent.InteractionKeyMappingTriggered) {
 		val player = Minecraft.getInstance().player ?: return
-		if (player.isShiftKeyDown) return
-
 		val interactionHand = getInteractionHand(player) ?: event.hand
 		val target = getTargetedNode(
 			player,
@@ -78,7 +74,7 @@ object ClientWebLineInteractionHandler {
 
 		NeoForge.EVENT_BUS.post(interactionEvent)
 		if (event.hand == interactionHand && !interactionEvent.isCanceled) {
-			sendInteraction(target, interactionHand)
+			sendInteraction(target, interactionHand, getSnapRadius(player))
 		}
 
 		event.isCanceled = true
@@ -86,7 +82,8 @@ object ClientWebLineInteractionHandler {
 
 	private fun sendInteraction(
 		target: Pair<WebLineType, TargetedWebNode>,
-		hand: InteractionHand
+		hand: InteractionHand,
+		snapRadius: Double
 	) {
 		val targetedNode = target.second
 		val targetsNode = targetedNode.lineUuid == null
@@ -98,7 +95,7 @@ object ClientWebLineInteractionHandler {
 			targetsNode,
 			targetedNode.node.position,
 			hand,
-			ClientConfig.CONFIG.webNodeSnapDistance.get()
+			snapRadius
 		).messageServer()
 	}
 
@@ -120,7 +117,7 @@ object ClientWebLineInteractionHandler {
 	): Pair<WebLineType, TargetedWebNode>? {
 		val lookEnd = eyePosition.add(viewVector.scale(player.blockInteractionRange()))
 		val heldStack = player.getItemInHand(interactionHand)
-		val nodeSnapDistance = ClientConfig.CONFIG.webNodeSnapDistance.get()
+		val snapRadius = getSnapRadius(player)
 		val shouldSnapToNode = heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
 		val canInteractWithItemWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.ITEM)
 		val canInteractWithRedstoneWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.REDSTONE)
@@ -132,7 +129,7 @@ object ClientWebLineInteractionHandler {
 				lookEnd,
 				snapToExistingNode = true,
 				requireExistingNode = true,
-				nodeSnapDistance = nodeSnapDistance
+				snapRadius = snapRadius
 			)
 			val target = if (installedWebPort == null) {
 				null
@@ -149,7 +146,8 @@ object ClientWebLineInteractionHandler {
 			val targetedArachnodePort = WebTargeting.getTargetedExistingNode(
 				ClientWebState.getArachnodePorts(),
 				eyePosition,
-				lookEnd
+				lookEnd,
+				snapRadius
 			)
 			val target = if (targetedArachnodePort == null) {
 				null
@@ -175,7 +173,7 @@ object ClientWebLineInteractionHandler {
 					ClientWebState.getArachnodePorts(),
 					eyePosition,
 					lookEnd,
-					nodeSnapDistance
+					snapRadius
 				)
 				if (portTarget != null && !isBehindCurrentHit(portTarget, eyePosition)) {
 					return Pair(webType, portTarget)
@@ -188,7 +186,7 @@ object ClientWebLineInteractionHandler {
 				lookEnd,
 				shouldSnapToNode,
 				heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE),
-				nodeSnapDistance
+				snapRadius
 			) ?: return null
 			return Pair(webType, target)
 		}
@@ -199,7 +197,7 @@ object ClientWebLineInteractionHandler {
 			lookEnd,
 			shouldSnapToNode,
 			heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE),
-			nodeSnapDistance
+			snapRadius
 		) ?: return null
 		val targetType = ClientWebState.getType(target) ?: return null
 		return Pair(targetType, target)
@@ -208,6 +206,14 @@ object ClientWebLineInteractionHandler {
 	private fun canInteractWithWeb(itemStack: ItemStack): Boolean {
 		return WebInteractionHandler.canInteractWithType(itemStack, WebLineType.ITEM)
 			|| WebInteractionHandler.canInteractWithType(itemStack, WebLineType.REDSTONE)
+	}
+
+	private fun getSnapRadius(player: Player): Double {
+		if (player.isShiftKeyDown) {
+			return ClientConfig.CONFIG.sneakingWebSnapRadius.get()
+		}
+
+		return ClientConfig.CONFIG.webSnapRadius.get()
 	}
 
 	private fun targetsInstalledWebPort(target: Pair<WebLineType, TargetedWebNode>): Boolean {

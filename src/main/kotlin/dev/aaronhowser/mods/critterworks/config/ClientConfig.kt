@@ -12,7 +12,8 @@ class ClientConfig(
 	lateinit var rotateScoochwormPassengerCamera: ModConfigSpec.BooleanValue
 	lateinit var fireflyParticleSpawnChance: ModConfigSpec.DoubleValue
 	lateinit var fireflyParticleSpawnRadius: ModConfigSpec.DoubleValue
-	lateinit var webNodeSnapDistance: ModConfigSpec.DoubleValue
+	lateinit var webSnapRadius: ModConfigSpec.DoubleValue
+	lateinit var sneakingWebSnapRadius: ModConfigSpec.DoubleValue
 
 	lateinit var renderScoochwormAttachmentProbe: ModConfigSpec.BooleanValue
 	lateinit var renderScoochwormPath: ModConfigSpec.BooleanValue
@@ -37,9 +38,13 @@ class ClientConfig(
 	}
 
 	private fun webConfigs() {
-		webNodeSnapDistance = builder
-			.comment("The maximum distance from the cursor that web interactions snap to an existing node.")
-			.defineInRange("webNodeSnapDistance", 0.3, 0.0, 1.0)
+		webSnapRadius = builder
+			.comment("The maximum distance from the cursor that web interactions snap to web lines and nodes.")
+			.defineInRange("webSnapRadius", 0.3, 0.0, 1.0)
+
+		sneakingWebSnapRadius = builder
+			.comment("The web interaction snap radius used while sneaking.")
+			.defineInRange("sneakingWebSnapRadius", 0.05, 0.0, 1.0)
 	}
 
 	private fun renderingConfigs() {

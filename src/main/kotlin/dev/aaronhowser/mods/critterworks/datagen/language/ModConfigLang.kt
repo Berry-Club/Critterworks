@@ -19,7 +19,8 @@ object ModConfigLang {
 		addConfig(ServerConfig.CONFIG.filterfeederWaterFogRadius, "Filterfeeder Water Fog Radius")
 
 		addConfig("webs", "Webs")
-		addConfig(ClientConfig.CONFIG.webNodeSnapDistance, "Web Node Snap Distance")
+		addConfig(ClientConfig.CONFIG.webSnapRadius, "Web Snap Radius")
+		addConfig(ClientConfig.CONFIG.sneakingWebSnapRadius, "Sneaking Web Snap Radius")
 
 		addConfig("scoochworm_attachments", "Scoochworm Attachments")
 		addConfig(ServerConfig.CONFIG.lockboxDropIntervalTicks, "Lockbox Drop Interval (ticks)")

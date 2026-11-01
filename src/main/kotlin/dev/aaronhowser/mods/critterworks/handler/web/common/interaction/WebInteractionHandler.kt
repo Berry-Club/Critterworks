@@ -28,14 +28,12 @@ object WebInteractionHandler {
 		targetsNode: Boolean,
 		requestedPosition: Vec3,
 		hand: InteractionHand,
-		nodeSnapDistance: Double
+		snapRadius: Double
 	) {
-		if (player.isShiftKeyDown) return
-
 		val itemStack = player.getItemInHand(hand)
-		val validatedSnapDistance = nodeSnapDistance.coerceIn(
+		val validatedSnapRadius = snapRadius.coerceIn(
 			0.0,
-			WebTargeting.MAXIMUM_NODE_SNAP_DISTANCE
+			WebTargeting.MAXIMUM_SNAP_RADIUS
 		)
 
 		if (targetsNode) {
@@ -46,11 +44,19 @@ object WebInteractionHandler {
 				requestedPosition,
 				itemStack,
 				hand,
-				validatedSnapDistance
+				validatedSnapRadius
 			)
 		} else {
 			if (!canInteractWithType(itemStack, webType)) return
-			interactLine(player, webType, targetUuid, requestedPosition, itemStack, hand)
+			interactLine(
+				player,
+				webType,
+				targetUuid,
+				requestedPosition,
+				itemStack,
+				hand,
+				validatedSnapRadius
+			)
 		}
 	}
 
@@ -61,15 +67,10 @@ object WebInteractionHandler {
 		requestedPosition: Vec3,
 		itemStack: ItemStack,
 		hand: InteractionHand,
-		nodeSnapDistance: Double
+		snapRadius: Double
 	) {
 		val target = getNode(player.serverLevel(), webType, targetUuid) ?: return
-		val selectionDistance = if (itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)) {
-			nodeSnapDistance
-		} else {
-			WebTargeting.DEFAULT_NODE_SNAP_DISTANCE
-		}
-		if (!isTargetingNode(player, target, selectionDistance)) return
+		if (!isTargetingNode(player, target, snapRadius)) return
 		if (!isWithinPositionTolerance(target.position, requestedPosition)) return
 
 		NeoForge.EVENT_BUS.post(WebNodeInteractionEvent(player, webType, target, itemStack, hand))
@@ -81,7 +82,8 @@ object WebInteractionHandler {
 		lineUuid: UUID,
 		requestedPosition: Vec3,
 		itemStack: ItemStack,
-		hand: InteractionHand
+		hand: InteractionHand,
+		snapRadius: Double
 	) {
 		val line = getLine(player.serverLevel(), webType, lineUuid) ?: return
 		val eyePosition = player.eyePosition
@@ -90,7 +92,8 @@ object WebInteractionHandler {
 			listOf(line),
 			eyePosition,
 			lookEnd,
-			false
+			false,
+			snapRadius = snapRadius
 		) ?: return
 
 		val lineAnchor = targetedNode.node as? WebLineAnchor ?: return

@@ -22,7 +22,7 @@ class WebLineInteractPacket(
 	val targetsNode: Boolean,
 	val position: Vec3,
 	val hand: InteractionHand,
-	val nodeSnapDistance: Double
+	val snapRadius: Double
 ) : AaronPacket() {
 
 	override fun handleOnServer(context: IPayloadContext) {
@@ -34,7 +34,7 @@ class WebLineInteractPacket(
 			targetsNode,
 			position,
 			hand,
-			nodeSnapDistance
+			snapRadius
 		)
 	}
 
@@ -53,7 +53,7 @@ class WebLineInteractPacket(
 				{ isMainHand -> if (isMainHand) InteractionHand.MAIN_HAND else InteractionHand.OFF_HAND },
 				{ hand -> hand == InteractionHand.MAIN_HAND }
 			), WebLineInteractPacket::hand,
-			ByteBufCodecs.DOUBLE, WebLineInteractPacket::nodeSnapDistance,
+			ByteBufCodecs.DOUBLE, WebLineInteractPacket::snapRadius,
 			::WebLineInteractPacket
 		)
 	}
