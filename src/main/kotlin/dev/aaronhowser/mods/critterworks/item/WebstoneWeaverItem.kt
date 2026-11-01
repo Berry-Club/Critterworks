@@ -116,13 +116,6 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 			return ModMessageLang.SAME_LINE_MESSAGE
 		}
 
-		val areAnchorsOnSameFace = firstNode is WebBlockAnchor &&
-			secondNode is WebBlockAnchor &&
-			firstNode.face == secondNode.face
-		if (areAnchorsOnSameFace) {
-			return ModMessageLang.WEBSTONE_SAME_DIRECTION_MESSAGE
-		}
-
 		if (firstNode.position.distanceToSqr(secondNode.position) >= MAX_LENGTH * MAX_LENGTH) {
 			return ModMessageLang.WEBSTONE_TOO_LONG_MESSAGE
 		}
