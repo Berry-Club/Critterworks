@@ -30,6 +30,8 @@ object WebInteractionHandler {
 		hand: InteractionHand,
 		nodeSnapDistance: Double
 	) {
+		if (player.isShiftKeyDown) return
+
 		val itemStack = player.getItemInHand(hand)
 		val validatedSnapDistance = nodeSnapDistance.coerceIn(
 			0.0,
@@ -62,9 +64,7 @@ object WebInteractionHandler {
 		nodeSnapDistance: Double
 	) {
 		val target = getNode(player.serverLevel(), webType, targetUuid) ?: return
-		val selectionDistance = if (itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
-			&& !player.isShiftKeyDown
-		) {
+		val selectionDistance = if (itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)) {
 			nodeSnapDistance
 		} else {
 			WebTargeting.DEFAULT_NODE_SNAP_DISTANCE

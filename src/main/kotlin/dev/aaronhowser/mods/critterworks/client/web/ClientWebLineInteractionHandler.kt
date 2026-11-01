@@ -34,6 +34,8 @@ object ClientWebLineInteractionHandler {
 		eyePosition: Vec3,
 		viewVector: Vec3
 	): TargetedWebNode? {
+		if (player.isShiftKeyDown) return null
+
 		val interactionHand = getInteractionHand(player) ?: InteractionHand.MAIN_HAND
 		val target = getTargetedNode(player, eyePosition, viewVector, interactionHand) ?: return null
 		val heldStack = player.getItemInHand(interactionHand)
@@ -45,6 +47,8 @@ object ClientWebLineInteractionHandler {
 
 	private fun interactWithTarget(event: InputEvent.InteractionKeyMappingTriggered) {
 		val player = Minecraft.getInstance().player ?: return
+		if (player.isShiftKeyDown) return
+
 		val interactionHand = getInteractionHand(player) ?: event.hand
 		val target = getTargetedNode(
 			player,
@@ -118,7 +122,6 @@ object ClientWebLineInteractionHandler {
 		val heldStack = player.getItemInHand(interactionHand)
 		val nodeSnapDistance = ClientConfig.CONFIG.webNodeSnapDistance.get()
 		val shouldSnapToNode = heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
-			&& !player.isShiftKeyDown
 		val canInteractWithItemWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.ITEM)
 		val canInteractWithRedstoneWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.REDSTONE)
 
@@ -127,7 +130,7 @@ object ClientWebLineInteractionHandler {
 				ClientWebState.getLines(WebLineType.ITEM),
 				eyePosition,
 				lookEnd,
-				snapToExistingNode = !player.isShiftKeyDown,
+				snapToExistingNode = true,
 				requireExistingNode = true,
 				nodeSnapDistance = nodeSnapDistance
 			)
