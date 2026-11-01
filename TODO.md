@@ -132,6 +132,7 @@
 - Boxing Glove drop from Punchprawns?
 	- All critters should probably drop something
  - Mining Mole
+ 	- Star-Nosed Mole, nose spins like a drill?
 
 # Guidebook
 
