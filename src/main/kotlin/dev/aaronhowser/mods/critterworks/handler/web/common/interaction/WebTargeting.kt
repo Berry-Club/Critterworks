@@ -16,7 +16,8 @@ object WebTargeting {
 		lookStart: Vec3,
 		lookEnd: Vec3,
 		snapToExistingNode: Boolean,
-		requireExistingNode: Boolean = false
+		requireExistingNode: Boolean = false,
+		nodeSnapDistance: Double = DEFAULT_NODE_SNAP_DISTANCE
 	): TargetedWebNode? {
 		var targetedNode: TargetedWebNode? = null
 		var targetedDistanceSquared = LINE_SELECTION_RADIUS_SQUARED
@@ -36,7 +37,7 @@ object WebTargeting {
 			if (distanceFromLookSquared > targetedDistanceSquared) continue
 
 			val position = Vec3(anchorPosition.x, anchorPosition.y, anchorPosition.z)
-			val existingNode = getClosestExistingNode(line, position)
+			val existingNode = getClosestExistingNode(line, position, nodeSnapDistance)
 			if (requireExistingNode && existingNode == null) continue
 
 			targetedDistanceSquared = distanceFromLookSquared
@@ -53,7 +54,12 @@ object WebTargeting {
 		return targetedNode
 	}
 
-	fun isTargetingNode(lookStart: Vec3, lookEnd: Vec3, node: WebNode): Boolean {
+	fun isTargetingNode(
+		lookStart: Vec3,
+		lookEnd: Vec3,
+		node: WebNode,
+		selectionDistance: Double = LINE_SELECTION_RADIUS
+	): Boolean {
 		val lookOffset = lookEnd.subtract(lookStart)
 		val lookLengthSquared = lookOffset.lengthSqr()
 		if (lookLengthSquared == 0.0) return false
@@ -65,21 +71,22 @@ object WebTargeting {
 			.coerceIn(0.0, 1.0)
 
 		val closestPosition = lookStart.add(lookOffset.scale(progress))
-		return closestPosition.distanceToSqr(node.position) <= LINE_SELECTION_RADIUS_SQUARED
+		return closestPosition.distanceToSqr(node.position) <= selectionDistance * selectionDistance
 	}
 
 	/** Finds the closest existing node. Ties use the node closest to the player. */
 	fun getTargetedExistingNode(
 		nodes: Collection<WebNode>,
 		lookStart: Vec3,
-		lookEnd: Vec3
+		lookEnd: Vec3,
+		selectionDistance: Double = LINE_SELECTION_RADIUS
 	): TargetedWebNode? {
 		val lookOffset = lookEnd.subtract(lookStart)
 		val lookLengthSquared = lookOffset.lengthSqr()
 		if (lookLengthSquared == 0.0) return null
 
 		var targetedNode: WebNode? = null
-		var targetedDistanceSquared = LINE_SELECTION_RADIUS_SQUARED
+		var targetedDistanceSquared = selectionDistance * selectionDistance
 		var targetedEyeDistanceSquared = Double.MAX_VALUE
 
 		for (node in nodes) {
@@ -107,15 +114,21 @@ object WebTargeting {
 		return TargetedWebNode(null, node)
 	}
 
-	private fun getClosestExistingNode(line: WebLine, position: Vec3): WebNode? {
-		var closestNode = getCloserNode(null, line.firstNode, position)
-		closestNode = getCloserNode(closestNode, line.secondNode, position)
+	private fun getClosestExistingNode(
+		line: WebLine,
+		position: Vec3,
+		nodeSnapDistance: Double
+	): WebNode? {
+		val nodeSnapDistanceSquared = nodeSnapDistance * nodeSnapDistance
+		var closestNode = getCloserNode(null, line.firstNode, position, nodeSnapDistanceSquared)
+		closestNode = getCloserNode(closestNode, line.secondNode, position, nodeSnapDistanceSquared)
 
 		for (attachment in line.attachedAnchors) {
 			closestNode = getCloserNode(
 				closestNode,
 				attachment.anchor,
-				position
+				position,
+				nodeSnapDistanceSquared
 			)
 		}
 
@@ -125,10 +138,11 @@ object WebTargeting {
 	private fun getCloserNode(
 		closestNode: WebNode?,
 		candidateNode: WebNode,
-		position: Vec3
+		position: Vec3,
+		nodeSnapDistanceSquared: Double
 	): WebNode? {
 		val candidateDistanceSquared = candidateNode.position.distanceToSqr(position)
-		if (candidateDistanceSquared > NODE_SNAP_RADIUS_SQUARED) return closestNode
+		if (candidateDistanceSquared > nodeSnapDistanceSquared) return closestNode
 
 		if (closestNode != null) {
 			val closestDistanceSquared = closestNode.position.distanceToSqr(position)
@@ -139,6 +153,9 @@ object WebTargeting {
 		return candidateNode
 	}
 
-	private const val LINE_SELECTION_RADIUS_SQUARED = 0.3 * 0.3
-	private const val NODE_SNAP_RADIUS_SQUARED = 0.3 * 0.3
+	const val DEFAULT_NODE_SNAP_DISTANCE = 0.3
+	const val MAXIMUM_NODE_SNAP_DISTANCE = 1.0
+
+	private const val LINE_SELECTION_RADIUS = 0.3
+	private const val LINE_SELECTION_RADIUS_SQUARED = LINE_SELECTION_RADIUS * LINE_SELECTION_RADIUS
 }

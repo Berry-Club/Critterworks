@@ -21,6 +21,8 @@
 ### Changed
 
 - Tardigrade recipes no longer pollute every item in JEI
+- Holding sneak disables web interactions from snapping to nodes
+- The distance that it snaps to nodes is now configurable on the client side
 
 # 1.5.1
 

@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.client.web
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.critterworks.config.ClientConfig
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
@@ -92,7 +93,8 @@ object ClientWebLineInteractionHandler {
 			targetUuid,
 			targetsNode,
 			targetedNode.node.position,
-			hand
+			hand,
+			ClientConfig.CONFIG.webNodeSnapDistance.get()
 		).messageServer()
 	}
 
@@ -114,6 +116,9 @@ object ClientWebLineInteractionHandler {
 	): Pair<WebLineType, TargetedWebNode>? {
 		val lookEnd = eyePosition.add(viewVector.scale(player.blockInteractionRange()))
 		val heldStack = player.getItemInHand(interactionHand)
+		val nodeSnapDistance = ClientConfig.CONFIG.webNodeSnapDistance.get()
+		val shouldSnapToNode = heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+			&& !player.isShiftKeyDown
 		val canInteractWithItemWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.ITEM)
 		val canInteractWithRedstoneWeb = WebInteractionHandler.canInteractWithType(heldStack, WebLineType.REDSTONE)
 
@@ -122,8 +127,9 @@ object ClientWebLineInteractionHandler {
 				ClientWebState.getLines(WebLineType.ITEM),
 				eyePosition,
 				lookEnd,
-				snapToExistingNode = true,
-				requireExistingNode = true
+				snapToExistingNode = !player.isShiftKeyDown,
+				requireExistingNode = true,
+				nodeSnapDistance = nodeSnapDistance
 			)
 			val target = if (installedWebPort == null) {
 				null
@@ -160,12 +166,13 @@ object ClientWebLineInteractionHandler {
 		}
 		if (webType != null) {
 			if (webType == WebLineType.REDSTONE
-				&& heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+				&& shouldSnapToNode
 			) {
 				val portTarget = WebTargeting.getTargetedExistingNode(
 					ClientWebState.getArachnodePorts(),
 					eyePosition,
-					lookEnd
+					lookEnd,
+					nodeSnapDistance
 				)
 				if (portTarget != null && !isBehindCurrentHit(portTarget, eyePosition)) {
 					return Pair(webType, portTarget)
@@ -176,8 +183,9 @@ object ClientWebLineInteractionHandler {
 				ClientWebState.getLines(webType),
 				eyePosition,
 				lookEnd,
-				heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
-				heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
+				shouldSnapToNode,
+				heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE),
+				nodeSnapDistance
 			) ?: return null
 			return Pair(webType, target)
 		}
@@ -186,8 +194,9 @@ object ClientWebLineInteractionHandler {
 			ClientWebState.getLines(),
 			eyePosition,
 			lookEnd,
-			heldStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
-			heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
+			shouldSnapToNode,
+			heldStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE),
+			nodeSnapDistance
 		) ?: return null
 		val targetType = ClientWebState.getType(target) ?: return null
 		return Pair(targetType, target)

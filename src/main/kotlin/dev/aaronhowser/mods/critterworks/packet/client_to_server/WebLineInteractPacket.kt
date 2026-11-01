@@ -21,12 +21,21 @@ class WebLineInteractPacket(
 	val targetUuid: UUID,
 	val targetsNode: Boolean,
 	val position: Vec3,
-	val hand: InteractionHand
+	val hand: InteractionHand,
+	val nodeSnapDistance: Double
 ) : AaronPacket() {
 
 	override fun handleOnServer(context: IPayloadContext) {
 		val player = context.player() as? ServerPlayer ?: return
-		WebInteractionHandler.interactFromC2S(player, webType, targetUuid, targetsNode, position, hand)
+		WebInteractionHandler.interactFromC2S(
+			player,
+			webType,
+			targetUuid,
+			targetsNode,
+			position,
+			hand,
+			nodeSnapDistance
+		)
 	}
 
 	override fun type(): CustomPacketPayload.Type<WebLineInteractPacket> = TYPE
@@ -44,6 +53,7 @@ class WebLineInteractPacket(
 				{ isMainHand -> if (isMainHand) InteractionHand.MAIN_HAND else InteractionHand.OFF_HAND },
 				{ hand -> hand == InteractionHand.MAIN_HAND }
 			), WebLineInteractPacket::hand,
+			ByteBufCodecs.DOUBLE, WebLineInteractPacket::nodeSnapDistance,
 			::WebLineInteractPacket
 		)
 	}

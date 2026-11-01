@@ -27,12 +27,25 @@ object WebInteractionHandler {
 		targetUuid: UUID,
 		targetsNode: Boolean,
 		requestedPosition: Vec3,
-		hand: InteractionHand
+		hand: InteractionHand,
+		nodeSnapDistance: Double
 	) {
 		val itemStack = player.getItemInHand(hand)
+		val validatedSnapDistance = nodeSnapDistance.coerceIn(
+			0.0,
+			WebTargeting.MAXIMUM_NODE_SNAP_DISTANCE
+		)
 
 		if (targetsNode) {
-			interactNode(player, webType, targetUuid, requestedPosition, itemStack, hand)
+			interactNode(
+				player,
+				webType,
+				targetUuid,
+				requestedPosition,
+				itemStack,
+				hand,
+				validatedSnapDistance
+			)
 		} else {
 			if (!canInteractWithType(itemStack, webType)) return
 			interactLine(player, webType, targetUuid, requestedPosition, itemStack, hand)
@@ -45,10 +58,18 @@ object WebInteractionHandler {
 		targetUuid: UUID,
 		requestedPosition: Vec3,
 		itemStack: ItemStack,
-		hand: InteractionHand
+		hand: InteractionHand,
+		nodeSnapDistance: Double
 	) {
 		val target = getNode(player.serverLevel(), webType, targetUuid) ?: return
-		if (!isTargetingNode(player, target)) return
+		val selectionDistance = if (itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE)
+			&& !player.isShiftKeyDown
+		) {
+			nodeSnapDistance
+		} else {
+			WebTargeting.DEFAULT_NODE_SNAP_DISTANCE
+		}
+		if (!isTargetingNode(player, target, selectionDistance)) return
 		if (!isWithinPositionTolerance(target.position, requestedPosition)) return
 
 		NeoForge.EVENT_BUS.post(WebNodeInteractionEvent(player, webType, target, itemStack, hand))
@@ -69,8 +90,7 @@ object WebInteractionHandler {
 			listOf(line),
 			eyePosition,
 			lookEnd,
-			itemStack.isItem(ModItemTagsProvider.SNAP_TO_NODE),
-			itemStack.isItem(ModItemTagsProvider.REQUIRES_EXISTING_NODE)
+			false
 		) ?: return
 
 		val lineAnchor = targetedNode.node as? WebLineAnchor ?: return
@@ -104,10 +124,14 @@ object WebInteractionHandler {
 		}
 	}
 
-	private fun isTargetingNode(player: ServerPlayer, node: WebNode): Boolean {
+	private fun isTargetingNode(
+		player: ServerPlayer,
+		node: WebNode,
+		selectionDistance: Double
+	): Boolean {
 		val lookStart = player.eyePosition
 		val lookEnd = lookStart.add(player.lookAngle.scale(player.blockInteractionRange()))
-		return WebTargeting.isTargetingNode(lookStart, lookEnd, node)
+		return WebTargeting.isTargetingNode(lookStart, lookEnd, node, selectionDistance)
 	}
 
 	private fun isWithinPositionTolerance(expected: Vec3, actual: Vec3): Boolean {
