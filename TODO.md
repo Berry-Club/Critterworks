@@ -106,7 +106,6 @@
 	- Basically the thing from Portal
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 - Compass that points to the Evil Snail
-- Some way to permanently banish the Evil Snail
 
 # "Pet" critters
 
@@ -116,6 +115,8 @@
 	- Backpack Packrat
 - Magpie item magnet
 - Homing Pigeon that you can use to send items back to your base, or request from storage?
+- Bloodhound that you give blocks and it points you towards more of it
+	-  BLOCKHOUND
 
 # Tool/Weapon critters
 
@@ -130,6 +131,8 @@
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
 - Boxing Glove drop from Punchprawns?
 	- All critters should probably drop something
+ - Mining Mole
+ 	- Star-Nosed Mole, nose spins like a drill?
 
 # Guidebook
 
