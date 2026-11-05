@@ -1,13 +1,15 @@
 package dev.aaronhowser.mods.critterworks.item
 
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isNotEmpty
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
+import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
+import dev.aaronhowser.mods.critterworks.item.component.ItemFilterEntry
 import dev.aaronhowser.mods.critterworks.menu.item_filter.ItemFilterMenu
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.ChatFormatting
-import net.minecraft.core.NonNullList
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -49,29 +51,19 @@ class ItemFilterItem(properties: Properties) : FilterfeederItem(
 	) {
 		val component = getFilterComponent(stack)
 
-		for (flag in component.flags) {
-			tooltipComponents.add(flag.getMessage(true).withStyle(ChatFormatting.BLUE))
+		if (component.isBlacklist) {
+			tooltipComponents.add(
+				ModMenuLang.BLACKLIST
+					.toComponent()
+					.withStyle(ChatFormatting.RED, ChatFormatting.UNDERLINE)
+			)
 		}
 
-		val filterStacks = component.getItems()
+		for (entry in component.entries) {
+			if (entry is ItemFilterEntry.Empty) continue
 
-		for (y in 0 until 4) {
-			val stacks = mutableListOf<ItemStack>()
-
-			for (x in 0 until 4) {
-				val ghostStack = filterStacks.getOrNull(y * 4 + x) ?: continue
-				if (ghostStack.isNotEmpty()) stacks.add(ghostStack)
-			}
-
-			if (stacks.isEmpty()) continue
-
-			val line = Component.empty()
-			for (index in stacks.indices) {
-				line.append(stacks[index].hoverName)
-				if (index < stacks.lastIndex) line.append(Component.literal(", "))
-			}
-
-			tooltipComponents.add(line)
+			val displayStack = entry.getDisplayStack(context.registries() ?: continue)
+			tooltipComponents.add(ModMenuLang.FILTER_LIST_POINT.toGrayComponent(displayStack.hoverName))
 		}
 	}
 
@@ -80,27 +72,8 @@ class ItemFilterItem(properties: Properties) : FilterfeederItem(
 			return filterStack.get(ModDataComponents.ITEM_FILTER) ?: ItemFilterComponent()
 		}
 
-		fun setFlags(filterStack: ItemStack, flags: List<ItemFilterComponent.Flag>) {
-			filterStack.set(ModDataComponents.ITEM_FILTER, getFilterComponent(filterStack).withFlags(flags))
-		}
-
-		fun setStack(filterStack: ItemStack, slot: Int, stackToPlace: ItemStack): Boolean {
-			if (slot !in 0 until ItemFilterComponent.CONTAINER_SIZE) return false
-
-			filterStack.set(
-				ModDataComponents.ITEM_FILTER,
-				getFilterComponent(filterStack).withSetItem(slot, stackToPlace)
-			)
-
-			return true
-		}
-
-		fun getFilterItems(filterStack: ItemStack): NonNullList<ItemStack> {
-			return getFilterComponent(filterStack).getItems()
-		}
-
 		fun passesFilter(filterStack: ItemStack, checkedStack: ItemStack): Boolean {
-			return getFilterComponent(filterStack).passesFilter(checkedStack)
+			return getFilterComponent(filterStack).test(checkedStack)
 		}
 	}
 }

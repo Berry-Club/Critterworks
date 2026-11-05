@@ -1,12 +1,15 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
+import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.item.component.FluidFilterComponent
+import dev.aaronhowser.mods.critterworks.item.component.FluidFilterEntry
 import dev.aaronhowser.mods.critterworks.menu.fluid_filter.FluidFilterMenu
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.ChatFormatting
-import net.minecraft.core.NonNullList
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -51,38 +54,28 @@ class FluidFilterItem(properties: Properties) : FilterfeederItem(
 	) {
 		val filterComponent = getFilterComponent(stack)
 
-		for (flag in filterComponent.flags) {
-			val component = flag.getMessage(true).withStyle(ChatFormatting.BLUE)
-			tooltipComponents.add(component)
+		if (filterComponent.isBlacklist) {
+			tooltipComponents.add(
+				ModMenuLang.BLACKLIST
+					.toComponent()
+					.withStyle(ChatFormatting.RED, ChatFormatting.UNDERLINE)
+			)
 		}
 
-		val filterStacks = filterComponent.getItems()
+		for (entry in filterComponent.entries) {
+			if (entry is FluidFilterEntry.Empty) continue
 
-		for (y in 0 until 4) {
-			val stacks = mutableListOf<FluidStack>()
-
-			for (x in 0 until 4) {
-				val slot = y * 4 + x
-				val ghostStack = filterStacks.getOrNull(slot) ?: continue
-				val fluidStack = FluidUtil.getFluidContained(ghostStack).orElse(FluidStack.EMPTY)
-
-				if (!fluidStack.isEmpty) {
-					stacks.add(fluidStack)
+			val name = when (entry) {
+				is FluidFilterEntry.SpecificFluid -> {
+					FluidUtil.getFluidContained(entry.containerStack)
+						.orElse(FluidStack.EMPTY)
+						.hoverName
 				}
+				is FluidFilterEntry.Tag -> Component.literal("#${entry.tagKey.location()}")
+				FluidFilterEntry.Empty -> continue
 			}
 
-			if (stacks.isEmpty()) continue
-
-			val component = Component.empty()
-			for ((index, fluidStack) in stacks.withIndex()) {
-				component.append(fluidStack.hoverName)
-
-				if (index < stacks.size - 1) {
-					component.append(Component.literal(", "))
-				}
-			}
-
-			tooltipComponents.add(component)
+			tooltipComponents.add(ModMenuLang.FILTER_LIST_POINT.toGrayComponent(name))
 		}
 	}
 
@@ -91,31 +84,9 @@ class FluidFilterItem(properties: Properties) : FilterfeederItem(
 			return filterStack.get(ModDataComponents.FLUID_FILTER) ?: FluidFilterComponent()
 		}
 
-		fun setFlags(filterStack: ItemStack, flags: List<FluidFilterComponent.Flag>) {
-			val currentComponent = getFilterComponent(filterStack)
-			val newComponent = currentComponent.withFlags(flags)
-			filterStack.set(ModDataComponents.FLUID_FILTER, newComponent)
-		}
-
-		fun setStack(filterStack: ItemStack, slot: Int, stackToPlace: ItemStack): Boolean {
-			if (slot !in 0 until FluidFilterComponent.CONTAINER_SIZE) return false
-
-			val currentComponent = getFilterComponent(filterStack)
-			val newComponent = currentComponent.withSetItem(slot, stackToPlace)
-
-			filterStack.set(ModDataComponents.FLUID_FILTER, newComponent)
-			return true
-		}
-
-		fun getFilterItems(filterStack: ItemStack): NonNullList<ItemStack> {
-			val component = getFilterComponent(filterStack)
-
-			return component.getItems()
-		}
-
 		fun passesFilter(filterStack: ItemStack, checkedStack: FluidStack): Boolean {
 			val component = getFilterComponent(filterStack)
-			return component.passesFilter(checkedStack)
+			return component.test(checkedStack)
 		}
 	}
 }

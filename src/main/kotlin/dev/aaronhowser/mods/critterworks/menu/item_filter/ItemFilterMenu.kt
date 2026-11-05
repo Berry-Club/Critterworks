@@ -5,15 +5,16 @@ import dev.aaronhowser.mods.aaron.menu.MenuWithButtons
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.item.ItemFilterItem
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
+import dev.aaronhowser.mods.critterworks.item.component.ItemFilterEntry
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import dev.aaronhowser.mods.critterworks.registry.ModMenuTypes
+import net.minecraft.core.NonNullList
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.neoforged.neoforge.items.ItemStackHandler
-import net.neoforged.neoforge.items.SlotItemHandler
 
 class ItemFilterMenu(
 	containerId: Int,
@@ -27,77 +28,87 @@ class ItemFilterMenu(
 		data: RegistryFriendlyByteBuf
 	) : this(containerId, playerInventory, data.readEnum(InteractionHand::class.java))
 
-	private val filterItems = object : ItemStackHandler(ItemFilterComponent.CONTAINER_SIZE) {
-		override fun onContentsChanged(slot: Int) {
-			val stackThere = getStackInSlot(slot)
-			val filterStack = getFilterStack()
-			ItemFilterItem.setStack(filterStack, slot, stackThere)
-		}
-	}
-
 	init {
-		val filterStack = getFilterStack()
-		val container = ItemFilterItem.getFilterItems(filterStack)
-		for ((index, ghostStack) in container.withIndex()) {
-			filterItems.setStackInSlot(index, ghostStack)
-		}
-
-		addSlots(159)
+		addSlots(59)
 	}
 
 	private fun getFilterStack(): ItemStack = playerInventory.player.getItemInHand(hand)
+	private fun getFilterComponent(): ItemFilterComponent = ItemFilterItem.getFilterComponent(getFilterStack())
 
-	private fun getFlagComponent(): ItemFilterComponent = ItemFilterItem.getFilterComponent(getFilterStack())
-
-	fun isInverted(): Boolean = getFlagComponent().isInverted
-	fun useTags(): Boolean = getFlagComponent().useTags
-	fun ignoreDamage(): Boolean = getFlagComponent().ignoreDamage
-	fun ignoreAllComponents(): Boolean = getFlagComponent().ignoreAllComponents
+	fun getEntries(): NonNullList<ItemFilterEntry> = getFilterComponent().entries
+	fun isBlacklist(): Boolean = getFilterComponent().isBlacklist
 
 	override fun addContainerSlots() {
-		for (index in 0 until ItemFilterComponent.CONTAINER_SIZE) {
-			val x = 53 + (index % 4) * 18
-			val y = 29 + (index / 4) * 18
+		val registries = playerInventory.player.registryAccess()
 
-			val slot = object : SlotItemHandler(filterItems, index, x, y) {
-				override fun mayPlace(stack: ItemStack): Boolean = true
-				override fun mayPickup(player: Player): Boolean = true
-				override fun getMaxStackSize(): Int = 1
-				override fun getMaxStackSize(stack: ItemStack): Int = 1
-			}
+		for (index in 0 until ItemFilterComponent.CONTAINER_SIZE) {
+			val slot = ItemFilterSlot(::getFilterStack, registries, index, 8 + index * 18, 26)
 			addSlot(slot)
 		}
 	}
+
+	override fun quickMoveStack(player: Player, clickedSlotIndex: Int): ItemStack = ItemStack.EMPTY
 
 	override fun isValidHeldItem(heldItem: ItemStack): Boolean {
 		return heldItem.isItem(ModItems.ITEM_FILTERFEEDER)
 	}
 
 	override fun handleButtonPressed(buttonId: Int, isShiftDown: Boolean) {
-		val filterStack = getFilterStack()
+		when (buttonId) {
+			TOGGLE_BLACKLIST_BUTTON_ID -> setBlacklist(!isBlacklist())
+			in 1..9 -> toggleEntryType(buttonId - 1)
+			in 10..18 -> cycleEntryOption(buttonId - 10)
+		}
+	}
 
-		val toggledFlag = when (buttonId) {
-			TOGGLE_INVERTED_BUTTON_ID -> ItemFilterComponent.Flag.INVERTED
-			TOGGLE_USE_TAGS_BUTTON_ID -> ItemFilterComponent.Flag.USE_TAGS
-			TOGGLE_IGNORE_DAMAGE_BUTTON_ID -> ItemFilterComponent.Flag.IGNORE_DAMAGE
-			TOGGLE_IGNORE_ALL_COMPONENTS_BUTTON_ID -> ItemFilterComponent.Flag.IGNORE_ALL_COMPONENTS
-			else -> return
+	private fun setBlacklist(value: Boolean) {
+		val component = getFilterComponent()
+		if (value == component.isBlacklist) return
+
+		getFilterStack().set(ModDataComponents.ITEM_FILTER, component.copy(isBlacklist = value))
+	}
+
+	private fun toggleEntryType(slotIndex: Int) {
+		val entries = getEntries()
+		val entry = entries.getOrNull(slotIndex) ?: return
+		val newEntry = when (entry) {
+			is ItemFilterEntry.Tag -> entry.asSpecificItem()
+			is ItemFilterEntry.SpecificItem -> {
+				val tag = entry.stack.tags.findFirst().orElse(null) ?: return
+				ItemFilterEntry.Tag(tag, entry.stack.copy())
+			}
+			ItemFilterEntry.Empty -> return
 		}
 
-		val flags = getFlagComponent().flags.toMutableList()
-		if (toggledFlag in flags) {
-			flags.remove(toggledFlag)
-		} else {
-			flags.add(toggledFlag)
+		setEntry(slotIndex, newEntry)
+	}
+
+	private fun cycleEntryOption(slotIndex: Int) {
+		val entry = getEntries().getOrNull(slotIndex) ?: return
+		val newEntry = when (entry) {
+			is ItemFilterEntry.Tag -> entry.copy(tagKey = entry.getNextTag())
+			is ItemFilterEntry.SpecificItem -> entry.withNextComponentMatch()
+			ItemFilterEntry.Empty -> return
 		}
 
-		ItemFilterItem.setFlags(filterStack, flags)
+		setEntry(slotIndex, newEntry)
+	}
+
+	private fun setEntry(slotIndex: Int, entry: ItemFilterEntry) {
+		val component = getFilterComponent()
+		val entries = component.entries.toMutableList()
+		entries[slotIndex] = entry
+
+		getFilterStack().set(
+			ModDataComponents.ITEM_FILTER,
+			ItemFilterComponent(entries, component.isBlacklist)
+		)
 	}
 
 	companion object {
-		const val TOGGLE_INVERTED_BUTTON_ID = 0
-		const val TOGGLE_USE_TAGS_BUTTON_ID = 1
-		const val TOGGLE_IGNORE_DAMAGE_BUTTON_ID = 2
-		const val TOGGLE_IGNORE_ALL_COMPONENTS_BUTTON_ID = 3
+		const val TOGGLE_BLACKLIST_BUTTON_ID = 0
+
+		fun getTypeButtonId(slotIndex: Int): Int = slotIndex + 1
+		fun getOptionButtonId(slotIndex: Int): Int = slotIndex + 10
 	}
 }

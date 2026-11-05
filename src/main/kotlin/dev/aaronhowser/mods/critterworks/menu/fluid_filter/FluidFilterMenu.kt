@@ -5,16 +5,18 @@ import dev.aaronhowser.mods.aaron.menu.MenuWithButtons
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.item.FluidFilterItem
 import dev.aaronhowser.mods.critterworks.item.component.FluidFilterComponent
+import dev.aaronhowser.mods.critterworks.item.component.FluidFilterEntry
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import dev.aaronhowser.mods.critterworks.registry.ModMenuTypes
+import net.minecraft.core.NonNullList
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.FluidUtil
-import net.neoforged.neoforge.items.ItemStackHandler
-import net.neoforged.neoforge.items.SlotItemHandler
 
 class FluidFilterMenu(
 	containerId: Int,
@@ -28,77 +30,89 @@ class FluidFilterMenu(
 		data: RegistryFriendlyByteBuf
 	) : this(containerId, playerInventory, data.readEnum(InteractionHand::class.java))
 
-	private val filterItems =
-		object : ItemStackHandler(FluidFilterComponent.CONTAINER_SIZE) {
-			override fun onContentsChanged(slot: Int) {
-				val stackThere = getStackInSlot(slot)
-				val filterStack = getFilterStack()
-				FluidFilterItem.setStack(filterStack, slot, stackThere)
-			}
-		}
-
 	init {
-		val filterStack = getFilterStack()
-		val container = FluidFilterItem.getFilterItems(filterStack)
-		for ((index, ghostStack) in container.withIndex()) {
-			filterItems.setStackInSlot(index, ghostStack)
-		}
-
-		addSlots(159)
+		addSlots(59)
 	}
 
 	private fun getFilterStack(): ItemStack = playerInventory.player.getItemInHand(hand)
+	private fun getFilterComponent(): FluidFilterComponent = FluidFilterItem.getFilterComponent(getFilterStack())
 
-	private fun getFlagComponent(): FluidFilterComponent = FluidFilterItem.getFilterComponent(getFilterStack())
-
-	fun isInverted(): Boolean = getFlagComponent().isInverted
-	fun useTags(): Boolean = getFlagComponent().useTags
-	fun ignoreAllComponents(): Boolean = getFlagComponent().ignoreAllComponents
+	fun getEntries(): NonNullList<FluidFilterEntry> = getFilterComponent().entries
+	fun isBlacklist(): Boolean = getFilterComponent().isBlacklist
 
 	override fun addContainerSlots() {
+		val registries = playerInventory.player.registryAccess()
+
 		for (index in 0 until FluidFilterComponent.CONTAINER_SIZE) {
-			val x = 53 + (index % 4) * 18
-			val y = 29 + (index / 4) * 18
-
-			val slot = object : SlotItemHandler(filterItems, index, x, y) {
-				override fun mayPlace(stack: ItemStack): Boolean = FluidUtil.getFluidContained(stack).isPresent
-				override fun mayPickup(player: Player): Boolean = true
-				override fun getMaxStackSize(): Int = 1
-				override fun getMaxStackSize(stack: ItemStack): Int = 1
-			}
-
+			val slot = FluidFilterSlot(::getFilterStack, registries, index, 8 + index * 18, 26)
 			addSlot(slot)
 		}
 	}
+
+	override fun quickMoveStack(player: Player, clickedSlotIndex: Int): ItemStack = ItemStack.EMPTY
 
 	override fun isValidHeldItem(heldItem: ItemStack): Boolean {
 		return heldItem.isItem(ModItems.FLUID_FILTERFEEDER)
 	}
 
 	override fun handleButtonPressed(buttonId: Int, isShiftDown: Boolean) {
-		val filterStack = getFilterStack()
+		when (buttonId) {
+			TOGGLE_BLACKLIST_BUTTON_ID -> setBlacklist(!isBlacklist())
+			in 1..9 -> toggleEntryType(buttonId - 1)
+			in 10..18 -> cycleEntryOption(buttonId - 10)
+		}
+	}
 
-		val toggledFlag = when (buttonId) {
-			TOGGLE_INVERTED_BUTTON_ID -> FluidFilterComponent.Flag.INVERTED
-			TOGGLE_USE_TAGS_BUTTON_ID -> FluidFilterComponent.Flag.USE_TAGS
-			TOGGLE_IGNORE_ALL_COMPONENTS_BUTTON_ID -> FluidFilterComponent.Flag.IGNORE_ALL_COMPONENTS
-			else -> return
+	private fun setBlacklist(value: Boolean) {
+		val component = getFilterComponent()
+		if (value == component.isBlacklist) return
+
+		getFilterStack().set(ModDataComponents.FLUID_FILTER, component.copy(isBlacklist = value))
+	}
+
+	private fun toggleEntryType(slotIndex: Int) {
+		val entry = getEntries().getOrNull(slotIndex) ?: return
+		val newEntry = when (entry) {
+			is FluidFilterEntry.Tag -> entry.asSpecificFluid()
+			is FluidFilterEntry.SpecificFluid -> {
+				val fluidStack = FluidUtil.getFluidContained(entry.containerStack).orElse(FluidStack.EMPTY)
+				val tag = fluidStack.tags.findFirst().orElse(null) ?: return
+				FluidFilterEntry.Tag(tag, entry.containerStack.copy())
+			}
+			FluidFilterEntry.Empty -> return
 		}
 
-		val flags = getFlagComponent().flags.toMutableList()
+		setEntry(slotIndex, newEntry)
+	}
 
-		if (toggledFlag in flags) {
-			flags.remove(toggledFlag)
-		} else {
-			flags.add(toggledFlag)
+	private fun cycleEntryOption(slotIndex: Int) {
+		val entry = getEntries().getOrNull(slotIndex) ?: return
+		val newEntry = when (entry) {
+			is FluidFilterEntry.Tag -> entry.copy(tagKey = entry.getNextTag())
+			is FluidFilterEntry.SpecificFluid -> {
+				entry.copy(requireSameComponents = !entry.requireSameComponents)
+			}
+			FluidFilterEntry.Empty -> return
 		}
 
-		FluidFilterItem.setFlags(filterStack, flags)
+		setEntry(slotIndex, newEntry)
+	}
+
+	private fun setEntry(slotIndex: Int, entry: FluidFilterEntry) {
+		val component = getFilterComponent()
+		val entries = component.entries.toMutableList()
+		entries[slotIndex] = entry
+
+		getFilterStack().set(
+			ModDataComponents.FLUID_FILTER,
+			FluidFilterComponent(entries, component.isBlacklist)
+		)
 	}
 
 	companion object {
-		const val TOGGLE_INVERTED_BUTTON_ID = 0
-		const val TOGGLE_USE_TAGS_BUTTON_ID = 1
-		const val TOGGLE_IGNORE_ALL_COMPONENTS_BUTTON_ID = 2
+		const val TOGGLE_BLACKLIST_BUTTON_ID = 0
+
+		fun getTypeButtonId(slotIndex: Int): Int = slotIndex + 1
+		fun getOptionButtonId(slotIndex: Int): Int = slotIndex + 10
 	}
 }

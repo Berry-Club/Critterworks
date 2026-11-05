@@ -5,14 +5,16 @@ object ModMenuLang {
 	const val CONTAINER_EMPTY = "tooltip.critterworks.container.empty"
 	const val CONTAINER_STACK = "tooltip.critterworks.container.stack"
 	const val CONTAINER_STACKS = "tooltip.critterworks.container.stacks"
-	const val INVERTED_ON = "tooltip.critterworks.item_filter.inverted_on"
-	const val INVERTED_OFF = "tooltip.critterworks.item_filter.inverted_off"
-	const val USE_TAGS_ON = "tooltip.critterworks.item_filter.use_tags_on"
-	const val USE_TAGS_OFF = "tooltip.critterworks.item_filter.use_tags_off"
-	const val IGNORE_DAMAGE_ON = "tooltip.critterworks.item_filter.ignore_damage_on"
-	const val IGNORE_DAMAGE_OFF = "tooltip.critterworks.item_filter.ignore_damage_off"
-	const val IGNORE_ALL_COMPONENTS_ON = "tooltip.critterworks.item_filter.ignore_all_components_on"
-	const val IGNORE_ALL_COMPONENTS_OFF = "tooltip.critterworks.item_filter.ignore_all_components_off"
+	const val WHITELIST = "tooltip.critterworks.filter.whitelist"
+	const val BLACKLIST = "tooltip.critterworks.filter.blacklist"
+	const val FILTER_ITEM = "tooltip.critterworks.filter.item"
+	const val FILTER_ITEM_TAG = "tooltip.critterworks.filter.item_tag"
+	const val FILTER_FLUID = "tooltip.critterworks.filter.fluid"
+	const val FILTER_FLUID_TAG = "tooltip.critterworks.filter.fluid_tag"
+	const val FILTER_IGNORE_COMPONENTS = "tooltip.critterworks.filter.ignore_components"
+	const val FILTER_IGNORE_DAMAGE = "tooltip.critterworks.filter.ignore_damage"
+	const val FILTER_REQUIRE_COMPONENTS = "tooltip.critterworks.filter.require_components"
+	const val FILTER_LIST_POINT = "tooltip.critterworks.filter.list_point"
 	const val WEB_PORT_COLOR = "menu.critterworks.web_port.color"
 	const val WEB_PORT_INPUT = "menu.critterworks.web_port.input"
 	const val WEB_PORT_OUTPUT = "menu.critterworks.web_port.output"
@@ -42,14 +44,16 @@ object ModMenuLang {
 		add(CONTAINER_EMPTY, "Empty")
 		add(CONTAINER_STACK, "Contains %s stack")
 		add(CONTAINER_STACKS, "Contains %s stacks")
-		add(INVERTED_ON, "Inverted: ON")
-		add(INVERTED_OFF, "Inverted: OFF")
-		add(USE_TAGS_ON, "Use Tags: ON")
-		add(USE_TAGS_OFF, "Use Tags: OFF")
-		add(IGNORE_DAMAGE_ON, "Ignore Damage: ON")
-		add(IGNORE_DAMAGE_OFF, "Ignore Damage: OFF")
-		add(IGNORE_ALL_COMPONENTS_ON, "Ignore All Components: ON")
-		add(IGNORE_ALL_COMPONENTS_OFF, "Ignore All Components: OFF")
+		add(WHITELIST, "Whitelist")
+		add(BLACKLIST, "Blacklist")
+		add(FILTER_ITEM, "Specific Item")
+		add(FILTER_ITEM_TAG, "Item Tag")
+		add(FILTER_FLUID, "Specific Fluid")
+		add(FILTER_FLUID_TAG, "Fluid Tag")
+		add(FILTER_IGNORE_COMPONENTS, "Ignore Components")
+		add(FILTER_IGNORE_DAMAGE, "Ignore Damage")
+		add(FILTER_REQUIRE_COMPONENTS, "Require Matching Components")
+		add(FILTER_LIST_POINT, "• %s")
 		add(WEB_PORT_COLOR, "Color: %s")
 		add(WEB_PORT_INPUT, "Input")
 		add(WEB_PORT_OUTPUT, "Output")
