@@ -34,6 +34,8 @@ object ModDataComponents : AaronDataComponentRegistry() {
 		double("web_fluid")
 	val HOPPING_SPIDER_ANIMATION: DeferredHolder<DataComponentType<*>, DataComponentType<HoppingSpiderAnimation>> =
 		register("hopping_spider_animation", HoppingSpiderAnimation.CODEC, HoppingSpiderAnimation.STREAM_CODEC)
+	val PARRY_PLATYPUS_USE_TICKS: DeferredHolder<DataComponentType<*>, DataComponentType<Int>> =
+		int("parry_platypus_use_ticks")
 	val HELD_SPARKPOLLEN: DeferredHolder<DataComponentType<*>, DataComponentType<Int>> =
 		int("held_sparkpollen")
 	val SPARKBUG_BUSH: DeferredHolder<DataComponentType<*>, DataComponentType<Long>> =

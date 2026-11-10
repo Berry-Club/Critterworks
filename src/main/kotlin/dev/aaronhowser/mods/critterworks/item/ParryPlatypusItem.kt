@@ -1,19 +1,22 @@
 package dev.aaronhowser.mods.critterworks.item
 
-import dev.aaronhowser.mods.aaron.client.AaronClientUtil
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.client.item.parry_platypus.ParryPlatypusItemRenderer
+import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ShieldItem
+import net.minecraft.world.level.Level
 import software.bernie.geckolib.animatable.GeoItem
 import software.bernie.geckolib.animatable.client.GeoRenderProvider
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.PlayState
-import software.bernie.geckolib.animation.RawAnimation
+import software.bernie.geckolib.animation.*
 import software.bernie.geckolib.constant.DataTickets
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.function.Consumer
@@ -46,33 +49,73 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 
 	private fun playHeldAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
 		val displayContext = animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)
-		if (!isHandDisplayContext(displayContext)) return PlayState.STOP
 
-		return animationState.setAndContinue(HELD_ANIMATION)
-	}
+		val isHeldInHand = when (displayContext) {
+			ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
+			ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
+			ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+			ItemDisplayContext.THIRD_PERSON_RIGHT_HAND -> true
 
-	private fun isHandDisplayContext(displayContext: ItemDisplayContext?): Boolean {
-		return displayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
-			|| displayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
-			|| displayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
-			|| displayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
+			else -> false
+		}
+
+		return if (isHeldInHand)
+			animationState.setAndContinue(HELD_ANIMATION)
+		else
+			PlayState.STOP
 	}
 
 	private fun playBlockAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
 		val stack = animationState.getData(DataTickets.ITEMSTACK) ?: return PlayState.STOP
-		if (!isBeingUsed(stack)) return PlayState.STOP
+		if (stack.platypusUseTicks == 0) return PlayState.STOP
 
 		return animationState.setAndContinue(BLOCK_ANIMATION)
 	}
 
-	private fun isBeingUsed(stack: ItemStack): Boolean {
-		val localPlayer = AaronClientUtil.localPlayer ?: return false
-
-		for (player in localPlayer.level().players()) {
-			if (player.isUsingItem && player.useItem === stack) return true
+	override fun use(
+		level: Level,
+		player: Player,
+		hand: InteractionHand
+	): InteractionResultHolder<ItemStack> {
+		val stack = player.getItemInHand(hand)
+		if (stack.isItem(this)) {
+			stack.platypusUseTicks = 0
 		}
 
-		return false
+		return super.use(level, player, hand)
+	}
+
+	override fun onUseTick(
+		level: Level,
+		livingEntity: LivingEntity,
+		stack: ItemStack,
+		remainingUseDuration: Int
+	) {
+		super.onUseTick(level, livingEntity, stack, remainingUseDuration)
+		stack.platypusUseTicks++
+	}
+
+	override fun inventoryTick(
+		stack: ItemStack,
+		level: Level,
+		entity: Entity,
+		slotId: Int,
+		isSelected: Boolean
+	) {
+		super.inventoryTick(stack, level, entity, slotId, isSelected)
+
+		if (entity is LivingEntity && entity.isUsingItem && entity.useItem === stack) return
+		stack.platypusUseTicks = 0
+	}
+
+	override fun releaseUsing(
+		stack: ItemStack,
+		level: Level,
+		livingEntity: LivingEntity,
+		timeCharged: Int
+	) {
+		super.releaseUsing(stack, level, livingEntity, timeCharged)
+		stack.platypusUseTicks = 0
 	}
 
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
@@ -81,6 +124,7 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		val DEFAULT_PROPERTIES = {
 			Properties()
 				.durability(336)
+				.component(ModDataComponents.PARRY_PLATYPUS_USE_TICKS, 0)
 		}
 
 		private const val BLOCK_TRANSITION_TICKS = 3
@@ -92,5 +136,11 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		private val BLOCK_ANIMATION: RawAnimation =
 			RawAnimation.begin()
 				.thenPlayAndHold("animation.platypus.block")
+
+		private var ItemStack.platypusUseTicks: Int
+			get() = getOrDefault(ModDataComponents.PARRY_PLATYPUS_USE_TICKS, 0)
+			set(value) {
+				set(ModDataComponents.PARRY_PLATYPUS_USE_TICKS, value)
+			}
 	}
 }
