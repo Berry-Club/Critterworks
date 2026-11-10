@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.client.item.parry_platypus.ParryPlatypusItemRenderer
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
@@ -25,6 +26,8 @@ import java.util.function.Consumer
 class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoItem {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
+
+	override fun isPerspectiveAware(): Boolean = true
 
 	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
 		consumer.accept(object : GeoRenderProvider {
@@ -104,6 +107,10 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		isSelected: Boolean
 	) {
 		super.inventoryTick(stack, level, entity, slotId, isSelected)
+
+		if (level is ServerLevel) {
+			GeoItem.getOrAssignId(stack, level)
+		}
 
 		if (entity is LivingEntity && entity.isUsingItem && entity.useItem === stack) return
 		stack.platypusUseTicks = 0
