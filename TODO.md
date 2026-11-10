@@ -81,8 +81,8 @@
 		- Place them free-floating or something?
 - Names:
 	- OR = Eitherweaver
-      - OR Weaver, like Orb?
-      - Eitherweaver could be XOR instead
+		- OR Weaver, like Orb?
+		- Eitherweaver could be XOR instead
 	- Clock = Clockroach?
 
 # Farm critters?
@@ -116,7 +116,7 @@
 - Magpie item magnet
 - Homing Pigeon that you can use to send items back to your base, or request from storage?
 - Bloodhound that you give blocks and it points you towards more of it
-	-  BLOCKHOUND
+	- BLOCKHOUND
 
 # Tool/Weapon critters
 
@@ -131,8 +131,11 @@
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
 - Boxing Glove drop from Punchprawns?
 	- All critters should probably drop something
- - Mining Mole
- 	- Star-Nosed Mole, nose spins like a drill?
+- Mining Mole
+	- Star-Nosed Mole, nose spins like a drill?
+- Parry Platypus
+	- Used like a shield
+    - Blocking at the right moment reflects the damage (twicefold?)
 
 # Guidebook
 
