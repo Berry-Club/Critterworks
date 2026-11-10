@@ -52,9 +52,7 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 	}
 
 	private fun playHeldAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
-		val displayContext = animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)
-
-		val isHeldInHand = when (displayContext) {
+		val isHeldInHand = when (animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)) {
 			ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
 			ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
 			ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
@@ -73,7 +71,20 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		val stack = animationState.getData(DataTickets.ITEMSTACK) ?: return PlayState.STOP
 		if (stack.platypusUseTicks == 0) return PlayState.STOP
 
-		return animationState.setAndContinue(BLOCK_ANIMATION)
+		val isHeldInHand = when (animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)) {
+			ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
+			ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
+			ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+			ItemDisplayContext.THIRD_PERSON_RIGHT_HAND -> true
+
+			else -> false
+		}
+
+
+		return if (isHeldInHand)
+			animationState.setAndContinue(BLOCK_ANIMATION)
+		else
+			PlayState.STOP
 	}
 
 	override fun use(
