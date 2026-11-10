@@ -118,6 +118,10 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		stack.platypusUseTicks = 0
 	}
 
+	override fun shouldCauseReequipAnimation(oldStack: ItemStack, newStack: ItemStack, slotChanged: Boolean): Boolean {
+		return slotChanged || oldStack.item != newStack.item
+	}
+
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	companion object {
