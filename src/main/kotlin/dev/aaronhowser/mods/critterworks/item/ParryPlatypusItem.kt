@@ -53,46 +53,6 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		)
 	}
 
-	private fun playParryAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
-		return PlayState.STOP
-	}
-
-	private fun playHeldAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
-		val isHeldInHand = when (animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)) {
-			ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-			ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
-			ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
-			ItemDisplayContext.THIRD_PERSON_RIGHT_HAND -> true
-
-			else -> false
-		}
-
-		return if (isHeldInHand)
-			animationState.setAndContinue(HELD_ANIMATION)
-		else
-			PlayState.STOP
-	}
-
-	private fun playBlockAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
-		val stack = animationState.getData(DataTickets.ITEMSTACK) ?: return PlayState.STOP
-		if (stack.platypusUseTicks == 0) return PlayState.STOP
-
-		val isHeldInHand = when (animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)) {
-			ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-			ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
-			ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
-			ItemDisplayContext.THIRD_PERSON_RIGHT_HAND -> true
-
-			else -> false
-		}
-
-
-		return if (isHeldInHand)
-			animationState.setAndContinue(BLOCK_ANIMATION)
-		else
-			PlayState.STOP
-	}
-
 	override fun use(
 		level: Level,
 		player: Player,
@@ -197,5 +157,46 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 			set(value) {
 				set(ModDataComponents.PARRY_PLATYPUS_USE_TICKS, value)
 			}
+
+		private fun playParryAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
+			// Only exists to trigger the animation without canceling held/block concurrent animations
+			return PlayState.STOP
+		}
+
+		private fun playHeldAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
+			val isHeldInHand = when (animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)) {
+				ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
+				ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
+				ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+				ItemDisplayContext.THIRD_PERSON_RIGHT_HAND -> true
+
+				else -> false
+			}
+
+			return if (isHeldInHand)
+				animationState.setAndContinue(HELD_ANIMATION)
+			else
+				PlayState.STOP
+		}
+
+		private fun playBlockAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
+			val stack = animationState.getData(DataTickets.ITEMSTACK) ?: return PlayState.STOP
+			if (stack.platypusUseTicks == 0) return PlayState.STOP
+
+			val isHeldInHand = when (animationState.getData(DataTickets.ITEM_RENDER_PERSPECTIVE)) {
+				ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
+				ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
+				ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+				ItemDisplayContext.THIRD_PERSON_RIGHT_HAND -> true
+
+				else -> false
+			}
+
+
+			return if (isHeldInHand)
+				animationState.setAndContinue(BLOCK_ANIMATION)
+			else
+				PlayState.STOP
+		}
 	}
 }
