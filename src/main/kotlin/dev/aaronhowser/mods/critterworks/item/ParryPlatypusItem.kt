@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ShieldItem
+import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 import software.bernie.geckolib.animatable.GeoItem
 import software.bernie.geckolib.animatable.client.GeoRenderProvider
@@ -122,16 +123,20 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		return slotChanged || oldStack.item != newStack.item
 	}
 
+	override fun getUseAnimation(stack: ItemStack): UseAnim {
+		return if (stack.platypusUseTicks > 0) UseAnim.BLOCK else super.getUseAnimation(stack)
+	}
+
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	companion object {
+		private const val BLOCK_TRANSITION_TICKS = 3
+
 		val DEFAULT_PROPERTIES = {
 			Properties()
 				.durability(336)
 				.component(ModDataComponents.PARRY_PLATYPUS_USE_TICKS, 0)
 		}
-
-		private const val BLOCK_TRANSITION_TICKS = 3
 
 		private val HELD_ANIMATION: RawAnimation =
 			RawAnimation.begin()
