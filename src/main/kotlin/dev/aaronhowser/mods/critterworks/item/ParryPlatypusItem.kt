@@ -13,9 +13,10 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ShieldItem
-import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
+import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent
 import software.bernie.geckolib.animatable.GeoItem
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable
 import software.bernie.geckolib.animatable.client.GeoRenderProvider
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.animation.*
@@ -26,6 +27,10 @@ import java.util.function.Consumer
 class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoItem {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
+
+	init {
+		SingletonGeoAnimatable.registerSyncedAnimatable(this)
+	}
 
 	override fun isPerspectiveAware(): Boolean = true
 
@@ -48,7 +53,15 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 
 	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
 		controllers.add(AnimationController(this, "held", 0, ::playHeldAnimation))
-		controllers.add(AnimationController(this, "blocking", BLOCK_TRANSITION_TICKS, ::playBlockAnimation))
+		controllers.add(AnimationController(this, BLOCK_CONTROLLER, BLOCK_TRANSITION_TICKS, ::playBlockAnimation))
+		controllers.add(
+			AnimationController(this, PARRY_CONTROLLER, 0, ::playParryAnimation)
+				.triggerableAnim(PARRY_TRIGGER, PARRY_ANIMATION)
+		)
+	}
+
+	private fun playParryAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
+		return PlayState.STOP
 	}
 
 	private fun playHeldAnimation(animationState: AnimationState<ParryPlatypusItem>): PlayState {
@@ -145,6 +158,28 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 
 	companion object {
 		private const val BLOCK_TRANSITION_TICKS = 3
+		private const val BLOCK_CONTROLLER = "blocking"
+		private const val PARRY_CONTROLLER = "parry"
+		private const val PARRY_TRIGGER = "parry"
+
+		fun handleShieldBlock(event: LivingShieldBlockEvent) {
+			if (!event.blocked) return
+
+			val livingEntity = event.entity
+			val level = livingEntity.level()
+			if (level !is ServerLevel) return
+
+			val stack = livingEntity.useItem
+			val item = stack.item
+			if (item !is ParryPlatypusItem) return
+
+			item.triggerAnim<Any>(
+				livingEntity,
+				GeoItem.getOrAssignId(stack, level),
+				PARRY_CONTROLLER,
+				PARRY_TRIGGER
+			)
+		}
 
 		val DEFAULT_PROPERTIES = {
 			Properties()
@@ -159,6 +194,10 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		private val BLOCK_ANIMATION: RawAnimation =
 			RawAnimation.begin()
 				.thenPlayAndHold("animation.platypus.block")
+
+		private val PARRY_ANIMATION: RawAnimation =
+			RawAnimation.begin()
+				.thenPlay("animation.platypus.parry")
 
 		private var ItemStack.platypusUseTicks: Int
 			get() = getOrDefault(ModDataComponents.PARRY_PLATYPUS_USE_TICKS, 0)

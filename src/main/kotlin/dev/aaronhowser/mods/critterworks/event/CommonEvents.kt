@@ -13,6 +13,7 @@ import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
 import dev.aaronhowser.mods.critterworks.handler.web.item.ItemWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
+import dev.aaronhowser.mods.critterworks.item.ParryPlatypusItem
 import dev.aaronhowser.mods.critterworks.item.SnailShieldItem
 import dev.aaronhowser.mods.critterworks.packet.ModPacketHandler
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -38,6 +39,7 @@ import net.neoforged.neoforge.event.entity.item.ItemExpireEvent
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
+import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ChunkWatchEvent
@@ -200,6 +202,11 @@ object CommonEvents {
 	fun onIncomingDamage(event: LivingIncomingDamageEvent) {
 		SnailShieldItem.handleIncomingDamage(event)
 		PunchprawnEntity.handleIncomingDamage(event)
+	}
+
+	@SubscribeEvent
+	fun onShieldBlock(event: LivingShieldBlockEvent) {
+		ParryPlatypusItem.handleShieldBlock(event)
 	}
 
 	@SubscribeEvent
