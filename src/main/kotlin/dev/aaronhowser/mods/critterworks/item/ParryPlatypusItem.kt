@@ -123,10 +123,6 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		return slotChanged || oldStack.item != newStack.item
 	}
 
-	override fun getUseAnimation(stack: ItemStack): UseAnim {
-		return if (stack.platypusUseTicks > 0) UseAnim.BLOCK else super.getUseAnimation(stack)
-	}
-
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	companion object {
