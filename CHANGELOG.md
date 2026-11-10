@@ -2,6 +2,8 @@
 
 ### Added
 
+- Parry Platypus
+	- Can be used like a shield
 - Webstone Weaver
 	- Can be used to place lines of Webstone across blocks
 		- Act like Hopping Spider web lines
