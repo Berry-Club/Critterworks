@@ -35,17 +35,10 @@ class HoppingSpiderItem(properties: Properties) : Item(properties), GeoItem, Equ
 
 	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
 		consumer.accept(object : GeoRenderProvider {
-			private var renderer: HoppingSpiderItemRenderer? = null
+			private val renderer by lazy { HoppingSpiderItemRenderer() }
 
 			override fun getGeoItemRenderer(): BlockEntityWithoutLevelRenderer {
-				var currentRenderer = renderer
-
-				if (currentRenderer == null) {
-					currentRenderer = HoppingSpiderItemRenderer()
-					renderer = currentRenderer
-				}
-
-				return currentRenderer
+				return renderer
 			}
 		})
 	}

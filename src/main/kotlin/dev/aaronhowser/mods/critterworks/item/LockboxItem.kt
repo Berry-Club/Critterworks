@@ -26,17 +26,10 @@ class LockboxItem(
 
 	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
 		consumer.accept(object : GeoRenderProvider {
-			private var renderer: LockboxItemRenderer? = null
+			private val renderer by lazy { LockboxItemRenderer() }
 
 			override fun getGeoItemRenderer(): BlockEntityWithoutLevelRenderer {
-				var currentRenderer = renderer
-
-				if (currentRenderer == null) {
-					currentRenderer = LockboxItemRenderer()
-					renderer = currentRenderer
-				}
-
-				return currentRenderer
+				return renderer
 			}
 		})
 	}

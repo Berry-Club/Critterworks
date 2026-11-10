@@ -44,17 +44,10 @@ abstract class FilterfeederItem(
 
 	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
 		consumer.accept(object : GeoRenderProvider {
-			private var renderer: FilterfeederItemRenderer? = null
+			private val renderer by lazy { FilterfeederItemRenderer() }
 
 			override fun getGeoItemRenderer(): BlockEntityWithoutLevelRenderer {
-				var currentRenderer = renderer
-
-				if (currentRenderer == null) {
-					currentRenderer = FilterfeederItemRenderer()
-					renderer = currentRenderer
-				}
-
-				return currentRenderer
+				return renderer
 			}
 		})
 	}

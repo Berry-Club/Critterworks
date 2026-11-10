@@ -36,17 +36,10 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 
 	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
 		consumer.accept(object : GeoRenderProvider {
-			private var renderer: ParryPlatypusItemRenderer? = null
+			private val renderer by lazy { ParryPlatypusItemRenderer() }
 
 			override fun getGeoItemRenderer(): BlockEntityWithoutLevelRenderer {
-				var currentRenderer = renderer
-
-				if (currentRenderer == null) {
-					currentRenderer = ParryPlatypusItemRenderer()
-					renderer = currentRenderer
-				}
-
-				return currentRenderer
+				return renderer
 			}
 		})
 	}

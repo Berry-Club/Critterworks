@@ -49,17 +49,10 @@ class SnailShieldItem(properties: Properties) : Item(properties), GeoItem {
 
 	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
 		consumer.accept(object : GeoRenderProvider {
-			private var renderer: SnailShieldItemRenderer? = null
+			private val renderer by lazy { SnailShieldItemRenderer() }
 
 			override fun getGeoItemRenderer(): BlockEntityWithoutLevelRenderer {
-				var currentRenderer = renderer
-
-				if (currentRenderer == null) {
-					currentRenderer = SnailShieldItemRenderer()
-					renderer = currentRenderer
-				}
-
-				return currentRenderer
+				return renderer
 			}
 		})
 	}
