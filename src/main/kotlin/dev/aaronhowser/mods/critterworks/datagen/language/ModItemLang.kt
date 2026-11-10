@@ -28,6 +28,7 @@ object ModItemLang {
 			addItem(ModItems.SPARKPOLLEN_POUCH, "Sparkpollen Pouch")
 			addItem(ModItems.TARDIGRADE, "Tardigrade")
 			addItem(ModItems.SNAIL_SHIELD, "Snail Shield")
+			addItem(ModItems.PARRY_PLATYPUS, "Parry Platypus")
 			addItem(ModItems.SNAIL_SHELL_FRAGMENT, "Snail Shell Fragment")
 			addItem(ModItems.SNAIL_SLIME, "Snail Slime")
 			addItem(ModItems.PEARL, "Pearl")
@@ -35,6 +36,7 @@ object ModItemLang {
 			addItem(ModItems.ITEM_FILTERFEEDER_SPAWN_EGG, "Item Filterfeeder Spawn Egg")
 			addItem(ModItems.FLUID_FILTERFEEDER_SPAWN_EGG, "Fluid Filterfeeder Spawn Egg")
 			addItem(ModItems.PUNCHPRAWN_SPAWN_EGG, "Punchprawn Spawn Egg")
+			addItem(ModItems.PARRY_PLATYPUS_SPAWN_EGG, "Parry Platypus Spawn Egg")
 			addItem(ModItems.SPROUTSNAIL_SPAWN_EGG, "Sproutsnail Spawn Egg")
 		}
 	}

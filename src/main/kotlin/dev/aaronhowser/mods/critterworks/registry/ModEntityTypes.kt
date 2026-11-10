@@ -2,6 +2,7 @@ package dev.aaronhowser.mods.critterworks.registry
 
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
+import dev.aaronhowser.mods.critterworks.entity.parry_platypus.ParryPlatypusEntity
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormPartEntity
@@ -47,6 +48,13 @@ object ModEntityTypes {
 			"punchprawn",
 			EntityType.Builder.of(::PunchprawnEntity, MobCategory.WATER_CREATURE)
 				.sized(PunchprawnEntity.WIDTH, PunchprawnEntity.HEIGHT)
+		)
+
+	val PARRY_PLATYPUS: DeferredHolder<EntityType<*>, EntityType<ParryPlatypusEntity>> =
+		register(
+			"parry_platypus",
+			EntityType.Builder.of(::ParryPlatypusEntity, MobCategory.CREATURE)
+				.sized(ParryPlatypusEntity.WIDTH, ParryPlatypusEntity.HEIGHT)
 		)
 
 	val SPROUTSNAIL: DeferredHolder<EntityType<*>, EntityType<SproutsnailEntity>> =

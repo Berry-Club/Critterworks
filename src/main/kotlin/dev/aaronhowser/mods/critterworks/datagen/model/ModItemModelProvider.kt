@@ -24,6 +24,7 @@ class ModItemModelProvider(
 		hoppingSpider()
 		lockbox()
 		snailShield()
+		parryPlatypus()
 		webstoneWeaver()
 		directionalArachnode()
 		invertingArachnode()
@@ -32,6 +33,7 @@ class ModItemModelProvider(
 		spawnEggItem(ModItems.ITEM_FILTERFEEDER_SPAWN_EGG.get())
 		spawnEggItem(ModItems.FLUID_FILTERFEEDER_SPAWN_EGG.get())
 		spawnEggItem(ModItems.PUNCHPRAWN_SPAWN_EGG.get())
+		spawnEggItem(ModItems.PARRY_PLATYPUS_SPAWN_EGG.get())
 		spawnEggItem(ModItems.SPROUTSNAIL_SPAWN_EGG.get())
 	}
 
@@ -172,6 +174,51 @@ class ModItemModelProvider(
 		basicItem(ModItems.PEARL.get())
 		basicItem(ModItems.SNAIL_SLIME.get())
 		basicItem(ModItems.SNAIL_SHELL_FRAGMENT.get())
+	}
+
+	private fun parryPlatypus() {
+		val parryPlatypusModel = getBuilder("parry_platypus")
+			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
+			.texture("particle", modLoc("entity/parry_platypus"))
+
+		parryPlatypusModel.transforms {
+			transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+				rotation(75f, 45f, 0f)
+					.translation(0f, 2.5f, 0f)
+					.scale(0.5f)
+			}
+
+			transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+				rotation(75f, 225f, 0f)
+					.translation(0f, 2.5f, 0f)
+					.scale(0.5f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
+				rotation(0f, 45f, 0f)
+					.scale(0.55f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
+				rotation(0f, 225f, 0f)
+					.scale(0.55f)
+			}
+
+			transform(ItemDisplayContext.GROUND) {
+				translation(0f, 2f, 0f)
+					.scale(0.4f)
+			}
+
+			transform(ItemDisplayContext.GUI) {
+				rotation(30f, 225f, 0f)
+					.translation(0f, -2f, 0f)
+					.scale(0.75f)
+			}
+
+			transform(ItemDisplayContext.FIXED) {
+				scale(0.6f)
+			}
+		}
 	}
 
 	private fun webstoneWeaver() {

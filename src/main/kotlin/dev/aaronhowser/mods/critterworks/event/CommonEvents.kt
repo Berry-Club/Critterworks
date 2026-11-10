@@ -6,6 +6,7 @@ import dev.aaronhowser.mods.critterworks.command.ModCommands
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModDamageTypeTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
+import dev.aaronhowser.mods.critterworks.entity.parry_platypus.ParryPlatypusEntity
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.PunchprawnEntity
 import dev.aaronhowser.mods.critterworks.entity.scoochworm.ScoochwormEntity
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
@@ -105,6 +106,7 @@ object CommonEvents {
 	@SubscribeEvent
 	fun registerEntityAttributes(event: EntityAttributeCreationEvent) {
 		event.put(ModEntityTypes.FILTERFEEDER.get(), FilterfeederEntity.createAttributes())
+		event.put(ModEntityTypes.PARRY_PLATYPUS.get(), ParryPlatypusEntity.createAttributes())
 		event.put(ModEntityTypes.PUNCHPRAWN.get(), PunchprawnEntity.createAttributes())
 		event.put(ModEntityTypes.SCOOCHWORM.get(), ScoochwormEntity.createAttributes())
 		event.put(ModEntityTypes.SPROUTSNAIL.get(), SproutsnailEntity.createAttributes())
@@ -130,6 +132,14 @@ object CommonEvents {
 			SpawnPlacementTypes.IN_WATER,
 			Heightmap.Types.OCEAN_FLOOR,
 			PunchprawnEntity::checkSpawnRules,
+			RegisterSpawnPlacementsEvent.Operation.REPLACE
+		)
+
+		event.register(
+			ModEntityTypes.PARRY_PLATYPUS.get(),
+			SpawnPlacementTypes.ON_GROUND,
+			Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+			Animal::checkAnimalSpawnRules,
 			RegisterSpawnPlacementsEvent.Operation.REPLACE
 		)
 

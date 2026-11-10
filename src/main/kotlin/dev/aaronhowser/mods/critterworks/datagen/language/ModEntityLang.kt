@@ -14,6 +14,7 @@ object ModEntityLang {
 		provider.addEntityType(ModEntityTypes.SCOOCHWORM_PART, "Scoochworm Segment")
 		provider.addEntityType(ModEntityTypes.FILTERFEEDER, "Filterfeeder")
 		provider.addEntityType(ModEntityTypes.PUNCHPRAWN, "Punchprawn")
+		provider.addEntityType(ModEntityTypes.PARRY_PLATYPUS, "Parry Platypus")
 		provider.addEntityType(ModEntityTypes.SPROUTSNAIL, "Sproutsnail")
 
 		provider.add(ITEM_FILTERFEEDER, "Item Filterfeeder")

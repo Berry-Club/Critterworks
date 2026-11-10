@@ -51,6 +51,8 @@ object ModItems : AaronItemRegistry() {
 		basic("tardigrade")
 	val SNAIL_SHIELD: DeferredItem<SnailShieldItem> =
 		register("snail_shield", ::SnailShieldItem, SnailShieldItem.DEFAULT_PROPERTIES)
+	val PARRY_PLATYPUS: DeferredItem<ParryPlatypusItem> =
+		register("parry_platypus", ::ParryPlatypusItem, ParryPlatypusItem.DEFAULT_PROPERTIES)
 
 	val SNAIL_SHELL_FRAGMENT: DeferredItem<Item> =
 		basic("snail_shell_fragment")
@@ -81,6 +83,12 @@ object ModItems : AaronItemRegistry() {
 			"punchprawn_spawn_egg",
 			ModEntityTypes.PUNCHPRAWN,
 			0x0E88BB, 0xFE0901
+		)
+	val PARRY_PLATYPUS_SPAWN_EGG: DeferredItem<SpawnEggItem> =
+		registerSpawnEgg(
+			"parry_platypus_spawn_egg",
+			ModEntityTypes.PARRY_PLATYPUS,
+			0x714F3E, 0xD58B76
 		)
 	val SPROUTSNAIL_SPAWN_EGG: DeferredItem<SpawnEggItem> =
 		registerSpawnEgg(

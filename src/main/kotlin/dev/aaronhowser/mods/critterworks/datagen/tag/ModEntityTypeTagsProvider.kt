@@ -22,7 +22,10 @@ class ModEntityTypeTagsProvider(
 
 	override fun addTags(provider: HolderLookup.Provider) {
 		tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
-			.add(ModEntityTypes.PUNCHPRAWN)
+			.add(
+				ModEntityTypes.PARRY_PLATYPUS,
+				ModEntityTypes.PUNCHPRAWN
+			)
 
 		tag(EntityTypeTags.FALL_DAMAGE_IMMUNE)
 			.add(
