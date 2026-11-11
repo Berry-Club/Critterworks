@@ -1,13 +1,18 @@
 package dev.aaronhowser.mods.critterworks.entity.parry_platypus
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.control.AmphibiousMoveControl
 import dev.aaronhowser.mods.critterworks.entity.goal.LowAmphibiousWanderGoal
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
+import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.tags.FluidTags
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
@@ -22,6 +27,7 @@ import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.pathfinder.PathType
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
@@ -92,6 +98,18 @@ class ParryPlatypusEntity(
 				.add(Attributes.MAX_HEALTH, 10.0)
 				.add(Attributes.MOVEMENT_SPEED, 0.25)
 				.build()
+		}
+
+		fun checkSpawnRules(
+			entityType: EntityType<ParryPlatypusEntity>,
+			level: ServerLevelAccessor,
+			spawnType: MobSpawnType,
+			position: BlockPos,
+			random: RandomSource
+		): Boolean {
+			if (level.getFluidState(position).isFluid(FluidTags.WATER)) return true
+
+			return checkAnimalSpawnRules(entityType, level, spawnType, position, random)
 		}
 	}
 }

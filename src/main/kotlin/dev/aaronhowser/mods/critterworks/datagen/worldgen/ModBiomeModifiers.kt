@@ -16,6 +16,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 object ModBiomeModifiers {
 
 	val ADD_FILTERFEEDER: ResourceKey<BiomeModifier> = key("add_filterfeeder")
+	val ADD_PARRY_PLATYPUS: ResourceKey<BiomeModifier> = key("add_parry_platypus")
 	val ADD_SPROUTSNAIL: ResourceKey<BiomeModifier> = key("add_sproutsnail")
 	val ADD_SPROUTSNAIL_POPULATED_OVERWORLD: ResourceKey<BiomeModifier> = key("add_sproutsnail_populated_overworld")
 	val ADD_SPROUTSNAIL_SPARSE_OVERWORLD: ResourceKey<BiomeModifier> = key("add_sproutsnail_sparse_overworld")
@@ -39,6 +40,14 @@ object ModBiomeModifiers {
 					MobSpawnSettings.SpawnerData(ModEntityTypes.FILTERFEEDER.get(), 3, 3, 3),
 					MobSpawnSettings.SpawnerData(ModEntityTypes.FILTERFEEDER.get(), 1, 4, 4)
 				)
+			)
+		)
+
+		context.register(
+			ADD_PARRY_PLATYPUS,
+			BiomeModifiers.AddSpawnsBiomeModifier(
+				biomes.getOrThrow(ModBiomeTagsProvider.HAS_PARRY_PLATYPUS),
+				listOf(MobSpawnSettings.SpawnerData(ModEntityTypes.PARRY_PLATYPUS.get(), 5, 1, 2))
 			)
 		)
 

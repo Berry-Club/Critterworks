@@ -139,9 +139,9 @@ object CommonEvents {
 
 		event.register(
 			ModEntityTypes.PARRY_PLATYPUS.get(),
-			SpawnPlacementTypes.ON_GROUND,
-			Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-			Animal::checkAnimalSpawnRules,
+			SpawnPlacementTypes.NO_RESTRICTIONS,
+			Heightmap.Types.OCEAN_FLOOR,
+			ParryPlatypusEntity::checkSpawnRules,
 			RegisterSpawnPlacementsEvent.Operation.REPLACE
 		)
 

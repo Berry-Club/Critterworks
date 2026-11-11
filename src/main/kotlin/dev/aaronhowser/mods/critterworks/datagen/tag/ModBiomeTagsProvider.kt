@@ -31,6 +31,9 @@ class ModBiomeTagsProvider(
 				BiomeTags.IS_RIVER
 			)
 
+		tag(HAS_PARRY_PLATYPUS)
+			.addTag(BiomeTags.IS_RIVER)
+
 		tag(HAS_SPROUTSNAIL)
 			.addTag(Tags.Biomes.IS_SWAMP)
 
@@ -78,6 +81,7 @@ class ModBiomeTagsProvider(
 			TagKey.create(Registries.BIOME, Critterworks.modResource(name))
 
 		val HAS_FILTERFEEDER: TagKey<Biome> = key("has_filterfeeder")
+		val HAS_PARRY_PLATYPUS: TagKey<Biome> = key("has_parry_platypus")
 		val HAS_SPROUTSNAIL: TagKey<Biome> = key("has_sproutsnail")
 		val HAS_SPROUTSNAIL_POPULATED_OVERWORLD: TagKey<Biome> = key("has_sproutsnail_populated_overworld")
 		val HAS_SPROUTSNAIL_SPARSE_OVERWORLD: TagKey<Biome> = key("has_sproutsnail_sparse_overworld")
