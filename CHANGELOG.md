@@ -32,6 +32,7 @@
 ### Fixed
 
 - Fixed certain mobs not moving their heads to look at you
+- Removed a bit of the Snail Shield texture that was z-fighting
 
 # 1.5.1
 
