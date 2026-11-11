@@ -105,7 +105,9 @@ class SnailShieldItem(properties: Properties) : Item(properties), GeoItem {
 
 			if (player !is ServerPlayer) return
 
-			val isActivatingShell = player.isDiscrete && player.isHolding(ModItems.SNAIL_SHIELD.get())
+			val isActivatingShell = player.isDiscrete
+				&& !player.abilities.flying
+				&& player.isHolding(ModItems.SNAIL_SHIELD.get())
 
 			val oldState = player.shellState
 			val newState = getNewShellState(player, isActivatingShell)
