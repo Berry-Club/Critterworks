@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.redstone.Redstone
 import net.minecraft.world.phys.Vec3
 import org.joml.Quaternionf
 
@@ -60,10 +61,16 @@ object WebLineGeometryRenderer {
 	}
 
 	private fun getStrongestConnectedPower(port: ArachnodePort): Int {
-		return port.lines
-			.filterIsInstance<RedstoneWebLine>()
-			.maxOfOrNull(RedstoneWebLine::power)
-			?: 0
+		var strongestPower = 0
+
+		for (line in port.lines) {
+			if (line !is RedstoneWebLine) continue
+
+			strongestPower = maxOf(strongestPower, line.power)
+			if (strongestPower >= Redstone.SIGNAL_MAX) break
+		}
+
+		return strongestPower
 	}
 
 	/**
@@ -131,7 +138,7 @@ object WebLineGeometryRenderer {
 		val light = LevelRenderer.getLightColor(level, BlockPos.containing(position))
 		val blockLight = maxOf(
 			LightTexture.block(light),
-			minimumBlockLight.coerceIn(0, 15)
+			minimumBlockLight.coerceIn(0, Redstone.SIGNAL_MAX)
 		)
 
 		return LightTexture.pack(blockLight, LightTexture.sky(light))
@@ -151,7 +158,7 @@ object WebLineGeometryRenderer {
 	}
 
 	private fun getColorForPower(power: Int): Int {
-		return REDSTONE_COLORS[power.coerceIn(0, 15)]
+		return REDSTONE_COLORS[power.coerceIn(0, Redstone.SIGNAL_MAX)]
 	}
 
 	private fun addSegment(
@@ -250,7 +257,7 @@ object WebLineGeometryRenderer {
 
 	private val REDSTONE_COLORS = IntArray(16) { power ->
 		fun lerpColorChannel(start: Int, end: Int, power: Int): Int {
-			return start + (end - start) * power / 15
+			return start + (end - start) * power / Redstone.SIGNAL_MAX
 		}
 
 		val darkColor = ARGB(0xFF, 0x4D, 0x00, 0x00)
