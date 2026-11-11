@@ -27,6 +27,7 @@
 - Item and Fluid Filterfeeder menus and data components are now use Irregular Implements' version as a base, rather than Excessive Utilities
 	- This unfortunately is not backwards compatible, but like, 3 people play this mod rn :(
 - The Snail Shield does not activate while flying
+- Improved the model transformations of several items
 
 ### Fixed
 

@@ -72,8 +72,8 @@ class ModItemModelProvider(
 
 			transform(ItemDisplayContext.GUI) {
 				rotation(30f, 225f, 0f)
-					.translation(1.5f, -4f, 0f)
-					.scale(0.4f)
+					.translation(0.5f, -4f, 0f)
+					.scale(0.6f)
 			}
 
 			transform(ItemDisplayContext.FIXED) {
