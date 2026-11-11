@@ -216,7 +216,11 @@ class PunchprawnEntity(
 
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
 		val offspring = ModEntityTypes.PUNCHPRAWN.get().create(level) ?: return null
-		val parentOwner = ownerUUID
+		var parentOwner = ownerUUID
+
+		if (parentOwner == null && otherParent is TamableAnimal) {
+			parentOwner = otherParent.ownerUUID
+		}
 
 		if (parentOwner != null) {
 			offspring.ownerUUID = parentOwner
