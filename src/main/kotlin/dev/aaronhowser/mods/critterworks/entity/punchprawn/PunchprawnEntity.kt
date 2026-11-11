@@ -8,10 +8,10 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.entity.goal.LowAmphibiousWanderGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.control.PunchprawnMoveControl
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnFollowOwnerGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnSitGoal
-import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnWanderGoal
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
@@ -76,7 +76,7 @@ class PunchprawnEntity(
 		goalSelector.addGoal(1, PunchprawnSitGoal(this))
 		goalSelector.addGoal(2, MeleeAttackGoal(this, 1.0, true))
 		goalSelector.addGoal(3, PunchprawnFollowOwnerGoal(this, 1.0, 8f, 2f))
-		goalSelector.addGoal(4, PunchprawnWanderGoal(this))
+		goalSelector.addGoal(4, LowAmphibiousWanderGoal(this, 5))
 		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
 		goalSelector.addGoal(6, RandomLookAroundGoal(this))
 
