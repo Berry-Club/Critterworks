@@ -27,6 +27,10 @@
 - Item and Fluid Filterfeeder menus and data components are now use Irregular Implements' version as a base, rather than Excessive Utilities
 	- This unfortunately is not backwards compatible, but like, 3 people play this mod rn :(
 
+### Fixed
+
+- Fixed certain mobs not moving their heads to look at you
+
 # 1.5.1
 
 ### Changed
