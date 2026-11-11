@@ -21,6 +21,7 @@ class SproutsnailMoveToBonemealableBlockGoal(
 	}
 
 	override fun canUse(): Boolean {
+		if (sproutsnail.isBaby) return false
 		if (sproutsnail.tickCount < nextSearchTick) return false
 
 		nextSearchTick = sproutsnail.tickCount + SEARCH_INTERVAL_TICKS

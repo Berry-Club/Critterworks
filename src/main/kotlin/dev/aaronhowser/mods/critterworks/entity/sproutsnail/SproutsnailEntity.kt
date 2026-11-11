@@ -14,6 +14,7 @@ import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.sproutsnail.goal.SproutsnailMoveToBonemealableBlockGoal
 import dev.aaronhowser.mods.critterworks.handler.snail.EvilSnailHandler
+import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
@@ -69,11 +70,13 @@ class SproutsnailEntity(
 	override fun registerGoals() {
 		goalSelector.addGoal(0, FloatGoal(this))
 		goalSelector.addGoal(1, PanicGoal(this, 1.25))
-		goalSelector.addGoal(2, TemptGoal(this, 1.0, ModItemTagsProvider.SPROUTSNAIL_FOOD.asIngredient(), false))
-		goalSelector.addGoal(3, SproutsnailMoveToBonemealableBlockGoal(this))
-		goalSelector.addGoal(4, RandomStrollGoal(this, 1.0))
-		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
-		goalSelector.addGoal(6, RandomLookAroundGoal(this))
+		goalSelector.addGoal(2, BreedGoal(this, 1.0))
+		goalSelector.addGoal(3, TemptGoal(this, 1.0, ModItemTagsProvider.SPROUTSNAIL_FOOD.asIngredient(), false))
+		goalSelector.addGoal(4, FollowParentGoal(this, 1.1))
+		goalSelector.addGoal(5, SproutsnailMoveToBonemealableBlockGoal(this))
+		goalSelector.addGoal(6, RandomStrollGoal(this, 1.0))
+		goalSelector.addGoal(7, LookAtPlayerGoal(this, Player::class.java, 6f))
+		goalSelector.addGoal(8, RandomLookAroundGoal(this))
 	}
 
 	override fun isFood(stack: ItemStack): Boolean {
@@ -147,6 +150,9 @@ class SproutsnailEntity(
 	}
 
 	override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+		val superResult = super.mobInteract(player, hand)
+		if (superResult.consumesAction()) return superResult
+
 		val heldStack = player.getItemInHand(hand)
 
 		if (heldStack.isItem(ModItemTagsProvider.SPROUTSNAIL_FLOWERS)) {
@@ -176,7 +182,7 @@ class SproutsnailEntity(
 			return InteractionResult.sidedSuccess(isClientSide)
 		}
 
-		return super.mobInteract(player, hand)
+		return superResult
 	}
 
 	override fun tick() {
@@ -197,8 +203,10 @@ class SproutsnailEntity(
 		val newBlockPositions = getOccupiedBlockPositions().toMutableList()
 		newBlockPositions.removeAll(previousBlockPositions)
 
-		for (newBlockPosition in newBlockPositions) {
-			tryApplyBonemeal(newBlockPosition)
+		if (!isBaby) {
+			for (newBlockPosition in newBlockPositions) {
+				tryApplyBonemeal(newBlockPosition)
+			}
 		}
 
 		if (isServerSide && isAlive && !isBaby) {
@@ -257,7 +265,16 @@ class SproutsnailEntity(
 	}
 
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
-		return null
+		val offspring = ModEntityTypes.SPROUTSNAIL.get().create(level) ?: return null
+		val otherSproutsnail = otherParent as? SproutsnailEntity
+		val inheritedFlower = if (otherSproutsnail != null && random.nextBoolean()) {
+			otherSproutsnail.flower
+		} else {
+			flower
+		}
+
+		offspring.flower = inheritedFlower
+		return offspring
 	}
 
 	override fun readAdditionalSaveData(compound: CompoundTag) {

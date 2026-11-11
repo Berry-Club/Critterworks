@@ -29,9 +29,7 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
+import net.minecraft.world.entity.ai.goal.*
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal
@@ -40,6 +38,7 @@ import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation
 import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ServerLevelAccessor
@@ -76,9 +75,20 @@ class PunchprawnEntity(
 		goalSelector.addGoal(1, PunchprawnSitGoal(this))
 		goalSelector.addGoal(2, MeleeAttackGoal(this, 1.0, true))
 		goalSelector.addGoal(3, PunchprawnFollowOwnerGoal(this, 1.0, 8f, 2f))
-		goalSelector.addGoal(4, LowAmphibiousWanderGoal(this, 5))
-		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
-		goalSelector.addGoal(6, RandomLookAroundGoal(this))
+		goalSelector.addGoal(4, BreedGoal(this, 1.0))
+		goalSelector.addGoal(
+			5,
+			TemptGoal(
+				this,
+				1.1,
+				Ingredient.of(ModItemTagsProvider.PUNCHPRAWN_BREEDING_FOOD),
+				false
+			)
+		)
+		goalSelector.addGoal(6, FollowParentGoal(this, 1.1))
+		goalSelector.addGoal(7, LowAmphibiousWanderGoal(this, 5))
+		goalSelector.addGoal(8, LookAtPlayerGoal(this, Player::class.java, 6f))
+		goalSelector.addGoal(9, RandomLookAroundGoal(this))
 
 		targetSelector.addGoal(1, OwnerHurtByTargetGoal(this))
 		targetSelector.addGoal(2, OwnerHurtTargetGoal(this))
@@ -95,21 +105,21 @@ class PunchprawnEntity(
 	}
 
 	override fun isFood(stack: ItemStack): Boolean {
-		return stack.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)
+		return stack.isItem(ModItemTagsProvider.PUNCHPRAWN_BREEDING_FOOD)
 	}
 
 	override fun canAttack(target: LivingEntity): Boolean {
+		if (isBaby) return false
+
 		if (target is Player) {
 			if (isTame) return false
-			if (isHoldingFood(target)) return false
+			if (target.isHolding {
+					it.isItem(ModItemTagsProvider.PUNCHPRAWN_TAMING_FOOD)
+						|| it.isItem(ModItemTagsProvider.PUNCHPRAWN_BREEDING_FOOD)
+				}) return false
 		}
 
 		return super.canAttack(target)
-	}
-
-	private fun isHoldingFood(player: Player): Boolean {
-		return player.mainHandItem.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)
-			|| player.offhandItem.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)
 	}
 
 	override fun tryToTeleportToOwner() {
@@ -159,9 +169,12 @@ class PunchprawnEntity(
 	}
 
 	override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
+		val superResult = super.mobInteract(player, hand)
+		if (superResult.consumesAction()) return superResult
+
 		val heldStack = player.getItemInHand(hand)
 
-		if (!isTame && heldStack.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)) {
+		if (!isTame && heldStack.isItem(ModItemTagsProvider.PUNCHPRAWN_TAMING_FOOD)) {
 			if (isServerSide) {
 				heldStack.consume(1, player)
 				tryToTame(player)
@@ -171,11 +184,11 @@ class PunchprawnEntity(
 		}
 
 		if (!isTame || !isOwnedBy(player) || !heldStack.isEmpty) {
-			return super.mobInteract(player, hand)
+			return superResult
 		}
 
 		if (isServerSide && player == owner) {
-			if (player.isShiftKeyDown && player.wornPunchprawn.isEmpty) {
+			if (!isBaby && player.isShiftKeyDown && player.wornPunchprawn.isEmpty) {
 				val tag = getMinimalTag(stripUniqueness = false)
 				player.wornPunchprawn = Optional.of(tag)
 				playSound(SoundEvents.ITEM_FRAME_ADD_ITEM)
@@ -202,7 +215,15 @@ class PunchprawnEntity(
 	}
 
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
-		return null
+		val offspring = ModEntityTypes.PUNCHPRAWN.get().create(level) ?: return null
+		val parentOwner = ownerUUID
+
+		if (parentOwner != null) {
+			offspring.ownerUUID = parentOwner
+			offspring.setTame(true, true)
+		}
+
+		return offspring
 	}
 
 	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {}

@@ -225,8 +225,11 @@ class ModItemTagsProvider(
 		tag(FILTERFEEDER_FOOD)
 			.addTag(ItemTags.SAND)
 
-		tag(PUNCHPRAWN_FOOD)
+		tag(PUNCHPRAWN_TAMING_FOOD)
 			.add(ModItems.PEARL)
+
+		tag(PUNCHPRAWN_BREEDING_FOOD)
+			.add(Items.SEAGRASS)
 
 		tag(PLATYPUS_FOOD)
 			.add(Items.COD)
@@ -260,7 +263,8 @@ class ModItemTagsProvider(
 		val TARDIGRADE_BLACKLIST = tk("tardigrade_blacklist")
 		val SPROUTSNAIL_FOOD = tk("sproutsnail_food")
 		val FILTERFEEDER_FOOD = tk("filterfeeder_food")
-		val PUNCHPRAWN_FOOD = tk("punchprawn_food")
+		val PUNCHPRAWN_TAMING_FOOD = tk("punchprawn_taming_food")
+		val PUNCHPRAWN_BREEDING_FOOD = tk("punchprawn_breeding_food")
 		val PLATYPUS_FOOD = tk("platypus_food")
 	}
 }

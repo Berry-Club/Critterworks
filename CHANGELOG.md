@@ -28,6 +28,8 @@
 	- This unfortunately is not backwards compatible, but like, 3 people play this mod rn :(
 - The Snail Shield does not activate while flying
 - Improved the model transformations of several items
+- Punchprawns can be bred with Seagrass
+- Sproutsnails can be bred with Mushrooms
 
 ### Fixed
 

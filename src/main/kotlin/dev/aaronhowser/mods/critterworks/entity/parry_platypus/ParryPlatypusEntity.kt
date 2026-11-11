@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl
 import net.minecraft.world.entity.ai.goal.BreedGoal
+import net.minecraft.world.entity.ai.goal.FollowParentGoal
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.ai.goal.TemptGoal
@@ -43,7 +44,8 @@ class ParryPlatypusEntity(
 	override fun registerGoals() {
 		goalSelector.addGoal(1, BreedGoal(this, 1.0))
 		goalSelector.addGoal(2, TemptGoal(this, 1.1, { it.isItem(ModItemTagsProvider.PLATYPUS_FOOD) }, false))
-		goalSelector.addGoal(3, LowAmphibiousWanderGoal(this, 3))
+		goalSelector.addGoal(3, FollowParentGoal(this, 1.1))
+		goalSelector.addGoal(4, LowAmphibiousWanderGoal(this, 3))
 		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
 		goalSelector.addGoal(6, RandomLookAroundGoal(this))
 	}
