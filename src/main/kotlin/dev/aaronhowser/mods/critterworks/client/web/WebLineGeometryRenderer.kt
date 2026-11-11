@@ -2,7 +2,6 @@ package dev.aaronhowser.mods.critterworks.client.web
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
-import dev.aaronhowser.mods.aaron.misc.ARGB
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.Critterworks
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
@@ -142,7 +141,9 @@ object WebLineGeometryRenderer {
 	}
 
 	private fun getMinimumBlockLight(line: WebLine): Int {
-		return if (line is RedstoneWebLine) line.power else 0
+		if (line !is RedstoneWebLine) return 0
+
+		return line.power
 	}
 
 	private fun getColor(line: WebLine): Int {
@@ -159,7 +160,16 @@ object WebLineGeometryRenderer {
 	}
 
 	private fun lerpRedstoneColor(power: Int): Int {
-		return REDSTONE_COLORS[power.coerceIn(0, MAX_REDSTONE_POWER)]
+		val clampedPower = power.coerceIn(0, MAX_REDSTONE_POWER)
+		val red = lerpColorChannel(REDSTONE_DARK_RED, REDSTONE_BRIGHT_RED, clampedPower)
+		val green = lerpColorChannel(REDSTONE_DARK_GREEN, REDSTONE_BRIGHT_GREEN, clampedPower)
+		val blue = lerpColorChannel(REDSTONE_DARK_BLUE, REDSTONE_BRIGHT_BLUE, clampedPower)
+
+		return 0xFF000000.toInt() or (red shl 16) or (green shl 8) or blue
+	}
+
+	private fun lerpColorChannel(start: Int, end: Int, power: Int): Int {
+		return start + (end - start) * power / MAX_REDSTONE_POWER
 	}
 
 	private fun addSegment(
@@ -253,25 +263,16 @@ object WebLineGeometryRenderer {
 	}
 
 	private const val WEB_COLOR = 0xFFFFFFFF.toInt()
+	private const val REDSTONE_DARK_RED = 0x4D
+	private const val REDSTONE_DARK_GREEN = 0x00
+	private const val REDSTONE_DARK_BLUE = 0x00
+	private const val REDSTONE_BRIGHT_RED = 0xFF
+	private const val REDSTONE_BRIGHT_GREEN = 0x30
+	private const val REDSTONE_BRIGHT_BLUE = 0x30
 	private const val MAX_REDSTONE_POWER = 15
 	private const val WEB_RADIUS = 1f / 64f
 	private const val TEXTURE_REPEAT_DISTANCE = 4.0
 	private const val LIGHT_SAMPLE_DISTANCE = 1.0
-
-	private val REDSTONE_DARK_COLOR = ARGB(0xFF, 0x4D, 0x00, 0x00)
-	private val REDSTONE_BRIGHT_COLOR = ARGB(0xFF, 0xFF, 0x30, 0x30)
-	private val REDSTONE_COLORS = IntArray(MAX_REDSTONE_POWER + 1) { power ->
-		fun lerpColorChannel(start: Int, end: Int, power: Int): Int {
-			return start + (end - start) * power / MAX_REDSTONE_POWER
-		}
-
-		ARGB(
-			alpha = 0xFF,
-			red = lerpColorChannel(REDSTONE_DARK_COLOR.red, REDSTONE_BRIGHT_COLOR.red, power),
-			green = lerpColorChannel(REDSTONE_DARK_COLOR.green, REDSTONE_BRIGHT_COLOR.green, power),
-			blue = lerpColorChannel(REDSTONE_DARK_COLOR.blue, REDSTONE_BRIGHT_COLOR.blue, power)
-		).toInt()
-	}
 
 	private val WEB_TEXTURE = Critterworks.modResource("textures/misc/web_line.png")
 	private val WEB_RENDER_TYPE = RenderType.entitySolid(WEB_TEXTURE)
