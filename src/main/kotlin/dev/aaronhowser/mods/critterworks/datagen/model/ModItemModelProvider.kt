@@ -252,33 +252,36 @@ class ModItemModelProvider(
 			transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
 				rotation(75f, 45f, 0f)
 					.translation(0f, 2.5f, 0f)
-					.scale(0.375f)
+					.scale(0.425f)
 			}
 
 			transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
 				rotation(75f, 45f, 0f)
 					.translation(0f, 2.5f, 0f)
-					.scale(0.375f)
+					.scale(0.425f)
 			}
 
 			transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
 				rotation(0f, 45f, 0f)
-					.scale(0.4f)
+					.translation(0f, 1.5f, 0f)
+					.scale(0.5f)
 			}
 
 			transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
-				rotation(0f, 225f, 0f)
-					.scale(0.4f)
+				rotation(0f, 45f, 0f)
+					.translation(0f, 1.5f, 0f)
+					.scale(0.5f)
 			}
 
 			transform(ItemDisplayContext.GROUND) {
 				translation(0f, 3f, 0f)
-					.scale(0.25f)
+					.scale(0.35f)
 			}
 
 			transform(ItemDisplayContext.GUI) {
 				rotation(30f, 225f, 0f)
-					.scale(0.625f)
+					.translation(0f, -2f, 0f)
+					.scale(0.75f)
 			}
 
 			transform(ItemDisplayContext.FIXED) {
