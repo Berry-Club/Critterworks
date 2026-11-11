@@ -5,5 +5,6 @@ import dev.aaronhowser.mods.critterworks.entity.sproutsnail.SproutsnailEntity
 import software.bernie.geckolib.model.DefaultedEntityGeoModel
 
 class SproutsnailModel : DefaultedEntityGeoModel<SproutsnailEntity>(
-	Critterworks.modResource("sproutsnail")
+	Critterworks.modResource("sproutsnail"),
+	"head"
 )
