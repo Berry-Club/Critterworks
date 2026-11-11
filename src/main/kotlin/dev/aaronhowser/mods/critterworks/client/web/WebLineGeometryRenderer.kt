@@ -33,7 +33,7 @@ object WebLineGeometryRenderer {
 				line.secondNode.position,
 				cameraPosition,
 				getColor(line),
-				getMinimumBlockLight(line)
+				if (line is RedstoneWebLine) line.power else 0
 			)
 		}
 
@@ -53,21 +53,17 @@ object WebLineGeometryRenderer {
 				inputPort.position,
 				outputPort.position,
 				cameraPosition,
-				lerpRedstoneColor(power),
+				getColorForPower(power),
 				power
 			)
 		}
 	}
 
 	private fun getStrongestConnectedPower(port: ArachnodePort): Int {
-		var power = 0
-
-		for (line in port.lines) {
-			if (line !is RedstoneWebLine) continue
-			power = maxOf(power, line.power)
-		}
-
-		return power
+		return port.lines
+			.filterIsInstance<RedstoneWebLine>()
+			.maxOfOrNull(RedstoneWebLine::power)
+			?: 0
 	}
 
 	/**
@@ -85,11 +81,11 @@ object WebLineGeometryRenderer {
 		minimumBlockLight: Int = 0
 	) {
 		val offset = end.subtract(start)
-		val height = offset.length()
-		if (height == 0.0) return
+		val length = offset.length()
+		if (length == 0.0) return
 
 		val vertexConsumer = bufferSource.getBuffer(WEB_RENDER_TYPE)
-		val direction = offset.scale(1.0 / height)
+		val direction = offset.scale(1.0 / length)
 		val rotation = Quaternionf().rotationTo(
 			0f,
 			1f,
@@ -108,8 +104,8 @@ object WebLineGeometryRenderer {
 			var segmentStart = 0.0
 			var startLight = getLightColor(level, start, minimumBlockLight)
 
-			while (segmentStart < height) {
-				val segmentEnd = minOf(segmentStart + LIGHT_SAMPLE_DISTANCE, height)
+			while (segmentStart < length) {
+				val segmentEnd = minOf(segmentStart + 1.0, length)
 				val endPosition = start.add(direction.scale(segmentEnd))
 				val endLight = getLightColor(level, endPosition, minimumBlockLight)
 
@@ -135,19 +131,15 @@ object WebLineGeometryRenderer {
 		val light = LevelRenderer.getLightColor(level, BlockPos.containing(position))
 		val blockLight = maxOf(
 			LightTexture.block(light),
-			minimumBlockLight.coerceIn(0, MAX_REDSTONE_POWER)
+			minimumBlockLight.coerceIn(0, 15)
 		)
 
 		return LightTexture.pack(blockLight, LightTexture.sky(light))
 	}
 
-	private fun getMinimumBlockLight(line: WebLine): Int {
-		return if (line is RedstoneWebLine) line.power else 0
-	}
-
 	private fun getColor(line: WebLine): Int {
 		if (!ClientConfig.CONFIG.renderWebLineDebugColors.get()) {
-			if (line is RedstoneWebLine) return lerpRedstoneColor(line.power)
+			if (line is RedstoneWebLine) return getColorForPower(line.power)
 			return WEB_COLOR
 		}
 
@@ -158,8 +150,8 @@ object WebLineGeometryRenderer {
 		return 0xFF000000.toInt() or rgb
 	}
 
-	private fun lerpRedstoneColor(power: Int): Int {
-		return REDSTONE_COLORS[power.coerceIn(0, MAX_REDSTONE_POWER)]
+	private fun getColorForPower(power: Int): Int {
+		return REDSTONE_COLORS[power.coerceIn(0, 15)]
 	}
 
 	private fun addSegment(
@@ -253,23 +245,22 @@ object WebLineGeometryRenderer {
 	}
 
 	private const val WEB_COLOR = 0xFFFFFFFF.toInt()
-	private const val MAX_REDSTONE_POWER = 15
 	private const val WEB_RADIUS = 1f / 64f
 	private const val TEXTURE_REPEAT_DISTANCE = 4.0
-	private const val LIGHT_SAMPLE_DISTANCE = 1.0
 
-	private val REDSTONE_DARK_COLOR = ARGB(0xFF, 0x4D, 0x00, 0x00)
-	private val REDSTONE_BRIGHT_COLOR = ARGB(0xFF, 0xFF, 0x30, 0x30)
-	private val REDSTONE_COLORS = IntArray(MAX_REDSTONE_POWER + 1) { power ->
+	private val REDSTONE_COLORS = IntArray(16) { power ->
 		fun lerpColorChannel(start: Int, end: Int, power: Int): Int {
-			return start + (end - start) * power / MAX_REDSTONE_POWER
+			return start + (end - start) * power / 15
 		}
+
+		val darkColor = ARGB(0xFF, 0x4D, 0x00, 0x00)
+		val brightColor = ARGB(0xFF, 0xFF, 0x30, 0x30)
 
 		ARGB(
 			alpha = 0xFF,
-			red = lerpColorChannel(REDSTONE_DARK_COLOR.red, REDSTONE_BRIGHT_COLOR.red, power),
-			green = lerpColorChannel(REDSTONE_DARK_COLOR.green, REDSTONE_BRIGHT_COLOR.green, power),
-			blue = lerpColorChannel(REDSTONE_DARK_COLOR.blue, REDSTONE_BRIGHT_COLOR.blue, power)
+			red = lerpColorChannel(darkColor.red, brightColor.red, power),
+			green = lerpColorChannel(darkColor.green, brightColor.green, power),
+			blue = lerpColorChannel(darkColor.blue, brightColor.blue, power)
 		).toInt()
 	}
 
