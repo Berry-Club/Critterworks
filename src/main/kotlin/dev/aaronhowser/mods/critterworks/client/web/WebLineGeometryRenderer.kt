@@ -10,6 +10,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import net.minecraft.client.renderer.LevelRenderer
+import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -30,7 +31,8 @@ object WebLineGeometryRenderer {
 				line.firstNode.position,
 				line.secondNode.position,
 				cameraPosition,
-				getColor(line)
+				getColor(line),
+				getMinimumBlockLight(line)
 			)
 		}
 
@@ -41,6 +43,8 @@ object WebLineGeometryRenderer {
 			val inputPort = arachnode.inputPorts.first()
 			val outputPort = arachnode.outputPorts.first()
 
+			val power = getStrongestConnectedPower(outputPort)
+
 			render(
 				bufferSource,
 				level,
@@ -48,7 +52,8 @@ object WebLineGeometryRenderer {
 				inputPort.position,
 				outputPort.position,
 				cameraPosition,
-				lerpRedstoneColor(getStrongestConnectedPower(outputPort))
+				lerpRedstoneColor(power),
+				power
 			)
 		}
 	}
@@ -75,7 +80,8 @@ object WebLineGeometryRenderer {
 		start: Vec3,
 		end: Vec3,
 		cameraPosition: Vec3,
-		color: Int
+		color: Int,
+		minimumBlockLight: Int = 0
 	) {
 		val offset = end.subtract(start)
 		val height = offset.length()
@@ -99,12 +105,12 @@ object WebLineGeometryRenderer {
 
 			val pose = poseStack.last()
 			var segmentStart = 0.0
-			var startLight = LevelRenderer.getLightColor(level, BlockPos.containing(start))
+			var startLight = getLightColor(level, start, minimumBlockLight)
 
 			while (segmentStart < height) {
 				val segmentEnd = minOf(segmentStart + LIGHT_SAMPLE_DISTANCE, height)
 				val endPosition = start.add(direction.scale(segmentEnd))
-				val endLight = LevelRenderer.getLightColor(level, BlockPos.containing(endPosition))
+				val endLight = getLightColor(level, endPosition, minimumBlockLight)
 
 				addSegment(
 					vertexConsumer,
@@ -122,6 +128,22 @@ object WebLineGeometryRenderer {
 		}
 
 		bufferSource.endBatch(WEB_RENDER_TYPE)
+	}
+
+	private fun getLightColor(level: Level, position: Vec3, minimumBlockLight: Int): Int {
+		val light = LevelRenderer.getLightColor(level, BlockPos.containing(position))
+		val blockLight = maxOf(
+			LightTexture.block(light),
+			minimumBlockLight.coerceIn(0, MAX_REDSTONE_POWER)
+		)
+
+		return LightTexture.pack(blockLight, LightTexture.sky(light))
+	}
+
+	private fun getMinimumBlockLight(line: WebLine): Int {
+		if (line !is RedstoneWebLine) return 0
+
+		return line.power
 	}
 
 	private fun getColor(line: WebLine): Int {
