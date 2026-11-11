@@ -8,13 +8,13 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.nextRange
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.oneIn
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.goal.LowAmphibiousWanderGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.control.PunchprawnMoveControl
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnFollowOwnerGoal
 import dev.aaronhowser.mods.critterworks.entity.punchprawn.goal.PunchprawnSitGoal
 import dev.aaronhowser.mods.critterworks.registry.ModAttachmentTypes
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
-import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
@@ -95,21 +95,21 @@ class PunchprawnEntity(
 	}
 
 	override fun isFood(stack: ItemStack): Boolean {
-		return stack.isItem(ModItems.PEARL)
+		return stack.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)
 	}
 
 	override fun canAttack(target: LivingEntity): Boolean {
 		if (target is Player) {
 			if (isTame) return false
-			if (isHoldingPearl(target)) return false
+			if (isHoldingFood(target)) return false
 		}
 
 		return super.canAttack(target)
 	}
 
-	private fun isHoldingPearl(player: Player): Boolean {
-		return player.mainHandItem.isItem(ModItems.PEARL)
-			|| player.offhandItem.isItem(ModItems.PEARL)
+	private fun isHoldingFood(player: Player): Boolean {
+		return player.mainHandItem.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)
+			|| player.offhandItem.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)
 	}
 
 	override fun tryToTeleportToOwner() {
@@ -161,7 +161,7 @@ class PunchprawnEntity(
 	override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
 		val heldStack = player.getItemInHand(hand)
 
-		if (!isTame && heldStack.isItem(ModItems.PEARL)) {
+		if (!isTame && heldStack.isItem(ModItemTagsProvider.PUNCHPRAWN_FOOD)) {
 			if (isServerSide) {
 				heldStack.consume(1, player)
 				tryToTame(player)

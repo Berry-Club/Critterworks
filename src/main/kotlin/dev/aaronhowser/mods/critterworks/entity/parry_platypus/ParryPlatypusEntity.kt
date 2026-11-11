@@ -1,5 +1,7 @@
 package dev.aaronhowser.mods.critterworks.entity.parry_platypus
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.control.AmphibiousMoveControl
 import dev.aaronhowser.mods.critterworks.entity.goal.LowAmphibiousWanderGoal
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
@@ -18,17 +20,11 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.pathfinder.PathType
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
-import software.bernie.geckolib.animation.AnimatableManager
-import software.bernie.geckolib.animation.AnimationController
-import software.bernie.geckolib.animation.AnimationState
-import software.bernie.geckolib.animation.PlayState
-import software.bernie.geckolib.animation.RawAnimation
+import software.bernie.geckolib.animation.*
 import software.bernie.geckolib.util.GeckoLibUtil
 
 class ParryPlatypusEntity(
@@ -46,7 +42,7 @@ class ParryPlatypusEntity(
 
 	override fun registerGoals() {
 		goalSelector.addGoal(1, BreedGoal(this, 1.0))
-		goalSelector.addGoal(2, TemptGoal(this, 1.1, FOOD, false))
+		goalSelector.addGoal(2, TemptGoal(this, 1.1, { it.isItem(ModItemTagsProvider.PLATYPUS_FOOD) }, false))
 		goalSelector.addGoal(3, LowAmphibiousWanderGoal(this, 3))
 		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
 		goalSelector.addGoal(6, RandomLookAroundGoal(this))
@@ -57,7 +53,7 @@ class ParryPlatypusEntity(
 	}
 
 	override fun isFood(stack: ItemStack): Boolean {
-		return FOOD.test(stack)
+		return stack.isItem(ModItemTagsProvider.PLATYPUS_FOOD)
 	}
 
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
@@ -80,8 +76,6 @@ class ParryPlatypusEntity(
 	companion object {
 		const val WIDTH = 0.875f
 		const val HEIGHT = 0.375f
-
-		private val FOOD = Ingredient.of(Items.COD)
 
 		private val WALK_ANIMATION: RawAnimation =
 			RawAnimation.begin()

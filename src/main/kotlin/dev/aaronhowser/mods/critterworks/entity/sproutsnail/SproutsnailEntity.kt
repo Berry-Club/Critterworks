@@ -69,7 +69,7 @@ class SproutsnailEntity(
 	override fun registerGoals() {
 		goalSelector.addGoal(0, FloatGoal(this))
 		goalSelector.addGoal(1, PanicGoal(this, 1.25))
-		goalSelector.addGoal(2, TemptGoal(this, 1.0, Tags.Items.MUSHROOMS.asIngredient(), false))
+		goalSelector.addGoal(2, TemptGoal(this, 1.0, ModItemTagsProvider.SPROUTSNAIL_FOOD.asIngredient(), false))
 		goalSelector.addGoal(3, SproutsnailMoveToBonemealableBlockGoal(this))
 		goalSelector.addGoal(4, RandomStrollGoal(this, 1.0))
 		goalSelector.addGoal(5, LookAtPlayerGoal(this, Player::class.java, 6f))
@@ -77,7 +77,7 @@ class SproutsnailEntity(
 	}
 
 	override fun isFood(stack: ItemStack): Boolean {
-		return stack.isItem(Tags.Items.MUSHROOMS)
+		return stack.isItem(ModItemTagsProvider.SPROUTSNAIL_FOOD)
 	}
 
 	override fun finalizeSpawn(

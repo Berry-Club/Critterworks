@@ -9,6 +9,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.control.FilterfeederMoveControl
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederSwimGoal
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederWaitForSandGoal
@@ -25,7 +26,6 @@ import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.FluidTags
-import net.minecraft.tags.ItemTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.InteractionHand
@@ -76,7 +76,7 @@ class FilterfeederEntity(
 		if (level().isClientSide) return InteractionResult.SUCCESS
 
 		val handItem = player.getItemInHand(hand)
-		if (handItem.isItem(ItemTags.SAND)) {
+		if (handItem.isItem(ModItemTagsProvider.FILTERFEEDER_FOOD)) {
 			handItem.consume(1, player)
 
 			if (player.random.chance(0.1)) {

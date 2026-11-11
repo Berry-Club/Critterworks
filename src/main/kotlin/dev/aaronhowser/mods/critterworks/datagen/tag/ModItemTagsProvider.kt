@@ -218,6 +218,18 @@ class ModItemTagsProvider(
 
 		tag(Tags.Items.SLIME_BALLS)
 			.add(ModItems.SNAIL_SLIME)
+
+		tag(SPROUTSNAIL_FOOD)
+			.addTag(Tags.Items.MUSHROOMS)
+
+		tag(FILTERFEEDER_FOOD)
+			.addTag(ItemTags.SAND)
+
+		tag(PUNCHPRAWN_FOOD)
+			.add(ModItems.PEARL)
+
+		tag(PLATYPUS_FOOD)
+			.add(Items.COD)
 	}
 
 	companion object {
@@ -246,5 +258,9 @@ class ModItemTagsProvider(
 		val REQUIRES_EXISTING_NODE = tk("requires_existing_node")
 		val SCOOCHSTEM_LOGS = tk("scoochstem_logs")
 		val TARDIGRADE_BLACKLIST = tk("tardigrade_blacklist")
+		val SPROUTSNAIL_FOOD = tk("sproutsnail_food")
+		val FILTERFEEDER_FOOD = tk("filterfeeder_food")
+		val PUNCHPRAWN_FOOD = tk("punchprawn_food")
+		val PLATYPUS_FOOD = tk("platypus_food")
 	}
 }
