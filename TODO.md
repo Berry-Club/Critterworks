@@ -106,6 +106,8 @@
 	- Basically the thing from Portal
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 - Compass that points to the Evil Snail
+- Maillard Mallard
+	- Duck that cooks food
 
 # "Pet" critters
 
@@ -129,6 +131,11 @@
 	- Shoots potions maybe?
 - One of those shield-head ants
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
+ - Climbing Chameleon
+ - Grabbing/Gripping Gecko
+ - Scaling Skink
+ - Ledge Lizard
+ - Sticking Salamander
 - Boxing Glove drop from Punchprawns?
 	- All critters should probably drop something
 - Mining Mole
