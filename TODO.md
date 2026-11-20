@@ -101,10 +101,11 @@
 - Is it even worth adding a whole new critter JUST for autocrafting?
 - Maillard Mallard
 	- Duck that cooks food
-    - Drops pre-cooked chicken? or new roasted duck item or something
+	- Drops pre-cooked chicken? or new roasted duck item or something
 - Thermite Termite
 	- Enemy that spawns in the Nether
-    - Cooks blasting recipes
+	- Cooks blasting recipes
+- Crushing Crab that does like macerating recipes?
 
 # Other stuff
 
@@ -123,6 +124,11 @@
 - Homing Pigeon that you can use to send items back to your base, or request from storage?
 - Bloodhound that you give blocks and it points you towards more of it
 	- BLOCKHOUND
+- Scare Crow
+	- All monsters run away?
+	- Or maybe prevent monster spawning entirely nearby
+- Sonar Bat that when fed makes an expanding pulse that shows the outlines of blocks through walls
+	- Like x-ray that shows caves
 
 # Tool/Weapon critters
 
@@ -149,9 +155,11 @@
 	- Blocking at the right moment reflects the damage (twicefold?)
 	- Deals poison damage?
 	- Platypus milk that glows in the dark
+- Monkey Wrench???
 
 # Guidebook
 
 - Bookworm, obviously
 - What if instead of an item given to you on spawn, it's a mob that spawns on you when you first join and it follows you around etc
 - Or it could be a butterfly and the wings are the front and back covers of the book
+- Instead of a single book with everything, maybe each butterfly would have a pamphlet for a single entry?
