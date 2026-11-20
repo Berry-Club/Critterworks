@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.client.item.parry_platypus.ParryPlatypusItemRenderer
+import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
@@ -140,9 +141,6 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		private const val BLOCK_CONTROLLER = "blocking"
 		private const val PARRY_CONTROLLER = "parry"
 		private const val PARRY_TRIGGER = "parry"
-		private const val PARRY_WINDOW_TICKS = 10
-		private const val NORMAL_REFLECTED_DAMAGE_MULTIPLIER = 0.3f
-		private const val PARRY_REFLECTED_DAMAGE_MULTIPLIER = 2f
 
 		val DEFAULT_PROPERTIES = {
 			Properties()
@@ -240,11 +238,11 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 			val attacker = damageSource.entity as? LivingEntity ?: return
 			if (attacker === blockingEntity) return
 
-			val reflectedDamageMultiplier = if (stack.platypusUseTicks <= PARRY_WINDOW_TICKS) {
-				PARRY_REFLECTED_DAMAGE_MULTIPLIER
+			val reflectedDamageMultiplier = if (stack.platypusUseTicks <= ServerConfig.CONFIG.platypusParryTiming.get()) {
+				ServerConfig.CONFIG.platypusPerfectReflectAmount.get()
 			} else {
-				NORMAL_REFLECTED_DAMAGE_MULTIPLIER
-			}
+				ServerConfig.CONFIG.platypusRegularReflectAmount.get()
+			}.toFloat()
 
 			val reflectedDamage = event.blockedDamage * reflectedDamageMultiplier
 			if (reflectedDamage <= 0f) return

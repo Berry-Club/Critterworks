@@ -32,6 +32,10 @@ class ServerConfig(
 	lateinit var scoochwormAppleRarity: ModConfigSpec.IntValue
 	lateinit var hoppingSpiderNestRarity: ModConfigSpec.IntValue
 
+	lateinit var platypusParryTiming: ModConfigSpec.IntValue
+	lateinit var platypusRegularReflectAmount: ModConfigSpec.DoubleValue
+	lateinit var platypusPerfectReflectAmount: ModConfigSpec.DoubleValue
+
 	lateinit var sendScoochwormAppleTeleportMessage: ModConfigSpec.BooleanValue
 	lateinit var sendHoppingSpiderNestTeleportMessage: ModConfigSpec.BooleanValue
 	lateinit var sendScoochstemVineTeleportMessage: ModConfigSpec.BooleanValue
@@ -55,6 +59,10 @@ class ServerConfig(
 			sproutsnailConfigs()
 		}
 
+		builder.section("platypus") {
+			platypusConfigs()
+		}
+
 		builder.section("world_gen") {
 			worldGenConfigs()
 		}
@@ -62,6 +70,20 @@ class ServerConfig(
 		builder.section("debug") {
 			debugConfigs()
 		}
+	}
+
+	private fun platypusConfigs() {
+		platypusParryTiming = builder
+			.comment("The amount of ticks you can be blocking with the Parry Platypus where getting hit counts as a parry")
+			.defineInRange("platypusParryTiming", 10, 1, Int.MAX_VALUE)
+
+		platypusRegularReflectAmount = builder
+			.comment("What percentage of incoming damage is reflected upon blocking an attack with the Parry Platypus")
+			.defineInRange("platypusRegularReflectAmount", 0.3, 0.0, Double.MAX_VALUE)
+
+		platypusPerfectReflectAmount = builder
+			.comment("What percentage of incoming damage is reflecting upon parrying an attack with the Parry Platypus")
+			.defineInRange("platypusPerfectReflectAmount", 2.0, 0.0, Double.MAX_VALUE)
 	}
 
 	private fun general() {
