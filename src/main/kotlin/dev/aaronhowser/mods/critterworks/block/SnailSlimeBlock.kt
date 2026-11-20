@@ -62,7 +62,7 @@ class SnailSlimeBlock : HoneyBlock(
 		if (state.getValue(HAS_WEST)) shape = Shapes.or(shape, SHAPE_WEST)
 		if (state.getValue(HAS_EAST)) shape = Shapes.or(shape, SHAPE_EAST)
 
-		SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape
+ 		SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape.optimize()
 
 		return shape
 	}
