@@ -3,6 +3,7 @@
     "critterworks:webstone_weaver",
     "critterworks:directional_arachnode",
     "critterworks:inverting_arachnode",
+    "critterworks:webstone_probe",
     "#c:tools/shear"
   ]
 }

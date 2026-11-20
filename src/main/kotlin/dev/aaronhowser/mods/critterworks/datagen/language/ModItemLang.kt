@@ -12,6 +12,7 @@ object ModItemLang {
 			addItem(ModItems.SCOOCHWORM_GPS, "Scoochworm GPS")
 			addItem(ModItems.ARTIFICIAL_SPINNERETS, "Artificial Spinnerets")
 			addItem(ModItems.WEBSTONE_WEAVER, "Webstone Weaver")
+			addItem(ModItems.WEBSTONE_PROBE, "Webstone Probe")
 			addItem(ModItems.DIRECTIONAL_ARACHNODE, "Directional Arachnode")
 			addItem(ModItems.INVERTING_ARACHNODE, "Inverting Arachnode")
 			addItem(ModItems.ITEM_FILTERFEEDER, "Item Filterfeeder")
