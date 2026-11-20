@@ -3,6 +3,7 @@ package dev.aaronhowser.mods.critterworks.block
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
@@ -72,22 +73,29 @@ class SnailSlimeBlock : HoneyBlock(
 		position: BlockPos,
 		context: CollisionContext
 	): VoxelShape {
-		val packedDirections = packDirections(state)
-		val cachedShape = COLLISION_SHAPES_BY_PACKED_DIRECTIONS[packedDirections]
-		if (cachedShape != null) return cachedShape
+		return getShape(state, level, position, context)
+	}
 
-		var shape = Shapes.empty()
+	override fun isSlidingDown(position: BlockPos, entity: Entity): Boolean {
+		if (entity.onGround()) return false
 
-		if (state.getValue(HAS_DOWN)) shape = Shapes.or(shape, COLLISION_SHAPE_DOWN)
-		if (state.getValue(HAS_UP)) shape = Shapes.or(shape, COLLISION_SHAPE_UP)
-		if (state.getValue(HAS_NORTH)) shape = Shapes.or(shape, COLLISION_SHAPE_NORTH)
-		if (state.getValue(HAS_SOUTH)) shape = Shapes.or(shape, COLLISION_SHAPE_SOUTH)
-		if (state.getValue(HAS_WEST)) shape = Shapes.or(shape, COLLISION_SHAPE_WEST)
-		if (state.getValue(HAS_EAST)) shape = Shapes.or(shape, COLLISION_SHAPE_EAST)
+		val state = entity.level().getBlockState(position)
+		return isTouchingSlimeSide(state, position, entity)
+	}
 
-		COLLISION_SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape
+	private fun isTouchingSlimeSide(state: BlockState, position: BlockPos, entity: Entity): Boolean {
+		val boundingBox = entity.boundingBox
+		val minimumX = position.x + SLIME_THICKNESS
+		val maximumX = position.x + 1.0 - SLIME_THICKNESS
+		val minimumZ = position.z + SLIME_THICKNESS
+		val maximumZ = position.z + 1.0 - SLIME_THICKNESS
 
-		return shape
+		if (state.getValue(HAS_NORTH) && boundingBox.minZ <= minimumZ + SLIDE_EPSILON) return true
+		if (state.getValue(HAS_SOUTH) && boundingBox.maxZ >= maximumZ - SLIDE_EPSILON) return true
+		if (state.getValue(HAS_WEST) && boundingBox.minX <= minimumX + SLIDE_EPSILON) return true
+		if (state.getValue(HAS_EAST) && boundingBox.maxX >= maximumX - SLIDE_EPSILON) return true
+
+		return false
 	}
 
 	fun getStateForPlacement(
@@ -110,6 +118,8 @@ class SnailSlimeBlock : HoneyBlock(
 	}
 
 	companion object {
+		private const val SLIDE_EPSILON = 1.0E-7
+		private const val SLIME_THICKNESS = 1.0 / 16.0
 		private const val DOWN_BIT = 1
 		private const val UP_BIT = 1 shl 1
 		private const val NORTH_BIT = 1 shl 2
@@ -118,7 +128,6 @@ class SnailSlimeBlock : HoneyBlock(
 		private const val EAST_BIT = 1 shl 5
 
 		private val SHAPES_BY_PACKED_DIRECTIONS: MutableMap<Int, VoxelShape> = ConcurrentHashMap()
-		private val COLLISION_SHAPES_BY_PACKED_DIRECTIONS: MutableMap<Int, VoxelShape> = ConcurrentHashMap()
 
 		val HAS_DOWN: BooleanProperty = BlockStateProperties.DOWN
 		val HAS_UP: BooleanProperty = BlockStateProperties.UP
@@ -133,13 +142,6 @@ class SnailSlimeBlock : HoneyBlock(
 		val SHAPE_SOUTH: VoxelShape = box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0)
 		val SHAPE_WEST: VoxelShape = box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0)
 		val SHAPE_EAST: VoxelShape = box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0)
-
-		val COLLISION_SHAPE_DOWN: VoxelShape = box(0.0, 0.25, 0.0, 16.0, 1.0, 16.0)
-		val COLLISION_SHAPE_UP: VoxelShape = box(0.0, 15.0, 0.0, 16.0, 15.75, 16.0)
-		val COLLISION_SHAPE_NORTH: VoxelShape = box(0.0, 0.0, 0.25, 16.0, 16.0, 1.0)
-		val COLLISION_SHAPE_SOUTH: VoxelShape = box(0.0, 0.0, 15.0, 16.0, 16.0, 15.75)
-		val COLLISION_SHAPE_WEST: VoxelShape = box(0.25, 0.0, 0.0, 1.0, 16.0, 16.0)
-		val COLLISION_SHAPE_EAST: VoxelShape = box(15.0, 0.0, 0.0, 15.75, 16.0, 16.0)
 
 		private fun packDirections(state: BlockState): Int {
 			var packedDirections = 0
