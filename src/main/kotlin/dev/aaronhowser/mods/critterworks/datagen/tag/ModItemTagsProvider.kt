@@ -185,6 +185,7 @@ class ModItemTagsProvider(
 			.add(ModItems.WEBSTONE_WEAVER)
 			.add(ModItems.DIRECTIONAL_ARACHNODE)
 			.add(ModItems.INVERTING_ARACHNODE)
+			.add(ModItems.WEBSTONE_PROBE)
 			.addTag(Tags.Items.TOOLS_SHEAR)
 
 		tag(ItemTags.LOGS)

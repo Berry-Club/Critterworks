@@ -8,7 +8,9 @@ import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import dev.aaronhowser.mods.critterworks.item.WebstoneWeaverItem
 import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
@@ -26,6 +28,11 @@ object RedstoneWebInteractionHandler {
 		val level = player.serverLevel()
 		val redstoneWebHandler = RedstoneWebHandler.get(level)
 		val selectedNode = redstoneWebHandler.getNode(event.node.uuid) ?: return
+
+		if (event.itemStack.isItem(ModItems.WEBSTONE_PROBE)) {
+			player.status("Redstone strength: ${getRedstoneStrength(selectedNode)}")
+			return
+		}
 
 		if (selectedNode is ArachnodePort && event.itemStack.isEmpty) {
 			val removedArachnode = redstoneWebHandler
@@ -51,8 +58,12 @@ object RedstoneWebInteractionHandler {
 		val player = event.player as? ServerPlayer ?: return
 		val level = player.serverLevel()
 		val redstoneWebHandler = RedstoneWebHandler.get(level)
+		val selectedLine = redstoneWebHandler.getLine(event.lineUuid) ?: return
 
-		if (redstoneWebHandler.getLine(event.lineUuid) == null) return
+		if (event.itemStack.isItem(ModItems.WEBSTONE_PROBE)) {
+			player.status("Redstone strength: ${selectedLine.power}")
+			return
+		}
 
 		when {
 			event.itemStack.item is ArachnodeItem -> {
@@ -83,5 +94,16 @@ object RedstoneWebInteractionHandler {
 				webstoneWeaver.handleNodeSelection(level, player, event.itemStack, event.target)
 			}
 		}
+	}
+
+	private fun getRedstoneStrength(node: WebNode): Int {
+		var strongestPower = 0
+
+		for (line in node.lines) {
+			val redstoneLine = line as? RedstoneWebLine ?: continue
+			strongestPower = maxOf(strongestPower, redstoneLine.power)
+		}
+
+		return strongestPower
 	}
 }
