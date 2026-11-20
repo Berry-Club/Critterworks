@@ -50,6 +50,8 @@ object ModBlocks : AaronBlockRegistry() {
 		registerBlockWithoutItem("dyeberry_vines", ::DyeberryVinesBlock)
 	val DYEBERRY_VINES_PLANT: DeferredBlock<DyeberryVinesPlantBlock> =
 		registerBlockWithoutItem("dyeberry_vines_plant", ::DyeberryVinesPlantBlock)
+	val SNAIL_SLIME: DeferredBlock<SnailSlimeBlock> =
+		registerBlockWithoutItem("snail_slime", ::SnailSlimeBlock)
 
 	private fun coloredScoochstem(wormColor: WormColor): DeferredBlock<ColoredScoochstemBlock> =
 		registerBlock(wormColor.colorName + "_scoochstem") { ColoredScoochstemBlock(wormColor) }
