@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HoneyBlock
 import net.minecraft.world.level.block.MultifaceBlock
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -21,8 +22,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 class SnailSlimeBlock : HoneyBlock(
 	Properties
-		.ofFullCopy(Blocks.HONEY_BLOCK)
+		.of()
 		.mapColor(MapColor.COLOR_BROWN)
+		.sound(SoundType.HONEY_BLOCK)
+		.jumpFactor(1f)
+		.speedFactor(1f)
 		.noCollission()
 ) {
 
