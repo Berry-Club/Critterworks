@@ -31,6 +31,7 @@ class SnailSlimeBlock : HoneyBlock(
 		.jumpFactor(1f)
 		.speedFactor(1f)
 		.noCollission()
+		.strength(0.1f)
 ) {
 
 	init {
