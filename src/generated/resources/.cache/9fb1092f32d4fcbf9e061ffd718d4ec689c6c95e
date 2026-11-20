@@ -1,9 +1,10 @@
-// 1.21.1	2026-10-25T19:22:53.0482845	Recipes
+// 1.21.1	2026-11-20T05:06:49.3276201	Recipes
 9f3c0fefc687fcb9593729bd3905bd9cae8298a0 data/critterworks/advancement/recipes/misc/apples_from_apple_slice.json
 217406fda284ac1b4e6db15a28c4d8388296eabf data/critterworks/advancement/recipes/misc/artificial_spinnerets.json
 f02a9a737972ffa462613e4f3b9996d01cd9623c data/critterworks/advancement/recipes/misc/blue_dye_from_dyeberry.json
 70bd0829ca09bc34bcf7d24267d12415bde70343 data/critterworks/advancement/recipes/misc/blue_scoochstem.json
 546a57844e56b8c936fefeb31dd811a60d9e3d79 data/critterworks/advancement/recipes/misc/critter_cage.json
+ebee2fe36accc37468f51ccc67a8930d6da46d48 data/critterworks/advancement/recipes/misc/critter_catcher.json
 7c262359799da5ef7b0f9482fe49f6a3dd811463 data/critterworks/advancement/recipes/misc/cyan_dye_from_dyeberry.json
 afb26bbec9e83c7c734aab6c3be090b6df62e9d4 data/critterworks/advancement/recipes/misc/cyan_scoochstem.json
 383dbbda7f0395e67d13bf423f73494a7b73612b data/critterworks/advancement/recipes/misc/green_dye_from_dyeberry.json
@@ -29,6 +30,7 @@ de19ebe3cb4c0c071fcb53a70bf3a00638a447f1 data/critterworks/advancement/recipes/m
 85109515077cdcd234ca96a518c418ebcec42cc1 data/critterworks/recipe/blue_dye_from_dyeberry.json
 da28fc2e7218d6b8a2c9c1d405da69fb6056193c data/critterworks/recipe/blue_scoochstem.json
 de3d44a60f56bc8be862b7576622342c42718e1b data/critterworks/recipe/critter_cage.json
+7955b5462f58d173f0762cbf81c4a9741850a98e data/critterworks/recipe/critter_catcher.json
 4ed5866e18264da28246219b7d848678f04d240c data/critterworks/recipe/cyan_dye_from_dyeberry.json
 6c1b5b6bacbc14d1f22d32aa080e87bec3a4e00e data/critterworks/recipe/cyan_scoochstem.json
 666f18dea883be46b02f31bb82886c6e01442322 data/critterworks/recipe/green_dye_from_dyeberry.json

@@ -4,6 +4,7 @@ import dev.aaronhowser.mods.aaron.datagen.AaronRecipeProvider
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.asIngredient
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getAsStack
 import dev.aaronhowser.mods.critterworks.Critterworks
+import dev.aaronhowser.mods.critterworks.datagen.tag.ModBlockTagsProvider
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
 import dev.aaronhowser.mods.critterworks.recipe.crafting.ApplyTardigradeRecipe
 import dev.aaronhowser.mods.critterworks.recipe.crafting.RemoveTardigradeRecipe
@@ -13,6 +14,7 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.data.recipes.SpecialRecipeBuilder
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.alchemy.Potions
@@ -92,6 +94,16 @@ class ModRecipeProvider(
 			"WW,WW",
 			mapOf(
 				'W' to ModBlocks.SCOOCHSTEM.asIngredient()
+			)
+		).save(recipeOutput)
+
+		shapedRecipe(
+			ModItems.CRITTER_CATCHER,
+			" SW, TS,T  ",
+			mapOf(
+				'S' to Tags.Items.STRINGS.asIngredient(),
+				'W' to ModItemTagsProvider.SCOOCHSTEM_LOGS.asIngredient(),
+				'T' to Tags.Items.RODS_WOODEN.asIngredient()
 			)
 		).save(recipeOutput)
 
