@@ -119,6 +119,12 @@ class SnailSlimeBlock : HoneyBlock(
 		return getShape(state, level, position, context)
 	}
 
+	override fun skipRendering(state: BlockState, adjacentState: BlockState, side: Direction): Boolean {
+		if (adjacentState.isBlock(this)) return true
+
+		return super.skipRendering(state, adjacentState, side)
+	}
+
 	override fun updateShape(
 		state: BlockState,
 		direction: Direction,

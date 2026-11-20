@@ -1,4 +1,4 @@
-// 1.21.1	2026-11-20T01:41:59.510196	Block States: critterworks
+// 1.21.1	2026-11-20T03:09:19.023029	Block States: critterworks
 bff39bd414b05811bbd89c96d8e2121642432d62 assets/critterworks/blockstates/apple_slice.json
 92a92831fb4c696d7bdfa64e0b64ae262f78d98c assets/critterworks/blockstates/blue_scoochstem.json
 86fd608de8d6b5ed6348bcdeee10c53f6ede2662 assets/critterworks/blockstates/critter_cage.json
@@ -48,7 +48,7 @@ ade6e67016b0a3b8be260d8357fd98e9c8942afe assets/critterworks/models/block/scooch
 2f5c99f222d16879ba54965172f6ac72010a113a assets/critterworks/models/block/scoochstem_wood_side_disabled.json
 c8d1bc58808e62d7ba91217bb1f3bc9899c0c44f assets/critterworks/models/block/scoochworm_depot.json
 f802f7d9d9f892de66bf9b904ab15ce2feb4e6dd assets/critterworks/models/block/scoochworm_depot_powered.json
-0e0f9f1815a2b9d103cc121b1fd0f46fcf60a056 assets/critterworks/models/block/snail_slime.json
+4c24cda076189782c6cad3f32d47ed4dad95d7a4 assets/critterworks/models/block/snail_slime.json
 26915bd4142d1337e483208bf2e7b0ae0ac13971 assets/critterworks/models/block/sparkbug_bush.json
 984816b9875ce400dc94b43fab9fddcfaa2c6488 assets/critterworks/models/block/stem_encased_comparator.json
 c56a244dfb9680676876c9705aab4085f7806315 assets/critterworks/models/block/stem_encased_comparator_off.json
