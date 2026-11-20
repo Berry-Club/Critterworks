@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.item
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getEquipmentSlot
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.giveOrDropStack
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isClientSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.tell
@@ -44,6 +45,8 @@ class CritterCatcherItem(properties: Properties) : Item(properties) {
 		player.giveOrDropStack(entityStack)
 		interactionTarget.discard()
 
+		stack.hurtAndBreak(1, player, usedHand.getEquipmentSlot())
+
 		return InteractionResult.SUCCESS
 	}
 
@@ -54,6 +57,12 @@ class CritterCatcherItem(properties: Properties) : Item(properties) {
 		tooltipFlag: TooltipFlag
 	) {
 		tooltipComponents += ModMenuLang.CRITTER_CATCHER_TOOLTIP.toGrayComponent()
+	}
+
+	companion object {
+		val DEFAULT_PROPERTIES: Properties =
+			Properties()
+				.durability(32)
 	}
 
 }

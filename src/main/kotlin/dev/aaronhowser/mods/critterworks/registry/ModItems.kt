@@ -23,7 +23,7 @@ object ModItems : AaronItemRegistry() {
 	val CRITTER_CAGE: DeferredItem<CritterCageItem> =
 		register("critter_cage", ::CritterCageItem)
 	val CRITTER_CATCHER: DeferredItem<CritterCatcherItem> =
-		register("critter_catcher", ::CritterCatcherItem)
+		register("critter_catcher", ::CritterCatcherItem, CritterCatcherItem.DEFAULT_PROPERTIES)
 
 	val LOCKBOX: DeferredItem<LockboxItem> =
 		register("lockbox", ::LockboxItem, LockboxItem.DEFAULT_PROPERTIES)
