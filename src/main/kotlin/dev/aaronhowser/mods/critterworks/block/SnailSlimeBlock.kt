@@ -135,8 +135,6 @@ class SnailSlimeBlock : HoneyBlock(
 	}
 
 	companion object {
-		private const val SLIDE_EPSILON = 1.0E-7
-		private const val SLIME_THICKNESS = 1.0 / 16.0
 		private const val DOWN_BIT = 1
 		private const val UP_BIT = 1 shl 1
 		private const val NORTH_BIT = 1 shl 2
