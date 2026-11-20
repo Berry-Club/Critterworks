@@ -1,8 +1,9 @@
-// 1.21.1	2026-10-25T21:02:33.4619123	Registries
+// 1.21.1	2026-11-20T01:41:59.5113114	Registries
 09de6d362d2989d8b0eb34f72f70f080d4d169f0 data/critterworks/damage_type/evil_snail.json
 2838a075dc434fb90472436a7032d8dd0872eaa1 data/critterworks/neoforge/biome_modifier/add_filterfeeder.json
 6c69a4b3230591b9539ba32cbfd927b55c95fdea data/critterworks/neoforge/biome_modifier/add_hopping_spider_nest.json
 d3ec7747314b94fe91b92b26933d0ca67c91255f data/critterworks/neoforge/biome_modifier/add_nether_sproutsnail.json
+c9f0c1b5f91f5c0470bc109f701d6a0dba476aff data/critterworks/neoforge/biome_modifier/add_parry_platypus.json
 996e3139c50effb337d478ff62cd842fe02c762a data/critterworks/neoforge/biome_modifier/add_scoochstem_vine.json
 0b68b5328b1ac79429082fd551c90659a139a5c2 data/critterworks/neoforge/biome_modifier/add_scoochworm_apple.json
 9e84f4b3a10c02e212c1f28f0e6a215a0dde40ca data/critterworks/neoforge/biome_modifier/add_sparkbug_bush.json

@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.CaveVines
 import net.minecraft.world.level.block.HugeMushroomBlock
+import net.minecraft.world.level.block.MultifaceBlock
 import net.minecraft.world.level.block.RotatedPillarBlock
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider
@@ -40,6 +41,36 @@ class ModBlockStateProvider(
 		coloredScoochstem()
 		dyeberryVines()
 		sparkbugBush()
+		snailSlime()
+	}
+
+	private fun snailSlime() {
+		val block = ModBlocks.SNAIL_SLIME.get()
+		val texture = mcLoc("block/honey_block_side")
+		val model = models()
+			.withExistingParent("snail_slime", mcLoc("block/block"))
+			.texture("texture", texture)
+			.particle(texture)
+			.renderType(RenderType.TRANSLUCENT.name)
+			.ao(false)
+
+		model
+			.element()
+			.from(0f, 0f, 0f)
+			.to(16f, 16f, 1f)
+			.allFaces { _, face -> face.texture("#texture") }
+			.end()
+
+		for (direction in Direction.entries) {
+			getMultipartBuilder(block)
+				.part()
+				.modelFile(model)
+				.rotationX(getFaceXRotation(direction))
+				.rotationY(getFaceYRotation(direction))
+				.addModel()
+				.condition(MultifaceBlock.getFaceProperty(direction), true)
+				.end()
+		}
 	}
 
 	private fun sparkbugBush() {

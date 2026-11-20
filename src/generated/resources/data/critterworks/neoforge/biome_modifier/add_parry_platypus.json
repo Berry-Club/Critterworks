@@ -1,12 +1,10 @@
 {
   "type": "neoforge:add_spawns",
   "biomes": "#critterworks:has_parry_platypus",
-  "spawners": [
-    {
-      "type": "critterworks:parry_platypus",
-      "maxCount": 2,
-      "minCount": 1,
-      "weight": 5
-    }
-  ]
+  "spawners": {
+    "type": "critterworks:parry_platypus",
+    "maxCount": 2,
+    "minCount": 1,
+    "weight": 5
+  }
 }

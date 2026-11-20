@@ -40,6 +40,7 @@ class ModBlockLootTablesSubProvider(
 
 		add(ModBlocks.DYEBERRY_VINES.get(), noDrop())
 		add(ModBlocks.DYEBERRY_VINES_PLANT.get(), noDrop())
+		add(ModBlocks.SNAIL_SLIME.get(), noDrop())
 	}
 
 	private fun critterCage() {
