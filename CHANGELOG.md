@@ -18,10 +18,10 @@
 	- They have 2 Webstone ports
 		- The port at their rear is the input
 		- The port at their head is the output
-- Directional Arachnode
-	- Simply carries the input signal to the output, without letting the output power the input
-- Inverting Arachnode
-	- Outputs a signal when the input does not have one
+	- Directional Arachnode
+		- Simply carries the input signal to the output, without letting the output power the input
+	- Inverting Arachnode
+		- Outputs a signal when the input does not have one
 - Snail Slime block
 	- Sneak right-click the Snail Slime item on a block to place a square on that face
 	- Touching it is like touching Honey, making you slide down
