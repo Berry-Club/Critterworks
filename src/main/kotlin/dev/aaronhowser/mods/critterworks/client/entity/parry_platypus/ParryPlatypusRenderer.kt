@@ -21,9 +21,15 @@ class ParryPlatypusRenderer(
 		packedLight: Int,
 		packedOverlay: Int
 	) {
-		if (!isReRender && animatable.isBaby) {
-			poseStack.scale(0.5f, 0.5f, 0.5f)
+		var w = widthScale
+		var h = heightScale
+
+		if (animatable.isBaby) {
+			w *= 0.5f
+			h *= 0.5f
 		}
+
+		super.scaleModelForRender(w, h, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay)
 	}
 
 }
