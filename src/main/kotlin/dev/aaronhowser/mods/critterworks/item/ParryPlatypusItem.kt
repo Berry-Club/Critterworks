@@ -1,5 +1,6 @@
 package dev.aaronhowser.mods.critterworks.item
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.client.item.parry_platypus.ParryPlatypusItemRenderer
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -8,6 +9,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
@@ -138,25 +140,9 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		private const val BLOCK_CONTROLLER = "blocking"
 		private const val PARRY_CONTROLLER = "parry"
 		private const val PARRY_TRIGGER = "parry"
-
-		fun handleShieldBlock(event: LivingShieldBlockEvent) {
-			if (!event.blocked) return
-
-			val livingEntity = event.entity
-			val level = livingEntity.level()
-			if (level !is ServerLevel) return
-
-			val stack = livingEntity.useItem
-			val item = stack.item
-			if (item !is ParryPlatypusItem) return
-
-			item.triggerAnim<Any>(
-				livingEntity,
-				GeoItem.getOrAssignId(stack, level),
-				PARRY_CONTROLLER,
-				PARRY_TRIGGER
-			)
-		}
+		private const val PARRY_WINDOW_TICKS = 10
+		private const val NORMAL_REFLECTED_DAMAGE_MULTIPLIER = 0.3f
+		private const val PARRY_REFLECTED_DAMAGE_MULTIPLIER = 2f
 
 		val DEFAULT_PROPERTIES = {
 			Properties()
@@ -216,11 +202,57 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 				else -> false
 			}
 
-
 			return if (isHeldInHand)
 				animationState.setAndContinue(BLOCK_ANIMATION)
 			else
 				PlayState.STOP
+		}
+
+		fun handleShieldBlock(event: LivingShieldBlockEvent) {
+			if (!event.blocked) return
+
+			val livingEntity = event.entity
+			val level = livingEntity.level()
+			if (level !is ServerLevel) return
+
+			val stack = livingEntity.useItem
+			val item = stack.item
+			if (item !is ParryPlatypusItem) return
+
+			reflectMeleeDamage(event, livingEntity, stack)
+
+			item.triggerAnim<Any>(
+				livingEntity,
+				GeoItem.getOrAssignId(stack, level),
+				PARRY_CONTROLLER,
+				PARRY_TRIGGER
+			)
+		}
+
+		private fun reflectMeleeDamage(
+			event: LivingShieldBlockEvent,
+			blockingEntity: LivingEntity,
+			stack: ItemStack
+		) {
+			val damageSource = event.damageSource
+			if (!damageSource.isDirect || damageSource.isDamageSource(DamageTypes.THORNS)) return
+
+			val attacker = damageSource.entity as? LivingEntity ?: return
+			if (attacker === blockingEntity) return
+
+			val reflectedDamageMultiplier = if (stack.platypusUseTicks <= PARRY_WINDOW_TICKS) {
+				PARRY_REFLECTED_DAMAGE_MULTIPLIER
+			} else {
+				NORMAL_REFLECTED_DAMAGE_MULTIPLIER
+			}
+
+			val reflectedDamage = event.blockedDamage * reflectedDamageMultiplier
+			if (reflectedDamage <= 0f) return
+
+			attacker.hurt(
+				blockingEntity.damageSources().thorns(blockingEntity),
+				reflectedDamage
+			)
 		}
 	}
 }

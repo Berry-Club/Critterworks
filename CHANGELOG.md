@@ -4,6 +4,8 @@
 
 - Parry Platypus
 	- Can be used like a shield
+		- Blocked hits will reflect a portion of damage onto the attacker
+        - Blocking at the perfect moment will reflect much more
 	- Spawns naturally on riverbanks and in river water
 - Webstone Weaver
 	- Can be used to place lines of Webstone across blocks
