@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
@@ -115,7 +116,6 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		platypus.setPlatypusStack(stack.copy())
 
 		if (!level.addFreshEntity(platypus)) return false
-
 		entity.discard()
 		return true
 	}
@@ -256,7 +256,17 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 				)
 			}
 
-			if (!isPerfectParry) return
+			if (!isPerfectParry) {
+				if (blockingEntity !is Player) return
+
+				val hand = when {
+					blockingEntity.getItemBySlot(EquipmentSlot.MAINHAND) === stack -> EquipmentSlot.MAINHAND
+					else -> EquipmentSlot.MAINHAND
+				}
+
+				stack.hurtAndBreak(1, blockingEntity, hand)
+				return
+			}
 
 			val knockback = ServerConfig.CONFIG.platypusPerfectParryKnockback.get()
 			val lookAngle = blockingEntity.lookAngle

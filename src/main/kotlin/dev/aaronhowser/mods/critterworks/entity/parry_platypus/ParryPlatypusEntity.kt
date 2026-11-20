@@ -14,6 +14,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
+import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
@@ -73,6 +74,9 @@ class ParryPlatypusEntity(
 		if (stack.has(DataComponents.CUSTOM_NAME)) {
 			customName = stack.get(DataComponents.CUSTOM_NAME)
 		}
+
+		val durabilityPercent = stack.damageValue.toFloat() / stack.maxDamage
+		health = durabilityPercent * maxHealth
 	}
 
 	override fun getCaughtItemStack(): ItemStack {
@@ -80,6 +84,15 @@ class ParryPlatypusEntity(
 			ModItems.PARRY_PLATYPUS.getDefaultInstance()
 		} else {
 			platypusStack.copy()
+		}
+
+		val healthPercent = health / maxHealth
+
+		if (healthPercent > 1.0) {
+			stack.remove(DataComponents.DAMAGE)
+		} else if (healthPercent > 0.0) {
+			val durability = Mth.ceil(stack.maxDamage * healthPercent)
+			stack.damageValue = durability
 		}
 
 		val name = customName
