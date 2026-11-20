@@ -3,12 +3,14 @@ package dev.aaronhowser.mods.critterworks.item
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.client.item.parry_platypus.ParryPlatypusItemRenderer
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
+import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
@@ -93,6 +95,27 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		stack.platypusUseTicks = 0
 	}
 
+	override fun onEntityItemUpdate(stack: ItemStack, entity: ItemEntity): Boolean {
+		val level = entity.level()
+		if (level.isClientSide || entity.tickCount < SPAWN_DELAY_TICKS) return false
+
+		val platypus = ModEntityTypes.PARRY_PLATYPUS.get().create(level) ?: return false
+		platypus.moveTo(
+			entity.x,
+			entity.y,
+			entity.z,
+			entity.yRot,
+			entity.xRot
+		)
+
+		platypus.setPlatypusStack(stack.copy())
+
+		if (!level.addFreshEntity(platypus)) return false
+
+		entity.discard()
+		return true
+	}
+
 	override fun releaseUsing(
 		stack: ItemStack,
 		level: Level,
@@ -110,6 +133,7 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	companion object {
+		private const val SPAWN_DELAY_TICKS = 5 * 20
 		private const val BLOCK_TRANSITION_TICKS = 3
 		private const val BLOCK_CONTROLLER = "blocking"
 		private const val PARRY_CONTROLLER = "parry"

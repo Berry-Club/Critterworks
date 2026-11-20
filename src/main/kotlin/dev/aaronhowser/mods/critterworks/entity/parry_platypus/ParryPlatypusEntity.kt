@@ -1,12 +1,17 @@
 package dev.aaronhowser.mods.critterworks.entity.parry_platypus
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDefaultInstance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
+import dev.aaronhowser.mods.critterworks.entity.ItemCatchableEntity
 import dev.aaronhowser.mods.critterworks.entity.control.AmphibiousMoveControl
 import dev.aaronhowser.mods.critterworks.entity.goal.LowAmphibiousWanderGoal
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
+import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
@@ -33,9 +38,10 @@ import software.bernie.geckolib.util.GeckoLibUtil
 class ParryPlatypusEntity(
 	entityType: EntityType<out ParryPlatypusEntity>,
 	level: Level
-) : Animal(entityType, level), GeoEntity {
+) : Animal(entityType, level), GeoEntity, ItemCatchableEntity {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
+	private var platypusStack = ItemStack.EMPTY
 
 	init {
 		moveControl = AmphibiousMoveControl(this)
@@ -60,8 +66,56 @@ class ParryPlatypusEntity(
 		return stack.isItem(ModItemTagsProvider.PLATYPUS_FOOD)
 	}
 
+	fun setPlatypusStack(stack: ItemStack) {
+		setPersistenceRequired()
+		platypusStack = stack.copy()
+
+		if (stack.has(DataComponents.CUSTOM_NAME)) {
+			customName = stack.get(DataComponents.CUSTOM_NAME)
+		}
+	}
+
+	override fun getAsItemstack(): ItemStack {
+		val stack = if (platypusStack.isEmpty) {
+			ModItems.PARRY_PLATYPUS.getDefaultInstance()
+		} else {
+			platypusStack.copy()
+		}
+
+		val name = customName
+		if (name != null) {
+			stack.set(DataComponents.CUSTOM_NAME, name)
+		}
+
+		return stack
+	}
+
 	override fun getBreedOffspring(level: ServerLevel, otherParent: AgeableMob): AgeableMob? {
 		return ModEntityTypes.PARRY_PLATYPUS.get().create(level)
+	}
+
+	override fun readAdditionalSaveData(tag: CompoundTag) {
+		super.readAdditionalSaveData(tag)
+
+		if (!tag.contains(PLATYPUS_STACK_TAG)) return
+
+		val savedStack = ItemStack.parseOptional(
+			registryAccess(),
+			tag.getCompound(PLATYPUS_STACK_TAG)
+		)
+
+		setPlatypusStack(savedStack)
+	}
+
+	override fun addAdditionalSaveData(tag: CompoundTag) {
+		super.addAdditionalSaveData(tag)
+
+		if (platypusStack.isEmpty) return
+
+		tag.put(
+			PLATYPUS_STACK_TAG,
+			platypusStack.save(registryAccess())
+		)
 	}
 
 	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) {
@@ -80,6 +134,7 @@ class ParryPlatypusEntity(
 	companion object {
 		const val WIDTH = 0.875f
 		const val HEIGHT = 0.375f
+		private const val PLATYPUS_STACK_TAG = "PlatypusStack"
 
 		private val WALK_ANIMATION: RawAnimation =
 			RawAnimation.begin()
