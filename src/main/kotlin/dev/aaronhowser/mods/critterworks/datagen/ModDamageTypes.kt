@@ -12,11 +12,20 @@ object ModDamageTypes {
 		Registries.DAMAGE_TYPE,
 		Critterworks.modResource("evil_snail")
 	)
+	val PARRY_PLATYPUS: ResourceKey<DamageType> = ResourceKey.create(
+		Registries.DAMAGE_TYPE,
+		Critterworks.modResource("parry_platypus")
+	)
 
 	fun bootstrap(context: BootstrapContext<DamageType>) {
 		context.register(
 			EVIL_SNAIL,
 			DamageType("evilSnail", 0f)
+		)
+
+		context.register(
+			PARRY_PLATYPUS,
+			DamageType("parryPlatypus", 0.1f)
 		)
 	}
 

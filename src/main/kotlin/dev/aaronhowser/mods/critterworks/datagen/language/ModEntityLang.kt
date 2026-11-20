@@ -8,6 +8,7 @@ object ModEntityLang {
 	const val FLUID_FILTERFEEDER = "entity.critterworks.filterfeeder.fluid"
 	const val EVIL_SNAIL = "entity.critterworks.evilsnail"
 	const val EVIL_SNAIL_DEATH = "death.attack.evilSnail"
+	const val PARRY_PLATYPUS_DEATH = "death.attack.parryPlatypus"
 
 	fun add(provider: ModLanguageProvider) {
 		provider.addEntityType(ModEntityTypes.SCOOCHWORM, "Scoochworm")
@@ -21,5 +22,6 @@ object ModEntityLang {
 		provider.add(FLUID_FILTERFEEDER, "Fluid Filterfeeder")
 		provider.add(EVIL_SNAIL, "The Snail That Kills %s")
 		provider.add(EVIL_SNAIL_DEATH, $$"%1$s was killed by the Snail That Kills %1$s")
+		provider.add(PARRY_PLATYPUS_DEATH, $$"%1$s had their attack reflected by %2$s")
 	}
 }

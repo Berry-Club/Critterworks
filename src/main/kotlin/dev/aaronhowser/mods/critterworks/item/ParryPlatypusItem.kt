@@ -4,13 +4,13 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isDamageSource
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.client.item.parry_platypus.ParryPlatypusItemRenderer
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
+import dev.aaronhowser.mods.critterworks.datagen.ModDamageTypes
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
@@ -233,7 +233,7 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 			stack: ItemStack
 		) {
 			val damageSource = event.damageSource
-			if (!damageSource.isDirect || damageSource.isDamageSource(DamageTypes.THORNS)) return
+			if (!damageSource.isDirect || damageSource.isDamageSource(ModDamageTypes.PARRY_PLATYPUS)) return
 
 			val attacker = damageSource.entity as? LivingEntity ?: return
 			if (attacker === blockingEntity) return
@@ -248,7 +248,7 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 			if (reflectedDamage <= 0f) return
 
 			attacker.hurt(
-				blockingEntity.damageSources().thorns(blockingEntity),
+				blockingEntity.damageSources().source(ModDamageTypes.PARRY_PLATYPUS, blockingEntity),
 				reflectedDamage
 			)
 		}

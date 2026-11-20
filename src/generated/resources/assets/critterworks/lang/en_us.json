@@ -97,6 +97,7 @@
   "critterworks.configuration.webs": "Webs",
   "critterworks.configuration.world_gen": "World Generation",
   "death.attack.evilSnail": "%1$s was killed by the Snail That Kills %1$s",
+  "death.attack.parryPlatypus": "%1$s had their attack reflected by %2$s",
   "effect.critterworks.aaron": "Aaron.",
   "effect.critterworks.dyed_blue": "Dyed Blue",
   "effect.critterworks.dyed_cyan": "Dyed Cyan",

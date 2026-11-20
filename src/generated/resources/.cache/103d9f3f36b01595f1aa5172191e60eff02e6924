@@ -1,5 +1,6 @@
-// 1.21.1	2026-11-20T01:41:59.5113114	Registries
+// 1.21.1	2026-11-20T05:40:34.0895285	Registries
 09de6d362d2989d8b0eb34f72f70f080d4d169f0 data/critterworks/damage_type/evil_snail.json
+916e84e6bdfce074d82b9f6ecb5a22bc44e9aeae data/critterworks/damage_type/parry_platypus.json
 2838a075dc434fb90472436a7032d8dd0872eaa1 data/critterworks/neoforge/biome_modifier/add_filterfeeder.json
 6c69a4b3230591b9539ba32cbfd927b55c95fdea data/critterworks/neoforge/biome_modifier/add_hopping_spider_nest.json
 d3ec7747314b94fe91b92b26933d0ca67c91255f data/critterworks/neoforge/biome_modifier/add_nether_sproutsnail.json
