@@ -166,14 +166,21 @@ class ModItemModelProvider(
 	}
 
 	private fun basicItems() {
-		basicItem(ModItems.ARTIFICIAL_SPINNERETS.get())
-		basicItem(ModItems.WEB_PORT.get())
-		basicItem(ModItems.SCOOCHWORM_GPS.get())
-		basicItem(ModItems.SPARKPOLLEN_POUCH.get())
-		basicItem(ModItems.TARDIGRADE.get())
-		basicItem(ModItems.PEARL.get())
-		basicItem(ModItems.SNAIL_SLIME.get())
-		basicItem(ModItems.SNAIL_SHELL_FRAGMENT.get())
+		val items = listOf(
+			ModItems.ARTIFICIAL_SPINNERETS.get(),
+			ModItems.WEB_PORT.get(),
+			ModItems.SCOOCHWORM_GPS.get(),
+			ModItems.SPARKPOLLEN_POUCH.get(),
+			ModItems.TARDIGRADE.get(),
+			ModItems.PEARL.get(),
+			ModItems.SNAIL_SLIME.get(),
+			ModItems.SNAIL_SHELL_FRAGMENT.get(),
+			ModItems.CRITTER_CATCHER.get()
+		)
+
+		for (i in items) {
+			basicItem(i)
+		}
 	}
 
 	private fun parryPlatypus() {
