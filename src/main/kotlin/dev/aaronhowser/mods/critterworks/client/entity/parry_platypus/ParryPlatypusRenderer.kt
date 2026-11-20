@@ -41,7 +41,7 @@ class ParryPlatypusRenderer(
 	}
 
 	companion object {
-		private const val MINIMUM_LIGHT_LEVEL = 2
+		private const val MINIMUM_LIGHT_LEVEL = 5
 	}
 
 }
