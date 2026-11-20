@@ -10,7 +10,7 @@ plugins {
 	id 'net.neoforged.moddev' version '2.0.124'
 	id 'org.jetbrains.kotlin.jvm' version '2.4.0'
 	id 'me.modmuss50.mod-publish-plugin' version '2.1.1'
-	id 'org.moddedmc.wiki.toolkit' version '0.5.0'
+	id 'org.moddedmc.wiki.toolkit' version '0.5.1'
 }
 
 def environment = System.getenv()
@@ -149,7 +149,7 @@ dependencies {
 	compileOnly "mezz.jei:jei-1.21.1-neoforge-api:${jei_version}"
 	runtimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
 
-	runtimeOnly 'org.sinytra:wiki-exporter-neoforge:2.2.1+1.21.1'
+	runtimeOnly 'org.sinytra:wiki-exporter-neoforge:2.5.0+1.21.1'
 }
 
 tasks.withType(ProcessResources).configureEach {
