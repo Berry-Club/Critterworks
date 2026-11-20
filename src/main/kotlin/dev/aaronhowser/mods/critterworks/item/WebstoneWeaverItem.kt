@@ -8,6 +8,10 @@ import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionContext
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionItem
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebNodeInteractionContext
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebNodeInteractionItem
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import dev.aaronhowser.mods.critterworks.item.component.WebNodeDataComponent
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
@@ -25,7 +29,9 @@ import net.minecraft.world.phys.HitResult
 import java.util.*
 import java.util.function.Supplier
 
-class WebstoneWeaverItem(properties: Properties) : Item(properties) {
+class WebstoneWeaverItem(properties: Properties) : Item(properties),
+	RedstoneWebNodeInteractionItem,
+	RedstoneWebLineInteractionItem {
 
 	override fun useOn(context: UseOnContext): InteractionResult {
 		val level = context.level
@@ -58,6 +64,14 @@ class WebstoneWeaverItem(properties: Properties) : Item(properties) {
 
 	override fun isFoil(stack: ItemStack): Boolean {
 		return stack.has(ModDataComponents.WEB_NODE)
+	}
+
+	override fun interactWithRedstoneWebNode(context: RedstoneWebNodeInteractionContext) {
+		handleNodeSelection(context.level, context.player, context.itemStack, context.node)
+	}
+
+	override fun interactWithRedstoneWebLine(context: RedstoneWebLineInteractionContext) {
+		handleNodeSelection(context.level, context.player, context.itemStack, context.target)
 	}
 
 	fun handleNodeSelection(

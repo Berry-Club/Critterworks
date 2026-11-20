@@ -43,8 +43,8 @@ object ModItems : AaronItemRegistry() {
 		register("directional_arachnode", ::DirectionalArachnodeItem)
 	val INVERTING_ARACHNODE: DeferredItem<InvertingArachnodeItem> =
 		register("inverting_arachnode", ::InvertingArachnodeItem)
-	val WEBSTONE_PROBE: DeferredItem<Item> =
-		basic("webstone_probe", PROPERTIES_SINGLE_STACK)
+	val WEBSTONE_PROBE: DeferredItem<WebstoneProbeItem> =
+		register("webstone_probe", ::WebstoneProbeItem, PROPERTIES_SINGLE_STACK)
 
 	val SPARKPOLLEN_POUCH: DeferredItem<SparkpollenPouchItem> =
 		register("sparkpollen_pouch", ::SparkpollenPouchItem, SparkpollenPouchItem.DEFAULT_PROPERTIES)

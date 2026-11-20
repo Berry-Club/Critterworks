@@ -8,13 +8,8 @@ import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
 import dev.aaronhowser.mods.critterworks.event.custom.WebLineInteractionEvent
 import dev.aaronhowser.mods.critterworks.event.custom.WebNodeInteractionEvent
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
-import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
-import dev.aaronhowser.mods.critterworks.item.WebstoneWeaverItem
-import dev.aaronhowser.mods.critterworks.item.arachnode.ArachnodeItem
-import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.Tags
@@ -28,9 +23,19 @@ object RedstoneWebInteractionHandler {
 		val level = player.serverLevel()
 		val redstoneWebHandler = RedstoneWebHandler.get(level)
 		val selectedNode = redstoneWebHandler.getNode(event.node.uuid) ?: return
+		val interactionItem = event.itemStack.item
 
-		if (event.itemStack.isItem(ModItems.WEBSTONE_PROBE)) {
-			player.status("Redstone strength: ${getRedstoneStrength(selectedNode)}")
+		if (interactionItem is RedstoneWebNodeInteractionItem) {
+			interactionItem.interactWithRedstoneWebNode(
+				RedstoneWebNodeInteractionContext(
+					level,
+					player,
+					event.itemStack,
+					event.hand,
+					redstoneWebHandler,
+					selectedNode
+				)
+			)
 			return
 		}
 
@@ -45,11 +50,6 @@ object RedstoneWebInteractionHandler {
 			level.gameEvent(player, GameEvent.BLOCK_DESTROY, selectedNode.position)
 			return
 		}
-
-		if (!event.itemStack.isItem(ModItems.WEBSTONE_WEAVER)) return
-
-		val webstoneWeaver = event.itemStack.item as? WebstoneWeaverItem ?: return
-		webstoneWeaver.handleNodeSelection(level, player, event.itemStack, selectedNode)
 	}
 
 	fun handleLineInteraction(event: WebLineInteractionEvent) {
@@ -59,51 +59,28 @@ object RedstoneWebInteractionHandler {
 		val level = player.serverLevel()
 		val redstoneWebHandler = RedstoneWebHandler.get(level)
 		val selectedLine = redstoneWebHandler.getLine(event.lineUuid) ?: return
+		val interactionItem = event.itemStack.item
 
-		if (event.itemStack.isItem(ModItems.WEBSTONE_PROBE)) {
-			player.status("Redstone strength: ${selectedLine.power}")
+		if (interactionItem is RedstoneWebLineInteractionItem) {
+			interactionItem.interactWithRedstoneWebLine(
+				RedstoneWebLineInteractionContext(
+					level,
+					player,
+					event.itemStack,
+					event.hand,
+					redstoneWebHandler,
+					selectedLine,
+					event.target
+				)
+			)
 			return
 		}
 
-		when {
-			event.itemStack.item is ArachnodeItem -> {
-				val placed = redstoneWebHandler.insertArachnodeOnLine(
-					level,
-					event.lineUuid,
-					event.itemStack,
-					event.target.position,
-					player.eyePosition
-				)
+		if (!event.itemStack.isItem(Tags.Items.TOOLS_SHEAR)) return
+		if (redstoneWebHandler.removeLine(level, event.lineUuid) == null) return
 
-				if (!placed) return
-
-				event.itemStack.consume(1, player)
-				level.gameEvent(player, GameEvent.BLOCK_PLACE, event.target.position)
-			}
-
-			event.itemStack.isItem(Tags.Items.TOOLS_SHEAR) -> {
-				if (redstoneWebHandler.removeLine(level, event.lineUuid) == null) return
-
-				event.itemStack.hurtAndBreak(1, player, event.hand.getEquipmentSlot())
-				player.status(ModMessageLang.LINE_REMOVED_MESSAGE.toComponent())
-				level.gameEvent(player, GameEvent.SHEAR, event.target.position)
-			}
-
-			event.itemStack.isItem(ModItems.WEBSTONE_WEAVER) -> {
-				val webstoneWeaver = event.itemStack.item as? WebstoneWeaverItem ?: return
-				webstoneWeaver.handleNodeSelection(level, player, event.itemStack, event.target)
-			}
-		}
-	}
-
-	private fun getRedstoneStrength(node: WebNode): Int {
-		var strongestPower = 0
-
-		for (line in node.lines) {
-			val redstoneLine = line as? RedstoneWebLine ?: continue
-			strongestPower = maxOf(strongestPower, redstoneLine.power)
-		}
-
-		return strongestPower
+		event.itemStack.hurtAndBreak(1, player, event.hand.getEquipmentSlot())
+		player.status(ModMessageLang.LINE_REMOVED_MESSAGE.toComponent())
+		level.gameEvent(player, GameEvent.SHEAR, event.target.position)
 	}
 }

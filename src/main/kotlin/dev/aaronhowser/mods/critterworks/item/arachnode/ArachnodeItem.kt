@@ -2,6 +2,8 @@ package dev.aaronhowser.mods.critterworks.item.arachnode
 
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionContext
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionItem
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import net.minecraft.server.level.ServerLevel
@@ -13,9 +15,24 @@ import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.math.abs
 
-abstract class ArachnodeItem(properties: Properties) : Item(properties) {
+abstract class ArachnodeItem(properties: Properties) : Item(properties), RedstoneWebLineInteractionItem {
 
 	abstract fun createArachnode(context: ArachnodePlacementContext): Arachnode?
+
+	override fun interactWithRedstoneWebLine(context: RedstoneWebLineInteractionContext) {
+		val placed = context.redstoneWebHandler.insertArachnodeOnLine(
+			context.level,
+			context.line.uuid,
+			context.itemStack,
+			context.target.position,
+			context.player.eyePosition
+		)
+
+		if (!placed) return
+
+		context.itemStack.consume(1, context.player)
+		context.level.gameEvent(context.player, GameEvent.BLOCK_PLACE, context.target.position)
+	}
 
 	override fun useOn(context: UseOnContext): InteractionResult {
 		val level = context.level
