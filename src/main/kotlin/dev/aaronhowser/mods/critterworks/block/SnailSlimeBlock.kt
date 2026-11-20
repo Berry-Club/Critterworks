@@ -71,7 +71,22 @@ class SnailSlimeBlock : HoneyBlock(
 		position: BlockPos,
 		context: CollisionContext
 	): VoxelShape {
-		return getShape(state, level, position, context)
+		val packedDirections = packDirections(state)
+		val cachedShape = COLLISION_SHAPES_BY_PACKED_DIRECTIONS[packedDirections]
+		if (cachedShape != null) return cachedShape
+
+		var shape = Shapes.empty()
+
+		if (state.getValue(HAS_DOWN)) shape = Shapes.or(shape, COLLISION_SHAPE_DOWN)
+		if (state.getValue(HAS_UP)) shape = Shapes.or(shape, COLLISION_SHAPE_UP)
+		if (state.getValue(HAS_NORTH)) shape = Shapes.or(shape, COLLISION_SHAPE_NORTH)
+		if (state.getValue(HAS_SOUTH)) shape = Shapes.or(shape, COLLISION_SHAPE_SOUTH)
+		if (state.getValue(HAS_WEST)) shape = Shapes.or(shape, COLLISION_SHAPE_WEST)
+		if (state.getValue(HAS_EAST)) shape = Shapes.or(shape, COLLISION_SHAPE_EAST)
+
+		COLLISION_SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape
+
+		return shape
 	}
 
 	fun getStateForPlacement(
@@ -102,6 +117,7 @@ class SnailSlimeBlock : HoneyBlock(
 		private const val EAST_BIT = 1 shl 5
 
 		private val SHAPES_BY_PACKED_DIRECTIONS: MutableMap<Int, VoxelShape> = ConcurrentHashMap()
+		private val COLLISION_SHAPES_BY_PACKED_DIRECTIONS: MutableMap<Int, VoxelShape> = ConcurrentHashMap()
 
 		val HAS_DOWN: BooleanProperty = BlockStateProperties.DOWN
 		val HAS_UP: BooleanProperty = BlockStateProperties.UP
@@ -116,6 +132,13 @@ class SnailSlimeBlock : HoneyBlock(
 		val SHAPE_SOUTH: VoxelShape = box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0)
 		val SHAPE_WEST: VoxelShape = box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0)
 		val SHAPE_EAST: VoxelShape = box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+
+		val COLLISION_SHAPE_DOWN: VoxelShape = box(0.0, 0.25, 0.0, 16.0, 1.0, 16.0)
+		val COLLISION_SHAPE_UP: VoxelShape = box(0.0, 15.0, 0.0, 16.0, 15.75, 16.0)
+		val COLLISION_SHAPE_NORTH: VoxelShape = box(0.0, 0.0, 0.25, 16.0, 16.0, 1.0)
+		val COLLISION_SHAPE_SOUTH: VoxelShape = box(0.0, 0.0, 15.0, 16.0, 16.0, 15.75)
+		val COLLISION_SHAPE_WEST: VoxelShape = box(0.25, 0.0, 0.0, 1.0, 16.0, 16.0)
+		val COLLISION_SHAPE_EAST: VoxelShape = box(15.0, 0.0, 0.0, 15.75, 16.0, 16.0)
 
 		private fun packDirections(state: BlockState): Int {
 			var packedDirections = 0
