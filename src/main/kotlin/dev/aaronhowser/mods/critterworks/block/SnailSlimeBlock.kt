@@ -232,12 +232,13 @@ class SnailSlimeBlock : HoneyBlock(
 		val supportPosition = position.relative(face)
 		val supportState = level.getBlockState(supportPosition)
 
-		if (existingState.isBlock(this) && existingState.getValue(faceProperty)) return null
-		if (!existingState.isBlock(this) && !existingState.canBeReplaced()) return null
-		if (!MultifaceBlock.canAttachTo(level, face, supportPosition, supportState)) return null
+		when {
+			existingState.isBlock(this) && existingState.getValue(faceProperty) -> return null
+			!existingState.isBlock(this) && !existingState.canBeReplaced() -> return null
+			!MultifaceBlock.canAttachTo(level, face, supportPosition, supportState) -> return null
+		}
 
 		val state = if (existingState.isBlock(this)) existingState else defaultBlockState()
-
 		return state.setValue(faceProperty, true)
 	}
 
