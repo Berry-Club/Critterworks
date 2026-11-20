@@ -23,6 +23,8 @@
 - Snail Slime block
 	- Sneak right-click the Snail Slime item a block to place a square on that face
 	- Touching it is like touching Honey, making you slide down
+- Critter Catcher
+	- Bug net that's required to pick up entities that also exist as items, such as Filterfeeders and the Parry Platypus
 
 ### Changed
 
