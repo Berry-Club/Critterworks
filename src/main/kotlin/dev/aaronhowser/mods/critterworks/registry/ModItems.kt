@@ -29,8 +29,6 @@ object ModItems : AaronItemRegistry() {
 		register("lockbox", ::LockboxItem, LockboxItem.DEFAULT_PROPERTIES)
 	val SCOOCHWORM_GPS: DeferredItem<Item> =
 		register("scoochworm_gps", ::Item, PROPERTIES_SINGLE_STACK)
-	val CRITTER_CAGE: DeferredItem<CritterCageItem> =
-		register("critter_cage", ::CritterCageItem)
 
 	val HOPPING_SPIDER: DeferredItem<HoppingSpiderItem> =
 		register("hopping_spider", ::HoppingSpiderItem)
@@ -38,6 +36,7 @@ object ModItems : AaronItemRegistry() {
 		register("web_port", ::WebPortItem, PROPERTIES_SINGLE_STACK)
 	val ARTIFICIAL_SPINNERETS: DeferredItem<ArtificialSpinneretsItem> =
 		register("artificial_spinnerets", ::ArtificialSpinneretsItem, ArtificialSpinneretsItem.DEFAULT_PROPERTIES)
+
 	val WEBSTONE_WEAVER: DeferredItem<WebstoneWeaverItem> =
 		register("webstone_weaver", ::WebstoneWeaverItem, WebstoneWeaverItem.DEFAULT_PROPERTIES)
 	val DIRECTIONAL_ARACHNODE: DeferredItem<DirectionalArachnodeItem> =
@@ -52,17 +51,19 @@ object ModItems : AaronItemRegistry() {
 		register("item_filterfeeder", ::ItemFilterItem, PROPERTIES_SINGLE_STACK)
 	val FLUID_FILTERFEEDER: DeferredItem<FluidFilterItem> =
 		register("fluid_filterfeeder", ::FluidFilterItem, PROPERTIES_SINGLE_STACK)
+	val PARRY_PLATYPUS: DeferredItem<ParryPlatypusItem> =
+		register("parry_platypus", ::ParryPlatypusItem, ParryPlatypusItem.DEFAULT_PROPERTIES)
+
 	val TARDIGRADE: DeferredItem<Item> =
 		basic("tardigrade")
 	val SNAIL_SHIELD: DeferredItem<SnailShieldItem> =
 		register("snail_shield", ::SnailShieldItem, SnailShieldItem.DEFAULT_PROPERTIES)
-	val PARRY_PLATYPUS: DeferredItem<ParryPlatypusItem> =
-		register("parry_platypus", ::ParryPlatypusItem, ParryPlatypusItem.DEFAULT_PROPERTIES)
 
 	val SNAIL_SHELL_FRAGMENT: DeferredItem<Item> =
 		basic("snail_shell_fragment")
 	val SNAIL_SLIME: DeferredItem<SnailSlimeItem> =
 		register("snail_slime", ::SnailSlimeItem)
+
 	val PEARL: DeferredItem<Item> =
 		basic("pearl")
 
