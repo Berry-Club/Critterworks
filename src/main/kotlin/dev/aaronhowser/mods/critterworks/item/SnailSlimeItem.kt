@@ -19,13 +19,16 @@ class SnailSlimeItem(properties: Properties) : BoneMealItem(properties) {
 		val placementPosition = context.clickedPos.relative(clickedFace)
 		val faceTowardsSupport = clickedFace.opposite
 		val existingState = level.getBlockState(placementPosition)
-		val snailSlimeBlock = ModBlocks.SNAIL_SLIME.get()
-		val placementState = snailSlimeBlock.getStateForPlacement(
-			existingState,
-			level,
-			placementPosition,
-			faceTowardsSupport
-		) ?: return InteractionResult.FAIL
+
+		val placementState = ModBlocks.SNAIL_SLIME
+			.get()
+			.getStateForPlacement(
+				existingState,
+				level,
+				placementPosition,
+				faceTowardsSupport
+			)
+			?: return InteractionResult.FAIL
 
 		if (!player.mayUseItemAt(placementPosition, clickedFace, context.itemInHand)) {
 			return InteractionResult.FAIL
@@ -44,6 +47,7 @@ class SnailSlimeItem(properties: Properties) : BoneMealItem(properties) {
 			(soundType.volume + 1.0f) / 2.0f,
 			soundType.pitch * 0.8f
 		)
+
 		level.gameEvent(player, GameEvent.BLOCK_PLACE, placementPosition)
 
 		if (!player.hasInfiniteMaterials()) {
