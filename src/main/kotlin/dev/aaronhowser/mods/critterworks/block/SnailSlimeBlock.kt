@@ -84,16 +84,27 @@ class SnailSlimeBlock : HoneyBlock(
 	}
 
 	private fun isTouchingSlimeSide(state: BlockState, position: BlockPos, entity: Entity): Boolean {
-		val boundingBox = entity.boundingBox
-		val minimumX = position.x + SLIME_THICKNESS
-		val maximumX = position.x + 1.0 - SLIME_THICKNESS
-		val minimumZ = position.z + SLIME_THICKNESS
-		val maximumZ = position.z + 1.0 - SLIME_THICKNESS
+		val distance = 0.0625
 
-		if (state.getValue(HAS_NORTH) && boundingBox.minZ <= minimumZ + SLIDE_EPSILON) return true
-		if (state.getValue(HAS_SOUTH) && boundingBox.maxZ >= maximumZ - SLIDE_EPSILON) return true
-		if (state.getValue(HAS_WEST) && boundingBox.minX <= minimumX + SLIDE_EPSILON) return true
-		if (state.getValue(HAS_EAST) && boundingBox.maxX >= maximumX - SLIDE_EPSILON) return true
+		if (state.getValue(HAS_WEST)) {
+			val dx = entity.position().x - position.x - entity.boundingBox.xsize / 2.0
+			if (dx <= distance) return true
+		}
+
+		if (state.getValue(HAS_EAST)) {
+			val dx = position.x - position.x + entity.boundingBox.xsize / 2.0
+			if (dx <= distance) return true
+		}
+
+		if (state.getValue(HAS_SOUTH)) {
+			val dz = entity.position().z - position.z - entity.boundingBox.zsize / 2.0
+			if (dz <= distance) return true
+		}
+
+		if (state.getValue(HAS_NORTH)) {
+			val dz = position.z - position.z + entity.boundingBox.zsize / 2.0
+			if (dz <= distance) return true
+		}
 
 		return false
 	}
