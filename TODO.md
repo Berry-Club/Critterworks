@@ -99,6 +99,12 @@
 	- Just a new block and the spiders do it themselves?
 - Carpenter ants? that's thematic
 - Is it even worth adding a whole new critter JUST for autocrafting?
+- Maillard Mallard
+	- Duck that cooks food
+    - Drops pre-cooked chicken? or new roasted duck item or something
+- Thermite Termite
+	- Enemy that spawns in the Nether
+    - Cooks blasting recipes
 
 # Other stuff
 
@@ -106,8 +112,6 @@
 	- Basically the thing from Portal
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 - Compass that points to the Evil Snail
-- Maillard Mallard
-	- Duck that cooks food
 
 # "Pet" critters
 
