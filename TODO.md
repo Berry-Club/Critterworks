@@ -131,20 +131,20 @@
 	- Shoots potions maybe?
 - One of those shield-head ants
 - Some kind of item (lizards?) that when held in both hands (?) lets you climb walls, has a cooldown
- - Climbing Chameleon
- - Grabbing/Gripping Gecko
- - Scaling Skink
- - Ledge Lizard
- - Sticking Salamander
+	- Climbing Chameleon
+	- Grabbing/Gripping Gecko
+	- Scaling Skink
+	- Ledge Lizard
+	- Sticking Salamander
 - Boxing Glove drop from Punchprawns?
 	- All critters should probably drop something
 - Mining Mole
 	- Star-Nosed Mole, nose spins like a drill?
 - Parry Platypus
 	- Used like a shield
-    - Blocking at the right moment reflects the damage (twicefold?)
-    - Deals poison damage?
-    - Platypus milk that glows in the dark
+	- Blocking at the right moment reflects the damage (twicefold?)
+	- Deals poison damage?
+	- Platypus milk that glows in the dark
 
 # Guidebook
 
