@@ -1,16 +1,22 @@
 package dev.aaronhowser.mods.critterworks.block
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
+import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -42,6 +48,41 @@ class SnailSlimeBlock : HoneyBlock(
 	override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
 		super.createBlockStateDefinition(builder)
 		builder.add(HAS_DOWN, HAS_UP, HAS_NORTH, HAS_SOUTH, HAS_WEST, HAS_EAST)
+	}
+
+	override fun onDestroyedByPlayer(
+		state: BlockState,
+		level: Level,
+		position: BlockPos,
+		player: Player,
+		willHarvest: Boolean,
+		fluid: FluidState
+	): Boolean {
+		val removedDirection = getTargetedDirection(state, position, player)
+		val removedProperty = PipeBlock.PROPERTY_BY_DIRECTION.getValue(removedDirection)
+		val remainingState = state.setValue(removedProperty, false)
+
+		val hasFaces = PipeBlock.PROPERTY_BY_DIRECTION
+			.values
+			.any(remainingState::getValue)
+
+		if (hasFaces) {
+			return level.setBlock(position, remainingState, UPDATE_ALL_IMMEDIATE)
+		}
+
+		return level.setBlock(position, fluid.createLegacyBlock(), UPDATE_ALL_IMMEDIATE)
+	}
+
+	override fun playerDestroy(
+		level: Level,
+		player: Player,
+		position: BlockPos,
+		state: BlockState,
+		blockEntity: BlockEntity?,
+		tool: ItemStack
+	) {
+		super.playerDestroy(level, player, position, state, blockEntity, tool)
+		popResource(level, position, ModItems.SNAIL_SLIME.toStack())
 	}
 
 	override fun getShape(
@@ -143,6 +184,37 @@ class SnailSlimeBlock : HoneyBlock(
 		return false
 	}
 
+	private fun getTargetedDirection(state: BlockState, position: BlockPos, player: Player): Direction {
+		val lookStart = player.eyePosition
+		val lookEnd = lookStart.add(player.lookAngle.scale(player.blockInteractionRange()))
+
+		var closestDirection: Direction? = null
+		var closestDistance = Double.MAX_VALUE
+
+		for (direction in Direction.entries) {
+			val property = PipeBlock.PROPERTY_BY_DIRECTION.getValue(direction)
+			if (!state.getValue(property)) continue
+
+			val shape = SHAPE_BY_DIRECTION.getValue(direction)
+			val hitResult = shape.clip(lookStart, lookEnd, position) ?: continue
+			val distance = lookStart.distanceToSqr(hitResult.location)
+
+			if (distance >= closestDistance) continue
+
+			closestDirection = direction
+			closestDistance = distance
+		}
+
+		if (closestDirection != null) return closestDirection
+
+		for (direction in Direction.entries) {
+			val property = PipeBlock.PROPERTY_BY_DIRECTION.getValue(direction)
+			if (state.getValue(property)) return direction
+		}
+
+		error("Snail slime block has no faces")
+	}
+
 	fun getStateForPlacement(
 		existingState: BlockState,
 		level: BlockGetter,
@@ -185,6 +257,15 @@ class SnailSlimeBlock : HoneyBlock(
 		val SHAPE_SOUTH: VoxelShape = box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0)
 		val SHAPE_WEST: VoxelShape = box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0)
 		val SHAPE_EAST: VoxelShape = box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+
+		val SHAPE_BY_DIRECTION: Map<Direction, VoxelShape> = mapOf(
+			Direction.DOWN to SHAPE_DOWN,
+			Direction.UP to SHAPE_UP,
+			Direction.NORTH to SHAPE_NORTH,
+			Direction.SOUTH to SHAPE_SOUTH,
+			Direction.WEST to SHAPE_WEST,
+			Direction.EAST to SHAPE_EAST
+		)
 
 		private fun packDirections(state: BlockState): Int {
 			var packedDirections = 0
