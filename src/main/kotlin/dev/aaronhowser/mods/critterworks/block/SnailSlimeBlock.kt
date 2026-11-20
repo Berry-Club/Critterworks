@@ -6,7 +6,6 @@ import net.minecraft.core.Direction
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HoneyBlock
 import net.minecraft.world.level.block.MultifaceBlock
 import net.minecraft.world.level.block.SoundType
@@ -66,7 +65,7 @@ class SnailSlimeBlock : HoneyBlock(
 		if (state.getValue(HAS_WEST)) shape = Shapes.or(shape, SHAPE_WEST)
 		if (state.getValue(HAS_EAST)) shape = Shapes.or(shape, SHAPE_EAST)
 
- 		SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape.optimize()
+		SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape.optimize()
 
 		return shape
 	}

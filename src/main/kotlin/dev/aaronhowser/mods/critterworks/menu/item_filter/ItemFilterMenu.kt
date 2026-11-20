@@ -77,6 +77,7 @@ class ItemFilterMenu(
 				val tag = entry.stack.tags.findFirst().orElse(null) ?: return
 				ItemFilterEntry.Tag(tag, entry.stack.copy())
 			}
+
 			ItemFilterEntry.Empty -> return
 		}
 

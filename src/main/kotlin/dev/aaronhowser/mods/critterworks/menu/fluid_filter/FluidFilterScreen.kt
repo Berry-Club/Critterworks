@@ -116,6 +116,7 @@ class FluidFilterScreen(
 					if (entry.requireSameComponents) ChatFormatting.GRAY else ChatFormatting.DARK_GRAY
 				)
 			)
+
 			is FluidFilterEntry.Tag -> getTagMessages(entry)
 			else -> listOf(Component.empty())
 		}
@@ -137,6 +138,7 @@ class FluidFilterScreen(
 			is FluidFilterEntry.SpecificFluid -> {
 				if (entry.requireSameComponents) 0xFF37C63C.toInt() else 0xFFFF5623.toInt()
 			}
+
 			is FluidFilterEntry.Tag -> getTagColor(entry)
 			else -> 0xFFFFFFFF.toInt()
 		}

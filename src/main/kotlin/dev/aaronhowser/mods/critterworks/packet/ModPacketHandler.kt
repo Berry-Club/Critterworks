@@ -4,13 +4,7 @@ import dev.aaronhowser.mods.aaron.packet.AaronPacketRegistrar
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.SnailShieldMovedPacket
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.UseCageOnEvilSnailPacket
 import dev.aaronhowser.mods.critterworks.packet.client_to_server.WebLineInteractPacket
-import dev.aaronhowser.mods.critterworks.packet.server_to_client.AddWebLinesPacket
-import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveArachnodePacket
-import dev.aaronhowser.mods.critterworks.packet.server_to_client.RemoveWebLinePacket
-import dev.aaronhowser.mods.critterworks.packet.server_to_client.ShowWebPathPacket
-import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncEvilSnailsPacket
-import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncItemWebPortsPacket
-import dev.aaronhowser.mods.critterworks.packet.server_to_client.SyncRedstoneWebPowerPacket
+import dev.aaronhowser.mods.critterworks.packet.server_to_client.*
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 
 object ModPacketHandler : AaronPacketRegistrar {

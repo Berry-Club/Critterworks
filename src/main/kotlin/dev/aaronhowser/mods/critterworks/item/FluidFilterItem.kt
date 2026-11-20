@@ -71,6 +71,7 @@ class FluidFilterItem(properties: Properties) : FilterfeederItem(
 						.orElse(FluidStack.EMPTY)
 						.hoverName
 				}
+
 				is FluidFilterEntry.Tag -> Component.literal("#${entry.tagKey.location()}")
 				FluidFilterEntry.Empty -> continue
 			}

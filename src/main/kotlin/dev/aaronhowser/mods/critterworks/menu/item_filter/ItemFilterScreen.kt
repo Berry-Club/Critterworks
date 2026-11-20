@@ -147,6 +147,7 @@ class ItemFilterScreen(
 				ItemFilterEntry.ComponentMatch.IGNORE_DAMAGE -> 0xFFFFC107.toInt()
 				ItemFilterEntry.ComponentMatch.EXACT -> 0xFF37C63C.toInt()
 			}
+
 			is ItemFilterEntry.Tag -> getTagColor(entry)
 			else -> 0xFFFFFFFF.toInt()
 		}

@@ -19,7 +19,6 @@ import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.MenuConstructor

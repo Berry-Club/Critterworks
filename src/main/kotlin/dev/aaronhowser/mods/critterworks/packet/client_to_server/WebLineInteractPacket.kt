@@ -3,8 +3,8 @@ package dev.aaronhowser.mods.critterworks.packet.client_to_server
 import dev.aaronhowser.mods.aaron.packet.AaronPacket
 import dev.aaronhowser.mods.aaron.serialization.AaronExtraStreamCodecs
 import dev.aaronhowser.mods.critterworks.Critterworks
-import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.WebInteractionHandler
 import dev.aaronhowser.mods.critterworks.handler.web.WebLineType
+import dev.aaronhowser.mods.critterworks.handler.web.common.interaction.WebInteractionHandler
 import io.netty.buffer.ByteBuf
 import net.minecraft.core.UUIDUtil
 import net.minecraft.network.codec.ByteBufCodecs

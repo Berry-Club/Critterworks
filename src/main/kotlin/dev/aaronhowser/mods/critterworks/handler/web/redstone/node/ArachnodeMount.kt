@@ -85,6 +85,7 @@ sealed class ArachnodeMount {
 							Direction.STREAM_CODEC.decode(buffer),
 							AaronExtraStreamCodecs.VEC3.decode(buffer)
 						)
+
 						else -> error("Unknown arachnode mount type")
 					}
 				}

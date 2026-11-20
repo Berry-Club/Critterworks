@@ -79,6 +79,7 @@ class FluidFilterMenu(
 				val tag = fluidStack.tags.findFirst().orElse(null) ?: return
 				FluidFilterEntry.Tag(tag, entry.containerStack.copy())
 			}
+
 			FluidFilterEntry.Empty -> return
 		}
 
@@ -92,6 +93,7 @@ class FluidFilterMenu(
 			is FluidFilterEntry.SpecificFluid -> {
 				entry.copy(requireSameComponents = !entry.requireSameComponents)
 			}
+
 			FluidFilterEntry.Empty -> return
 		}
 

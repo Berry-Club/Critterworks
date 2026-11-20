@@ -1,8 +1,8 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
-import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.item.component.ItemFilterComponent
