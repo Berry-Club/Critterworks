@@ -22,6 +22,8 @@
 		- Simply carries the input signal to the output, without letting the output power the input
 	- Inverting Arachnode
 		- Outputs a signal when the input does not have one
+- Webstone Probe
+	- Use it on a Webstone line or node to see its signal strength
 - Snail Slime block
 	- Sneak right-click the Snail Slime item on a block to place a square on that face
 	- Touching it is like touching Honey, making you slide down
