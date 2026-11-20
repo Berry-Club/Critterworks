@@ -2,8 +2,8 @@ package dev.aaronhowser.mods.critterworks.entity
 
 import net.minecraft.world.item.ItemStack
 
-interface ItemCatchableEntity {
+interface CatchableEntity {
 
-	fun getAsItemstack(): ItemStack?
+	fun getCaughtItemStack(): ItemStack
 
 }

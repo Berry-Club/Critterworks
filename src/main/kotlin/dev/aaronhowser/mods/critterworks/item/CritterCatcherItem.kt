@@ -7,7 +7,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
-import dev.aaronhowser.mods.critterworks.entity.ItemCatchableEntity
+import dev.aaronhowser.mods.critterworks.entity.CatchableEntity
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -26,14 +26,14 @@ class CritterCatcherItem(properties: Properties) : Item(properties) {
 		interactionTarget: LivingEntity,
 		usedHand: InteractionHand
 	): InteractionResult {
-		if (interactionTarget !is ItemCatchableEntity || player.isClientSide) return InteractionResult.PASS
+		if (interactionTarget !is CatchableEntity || player.isClientSide) return InteractionResult.PASS
 
 		if (interactionTarget is TamableAnimal && !interactionTarget.isOwnedBy(player)) {
 			interactionTarget.tell(ModMessageLang.NO_PET_THEFT.toComponent())
 			return InteractionResult.FAIL
 		}
 
-		val entityStack = interactionTarget.getAsItemstack() ?: return InteractionResult.PASS
+		val entityStack = interactionTarget.getCaughtItemStack()
 
 		player.giveOrDropStack(entityStack)
 		interactionTarget.discard()

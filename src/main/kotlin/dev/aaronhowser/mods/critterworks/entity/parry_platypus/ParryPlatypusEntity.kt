@@ -4,7 +4,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDefaultInstance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
-import dev.aaronhowser.mods.critterworks.entity.ItemCatchableEntity
+import dev.aaronhowser.mods.critterworks.entity.CatchableEntity
 import dev.aaronhowser.mods.critterworks.entity.control.AmphibiousMoveControl
 import dev.aaronhowser.mods.critterworks.entity.goal.LowAmphibiousWanderGoal
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
@@ -38,7 +38,7 @@ import software.bernie.geckolib.util.GeckoLibUtil
 class ParryPlatypusEntity(
 	entityType: EntityType<out ParryPlatypusEntity>,
 	level: Level
-) : Animal(entityType, level), GeoEntity, ItemCatchableEntity {
+) : Animal(entityType, level), GeoEntity, CatchableEntity {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 	private var platypusStack = ItemStack.EMPTY
@@ -75,7 +75,7 @@ class ParryPlatypusEntity(
 		}
 	}
 
-	override fun getAsItemstack(): ItemStack {
+	override fun getCaughtItemStack(): ItemStack {
 		val stack = if (platypusStack.isEmpty) {
 			ModItems.PARRY_PLATYPUS.getDefaultInstance()
 		} else {
