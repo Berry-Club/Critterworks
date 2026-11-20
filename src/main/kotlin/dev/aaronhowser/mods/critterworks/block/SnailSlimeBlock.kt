@@ -1,9 +1,13 @@
 package dev.aaronhowser.mods.critterworks.block
 
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.HoneyBlock
+import net.minecraft.world.level.block.MultifaceBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -14,7 +18,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import java.util.concurrent.ConcurrentHashMap
 
-class SnailSlimeBlock : Block(
+class SnailSlimeBlock : HoneyBlock(
 	Properties
 		.ofFullCopy(Blocks.HONEY_BLOCK)
 		.mapColor(MapColor.COLOR_BROWN)
@@ -59,6 +63,34 @@ class SnailSlimeBlock : Block(
 		SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape
 
 		return shape
+	}
+
+	override fun getCollisionShape(
+		state: BlockState,
+		level: BlockGetter,
+		position: BlockPos,
+		context: CollisionContext
+	): VoxelShape {
+		return getShape(state, level, position, context)
+	}
+
+	fun getStateForPlacement(
+		existingState: BlockState,
+		level: BlockGetter,
+		position: BlockPos,
+		face: Direction
+	): BlockState? {
+		val faceProperty = MultifaceBlock.getFaceProperty(face)
+		val supportPosition = position.relative(face)
+		val supportState = level.getBlockState(supportPosition)
+
+		if (existingState.isBlock(this) && existingState.getValue(faceProperty)) return null
+		if (!existingState.isBlock(this) && !existingState.canBeReplaced()) return null
+		if (!MultifaceBlock.canAttachTo(level, face, supportPosition, supportState)) return null
+
+		val state = if (existingState.isBlock(this)) existingState else defaultBlockState()
+
+		return state.setValue(faceProperty, true)
 	}
 
 	companion object {
