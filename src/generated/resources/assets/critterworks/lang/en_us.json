@@ -212,6 +212,8 @@
   "message.critterworks.evil_snail_banished": "The snail struck your shield one last time and was banished for good.",
   "message.critterworks.evil_snail_cage": "You thought you caught it, but it was only a decoy snail...",
   "message.critterworks.evil_snail_shield": "The snail was temporarily banished, but not forever...",
+  "message.critterworks.no_catch_baby": "You can't catch babies!",
+  "message.critterworks.no_pet_theft": "You can't take someone else's pet!",
   "subtitles.critterworks.scoochworm_footstep": "Scoochworm scooches",
   "subtitles.critterworks.scoochworm_kiss": "Scoochworm smooches",
   "subtitles.critterworks.web_snap": "Web snaps",
