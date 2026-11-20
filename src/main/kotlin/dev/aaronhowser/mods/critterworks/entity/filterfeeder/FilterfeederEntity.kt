@@ -19,6 +19,7 @@ import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -96,15 +97,28 @@ class FilterfeederEntity(
 		if (filterItem is FilterfeederItem) {
 			filterType = filterItem.filterType
 		}
+
+		if (stack.has(DataComponents.CUSTOM_NAME)) {
+			customName = stack.get(DataComponents.CUSTOM_NAME)
+		}
 	}
 
 	override fun getAsItemstack(): ItemStack? {
-		if (!filterStack.isEmpty) return filterStack
-
-		return when (filterType) {
-			FilterType.ITEM -> ModItems.ITEM_FILTERFEEDER.getDefaultInstance()
-			FilterType.FLUID -> ModItems.FLUID_FILTERFEEDER.getDefaultInstance()
+		val stack = if (!filterStack.isEmpty) {
+			filterStack.copy()
+		} else {
+			when (filterType) {
+				FilterType.ITEM -> ModItems.ITEM_FILTERFEEDER.getDefaultInstance()
+				FilterType.FLUID -> ModItems.FLUID_FILTERFEEDER.getDefaultInstance()
+			}
 		}
+
+		val name = customName
+		if (name != null) {
+			stack.set(DataComponents.CUSTOM_NAME, name)
+		}
+
+		return stack
 	}
 
 	protected override fun getFlopSound(): SoundEvent = SoundEvents.SHULKER_AMBIENT
