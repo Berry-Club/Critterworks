@@ -8,7 +8,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toGrayComponent
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMenuLang
 import dev.aaronhowser.mods.critterworks.datagen.language.ModMessageLang
-import dev.aaronhowser.mods.critterworks.entity.CatchableEntity
+import dev.aaronhowser.mods.critterworks.entity.CatchableMob
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -28,7 +28,7 @@ class CritterCatcherItem(properties: Properties) : Item(properties) {
 		interactionTarget: LivingEntity,
 		usedHand: InteractionHand
 	): InteractionResult {
-		if (interactionTarget !is CatchableEntity || player.isClientSide) return InteractionResult.PASS
+		if (interactionTarget !is CatchableMob || player.isClientSide) return InteractionResult.PASS
 
 		if (interactionTarget is TamableAnimal && !interactionTarget.isOwnedBy(player)) {
 			player.tell(ModMessageLang.NO_PET_THEFT.toComponent())

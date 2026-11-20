@@ -4,17 +4,15 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.getDefaultInstance
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isFluid
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
-import dev.aaronhowser.mods.critterworks.entity.CatchableEntity
+import dev.aaronhowser.mods.critterworks.entity.CatchableMob
 import dev.aaronhowser.mods.critterworks.entity.control.AmphibiousMoveControl
 import dev.aaronhowser.mods.critterworks.entity.goal.LowAmphibiousWanderGoal
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.core.BlockPos
-import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
-import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityType
@@ -39,7 +37,7 @@ import software.bernie.geckolib.util.GeckoLibUtil
 class ParryPlatypusEntity(
 	entityType: EntityType<out ParryPlatypusEntity>,
 	level: Level
-) : Animal(entityType, level), GeoEntity, CatchableEntity {
+) : Animal(entityType, level), GeoEntity, CatchableMob {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
 	private var platypusStack = ItemStack.EMPTY
@@ -68,15 +66,8 @@ class ParryPlatypusEntity(
 	}
 
 	fun setPlatypusStack(stack: ItemStack) {
-		setPersistenceRequired()
 		platypusStack = stack.copy()
-
-		if (stack.has(DataComponents.CUSTOM_NAME)) {
-			customName = stack.get(DataComponents.CUSTOM_NAME)
-		}
-
-		val durabilityPercent = stack.damageValue.toFloat() / stack.maxDamage
-		health = durabilityPercent * maxHealth
+		loadItemData(stack)
 	}
 
 	override fun getCaughtItemStack(): ItemStack {
@@ -86,19 +77,7 @@ class ParryPlatypusEntity(
 			platypusStack.copy()
 		}
 
-		val healthPercent = health / maxHealth
-
-		if (healthPercent > 1.0) {
-			stack.remove(DataComponents.DAMAGE)
-		} else if (healthPercent > 0.0) {
-			val durability = Mth.ceil(stack.maxDamage * healthPercent)
-			stack.damageValue = durability
-		}
-
-		val name = customName
-		if (name != null) {
-			stack.set(DataComponents.CUSTOM_NAME, name)
-		}
+		saveItemData(stack)
 
 		return stack
 	}
@@ -117,7 +96,7 @@ class ParryPlatypusEntity(
 			tag.getCompound(PLATYPUS_STACK_TAG)
 		)
 
-		setPlatypusStack(savedStack)
+		platypusStack = savedStack
 	}
 
 	override fun addAdditionalSaveData(tag: CompoundTag) {
@@ -147,6 +126,7 @@ class ParryPlatypusEntity(
 	companion object {
 		const val WIDTH = 0.875f
 		const val HEIGHT = 0.375f
+		const val MAX_HEALTH = 10f
 		private const val PLATYPUS_STACK_TAG = "PlatypusStack"
 
 		private val WALK_ANIMATION: RawAnimation =
@@ -159,7 +139,7 @@ class ParryPlatypusEntity(
 
 		fun createAttributes(): AttributeSupplier {
 			return createMobAttributes()
-				.add(Attributes.MAX_HEALTH, 10.0)
+				.add(Attributes.MAX_HEALTH, MAX_HEALTH.toDouble())
 				.add(Attributes.MOVEMENT_SPEED, 0.25)
 				.build()
 		}

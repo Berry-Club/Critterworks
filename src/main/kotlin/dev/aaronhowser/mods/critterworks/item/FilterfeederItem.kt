@@ -1,6 +1,7 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.critterworks.client.item.filterfeeder.FilterfeederItemRenderer
+import dev.aaronhowser.mods.critterworks.entity.CatchableMob
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.FilterfeederEntity
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
@@ -20,6 +21,18 @@ abstract class FilterfeederItem(
 ) : Item(properties), GeoItem {
 
 	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
+
+	override fun isBarVisible(stack: ItemStack): Boolean {
+		return CatchableMob.isHealthBarVisible(stack, FilterfeederEntity.MAX_HEALTH)
+	}
+
+	override fun getBarWidth(stack: ItemStack): Int {
+		return CatchableMob.getHealthBarWidth(stack, FilterfeederEntity.MAX_HEALTH)
+	}
+
+	override fun getBarColor(stack: ItemStack): Int {
+		return CatchableMob.getHealthBarColor(stack, FilterfeederEntity.MAX_HEALTH)
+	}
 
 	override fun onEntityItemUpdate(stack: ItemStack, entity: ItemEntity): Boolean {
 		val level = entity.level()

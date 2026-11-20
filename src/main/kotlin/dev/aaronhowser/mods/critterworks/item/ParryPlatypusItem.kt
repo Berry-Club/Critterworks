@@ -5,6 +5,8 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.critterworks.client.item.parry_platypus.ParryPlatypusItemRenderer
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.ModDamageTypes
+import dev.aaronhowser.mods.critterworks.entity.CatchableMob
+import dev.aaronhowser.mods.critterworks.entity.parry_platypus.ParryPlatypusEntity
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
@@ -13,7 +15,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
@@ -37,6 +38,18 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 
 	init {
 		SingletonGeoAnimatable.registerSyncedAnimatable(this)
+	}
+
+	override fun isBarVisible(stack: ItemStack): Boolean {
+		return CatchableMob.isHealthBarVisible(stack, ParryPlatypusEntity.MAX_HEALTH)
+	}
+
+	override fun getBarWidth(stack: ItemStack): Int {
+		return CatchableMob.getHealthBarWidth(stack, ParryPlatypusEntity.MAX_HEALTH)
+	}
+
+	override fun getBarColor(stack: ItemStack): Int {
+		return CatchableMob.getHealthBarColor(stack, ParryPlatypusEntity.MAX_HEALTH)
 	}
 
 	override fun isPerspectiveAware(): Boolean = true
@@ -145,7 +158,8 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 
 		val DEFAULT_PROPERTIES = {
 			Properties()
-				.durability(336)
+				.stacksTo(1)
+				.component(ModDataComponents.ENTITY_HEALTH, ParryPlatypusEntity.MAX_HEALTH)
 				.component(ModDataComponents.PARRY_PLATYPUS_USE_TICKS, 0)
 		}
 
@@ -257,14 +271,18 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 			}
 
 			if (!isPerfectParry) {
-				if (blockingEntity !is Player) return
+				val entityHealth = stack.getOrDefault(
+					ModDataComponents.ENTITY_HEALTH,
+					ParryPlatypusEntity.MAX_HEALTH
+				)
+				val remainingHealth = entityHealth - 1f
 
-				val hand = when {
-					blockingEntity.getItemBySlot(EquipmentSlot.MAINHAND) === stack -> EquipmentSlot.MAINHAND
-					else -> EquipmentSlot.MAINHAND
+				if (remainingHealth <= 0f) {
+					stack.shrink(1)
+				} else {
+					stack.set(ModDataComponents.ENTITY_HEALTH, remainingHealth)
 				}
 
-				stack.hurtAndBreak(1, blockingEntity, hand)
 				return
 			}
 

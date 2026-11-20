@@ -5,7 +5,7 @@
 - Parry Platypus
 	- Can be used like a shield
 		- Blocked hits will reflect a portion of damage onto the attacker
-        - Blocking at the perfect moment will reflect much more
+		- Blocking at the perfect moment will reflect much more
 	- Spawns naturally on riverbanks and in river water
 - Webstone Weaver
 	- Can be used to place lines of Webstone across blocks
@@ -39,6 +39,10 @@
 - Punchprawns can be bred with Seagrass
 - Sproutsnails can be bred with Mushrooms
 - You can no longer catch pets owned by someone other than you with the Critter Cage
+- Entities that have an item form (like Filterfeeders) now save how much health they have
+	- Can be seen as durability
+- Entities that have an item form keep any changed name
+	- Works if the name was changed as an item in an Anvil or as a mob with a Name tag
 
 ### Fixed
 

@@ -10,7 +10,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
-import dev.aaronhowser.mods.critterworks.entity.CatchableEntity
+import dev.aaronhowser.mods.critterworks.entity.CatchableMob
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.control.FilterfeederMoveControl
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederSwimGoal
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederWaitForSandGoal
@@ -19,7 +19,6 @@ import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -54,7 +53,7 @@ import software.bernie.geckolib.util.GeckoLibUtil
 class FilterfeederEntity(
 	entityType: EntityType<out FilterfeederEntity>,
 	level: Level
-) : AbstractSchoolingFish(entityType, level), GeoEntity, CatchableEntity {
+) : AbstractSchoolingFish(entityType, level), GeoEntity, CatchableMob {
 
 	init {
 		moveControl = FilterfeederMoveControl(this)
@@ -90,7 +89,6 @@ class FilterfeederEntity(
 	}
 
 	fun setFilterStack(stack: ItemStack) {
-		setPersistenceRequired()
 		filterStack = stack.copy()
 
 		val filterItem = stack.item
@@ -98,9 +96,7 @@ class FilterfeederEntity(
 			filterType = filterItem.filterType
 		}
 
-		if (stack.has(DataComponents.CUSTOM_NAME)) {
-			customName = stack.get(DataComponents.CUSTOM_NAME)
-		}
+		loadItemData(stack)
 	}
 
 	override fun getCaughtItemStack(): ItemStack {
@@ -113,10 +109,7 @@ class FilterfeederEntity(
 			}
 		}
 
-		val name = customName
-		if (name != null) {
-			stack.set(DataComponents.CUSTOM_NAME, name)
-		}
+		saveItemData(stack)
 
 		return stack
 	}
@@ -176,12 +169,10 @@ class FilterfeederEntity(
 		filterType = FilterType.fromOrdinal(tag.getInt(FILTER_TYPE_TAG))
 
 		if (tag.contains(FILTER_STACK_TAG)) {
-			val savedStack = ItemStack.parseOptional(
+			filterStack = ItemStack.parseOptional(
 				registryAccess(),
 				tag.getCompound(FILTER_STACK_TAG)
 			)
-
-			setFilterStack(savedStack)
 		}
 	}
 
@@ -212,6 +203,7 @@ class FilterfeederEntity(
 	companion object {
 		const val WIDTH = 0.5f
 		const val HEIGHT = 0.125f
+		const val MAX_HEALTH = 3f
 		const val MAXIMUM_FLOOR_DISTANCE = 10
 		private const val FLUID_SPAWN_CHANCE = 0.2f
 
@@ -230,6 +222,7 @@ class FilterfeederEntity(
 
 		fun createAttributes(): AttributeSupplier {
 			return AbstractFish.createAttributes()
+				.add(Attributes.MAX_HEALTH, MAX_HEALTH.toDouble())
 				.add(Attributes.ARMOR, 4.0)
 				.build()
 		}
