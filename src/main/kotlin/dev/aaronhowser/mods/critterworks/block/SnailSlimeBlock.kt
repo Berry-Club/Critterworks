@@ -5,10 +5,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.HoneyBlock
-import net.minecraft.world.level.block.MultifaceBlock
-import net.minecraft.world.level.block.SoundType
+import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -77,6 +75,36 @@ class SnailSlimeBlock : HoneyBlock(
 		context: CollisionContext
 	): VoxelShape {
 		return getShape(state, level, position, context)
+	}
+
+	override fun updateShape(
+		state: BlockState,
+		direction: Direction,
+		neighborState: BlockState,
+		level: LevelAccessor,
+		pos: BlockPos,
+		neighborPos: BlockPos
+	): BlockState {
+		var updatedState = state
+
+		for (direction in Direction.entries) {
+			val property = PipeBlock.PROPERTY_BY_DIRECTION[direction] ?: continue
+			if (!updatedState.getValue(property)) continue
+
+			val supportPosition = pos.relative(direction)
+			val supportState = level.getBlockState(supportPosition)
+
+			if (MultifaceBlock.canAttachTo(level, direction, supportPosition, supportState)) continue
+
+			updatedState = updatedState.setValue(property, false)
+		}
+
+		for (direction in Direction.entries) {
+			val property = PipeBlock.PROPERTY_BY_DIRECTION[direction] ?: continue
+			if (updatedState.getValue(property)) return updatedState
+		}
+
+		return Blocks.AIR.defaultBlockState()
 	}
 
 	override fun isSlidingDown(position: BlockPos, entity: Entity): Boolean {
