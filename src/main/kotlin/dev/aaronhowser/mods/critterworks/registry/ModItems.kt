@@ -20,6 +20,11 @@ object ModItems : AaronItemRegistry() {
 	val ITEM_REGISTRY: DeferredRegister.Items = DeferredRegister.createItems(Critterworks.MOD_ID)
 	override fun getItemRegistry(): DeferredRegister.Items = ITEM_REGISTRY
 
+	val CRITTER_CAGE: DeferredItem<CritterCageItem> =
+		register("critter_cage", ::CritterCageItem)
+	val CRITTER_CATCHER: DeferredItem<CritterCatcherItem> =
+		register("critter_catcher", ::CritterCatcherItem)
+
 	val LOCKBOX: DeferredItem<LockboxItem> =
 		register("lockbox", ::LockboxItem, LockboxItem.DEFAULT_PROPERTIES)
 	val SCOOCHWORM_GPS: DeferredItem<Item> =

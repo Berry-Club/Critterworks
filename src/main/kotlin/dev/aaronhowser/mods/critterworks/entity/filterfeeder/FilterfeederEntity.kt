@@ -77,20 +77,15 @@ class FilterfeederEntity(
 		if (level().isClientSide) return InteractionResult.SUCCESS
 
 		val handItem = player.getItemInHand(hand)
-		if (handItem.isItem(ModItemTagsProvider.FILTERFEEDER_FOOD)) {
-			handItem.consume(1, player)
+		if (!handItem.isItem(ModItemTagsProvider.FILTERFEEDER_FOOD)) return InteractionResult.PASS
 
-			if (player.random.chance(0.1)) {
-				player.giveOrDropStack(ModItems.PEARL.getDefaultInstance())
-			}
+		handItem.consume(1, player)
 
-			return InteractionResult.SUCCESS
+		if (player.random.chance(0.1)) {
+			player.giveOrDropStack(ModItems.PEARL.getDefaultInstance())
 		}
 
-		val returnedStack = getAsItemstack()?.copy() ?: return InteractionResult.FAIL
-		player.giveOrDropStack(returnedStack)
-		discard()
-		return InteractionResult.CONSUME
+		return InteractionResult.SUCCESS
 	}
 
 	fun setFilterStack(stack: ItemStack) {
