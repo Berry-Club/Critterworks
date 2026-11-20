@@ -150,11 +150,6 @@
 	- All critters should probably drop something
 - Mining Mole
 	- Star-Nosed Mole, nose spins like a drill?
-- Parry Platypus
-	- Used like a shield
-	- Blocking at the right moment reflects the damage (twicefold?)
-	- Deals poison damage?
-	- Platypus milk that glows in the dark
 - Monkey Wrench???
 
 # Guidebook

@@ -3,12 +3,20 @@ package dev.aaronhowser.mods.critterworks.client.entity.parry_platypus
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.critterworks.entity.parry_platypus.ParryPlatypusEntity
 import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.core.BlockPos
 import software.bernie.geckolib.cache.`object`.BakedGeoModel
 import software.bernie.geckolib.renderer.GeoEntityRenderer
 
 class ParryPlatypusRenderer(
 	context: EntityRendererProvider.Context
 ) : GeoEntityRenderer<ParryPlatypusEntity>(context, ParryPlatypusModel()) {
+
+	override fun getBlockLightLevel(
+		entity: ParryPlatypusEntity,
+		blockPosition: BlockPos
+	): Int {
+		return maxOf(MINIMUM_LIGHT_LEVEL, super.getBlockLightLevel(entity, blockPosition))
+	}
 
 	override fun scaleModelForRender(
 		widthScale: Float,
@@ -30,6 +38,10 @@ class ParryPlatypusRenderer(
 		}
 
 		super.scaleModelForRender(w, h, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay)
+	}
+
+	companion object {
+		private const val MINIMUM_LIGHT_LEVEL = 2
 	}
 
 }
