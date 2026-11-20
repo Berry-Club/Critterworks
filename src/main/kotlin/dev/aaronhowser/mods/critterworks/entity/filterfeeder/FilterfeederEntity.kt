@@ -10,6 +10,7 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
 import dev.aaronhowser.mods.critterworks.datagen.language.ModEntityLang
 import dev.aaronhowser.mods.critterworks.datagen.tag.ModItemTagsProvider
+import dev.aaronhowser.mods.critterworks.entity.ItemCatchableEntity
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.control.FilterfeederMoveControl
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederSwimGoal
 import dev.aaronhowser.mods.critterworks.entity.filterfeeder.goal.FilterfeederWaitForSandGoal
@@ -52,7 +53,7 @@ import software.bernie.geckolib.util.GeckoLibUtil
 class FilterfeederEntity(
 	entityType: EntityType<out FilterfeederEntity>,
 	level: Level
-) : AbstractSchoolingFish(entityType, level), GeoEntity {
+) : AbstractSchoolingFish(entityType, level), GeoEntity, ItemCatchableEntity {
 
 	init {
 		moveControl = FilterfeederMoveControl(this)
@@ -86,7 +87,7 @@ class FilterfeederEntity(
 			return InteractionResult.SUCCESS
 		}
 
-		val returnedStack = getFilterStack().copy()
+		val returnedStack = getAsItemstack()?.copy() ?: return InteractionResult.FAIL
 		player.giveOrDropStack(returnedStack)
 		discard()
 		return InteractionResult.CONSUME
@@ -102,7 +103,7 @@ class FilterfeederEntity(
 		}
 	}
 
-	private fun getFilterStack(): ItemStack {
+	override fun getAsItemstack(): ItemStack? {
 		if (!filterStack.isEmpty) return filterStack
 
 		return when (filterType) {
