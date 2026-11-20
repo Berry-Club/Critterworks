@@ -8,6 +8,7 @@ import dev.aaronhowser.mods.critterworks.datagen.ModDamageTypes
 import dev.aaronhowser.mods.critterworks.registry.ModDataComponents
 import dev.aaronhowser.mods.critterworks.registry.ModEntityTypes
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -217,7 +218,7 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 			val item = stack.item
 			if (item !is ParryPlatypusItem) return
 
-			reflectMeleeDamage(event, livingEntity, stack)
+			reflectMeleeDamage(event, livingEntity, stack, level)
 
 			item.triggerAnim<Any>(
 				livingEntity,
@@ -230,7 +231,8 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 		private fun reflectMeleeDamage(
 			event: LivingShieldBlockEvent,
 			blockingEntity: LivingEntity,
-			stack: ItemStack
+			stack: ItemStack,
+			level: ServerLevel
 		) {
 			val damageSource = event.damageSource
 			if (!damageSource.isDirect || damageSource.isDamageSource(ModDamageTypes.PARRY_PLATYPUS)) return
@@ -238,18 +240,38 @@ class ParryPlatypusItem(properties: Properties) : ShieldItem(properties), GeoIte
 			val attacker = damageSource.entity as? LivingEntity ?: return
 			if (attacker === blockingEntity) return
 
-			val reflectedDamageMultiplier = if (stack.platypusUseTicks <= ServerConfig.CONFIG.platypusParryTiming.get()) {
+			val isPerfectParry = stack.platypusUseTicks <= ServerConfig.CONFIG.platypusParryTiming.get()
+
+			val reflectedDamageMultiplier = if (isPerfectParry) {
 				ServerConfig.CONFIG.platypusPerfectReflectAmount.get()
 			} else {
 				ServerConfig.CONFIG.platypusRegularReflectAmount.get()
 			}.toFloat()
 
 			val reflectedDamage = event.blockedDamage * reflectedDamageMultiplier
-			if (reflectedDamage <= 0f) return
+			if (reflectedDamage > 0f) {
+				attacker.hurt(
+					blockingEntity.damageSources().source(ModDamageTypes.PARRY_PLATYPUS, blockingEntity),
+					reflectedDamage
+				)
+			}
 
-			attacker.hurt(
-				blockingEntity.damageSources().source(ModDamageTypes.PARRY_PLATYPUS, blockingEntity),
-				reflectedDamage
+			if (!isPerfectParry) return
+
+			val knockback = ServerConfig.CONFIG.platypusPerfectParryKnockback.get()
+			val lookAngle = blockingEntity.lookAngle
+			attacker.knockback(knockback, -lookAngle.x, -lookAngle.z)
+
+			level.sendParticles(
+				ParticleTypes.EXPLOSION,
+				attacker.x,
+				attacker.y + attacker.bbHeight / 2.0,
+				attacker.z,
+				3,
+				0.15,
+				0.15,
+				0.15,
+				0.0
 			)
 		}
 	}

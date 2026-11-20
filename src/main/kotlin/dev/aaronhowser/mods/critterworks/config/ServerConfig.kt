@@ -35,6 +35,7 @@ class ServerConfig(
 	lateinit var platypusParryTiming: ModConfigSpec.IntValue
 	lateinit var platypusRegularReflectAmount: ModConfigSpec.DoubleValue
 	lateinit var platypusPerfectReflectAmount: ModConfigSpec.DoubleValue
+	lateinit var platypusPerfectParryKnockback: ModConfigSpec.DoubleValue
 
 	lateinit var sendScoochwormAppleTeleportMessage: ModConfigSpec.BooleanValue
 	lateinit var sendHoppingSpiderNestTeleportMessage: ModConfigSpec.BooleanValue
@@ -84,6 +85,10 @@ class ServerConfig(
 		platypusPerfectReflectAmount = builder
 			.comment("What percentage of incoming damage is reflecting upon parrying an attack with the Parry Platypus")
 			.defineInRange("platypusPerfectReflectAmount", 2.0, 0.0, Double.MAX_VALUE)
+
+		platypusPerfectParryKnockback = builder
+			.comment("The knockback applied to an attacker upon parrying an attack with the Parry Platypus")
+			.defineInRange("platypusPerfectParryKnockback", 6.0, 0.0, Double.MAX_VALUE)
 	}
 
 	private fun general() {
