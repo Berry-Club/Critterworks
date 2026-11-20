@@ -38,6 +38,7 @@ object ModItemLang {
 			addItem(ModItems.PUNCHPRAWN_SPAWN_EGG, "Punchprawn Spawn Egg")
 			addItem(ModItems.PARRY_PLATYPUS_SPAWN_EGG, "Parry Platypus Spawn Egg")
 			addItem(ModItems.SPROUTSNAIL_SPAWN_EGG, "Sproutsnail Spawn Egg")
+			addItem(ModItems.CRITTER_CATCHER, "Critter Catcher")
 		}
 	}
 }
