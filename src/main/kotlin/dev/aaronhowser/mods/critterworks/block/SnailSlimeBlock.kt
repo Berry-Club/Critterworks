@@ -22,6 +22,7 @@ class SnailSlimeBlock : HoneyBlock(
 	Properties
 		.ofFullCopy(Blocks.HONEY_BLOCK)
 		.mapColor(MapColor.COLOR_BROWN)
+		.noCollission()
 ) {
 
 	init {
