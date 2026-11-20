@@ -220,6 +220,7 @@
   "tooltip.critterworks.container.empty": "Empty",
   "tooltip.critterworks.container.stack": "Contains %s stack",
   "tooltip.critterworks.container.stacks": "Contains %s stacks",
+  "tooltip.critterworks.crittercater_catcher": "Catches certain mobs as items",
   "tooltip.critterworks.filter.blacklist": "Blacklist",
   "tooltip.critterworks.filter.fluid": "Specific Fluid",
   "tooltip.critterworks.filter.fluid_tag": "Fluid Tag",

@@ -6,6 +6,8 @@ import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isEntity
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isItem
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isServerSide
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isTrue
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.tell
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.toComponent
 import dev.aaronhowser.mods.aaron.misc.AaronUtil
 import dev.aaronhowser.mods.critterworks.advancement.ModAdvancements
 import dev.aaronhowser.mods.critterworks.config.ServerConfig
@@ -28,6 +30,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
@@ -89,6 +92,11 @@ class CritterCageItem(properties: Properties) : BlockItem(ModBlocks.CRITTER_CAGE
 		if (!canCapture(interactionTarget)) return InteractionResult.PASS
 
 		if (player.isServerSide) {
+			if (interactionTarget is TamableAnimal && !interactionTarget.isOwnedBy(player)) {
+				interactionTarget.tell(ModMessageLang.NO_PET_THEFT.toComponent())
+				return InteractionResult.FAIL
+			}
+
 			val filledCage = stack.copyWithCount(1)
 			filledCage.set(ModDataComponents.ENTITY_DATA, createEntityData(interactionTarget))
 

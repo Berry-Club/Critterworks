@@ -36,6 +36,7 @@
 - Improved the model transformations of several items
 - Punchprawns can be bred with Seagrass
 - Sproutsnails can be bred with Mushrooms
+- You can no longer catch pets owned by someone other than you with the Critter Cage
 
 ### Fixed
 

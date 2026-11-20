@@ -20,6 +20,7 @@ object ModMessageLang {
 	const val EVIL_SNAIL_CAGE_MESSAGE = "message.critterworks.evil_snail_cage"
 	const val EVIL_SNAIL_SHIELD_MESSAGE = "message.critterworks.evil_snail_shield"
 	const val EVIL_SNAIL_BANISHED_MESSAGE = "message.critterworks.evil_snail_banished"
+	const val NO_PET_THEFT = "message.critterworks.no_pet_theft"
 
 	fun add(provider: ModLanguageProvider) {
 		provider.apply {
@@ -41,6 +42,7 @@ object ModMessageLang {
 			add(EVIL_SNAIL_CAGE_MESSAGE, "You thought you caught it, but it was only a decoy snail...")
 			add(EVIL_SNAIL_SHIELD_MESSAGE, "The snail was temporarily banished, but not forever...")
 			add(EVIL_SNAIL_BANISHED_MESSAGE, "The snail struck your shield one last time and was banished for good.")
+			add(NO_PET_THEFT, "You can't take someone else's pet!")
 		}
 	}
 
