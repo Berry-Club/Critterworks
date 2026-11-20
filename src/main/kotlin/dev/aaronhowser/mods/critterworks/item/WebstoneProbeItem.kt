@@ -1,27 +1,26 @@
 package dev.aaronhowser.mods.critterworks.item
 
 import dev.aaronhowser.mods.aaron.misc.AaronExtensions.status
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebNode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionContext
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionItem
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebNodeInteractionContext
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebNodeInteractionItem
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 
 class WebstoneProbeItem(properties: Properties) : Item(properties),
 	RedstoneWebNodeInteractionItem,
 	RedstoneWebLineInteractionItem {
 
-	override fun interactWithRedstoneWebNode(context: RedstoneWebNodeInteractionContext) {
-		context.player.status("Redstone strength: ${getRedstoneStrength(context.node)}")
-	}
-
-	override fun interactWithRedstoneWebLine(context: RedstoneWebLineInteractionContext) {
-		context.player.status("Redstone strength: ${context.line.power}")
-	}
-
-	private fun getRedstoneStrength(node: WebNode): Int {
+	override fun interactWithRedstoneWebNode(
+		level: ServerLevel,
+		player: ServerPlayer,
+		itemStack: ItemStack,
+		node: WebNode
+	) {
 		var strongestPower = 0
 
 		for (line in node.lines) {
@@ -29,6 +28,17 @@ class WebstoneProbeItem(properties: Properties) : Item(properties),
 			strongestPower = maxOf(strongestPower, redstoneLine.power)
 		}
 
-		return strongestPower
+		player.status(strongestPower.toString())
 	}
+
+	override fun interactWithRedstoneWebLine(
+		level: ServerLevel,
+		player: ServerPlayer,
+		itemStack: ItemStack,
+		line: RedstoneWebLine,
+		target: WebLineAnchor
+	) {
+		player.status(line.power.toString())
+	}
+
 }

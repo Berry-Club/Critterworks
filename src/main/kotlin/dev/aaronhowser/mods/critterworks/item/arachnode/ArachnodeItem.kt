@@ -1,14 +1,16 @@
 package dev.aaronhowser.mods.critterworks.item.arachnode
 
+import dev.aaronhowser.mods.critterworks.handler.web.common.node.WebLineAnchor
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebHandler
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
-import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionContext
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.interaction.RedstoneWebLineInteractionItem
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodePort
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
@@ -19,19 +21,25 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties), Redston
 
 	abstract fun createArachnode(context: ArachnodePlacementContext): Arachnode?
 
-	override fun interactWithRedstoneWebLine(context: RedstoneWebLineInteractionContext) {
-		val placed = context.redstoneWebHandler.insertArachnodeOnLine(
-			context.level,
-			context.line.uuid,
-			context.itemStack,
-			context.target.position,
-			context.player.eyePosition
+	override fun interactWithRedstoneWebLine(
+		level: ServerLevel,
+		player: ServerPlayer,
+		itemStack: ItemStack,
+		line: RedstoneWebLine,
+		target: WebLineAnchor
+	) {
+		val placed = RedstoneWebHandler.get(level).insertArachnodeOnLine(
+			level,
+			line.uuid,
+			itemStack,
+			target.position,
+			player.eyePosition
 		)
 
 		if (!placed) return
 
-		context.itemStack.consume(1, context.player)
-		context.level.gameEvent(context.player, GameEvent.BLOCK_PLACE, context.target.position)
+		itemStack.consume(1, player)
+		level.gameEvent(player, GameEvent.BLOCK_PLACE, target.position)
 	}
 
 	override fun useOn(context: UseOnContext): InteractionResult {

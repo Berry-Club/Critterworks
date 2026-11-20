@@ -31,14 +31,10 @@ object RedstoneWebInteractionHandler {
 
 		if (interactionItem is RedstoneWebNodeInteractionItem) {
 			interactionItem.interactWithRedstoneWebNode(
-				RedstoneWebNodeInteractionContext(
-					level,
-					player,
-					event.itemStack,
-					event.hand,
-					redstoneWebHandler,
-					selectedNode
-				)
+				level,
+				player,
+				event.itemStack,
+				selectedNode
 			)
 			return
 		}
@@ -67,15 +63,11 @@ object RedstoneWebInteractionHandler {
 
 		if (interactionItem is RedstoneWebLineInteractionItem) {
 			interactionItem.interactWithRedstoneWebLine(
-				RedstoneWebLineInteractionContext(
-					level,
-					player,
-					event.itemStack,
-					event.hand,
-					redstoneWebHandler,
-					selectedLine,
-					event.target
-				)
+				level,
+				player,
+				event.itemStack,
+				selectedLine,
+				event.target
 			)
 			return
 		}
