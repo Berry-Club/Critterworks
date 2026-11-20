@@ -84,6 +84,8 @@ class SnailSlimeBlock : HoneyBlock(
 	}
 
 	private fun isTouchingSlimeSide(state: BlockState, position: BlockPos, entity: Entity): Boolean {
+		if (entity.deltaMovement.y >= -0.08) return false
+
 		val distance = 0.0625
 		val boundingBox = entity.boundingBox
 
