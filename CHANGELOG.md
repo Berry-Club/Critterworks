@@ -15,7 +15,7 @@
 	- Signals input and output via the blocks they're connected to
 - Arachnodes
 	- Can be placed on either a block or an existing Webstone line
-	- They have 2 ports
+	- They have 2 Webstone ports
 		- The port at their rear is the input
 		- The port at their head is the output
 - Directional Arachnode
