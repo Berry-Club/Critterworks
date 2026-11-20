@@ -37,6 +37,7 @@ object ModMenuLang {
 	const val WEB_FLUID = "tooltip.critterworks.artificial_spinnerets.web_fluid"
 	const val WEB_FLUID_INSTRUCTIONS = "tooltip.critterworks.artificial_spinnerets.web_fluid_instructions"
 	const val SHIFT_FOR_INFO = "tooltip.critterworks.shift_for_info"
+	const val CRITTER_CATCHER_TOOLTIP = "tooltip.critterworks.crittercater_catcher"
 
 	fun add(provider: ModLanguageProvider) {
 		fun add(key: String, value: String) = provider.add(key, value)
@@ -82,5 +83,6 @@ object ModMenuLang {
 		add(WEB_FLUID, "Web Fluid: %s / %s")
 		add(WEB_FLUID_INSTRUCTIONS, "Click String onto the Spinnerets to refill them")
 		add(SHIFT_FOR_INFO, "[Shift for Info]")
+		add(CRITTER_CATCHER_TOOLTIP, "Catches certain mobs as items")
 	}
 }
