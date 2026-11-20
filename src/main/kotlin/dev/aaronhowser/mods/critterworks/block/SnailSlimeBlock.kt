@@ -1,116 +1,133 @@
 package dev.aaronhowser.mods.critterworks.block
 
-import com.mojang.serialization.MapCodec
+import dev.aaronhowser.mods.aaron.misc.AaronExtensions.isBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.level.Level
+import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.HoneyBlock
 import net.minecraft.world.level.block.MultifaceBlock
-import net.minecraft.world.level.block.MultifaceSpreader
-import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
+import java.util.concurrent.ConcurrentHashMap
 
-class SnailSlimeBlock(properties: BlockBehaviour.Properties) : MultifaceBlock(properties) {
+class SnailSlimeBlock : HoneyBlock(
+	Properties
+		.ofFullCopy(Blocks.HONEY_BLOCK)
+		.mapColor(MapColor.COLOR_BROWN)
+) {
 
-	constructor() : this(
-		Properties
-			.ofFullCopy(Blocks.HONEY_BLOCK)
-			.mapColor(MapColor.COLOR_BROWN)
-	)
+	init {
+		registerDefaultState(
+			defaultBlockState()
+				.setValue(HAS_DOWN, false)
+				.setValue(HAS_UP, false)
+				.setValue(HAS_NORTH, false)
+				.setValue(HAS_SOUTH, false)
+				.setValue(HAS_WEST, false)
+				.setValue(HAS_EAST, false)
+		)
+	}
 
-	private val spreader = MultifaceSpreader(this)
+	override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+		super.createBlockStateDefinition(builder)
+		builder.add(HAS_DOWN, HAS_UP, HAS_NORTH, HAS_SOUTH, HAS_WEST, HAS_EAST)
+	}
 
-	override fun codec(): MapCodec<out SnailSlimeBlock> = CODEC
-
-	override fun getSpreader(): MultifaceSpreader = spreader
-
-	override fun fallOn(
-		level: Level,
+	override fun getShape(
 		state: BlockState,
+		level: BlockGetter,
 		position: BlockPos,
-		entity: Entity,
-		fallDistance: Float
-	) {
-		if (!hasFace(state, Direction.DOWN)) {
-			super.fallOn(level, state, position, entity, fallDistance)
-			return
-		}
+		context: CollisionContext
+	): VoxelShape {
+		val packedDirections = packDirections(state)
+		val cachedShape = SHAPES_BY_PACKED_DIRECTIONS[packedDirections]
+		if (cachedShape != null) return cachedShape
 
-		entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0f, 1.0f)
+		var shape = Shapes.empty()
 
-		if (entity.causeFallDamage(fallDistance, 0.2f, level.damageSources().fall())) {
-			val soundType = state.getSoundType(level, position, entity)
-			entity.playSound(
-				soundType.fallSound,
-				soundType.volume * 0.5f,
-				soundType.pitch * 0.75f
-			)
-		}
+		if (state.getValue(HAS_DOWN)) shape = Shapes.or(shape, SHAPE_DOWN)
+		if (state.getValue(HAS_UP)) shape = Shapes.or(shape, SHAPE_UP)
+		if (state.getValue(HAS_NORTH)) shape = Shapes.or(shape, SHAPE_NORTH)
+		if (state.getValue(HAS_SOUTH)) shape = Shapes.or(shape, SHAPE_SOUTH)
+		if (state.getValue(HAS_WEST)) shape = Shapes.or(shape, SHAPE_WEST)
+		if (state.getValue(HAS_EAST)) shape = Shapes.or(shape, SHAPE_EAST)
+
+		SHAPES_BY_PACKED_DIRECTIONS[packedDirections] = shape
+
+		return shape
 	}
 
-	override fun entityInside(state: BlockState, level: Level, position: BlockPos, entity: Entity) {
-		if (isSlidingDown(state, position, entity)) {
-			slowSlide(entity)
-
-			if (level.random.nextInt(5) == 0) {
-				entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0f, 1.0f)
-			}
-		}
-
-		super.entityInside(state, level, position, entity)
+	override fun getCollisionShape(
+		state: BlockState,
+		level: BlockGetter,
+		position: BlockPos,
+		context: CollisionContext
+	): VoxelShape {
+		return getShape(state, level, position, context)
 	}
 
-	private fun isSlidingDown(state: BlockState, position: BlockPos, entity: Entity): Boolean {
-		if (entity.onGround()) return false
-		if (entity.y > position.y + 1.0 - COLLISION_EPSILON) return false
-		if (entity.deltaMovement.y >= MINIMUM_SLIDE_SPEED) return false
+	fun getStateForPlacement(
+		existingState: BlockState,
+		level: BlockGetter,
+		position: BlockPos,
+		face: Direction
+	): BlockState? {
+		val faceProperty = MultifaceBlock.getFaceProperty(face)
+		val supportPosition = position.relative(face)
+		val supportState = level.getBlockState(supportPosition)
 
-		val entityBounds = entity.boundingBox
-		val minimumX = position.x + FACE_THICKNESS
-		val maximumX = position.x + 1.0 - FACE_THICKNESS
-		val minimumZ = position.z + FACE_THICKNESS
-		val maximumZ = position.z + 1.0 - FACE_THICKNESS
+		if (existingState.isBlock(this) && existingState.getValue(faceProperty)) return null
+		if (!existingState.isBlock(this) && !existingState.canBeReplaced()) return null
+		if (!MultifaceBlock.canAttachTo(level, face, supportPosition, supportState)) return null
 
-		if (hasFace(state, Direction.WEST) && entityBounds.minX <= minimumX + COLLISION_EPSILON) return true
-		if (hasFace(state, Direction.EAST) && entityBounds.maxX >= maximumX - COLLISION_EPSILON) return true
-		if (hasFace(state, Direction.NORTH) && entityBounds.minZ <= minimumZ + COLLISION_EPSILON) return true
-		if (hasFace(state, Direction.SOUTH) && entityBounds.maxZ >= maximumZ - COLLISION_EPSILON) return true
+		val state = if (existingState.isBlock(this)) existingState else defaultBlockState()
 
-		return false
-	}
-
-	private fun slowSlide(entity: Entity) {
-		val movement = entity.deltaMovement
-
-		if (movement.y < SLIDE_SPEED_THRESHOLD) {
-			val horizontalMultiplier = MAXIMUM_SLIDE_SPEED / -movement.y
-			entity.deltaMovement = Vec3(
-				movement.x * horizontalMultiplier,
-				-MAXIMUM_SLIDE_SPEED,
-				movement.z * horizontalMultiplier
-			)
-		} else {
-			entity.deltaMovement = Vec3(movement.x, -MAXIMUM_SLIDE_SPEED, movement.z)
-		}
-
-		entity.resetFallDistance()
+		return state.setValue(faceProperty, true)
 	}
 
 	companion object {
-		private const val FACE_THICKNESS = 1.0 / 16.0
-		private const val COLLISION_EPSILON = 1.0E-7
-		private const val MINIMUM_SLIDE_SPEED = -0.08
-		private const val SLIDE_SPEED_THRESHOLD = -0.13
-		private const val MAXIMUM_SLIDE_SPEED = 0.05
+		private const val DOWN_BIT = 1
+		private const val UP_BIT = 1 shl 1
+		private const val NORTH_BIT = 1 shl 2
+		private const val SOUTH_BIT = 1 shl 3
+		private const val WEST_BIT = 1 shl 4
+		private const val EAST_BIT = 1 shl 5
 
-		val CODEC: MapCodec<SnailSlimeBlock> = simpleCodec(::create)
+		private val SHAPES_BY_PACKED_DIRECTIONS: MutableMap<Int, VoxelShape> = ConcurrentHashMap()
 
-		private fun create(properties: BlockBehaviour.Properties): SnailSlimeBlock {
-			return SnailSlimeBlock(properties)
+		val HAS_DOWN: BooleanProperty = BlockStateProperties.DOWN
+		val HAS_UP: BooleanProperty = BlockStateProperties.UP
+		val HAS_NORTH: BooleanProperty = BlockStateProperties.NORTH
+		val HAS_SOUTH: BooleanProperty = BlockStateProperties.SOUTH
+		val HAS_WEST: BooleanProperty = BlockStateProperties.WEST
+		val HAS_EAST: BooleanProperty = BlockStateProperties.EAST
+
+		val SHAPE_DOWN: VoxelShape = box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0)
+		val SHAPE_UP: VoxelShape = box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0)
+		val SHAPE_NORTH: VoxelShape = box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0)
+		val SHAPE_SOUTH: VoxelShape = box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0)
+		val SHAPE_WEST: VoxelShape = box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0)
+		val SHAPE_EAST: VoxelShape = box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+
+		private fun packDirections(state: BlockState): Int {
+			var packedDirections = 0
+
+			if (state.getValue(HAS_DOWN)) packedDirections = packedDirections or DOWN_BIT
+			if (state.getValue(HAS_UP)) packedDirections = packedDirections or UP_BIT
+			if (state.getValue(HAS_NORTH)) packedDirections = packedDirections or NORTH_BIT
+			if (state.getValue(HAS_SOUTH)) packedDirections = packedDirections or SOUTH_BIT
+			if (state.getValue(HAS_WEST)) packedDirections = packedDirections or WEST_BIT
+			if (state.getValue(HAS_EAST)) packedDirections = packedDirections or EAST_BIT
+
+			return packedDirections
 		}
 	}
 

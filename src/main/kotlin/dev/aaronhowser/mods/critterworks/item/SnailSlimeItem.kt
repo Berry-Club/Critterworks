@@ -20,11 +20,6 @@ class SnailSlimeItem(properties: Properties) : BoneMealItem(properties) {
 		val faceTowardsSupport = clickedFace.opposite
 		val existingState = level.getBlockState(placementPosition)
 		val snailSlimeBlock = ModBlocks.SNAIL_SLIME.get()
-
-		if (!existingState.`is`(snailSlimeBlock) && !existingState.canBeReplaced()) {
-			return InteractionResult.FAIL
-		}
-
 		val placementState = snailSlimeBlock.getStateForPlacement(
 			existingState,
 			level,
