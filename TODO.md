@@ -37,7 +37,7 @@
 				- Would have to start keeping track of port activity in addition to priority
 	- Breed Spiders to get better stats?
 		- How would you even do that though?
-  - Make them look like hoppers, the thorax could look like an angled hopper
+	- Make them look like hoppers, the thorax could look like an angled hopper
 
 # Honeypot Ants
 
@@ -85,7 +85,7 @@
 		- OR Weaver, like Orb?
 		- Eitherweaver could be XOR instead
 	- Clock = Clockroach?
- - Web Developer advancement
+- Web Developer advancement
 
 # Farm critters?
 
@@ -117,7 +117,7 @@
 - Compass that points to the Evil Snail
 - Flee market???
 	- Trades Critterworks stuff
- 	- Imagine they look like a Hollow Knight guy lmao
+	- Imagine they look like a Hollow Knight guy lmao
 
 # "Pet" critters
 
@@ -134,6 +134,8 @@
 	- Or maybe prevent monster spawning entirely nearby
 - Sonar Bat that when fed makes an expanding pulse that shows the outlines of blocks through walls
 	- Like x-ray that shows caves
+- Grasshopper mount
+	- Only move from charged jumps like Jump King
 
 # Tool/Weapon critters
 
