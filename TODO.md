@@ -115,6 +115,9 @@
 	- Basically the thing from Portal
 - Item Entity collector that looks [like this](https://youtu.be/cX4yPhiAa7A?t=1237)?
 - Compass that points to the Evil Snail
+- Flee market???
+	- Trades Critterworks stuff
+ 	- Imagine they look like a Hollow Knight guy lmao
 
 # "Pet" critters
 
