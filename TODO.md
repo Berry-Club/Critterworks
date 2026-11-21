@@ -37,6 +37,7 @@
 				- Would have to start keeping track of port activity in addition to priority
 	- Breed Spiders to get better stats?
 		- How would you even do that though?
+  - Make them look like hoppers, the thorax could look like an angled hopper
 
 # Honeypot Ants
 
@@ -84,6 +85,7 @@
 		- OR Weaver, like Orb?
 		- Eitherweaver could be XOR instead
 	- Clock = Clockroach?
+ - Web Developer advancement
 
 # Farm critters?
 
