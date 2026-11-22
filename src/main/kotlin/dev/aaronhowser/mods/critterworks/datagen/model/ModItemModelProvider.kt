@@ -234,11 +234,19 @@ class ModItemModelProvider(
 	}
 
 	private fun directionalArachnode() {
-		val directionalArachnodeModel = getBuilder("directional_arachnode")
-			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
-			.texture("particle", modLoc("item/directional_arachnode"))
+		arachnodeModel("directional_arachnode")
+	}
 
-		directionalArachnodeModel.transforms {
+	private fun invertingArachnode() {
+		arachnodeModel("inverting_arachnode")
+	}
+
+	private fun arachnodeModel(name: String) {
+		val arachnodeModel = getBuilder(name)
+			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
+			.texture("particle", modLoc("item/$name"))
+
+		arachnodeModel.transforms {
 			transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
 				rotation(64f, 0f, 0f)
 					.translation(-0.1f, 1f, -0.75f)
@@ -279,12 +287,6 @@ class ModItemModelProvider(
 				rotation(90f, 0f, -180f)
 			}
 		}
-	}
-
-	private fun invertingArachnode() {
-		withExistingParent("inverting_arachnode", mcLoc("item/generated"))
-			.texture("layer0", modLoc("item/hopping_spider"))
-			.texture("layer1", mcLoc("block/redstone_torch"))
 	}
 
 	private fun filterfeederItems() {

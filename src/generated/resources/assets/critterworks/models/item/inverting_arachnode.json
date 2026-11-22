@@ -1,7 +1,104 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:builtin/entity",
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        -180,
+        65,
+        180
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -180,
+        65,
+        -180
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        90,
+        0,
+        -180
+      ]
+    },
+    "ground": {
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -152.25,
+        29.25,
+        -180
+      ],
+      "translation": [
+        0,
+        -4,
+        0
+      ]
+    },
+    "head": {
+      "rotation": [
+        90,
+        0,
+        -180
+      ],
+      "translation": [
+        0,
+        0,
+        -4.5
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        64,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ],
+      "translation": [
+        0.1,
+        0,
+        -0.75
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        64,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ],
+      "translation": [
+        -0.1,
+        1,
+        -0.75
+      ]
+    }
+  },
   "textures": {
-    "layer0": "critterworks:item/hopping_spider",
-    "layer1": "minecraft:block/redstone_torch"
+    "particle": "critterworks:item/inverting_arachnode"
   }
 }

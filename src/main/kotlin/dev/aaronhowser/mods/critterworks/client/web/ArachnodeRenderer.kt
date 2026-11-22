@@ -7,6 +7,7 @@ import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.DirectionalArachnode
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.InvertingArachnode
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
@@ -67,29 +68,42 @@ object ArachnodeRenderer {
 			poseStack.mulPose(rotation)
 			poseStack.scale(hoppingSpiderScale, hoppingSpiderScale, hoppingSpiderScale)
 
-			if (arachnode is DirectionalArachnode) {
-				DirectionalArachnodeRenderer.render(
-					poseStack,
-					bufferSource,
-					light,
-					isReceivingSignal(arachnode)
-				)
-			} else {
-				itemRenderer.renderStatic(
-					hoppingSpiderStack,
-					ItemDisplayContext.GROUND,
-					light,
-					OverlayTexture.NO_OVERLAY,
-					poseStack,
-					bufferSource,
-					level,
-					0
-				)
+			when (arachnode) {
+				is DirectionalArachnode -> {
+					DirectionalArachnodeRenderer.render(
+						poseStack,
+						bufferSource,
+						light,
+						isReceivingSignal(arachnode)
+					)
+				}
+
+				is InvertingArachnode -> {
+					InvertingArachnodeRenderer.render(
+						poseStack,
+						bufferSource,
+						light,
+						!isReceivingSignal(arachnode)
+					)
+				}
+
+				else -> {
+					itemRenderer.renderStatic(
+						hoppingSpiderStack,
+						ItemDisplayContext.GROUND,
+						light,
+						OverlayTexture.NO_OVERLAY,
+						poseStack,
+						bufferSource,
+						level,
+						0
+					)
+				}
 			}
 		}
 	}
 
-	private fun isReceivingSignal(arachnode: DirectionalArachnode): Boolean {
+	private fun isReceivingSignal(arachnode: Arachnode): Boolean {
 		for (inputPort in arachnode.inputPorts) {
 			for (line in inputPort.lines) {
 				if (line is RedstoneWebLine && line.power > 0) return true
