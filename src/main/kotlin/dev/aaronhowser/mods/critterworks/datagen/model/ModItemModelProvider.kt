@@ -234,9 +234,51 @@ class ModItemModelProvider(
 	}
 
 	private fun directionalArachnode() {
-		withExistingParent("directional_arachnode", mcLoc("item/generated"))
-			.texture("layer0", modLoc("item/hopping_spider"))
-			.texture("layer1", mcLoc("item/spectral_arrow"))
+		val directionalArachnodeModel = getBuilder("directional_arachnode")
+			.parent(ModelFile.UncheckedModelFile(mcLoc("builtin/entity")))
+			.texture("particle", modLoc("item/directional_arachnode"))
+
+		directionalArachnodeModel.transforms {
+			transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+				rotation(64f, 0f, 0f)
+					.translation(-0.1f, 1f, -0.75f)
+					.scale(0.4f)
+			}
+
+			transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+				rotation(64f, 0f, 0f)
+					.translation(0.1f, 0f, -0.75f)
+					.scale(0.4f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
+				rotation(-180f, 65f, -180f)
+					.scale(0.5f)
+			}
+
+			transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
+				rotation(-180f, 65f, 180f)
+					.scale(0.5f)
+			}
+
+			transform(ItemDisplayContext.GROUND) {
+				scale(0.5f)
+			}
+
+			transform(ItemDisplayContext.GUI) {
+				rotation(-152.25f, 29.25f, -180f)
+					.translation(0f, -4f, 0f)
+			}
+
+			transform(ItemDisplayContext.HEAD) {
+				rotation(90f, 0f, -180f)
+					.translation(0f, 0f, -4.5f)
+			}
+
+			transform(ItemDisplayContext.FIXED) {
+				rotation(90f, 0f, -180f)
+			}
+		}
 	}
 
 	private fun invertingArachnode() {

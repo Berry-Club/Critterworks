@@ -3,7 +3,9 @@ package dev.aaronhowser.mods.critterworks.client.web
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.aaronhowser.mods.aaron.misc.AaronDsls.withPose
 import dev.aaronhowser.mods.critterworks.config.ClientConfig
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.RedstoneWebLine
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
+import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.DirectionalArachnode
 import dev.aaronhowser.mods.critterworks.registry.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
@@ -46,20 +48,39 @@ object ArachnodeRenderer {
 				poseStack.mulPose(rotation)
 				poseStack.scale(hoppingSpiderScale, hoppingSpiderScale, hoppingSpiderScale)
 
-				minecraft.itemRenderer.renderStatic(
-					hoppingSpiderStack,
-					ItemDisplayContext.GROUND,
-					light,
-					OverlayTexture.NO_OVERLAY,
-					poseStack,
-					bufferSource,
-					level,
-					0
-				)
+				if (arachnode is DirectionalArachnode) {
+					DirectionalArachnodeRenderer.render(
+						poseStack,
+						bufferSource,
+						light,
+						isReceivingSignal(arachnode)
+					)
+				} else {
+					minecraft.itemRenderer.renderStatic(
+						hoppingSpiderStack,
+						ItemDisplayContext.GROUND,
+						light,
+						OverlayTexture.NO_OVERLAY,
+						poseStack,
+						bufferSource,
+						level,
+						0
+					)
+				}
 			}
 		}
 
 		bufferSource.endBatch()
+	}
+
+	private fun isReceivingSignal(arachnode: DirectionalArachnode): Boolean {
+		for (inputPort in arachnode.inputPorts) {
+			for (line in inputPort.lines) {
+				if (line is RedstoneWebLine && line.power > 0) return true
+			}
+		}
+
+		return false
 	}
 
 	private fun getTravelRotation(direction: Vec3, spiderUp: Vec3): Quaternionf {

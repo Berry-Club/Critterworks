@@ -1,11 +1,35 @@
 package dev.aaronhowser.mods.critterworks.item.arachnode
 
+import dev.aaronhowser.mods.critterworks.client.item.directional_arachnode.DirectionalArachnodeItemRenderer
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.Arachnode
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.ArachnodeMount
 import dev.aaronhowser.mods.critterworks.handler.web.redstone.node.DirectionalArachnode
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer
+import software.bernie.geckolib.animatable.GeoItem
+import software.bernie.geckolib.animatable.client.GeoRenderProvider
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.animation.AnimatableManager
+import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
+import java.util.function.Consumer
 
-class DirectionalArachnodeItem(properties: Properties) : ArachnodeItem(properties) {
+class DirectionalArachnodeItem(properties: Properties) : ArachnodeItem(properties), GeoItem {
+
+	private val animatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
+
+	override fun createGeoRenderer(consumer: Consumer<GeoRenderProvider>) {
+		consumer.accept(object : GeoRenderProvider {
+			private val renderer by lazy { DirectionalArachnodeItemRenderer() }
+
+			override fun getGeoItemRenderer(): BlockEntityWithoutLevelRenderer {
+				return renderer
+			}
+		})
+	}
+
+	override fun registerControllers(controllers: AnimatableManager.ControllerRegistrar) = Unit
+
+	override fun getAnimatableInstanceCache(): AnimatableInstanceCache = animatableInstanceCache
 
 	override fun createArachnode(context: ArachnodePlacementContext): Arachnode? {
 		val arachnodeUuid = UUID.randomUUID()
