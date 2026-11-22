@@ -45,6 +45,7 @@
 	- Can be seen as durability
 - Entities that have an item form keep any changed name
 	- Works if the name was changed as an item in an Anvil or as a mob with a Name tag
+- Changed the model, texture, and animations of the Hopping Spider
 
 ### Fixed
 
