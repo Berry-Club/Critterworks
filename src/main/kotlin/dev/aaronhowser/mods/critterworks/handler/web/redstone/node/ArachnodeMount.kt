@@ -24,9 +24,7 @@ sealed class ArachnodeMount {
 		val contactPosition: Vec3
 	) : ArachnodeMount() {
 
-		fun getSurfaceNormal(): Vec3 {
-			return Vec3.atLowerCornerOf(face.normal)
-		}
+		val surfaceNormal: Vec3 = Vec3.atLowerCornerOf(face.normal)
 
 		fun isValid(level: ServerLevel): Boolean {
 			val chunkPosition = ChunkPos(blockPosition)

@@ -50,7 +50,7 @@ object ArachnodeRenderer {
 		val mount = arachnode.mount
 
 		val spiderUp = if (mount is ArachnodeMount.Surface) {
-			mount.getSurfaceNormal()
+			mount.surfaceNormal
 		} else {
 			getSpiderUp(outputDirection)
 		}

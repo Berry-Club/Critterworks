@@ -184,7 +184,7 @@ class RedstoneWebHandler : SavedData() {
 		if (!mount.isValid(level)) return false
 
 		val position = clickedPosition.add(
-			mount.getSurfaceNormal().scale(SURFACE_OFFSET)
+			mount.surfaceNormal.scale(SURFACE_OFFSET)
 		)
 
 		for (existingArachnode in arachnodes.values) {

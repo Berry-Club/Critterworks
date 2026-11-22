@@ -90,7 +90,7 @@ abstract class ArachnodeItem(properties: Properties) : Item(properties), Redston
 		}
 		if (context !is ArachnodePlacementContext.OnSurface) return null
 
-		val surfaceNormal = context.mount.getSurfaceNormal()
+		val surfaceNormal = context.mount.surfaceNormal
 		val awayFromPlayer = context.position.subtract(context.playerPosition)
 
 		var outputDirection = awayFromPlayer.subtract(
