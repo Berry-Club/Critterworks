@@ -34,19 +34,20 @@ sealed class ArachnodeMount {
 		}
 
 		companion object {
-			val CODEC: MapCodec<Surface> = RecordCodecBuilder.mapCodec { instance ->
-				instance.group(
-					BlockPos.CODEC
-						.fieldOf("block_position")
-						.forGetter(Surface::blockPosition),
-					Direction.CODEC
-						.fieldOf("face")
-						.forGetter(Surface::face),
-					Vec3.CODEC
-						.fieldOf("contact_position")
-						.forGetter(Surface::contactPosition)
-				).apply(instance, ::Surface)
-			}
+			val CODEC: MapCodec<Surface> =
+				RecordCodecBuilder.mapCodec { instance ->
+					instance.group(
+						BlockPos.CODEC
+							.fieldOf("block_position")
+							.forGetter(Surface::blockPosition),
+						Direction.CODEC
+							.fieldOf("face")
+							.forGetter(Surface::face),
+						Vec3.CODEC
+							.fieldOf("contact_position")
+							.forGetter(Surface::contactPosition)
+					).apply(instance, ::Surface)
+				}
 		}
 	}
 
@@ -56,22 +57,23 @@ sealed class ArachnodeMount {
 		private const val LINE_TYPE_ID = 0
 		private const val SURFACE_TYPE_ID = 1
 
-		val CODEC: Codec<ArachnodeMount> = Codec.STRING.dispatch(
-			"type",
-			{ mount ->
-				when (mount) {
-					Line -> LINE_TYPE
-					is Surface -> SURFACE_TYPE
+		val CODEC: Codec<ArachnodeMount> =
+			Codec.STRING.dispatch(
+				"type",
+				{ mount ->
+					when (mount) {
+						Line -> LINE_TYPE
+						is Surface -> SURFACE_TYPE
+					}
+				},
+				{ type ->
+					when (type) {
+						LINE_TYPE -> MapCodec.unit(Line)
+						SURFACE_TYPE -> Surface.CODEC
+						else -> error("Unknown arachnode mount type: $type")
+					}
 				}
-			},
-			{ type ->
-				when (type) {
-					LINE_TYPE -> MapCodec.unit(Line)
-					SURFACE_TYPE -> Surface.CODEC
-					else -> error("Unknown arachnode mount type: $type")
-				}
-			}
-		)
+			)
 
 		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ArachnodeMount> =
 			object : StreamCodec<RegistryFriendlyByteBuf, ArachnodeMount> {
