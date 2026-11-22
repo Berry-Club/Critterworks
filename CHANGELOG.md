@@ -51,6 +51,7 @@
 
 - Fixed certain mobs not moving their heads to look at you
 - Removed a bit of the Snail Shield texture that was z-fighting
+- The Scoochworm Apple feature now uses its own RandomSource when spawning the Scoochworm (#4)
 
 # 1.5.1
 

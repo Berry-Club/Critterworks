@@ -12,6 +12,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
+import net.minecraft.util.Mth
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.*
@@ -19,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.levelgen.feature.Feature
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
+import net.neoforged.neoforge.event.EventHooks
 
 class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormAppleConfiguration.CODEC) {
 
@@ -36,10 +39,10 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 
 		if (!isExposed(level, center, radius)) return false
 
-		placeApple(level, center, radius)
+		placeApple(level, center, radius, random)
 
 		if (configuration.spawnScoochworm) {
-			spawnScoochworm(level, center.below(radius))
+			spawnScoochworm(level, center.below(radius), random)
 		}
 
 		if (ServerConfig.CONFIG.sendScoochwormAppleTeleportMessage.get()) {
@@ -89,7 +92,7 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 		return false
 	}
 
-	private fun placeApple(level: WorldGenLevel, center: BlockPos, radius: Int) {
+	private fun placeApple(level: WorldGenLevel, center: BlockPos, radius: Int, random: RandomSource) {
 		val mutablePosition = BlockPos.MutableBlockPos()
 
 		for (xOffset in -radius..radius) {
@@ -115,7 +118,7 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 			.setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)
 			.setValue(
 				ScoochstemBlock.GROWTH_REMAINING,
-				level.random.nextRange(
+				random.nextRange(
 					ScoochstemBlock.MIN_INITIAL_GROWTH,
 					ScoochstemBlock.MAX_INITIAL_GROWTH + 1
 				)
@@ -133,23 +136,40 @@ class ScoochwormAppleFeature : Feature<ScoochwormAppleConfiguration>(ScoochwormA
 
 	}
 
-	private fun spawnScoochworm(level: WorldGenLevel, floorPosition: BlockPos) {
+	private fun spawnScoochworm(level: WorldGenLevel, floorPosition: BlockPos, random: RandomSource) {
+		val spawnPosition = floorPosition.above()
 		val scoochworm = ModEntityTypes.SCOOCHWORM.get()
-			.create(
-				level.level,
-				null,
-				floorPosition.above(),
-				MobSpawnType.STRUCTURE,
-				false,
-				false
-			)
+			.create(level.level)
 			?: return
+
+		val yaw = Mth.wrapDegrees(random.nextFloat() * 360f)
+		scoochworm.moveTo(
+			spawnPosition.x + 0.5,
+			spawnPosition.y.toDouble(),
+			spawnPosition.z + 0.5,
+			yaw,
+			0f
+		)
+		scoochworm.yHeadRot = yaw
+		scoochworm.yBodyRot = yaw
+		EventHooks.finalizeMobSpawn(
+			scoochworm,
+			level,
+			level.getCurrentDifficultyAt(spawnPosition),
+			MobSpawnType.CHUNK_GENERATION,
+			null
+		)
 
 		scoochworm.attachToSupport(floorPosition, Direction.DOWN)
 		scoochworm.setPersistenceRequired()
 		scoochworm.isTryingToMove = true
 
-		level.addFreshEntityWithPassengers(scoochworm)
+		if (!level.addFreshEntity(scoochworm)) {
+			scoochworm.discard()
+			return
+		}
+
+		scoochworm.playAmbientSound()
 	}
 
 	private fun sendTeleportMessage(level: WorldGenLevel, position: BlockPos) {
