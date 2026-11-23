@@ -104,6 +104,7 @@
 - Maillard Mallard
 	- Duck that cooks food
 	- Drops pre-cooked chicken? or new roasted duck item or something
+    - Advancement named Magician's Red
 - Thermite Termite
 	- Enemy that spawns in the Nether
 	- Cooks blasting recipes
